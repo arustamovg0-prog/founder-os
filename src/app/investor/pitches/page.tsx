@@ -1,0 +1,275 @@
+'use client';
+
+import { useState } from 'react';
+import { MOCK_PITCHES, MOCK_STARTUPS } from '@/lib/mockData';
+import { PitchEvent } from '@/types';
+import { Calendar, Video, MapPin, CheckCircle, XCircle, Clock, MessageSquare, Star } from 'lucide-react';
+import toast from 'react-hot-toast';
+
+const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string }> = {
+  pending: { label: 'Pending', color: '#f59e0b', bg: 'rgba(245,158,11,0.1)' },
+  accepted: { label: 'Accepted', color: '#10b981', bg: 'rgba(16,185,129,0.1)' },
+  rejected: { label: 'Rejected', color: '#ef4444', bg: 'rgba(239,68,68,0.1)' },
+  feedback_pending: { label: 'Feedback Pending', color: '#3b82f6', bg: 'rgba(59,130,246,0.1)' },
+  completed: { label: 'Completed', color: '#64748b', bg: 'rgba(100,116,139,0.1)' },
+  closed: { label: 'Closed', color: '#64748b', bg: 'rgba(100,116,139,0.1)' },
+};
+
+function FeedbackModal({ pitch, onClose }: { pitch: PitchEvent; onClose: () => void }) {
+  const [scores, setScores] = useState({ team: 3, market: 3, product: 3, traction: 3, financials: 3 });
+  const [impression, setImpression] = useState<string>('neutral');
+  const [text, setText] = useState('');
+  const [nextStep, setNextStep] = useState('follow_up');
+
+  const submit = () => {
+    toast.success('Feedback submitted! AI analysis started.', { icon: '🤖' });
+    onClose();
+  };
+
+  const IMPRESSIONS = [
+    { value: 'strong_yes', label: '🔥 Strong Yes', color: '#10b981' },
+    { value: 'yes', label: '👍 Yes', color: '#34d399' },
+    { value: 'neutral', label: '😐 Neutral', color: '#f59e0b' },
+    { value: 'no', label: '👎 No', color: '#f87171' },
+    { value: 'strong_no', label: '❌ Strong No', color: '#ef4444' },
+  ];
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-box" onClick={e => e.stopPropagation()} style={{ maxWidth: '600px' }}>
+        <h2 style={{ fontFamily: 'Space Grotesk', fontSize: 20, fontWeight: 700, marginBottom: '4px' }}>
+          Submit Feedback
+        </h2>
+        <p style={{ color: '#64748b', fontSize: 13, marginBottom: '24px' }}>{pitch.startupName} — Post-pitch review</p>
+
+        {/* Overall Impression */}
+        <div style={{ marginBottom: '20px' }}>
+          <label style={{ fontSize: 12, color: '#64748b', fontWeight: 600, display: 'block', marginBottom: 10 }}>
+            Overall Impression
+          </label>
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+            {IMPRESSIONS.map(imp => (
+              <button key={imp.value} onClick={() => setImpression(imp.value)} style={{
+                padding: '8px 14px', borderRadius: '10px', fontSize: 13, fontWeight: 500,
+                background: impression === imp.value ? `${imp.color}20` : 'rgba(255,255,255,0.04)',
+                border: `1px solid ${impression === imp.value ? imp.color : 'rgba(255,255,255,0.08)'}`,
+                color: impression === imp.value ? imp.color : '#64748b',
+                cursor: 'pointer', fontFamily: 'Inter', transition: 'all 0.15s',
+              }}>
+                {imp.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Score Sliders */}
+        <div style={{ marginBottom: '20px' }}>
+          <label style={{ fontSize: 12, color: '#64748b', fontWeight: 600, display: 'block', marginBottom: 12 }}>
+            Category Scores (1–5)
+          </label>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {(Object.entries(scores) as [string, number][]).map(([key, val]) => (
+              <div key={key} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <span style={{ width: 80, fontSize: 13, color: '#94a3b8', textTransform: 'capitalize', flexShrink: 0 }}>{key}</span>
+                <input type="range" min={1} max={5} value={val}
+                  onChange={e => setScores(p => ({ ...p, [key]: Number(e.target.value) }))}
+                  style={{ flex: 1, accentColor: '#7c3aed' }}
+                />
+                <div style={{ display: 'flex', gap: '2px', flexShrink: 0 }}>
+                  {[1, 2, 3, 4, 5].map(i => (
+                    <Star key={i} size={12} fill={i <= val ? '#f59e0b' : 'none'} color={i <= val ? '#f59e0b' : '#334155'} />
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Text Feedback */}
+        <div style={{ marginBottom: '16px' }}>
+          <label style={{ fontSize: 12, color: '#64748b', fontWeight: 600, display: 'block', marginBottom: 6 }}>
+            Written Feedback
+          </label>
+          <textarea className="input-field" rows={3} placeholder="Detailed feedback for the founder team..." value={text} onChange={e => setText(e.target.value)} style={{ resize: 'vertical' }} />
+        </div>
+
+        {/* Next Step */}
+        <div style={{ marginBottom: '24px' }}>
+          <label style={{ fontSize: 12, color: '#64748b', fontWeight: 600, display: 'block', marginBottom: 8 }}>
+            Recommended Next Step
+          </label>
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+            {[
+              { value: 'deal', label: '🤝 Deal', color: '#10b981' },
+              { value: 'follow_up', label: '📅 Follow Up', color: '#3b82f6' },
+              { value: 'traction', label: '📈 Improve Traction', color: '#f59e0b' },
+              { value: 'pivot', label: '🔄 Pivot', color: '#7c3aed' },
+              { value: 'reject', label: '✖ Pass', color: '#ef4444' },
+            ].map(ns => (
+              <button key={ns.value} onClick={() => setNextStep(ns.value)} style={{
+                padding: '7px 14px', borderRadius: '10px', fontSize: 12, fontWeight: 500,
+                background: nextStep === ns.value ? `${ns.color}20` : 'rgba(255,255,255,0.04)',
+                border: `1px solid ${nextStep === ns.value ? ns.color : 'rgba(255,255,255,0.08)'}`,
+                color: nextStep === ns.value ? ns.color : '#64748b',
+                cursor: 'pointer', fontFamily: 'Inter',
+              }}>
+                {ns.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <button className="btn-secondary" onClick={onClose} style={{ flex: 1 }}>Cancel</button>
+          <button className="btn-primary" onClick={submit} style={{ flex: 2 }}>
+            <MessageSquare size={14} /> Submit Feedback — AI Will Analyze
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function InvestorPitchesPage() {
+  const [activeFeedback, setActiveFeedback] = useState<PitchEvent | null>(null);
+  const [activeTab, setActiveTab] = useState<'all' | 'pending' | 'active' | 'closed'>('all');
+
+  const filtered = MOCK_PITCHES.filter(p => {
+    if (activeTab === 'pending') return p.status === 'pending';
+    if (activeTab === 'active') return ['accepted', 'feedback_pending'].includes(p.status);
+    if (activeTab === 'closed') return ['closed', 'rejected'].includes(p.status);
+    return true;
+  });
+
+  const acceptPitch = (pitchId: string) => {
+    toast.success('Pitch accepted! Calendar invite sent.', { icon: '📅' });
+  };
+
+  const declinePitch = (pitchId: string) => {
+    toast.error('Pitch declined. Founder notified.', { icon: '❌' });
+  };
+
+  return (
+    <div className="animate-fade-in">
+      <div style={{ marginBottom: '28px' }}>
+        <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 28, fontWeight: 700, marginBottom: 6 }}>Pitch Requests</h1>
+        <p style={{ color: '#64748b', fontSize: 14 }}>Manage incoming pitch requests and submit post-pitch feedback</p>
+      </div>
+
+      {/* Tabs */}
+      <div style={{ display: 'flex', gap: '4px', marginBottom: '24px', background: 'rgba(255,255,255,0.04)', borderRadius: '12px', padding: '4px', width: 'fit-content' }}>
+        {(['all', 'pending', 'active', 'closed'] as const).map(tab => (
+          <button key={tab} onClick={() => setActiveTab(tab)} style={{
+            padding: '8px 20px', borderRadius: '9px', border: 'none',
+            background: activeTab === tab ? 'rgba(124,58,237,0.3)' : 'transparent',
+            color: activeTab === tab ? '#a78bfa' : '#64748b',
+            fontSize: '13px', fontWeight: 600, cursor: 'pointer',
+            transition: 'all 0.15s', fontFamily: 'Inter', textTransform: 'capitalize',
+          }}>
+            {tab} {tab === 'all' ? `(${MOCK_PITCHES.length})` : tab === 'pending' ? `(${MOCK_PITCHES.filter(p => p.status === 'pending').length})` : ''}
+          </button>
+        ))}
+      </div>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        {filtered.map((pitch) => {
+          const startup = MOCK_STARTUPS.find(s => s.id === pitch.startupId);
+          const cfg = STATUS_CONFIG[pitch.status];
+
+          return (
+            <div key={pitch.id} className="card glass-hover">
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '20px' }}>
+                <div style={{
+                  width: 52, height: 52, borderRadius: '14px', flexShrink: 0,
+                  background: 'rgba(124,58,237,0.15)', border: '1px solid rgba(124,58,237,0.25)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontFamily: 'Space Grotesk', fontSize: 22, fontWeight: 800, color: '#a78bfa',
+                }}>
+                  {pitch.startupName?.charAt(0)}
+                </div>
+
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <h3 style={{ fontSize: 16, fontWeight: 700 }}>{pitch.startupName}</h3>
+                      <span style={{ padding: '2px 10px', borderRadius: '99px', fontSize: 11, fontWeight: 600, background: cfg.bg, color: cfg.color, border: `1px solid ${cfg.color}30` }}>
+                        {cfg.label}
+                      </span>
+                    </div>
+                    <span style={{ fontSize: 12, color: '#334155' }}>
+                      {pitch.request.sentAt.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
+                    </span>
+                  </div>
+
+                  <p style={{ fontSize: 13, color: '#64748b', lineHeight: 1.6, marginBottom: '12px' }}>
+                    {pitch.request.message}
+                  </p>
+
+                  <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', marginBottom: '16px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: 13, color: '#94a3b8' }}>
+                      <Calendar size={13} color="#7c3aed" />
+                      Proposed: {pitch.request.proposedDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
+                    </div>
+                    {startup && (
+                      <>
+                        <div style={{ fontSize: 13, color: '#94a3b8' }}>
+                          MRR: <strong style={{ color: '#10b981' }}>${(startup.metrics.mrr / 1000).toFixed(1)}K</strong>
+                        </div>
+                        <div style={{ fontSize: 13, color: '#94a3b8' }}>
+                          AI Score: <strong style={{ color: '#a78bfa' }}>{pitch.request.snapshotScore}/100</strong>
+                        </div>
+                      </>
+                    )}
+                  </div>
+
+                  {pitch.meeting.confirmedDate && (
+                    <div style={{ display: 'flex', gap: '12px', padding: '10px 14px', borderRadius: '10px', background: 'rgba(16,185,129,0.07)', border: '1px solid rgba(16,185,129,0.15)', marginBottom: '12px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: 13, color: '#34d399' }}>
+                        <CheckCircle size={13} />
+                        Meeting: {pitch.meeting.confirmedDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })}
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: 13, color: '#34d399' }}>
+                        <Video size={13} /> Online
+                      </div>
+                    </div>
+                  )}
+
+                  <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                    {pitch.status === 'pending' && (
+                      <>
+                        <button className="btn-primary" style={{ fontSize: 12, padding: '7px 16px' }} onClick={() => acceptPitch(pitch.id)}>
+                          <CheckCircle size={13} /> Accept
+                        </button>
+                        <button onClick={() => declinePitch(pitch.id)} style={{
+                          display: 'flex', alignItems: 'center', gap: '6px',
+                          padding: '7px 16px', fontSize: 12, borderRadius: '8px', border: '1px solid rgba(239,68,68,0.3)',
+                          background: 'rgba(239,68,68,0.1)', color: '#f87171', cursor: 'pointer', fontFamily: 'Inter',
+                        }}>
+                          <XCircle size={13} /> Decline
+                        </button>
+                      </>
+                    )}
+                    {pitch.status === 'feedback_pending' && (
+                      <button className="btn-primary" style={{ fontSize: 12, padding: '7px 16px' }} onClick={() => setActiveFeedback(pitch)}>
+                        <MessageSquare size={13} /> Submit Feedback
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+
+        {filtered.length === 0 && (
+          <div className="card" style={{ textAlign: 'center', padding: '60px' }}>
+            <Clock size={40} style={{ margin: '0 auto 16px', opacity: 0.2, display: 'block' }} />
+            <p style={{ color: '#475569' }}>No pitches in this category</p>
+          </div>
+        )}
+      </div>
+
+      {activeFeedback && <FeedbackModal pitch={activeFeedback} onClose={() => setActiveFeedback(null)} />}
+    </div>
+  );
+}
