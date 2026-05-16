@@ -7,7 +7,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import {
   LayoutDashboard, Map, FolderOpen, Presentation, Brain,
   Users, TrendingUp, Briefcase, LogOut, Zap,
-  BarChart3, CheckCircle, ChevronRight, Bell, X, Heart,
+  BarChart3, CheckCircle, ChevronRight, Bell, X, Heart, MessageSquare, Kanban,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { collection, query, where, onSnapshot, orderBy, limit, updateDoc, doc } from 'firebase/firestore';
@@ -34,12 +34,14 @@ const NAV = {
     { href: '/founder/data-room', icon: <FolderOpen size={16} />, label: 'Data Room', notifKey: 'ai_score' },
     { href: '/founder/pitches', icon: <Presentation size={16} />, label: 'Pitches', notifKey: 'pitch' },
     { href: '/founder/ai-copilot', icon: <Brain size={16} />, label: 'AI Copilot', notifKey: null },
+    { href: '/founder/chat', icon: <MessageSquare size={16} />, label: 'Support Chat', notifKey: null },
   ],
   investor: [
     { href: '/investor', icon: <LayoutDashboard size={16} />, label: 'Dashboard', notifKey: null },
     { href: '/investor/deal-flow', icon: <TrendingUp size={16} />, label: 'Deal Flow', notifKey: 'new_startup' },
     { href: '/investor/pitches', icon: <Briefcase size={16} />, label: 'Pitches', notifKey: 'pitch' },
     { href: '/investor/portfolio', icon: <BarChart3 size={16} />, label: 'Portfolio', notifKey: null },
+    { href: '/investor/crm', icon: <Kanban size={16} />, label: 'CRM Pipeline', notifKey: null },
   ],
   admin: [
     { href: '/admin', icon: <LayoutDashboard size={16} />, label: 'Dashboard', notifKey: null },

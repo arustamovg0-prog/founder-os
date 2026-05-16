@@ -109,6 +109,31 @@ export default function OnboardingPage() {
           linkedStartupId: startupRef.id,
           onboardingCompleted: true,
         }, { merge: true });
+
+        // 4. AI Auto-Analysis — Gemini генерирует executive summary и начальный score
+        try {
+          const aiRes = await fetch('/api/ai/analyze-startup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              name: data.startupName, tagline: data.tagline,
+              industry: data.industry, stage: data.stage,
+              location: data.location, teamSize: data.teamSize,
+              problem: data.problem,
+            }),
+          });
+          if (aiRes.ok) {
+            const aiData = await aiRes.json();
+            await setDoc(startupRef, {
+              executiveSummaryAI: aiData.executiveSummaryAI || '',
+              aiScores: aiData.aiScores || { overallReadinessScore: 0, pitchDeckScore: 0 },
+              aiStrengths: aiData.strengths || [],
+              aiWeaknesses: aiData.weaknesses || [],
+              aiRecommendation: aiData.recommendation || 'pass',
+              aiNextSteps: aiData.nextSteps || '',
+            }, { merge: true });
+          }
+        } catch { /* AI analysis is non-blocking */ }
       }
     } catch (err) {
       console.warn('Firestore save failed (demo mode?):', err);

@@ -614,3 +614,86 @@ export const aiRoadmapHints = functions
     log('aiRoadmapHints', `Done. Processed ${snap.size} startups`);
     return null;
   });
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 7. SMART ALERTS — onStartupMetricUpdate
+// Trigger: startups/{startupId} document update
+// Flow: MRR drop >20% in 30d OR runway <3mo → notify founders + investors + Gemini action plan
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const onStartupMetricUpdate = functions
+  .region('us-central1')
+  .runWith({ memory: '256MB', timeoutSeconds: 120 })
+  .firestore
+  .document('startups/{startupId}')
+  .onUpdate(async (change, context) => {
+    const before = change.before.data();
+    const after = change.after.data();
+    const { startupId } = context.params;
+
+    const prevMrr = before.metrics?.mrr || 0;
+    const newMrr = after.metrics?.mrr || 0;
+    const prevRunway = before.metrics?.runwayMonths || 99;
+    const newRunway = after.metrics?.runwayMonths || 99;
+
+    const mrrDropPct = prevMrr > 0 ? ((prevMrr - newMrr) / prevMrr) * 100 : 0;
+    const isMrrAlert = mrrDropPct >= 20;
+    const isRunwayAlert = newRunway <= 3 && prevRunway > 3;
+
+    if (!isMrrAlert && !isRunwayAlert) return null;
+
+    log('onStartupMetricUpdate', `ALERT for ${startupId}: MRR drop=${mrrDropPct.toFixed(1)}%, runway=${newRunway}mo`);
+
+    const model = gemini.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const alertType = isMrrAlert ? 'MRR_DROP' : 'RUNWAY_CRITICAL';
+
+    // Generate AI action plan
+    let actionPlan = '';
+    try {
+      const result = await model.generateContent(
+        `Startup "${after.name}" (${after.industry}) has a critical alert: ${
+          isMrrAlert
+            ? `MRR dropped from $${prevMrr} to $${newMrr} (${mrrDropPct.toFixed(0)}% drop in 30 days)`
+            : `Runway is critically low at ${newRunway} months`
+        }.
+        Give a 3-step emergency action plan. Return ONLY JSON:
+        {"steps": ["step1", "step2", "step3"], "urgency": "critical|high"}`
+      );
+      const match = result.response.text().match(/\{[\s\S]*\}/);
+      if (match) actionPlan = JSON.parse(match[0]).steps?.join(' → ') || '';
+    } catch { /* action plan optional */ }
+
+    const title = isMrrAlert ? `⚠️ MRR Alert: -${mrrDropPct.toFixed(0)}%` : `🚨 Critical Runway: ${newRunway} мес.`;
+    const body = isMrrAlert
+      ? `MRR упал с $${prevMrr.toLocaleString()} до $${newMrr.toLocaleString()}${actionPlan ? '. ' + actionPlan.slice(0, 80) : ''}`
+      : `Осталось ${newRunway} месяц runway${actionPlan ? '. ' + actionPlan.slice(0, 80) : ''}`;
+
+    // Notify all founders
+    for (const founderId of (after.founderIds || [])) {
+      await writeNotification(founderId, { type: 'feedback_received', title, body, href: '/founder' });
+    }
+
+    // Notify linked investors (who have this startup in their digests)
+    const digestsSnap = await db.collection('investor_digests')
+      .where('topMatches', 'array-contains', after.name)
+      .limit(10).get();
+    for (const d of digestsSnap.docs) {
+      await writeNotification(d.data().investorId, {
+        type: 'feedback_received',
+        title: `Portfolio Alert: ${after.name}`,
+        body,
+        href: '/investor/crm',
+      });
+    }
+
+    // Save alert log
+    await db.collection('startup_alerts').add({
+      startupId, alertType, prevMrr, newMrr, prevRunway, newRunway,
+      mrrDropPct, actionPlan,
+      resolvedAt: null,
+      createdAt: admin.firestore.FieldValue.serverTimestamp(),
+    });
+
+    log('onStartupMetricUpdate', `Alert logged for ${startupId}: ${alertType}`);
+    return null;
+  });
