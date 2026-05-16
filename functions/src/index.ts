@@ -62,7 +62,7 @@ export const onPitchDeckUploaded = functions
   .region('us-central1')
   .runWith({ memory: '1GB', timeoutSeconds: 300 })
   .storage.object()
-  .onFinalize(async (object) => {
+  .onFinalize(async (object: any) => {
     const filePath = object.name || '';
 
     // Проверяем что это pitch deck (PDF в папке startup_documents)
@@ -368,7 +368,7 @@ export const onStageVerified = functions
   .region('us-central1')
   .firestore
   .document('startup_roadmap_progress/{startupId}/stages/{stageId}')
-  .onUpdate(async (change, context) => {
+  .onUpdate(async (change: any, context: any) => {
     const before = change.before.data();
     const after = change.after.data();
     const { startupId, stageId } = context.params;
@@ -421,7 +421,7 @@ export const onPitchFeedback = functions
   .runWith({ memory: '256MB', timeoutSeconds: 120 })
   .firestore
   .document('pitch_events/{pitchId}')
-  .onUpdate(async (change, context) => {
+  .onUpdate(async (change: any, context: any) => {
     const before = change.before.data();
     const after = change.after.data();
 
@@ -497,7 +497,7 @@ Generate a concise action plan for the founder. Return ONLY valid JSON:
 export const onUserCreated = functions
   .region('us-central1')
   .auth.user()
-  .onCreate(async (user) => {
+  .onCreate(async (user: any) => {
     log('onUserCreated', `New user: ${user.email} (${user.uid})`);
 
     try {
@@ -626,7 +626,7 @@ export const onStartupMetricUpdate = functions
   .runWith({ memory: '256MB', timeoutSeconds: 120 })
   .firestore
   .document('startups/{startupId}')
-  .onUpdate(async (change, context) => {
+  .onUpdate(async (change: any, context: any) => {
     const before = change.before.data();
     const after = change.after.data();
     const { startupId } = context.params;
@@ -695,5 +695,72 @@ export const onStartupMetricUpdate = functions
     });
 
     log('onStartupMetricUpdate', `Alert logged for ${startupId}: ${alertType}`);
+    return null;
+  });
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 8. FOUNDER WEEKLY DIGEST (Cloud Scheduler)
+// Schedule: Every Monday at 9:00 AM
+// Action: Generates a weekly recap of metrics and AI Copilot top 3 actions
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const founderWeeklyDigest = functions
+  .region('us-central1')
+  .pubsub.schedule('0 9 * * 1')
+  .timeZone('Asia/Tashkent')
+  .onRun(async () => {
+    log('founderWeeklyDigest', 'Starting weekly digest for founders...');
+    const startupsSnap = await db.collection('startups').where('status', '==', 'active').get();
+
+    const model = gemini.getGenerativeModel({ model: 'gemini-1.5-flash' });
+
+    let count = 0;
+    for (const doc of startupsSnap.docs) {
+      const data = doc.data();
+      const founderIds = data.founderIds || [];
+      if (founderIds.length === 0) continue;
+
+      try {
+        const prompt = `
+        You are Founder OS AI Copilot. Write a short weekly digest for startup "${data.name}".
+        Current MRR: $${data.metrics?.mrr || 0}. Score: ${data.aiScores?.overallReadinessScore || 0}.
+        Provide exactly 3 actionable bullet points for what the founder should focus on this week to improve their AI Score and MRR.
+        Return raw text (no markdown formatting outside of bullets).
+        `;
+        const res = await model.generateContent(prompt);
+        const advice = res.response.text().trim();
+
+        const html = `
+          <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #334155;">
+            <h2 style="color: #7c3aed;">Weekly Founder Digest: ${data.name}</h2>
+            <p>Here is your ecosystem snapshot for the week.</p>
+            <table width="100%" cellpadding="10" style="background: #f8fafc; border-radius: 8px; text-align: center;">
+              <tr>
+                <td><strong>AI Score</strong><br/>${data.aiScores?.overallReadinessScore || 0}/100</td>
+                <td><strong>MRR</strong><br/>$${data.metrics?.mrr || 0}</td>
+                <td><strong>MAU</strong><br/>${data.metrics?.mau || 0}</td>
+              </tr>
+            </table>
+            <h3>AI Copilot Top 3 Actions This Week:</h3>
+            <div style="background: #f0fdf4; border-left: 4px solid #10b981; padding: 12px; border-radius: 4px;">
+              ${advice.replace(/\n/g, '<br/>')}
+            </div>
+            <p style="margin-top: 20px;"><a href="https://founder-os-test.web.app/founder" style="display:inline-block; padding: 10px 20px; background: #7c3aed; color: #fff; text-decoration: none; border-radius: 6px;">Open Dashboard</a></p>
+          </div>
+        `;
+
+        for (const fId of founderIds) {
+          const uDoc = await db.collection('users').doc(fId).get();
+          if (uDoc.exists && uDoc.data()?.email) {
+            await sendEmail(uDoc.data()!.email, `Your Weekly Founder Digest: ${data.name}`, html);
+            count++;
+          }
+        }
+      } catch (err: any) {
+        log('founderWeeklyDigest', `Error for ${data.name}: ${err.message}`, 'error');
+      }
+    }
+
+    log('founderWeeklyDigest', `Done. Sent ${count} emails.`);
     return null;
   });

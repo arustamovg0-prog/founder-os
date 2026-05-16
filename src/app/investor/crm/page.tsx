@@ -16,6 +16,7 @@ interface Deal {
   notes: string;
   addedAt: Date;
   priority: 'low' | 'medium' | 'high';
+  dealAmount?: number;
 }
 
 // ─── Pipeline config ──────────────────────────────────────────────────────────
@@ -39,11 +40,11 @@ function fmt(n: number) {
 // ─── Initial deals ────────────────────────────────────────────────────────────
 
 const INITIAL_DEALS: Deal[] = [
-  { id: 'd1', startupId: 'startup_1', stage: 'due_diligence', notes: 'Strong B2B play. Team impressive.', addedAt: new Date(Date.now() - 5 * 86400000), priority: 'high' },
+  { id: 'd1', startupId: 'startup_1', stage: 'due_diligence', notes: 'Strong B2B play. Team impressive.', addedAt: new Date(Date.now() - 5 * 86400000), priority: 'high', dealAmount: 200000 },
   { id: 'd2', startupId: 'startup_2', stage: 'watching', notes: 'Monitor traction for 30 days', addedAt: new Date(Date.now() - 3 * 86400000), priority: 'medium' },
   { id: 'd3', startupId: 'startup_3', stage: 'contacted', notes: 'Sent intro email', addedAt: new Date(Date.now() - 1 * 86400000), priority: 'medium' },
-  { id: 'd4', startupId: 'startup_4', stage: 'term_sheet', notes: 'Drafting $150K SAFE note', addedAt: new Date(Date.now() - 10 * 86400000), priority: 'high' },
-  { id: 'd5', startupId: 'startup_5', stage: 'closed', notes: 'Deal closed. Board observer seat.', addedAt: new Date(Date.now() - 20 * 86400000), priority: 'low' },
+  { id: 'd4', startupId: 'startup_4', stage: 'term_sheet', notes: 'Drafting $150K SAFE note', addedAt: new Date(Date.now() - 10 * 86400000), priority: 'high', dealAmount: 150000 },
+  { id: 'd5', startupId: 'startup_5', stage: 'closed', notes: 'Deal closed. Board observer seat.', addedAt: new Date(Date.now() - 20 * 86400000), priority: 'low', dealAmount: 500000 },
 ];
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -54,6 +55,7 @@ export default function InvestorCRMPage() {
   const [addModal, setAddModal] = useState<PipelineStage | null>(null);
   const [selectedDeal, setSelectedDeal] = useState<Deal | null>(null);
   const [noteEdit, setNoteEdit] = useState('');
+  const [dealAmountEdit, setDealAmountEdit] = useState<number | ''>('');
 
   const getStartup = (id: string) => MOCK_STARTUPS.find(s => s.id === id);
 
@@ -83,7 +85,7 @@ export default function InvestorCRMPage() {
 
   const saveNote = () => {
     if (!selectedDeal) return;
-    setDeals(prev => prev.map(d => d.id === selectedDeal.id ? { ...d, notes: noteEdit } : d));
+    setDeals(prev => prev.map(d => d.id === selectedDeal.id ? { ...d, notes: noteEdit, dealAmount: dealAmountEdit === '' ? undefined : dealAmountEdit } : d));
     setSelectedDeal(null);
     toast.success('Notes saved');
   };
@@ -92,8 +94,24 @@ export default function InvestorCRMPage() {
     .filter(d => d.stage === 'closed' || d.stage === 'term_sheet')
     .reduce((a, d) => {
       const s = getStartup(d.startupId);
-      return a + (s?.metrics.arr || 0) * 0.1;
+      return a + (d.dealAmount || (s?.metrics.arr || 0) * 0.1);
     }, 0);
+
+  const exportCsv = () => {
+    const header = 'Startup,Stage,MRR,Runway,AI Score,Deal Amount,Notes\n';
+    const rows = deals.map(d => {
+      const s = getStartup(d.startupId);
+      return `"${s?.name}","${d.stage}",${s?.metrics.mrr},${s?.metrics.runwayMonths},${s?.aiScores.overallReadinessScore},${d.dealAmount || 0},"${d.notes.replace(/"/g, '""')}"`;
+    }).join('\n');
+    const blob = new Blob([header + rows], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'investor_crm.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success('CSV Exported');
+  };
 
   return (
     <div className="animate-fade-in">
@@ -104,6 +122,9 @@ export default function InvestorCRMPage() {
           <p style={{ color: '#64748b', fontSize: 14 }}>Deal pipeline — drag cards between stages</p>
         </div>
         <div style={{ display: 'flex', gap: '8px' }}>
+          <button onClick={exportCsv} className="btn-secondary" style={{ fontSize: 13, padding: '8px 16px' }}>
+            Export CSV
+          </button>
           <div style={{ padding: '8px 16px', borderRadius: 10, background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.2)', fontSize: 13, color: '#34d399', fontFamily: 'Space Grotesk', fontWeight: 700 }}>
             Portfolio est. {fmt(totalValue)}
           </div>
@@ -164,7 +185,7 @@ export default function InvestorCRMPage() {
                     draggable
                     onDragStart={() => setDragId(deal.id)}
                     onDragEnd={() => setDragId(null)}
-                    onClick={() => { setSelectedDeal(deal); setNoteEdit(deal.notes); }}
+                    onClick={() => { setSelectedDeal(deal); setNoteEdit(deal.notes); setDealAmountEdit(deal.dealAmount || ''); }}
                     style={{
                       padding: '14px', borderRadius: '12px', cursor: 'grab',
                       background: dragId === deal.id ? 'rgba(124,58,237,0.15)' : 'rgba(255,255,255,0.04)',
@@ -269,6 +290,10 @@ export default function InvestorCRMPage() {
                     <div style={{ fontFamily: 'Space Grotesk', fontSize: 16, fontWeight: 700 }}>{kv.v}</div>
                   </div>
                 ))}
+              </div>
+              <div style={{ marginBottom: 12 }}>
+                <label style={{ fontSize: 12, color: '#64748b', fontWeight: 600, display: 'block', marginBottom: 6 }}>Deal Amount ($)</label>
+                <input className="input-field" type="number" placeholder="e.g. 150000" value={dealAmountEdit} onChange={e => setDealAmountEdit(e.target.value === '' ? '' : Number(e.target.value))} />
               </div>
               <label style={{ fontSize: 12, color: '#64748b', fontWeight: 600, display: 'block', marginBottom: 6 }}>Notes</label>
               <textarea className="input-field" rows={4} value={noteEdit} onChange={e => setNoteEdit(e.target.value)} style={{ resize: 'vertical' }} />

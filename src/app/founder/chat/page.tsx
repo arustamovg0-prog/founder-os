@@ -4,6 +4,8 @@ import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Brain, Send, Bot, User, Sparkles, RefreshCw, MessageSquare } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { db } from '@/lib/firebase';
+import { doc, onSnapshot, setDoc, serverTimestamp } from 'firebase/firestore';
 
 interface Message {
   id: string;
@@ -73,6 +75,27 @@ export default function FounderChatPage() {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
+  useEffect(() => {
+    if (!profile?.uid) return;
+    const unsub = onSnapshot(doc(db, 'support_threads', profile.uid), (docSnap) => {
+      if (docSnap.exists() && docSnap.data().messages) {
+        const msgs = docSnap.data().messages.map((m: any) => ({
+          ...m,
+          timestamp: m.timestamp?.toDate ? m.timestamp.toDate() : new Date(m.timestamp)
+        }));
+        if (msgs.length > 0) setMessages(msgs);
+      }
+    });
+    return () => unsub();
+  }, [profile?.uid]);
+
+  const clearChat = async () => {
+    setMessages([WELCOME]);
+    if (profile?.uid) {
+      await setDoc(doc(db, 'support_threads', profile.uid), { messages: [WELCOME], updatedAt: serverTimestamp() });
+    }
+  };
+
   const send = async (text?: string) => {
     const msg = (text || input).trim();
     if (!msg || loading) return;
@@ -80,16 +103,25 @@ export default function FounderChatPage() {
     const userMsg: Message = {
       id: `u_${Date.now()}`, role: 'user', content: msg, timestamp: new Date(),
     };
-    setMessages(prev => [...prev, userMsg]);
+    const newMsgs = [...messages, userMsg];
+    setMessages(newMsgs);
     setInput('');
     setLoading(true);
+
+    if (profile?.uid) {
+      await setDoc(doc(db, 'support_threads', profile.uid), { messages: newMsgs, updatedAt: serverTimestamp() }, { merge: true });
+    }
 
     try {
       const reply = await callGemini(messages, msg);
       const botMsg: Message = {
         id: `a_${Date.now()}`, role: 'assistant', content: reply, timestamp: new Date(),
       };
-      setMessages(prev => [...prev, botMsg]);
+      const finalMsgs = [...newMsgs, botMsg];
+      setMessages(finalMsgs);
+      if (profile?.uid) {
+        await setDoc(doc(db, 'support_threads', profile.uid), { messages: finalMsgs, updatedAt: serverTimestamp() }, { merge: true });
+      }
     } catch {
       toast.error('Ошибка соединения с AI');
       const errMsg: Message = {
@@ -122,7 +154,7 @@ export default function FounderChatPage() {
             AI ассистент онлайн
           </div>
         </div>
-        <button onClick={() => setMessages([WELCOME])} style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: '10px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', color: '#64748b', cursor: 'pointer', fontSize: 12, fontFamily: 'Inter' }}>
+        <button onClick={clearChat} style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: '10px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', color: '#64748b', cursor: 'pointer', fontSize: 12, fontFamily: 'Inter' }}>
           <RefreshCw size={12} /> Новый чат
         </button>
       </div>

@@ -1,0 +1,121 @@
+'use client';
+
+import { useState } from 'react';
+import { MOCK_STARTUPS } from '@/lib/mockData';
+import { Video, Mic, MicOff, Camera, CameraOff, MonitorUp, PhoneOff, Users, MessageSquare, Brain } from 'lucide-react';
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
+
+export default function VideoPitchRoomPage({ params }: { params: { id: string } }) {
+  const router = useRouter();
+  const [micOn, setMicOn] = useState(true);
+  const [camOn, setCamOn] = useState(true);
+  const [activeTab, setActiveTab] = useState<'chat' | 'ai'>('ai');
+
+  const handleLeave = () => {
+    toast('Оставление комнаты...', { icon: '👋' });
+    router.push('/founder/pitches');
+  };
+
+  return (
+    <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 48px)' }}>
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+        <div>
+          <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 24, fontWeight: 700 }}>Pitch Room</h1>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#10b981' }}>
+            <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#10b981', boxShadow: '0 0 6px #10b981' }} />
+            Session Recording Active
+          </div>
+        </div>
+      </div>
+
+      <div style={{ display: 'flex', gap: '16px', flex: 1, minHeight: 0 }}>
+        {/* Main Video Area */}
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          {/* Main Stage */}
+          <div style={{ flex: 1, background: '#0a0a14', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)', position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            {camOn ? (
+              <div style={{ textAlign: 'center', color: '#64748b' }}>
+                <Video size={48} style={{ opacity: 0.2, margin: '0 auto 16px' }} />
+                <div>Investor Camera Feed Placeholder</div>
+              </div>
+            ) : (
+              <div style={{ width: 80, height: 80, borderRadius: '50%', background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, color: '#fff' }}>I</div>
+            )}
+            
+            <div style={{ position: 'absolute', bottom: 16, left: 16, padding: '6px 12px', background: 'rgba(0,0,0,0.6)', borderRadius: '8px', fontSize: 13, color: '#f8fafc', backdropFilter: 'blur(4px)' }}>
+              Aibek Ventures (Investor)
+            </div>
+          </div>
+
+          {/* Self View & Controls */}
+          <div style={{ display: 'flex', gap: '16px', height: '180px' }}>
+            <div style={{ width: '300px', background: '#0f111a', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)', position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+               {camOn ? (
+                <div style={{ textAlign: 'center', color: '#64748b', fontSize: 12 }}>Self Feed Placeholder</div>
+              ) : (
+                <div style={{ width: 60, height: 60, borderRadius: '50%', background: 'rgba(124,58,237,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, color: '#a78bfa' }}>Me</div>
+              )}
+              <div style={{ position: 'absolute', bottom: 12, left: 12, padding: '4px 8px', background: 'rgba(0,0,0,0.6)', borderRadius: '6px', fontSize: 11, color: '#f8fafc', backdropFilter: 'blur(4px)' }}>
+                You (Founder)
+              </div>
+            </div>
+
+            {/* Controls */}
+            <div style={{ flex: 1, background: 'rgba(255,255,255,0.02)', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>
+              <button onClick={() => setMicOn(!micOn)} style={{ width: 56, height: 56, borderRadius: '50%', background: micOn ? 'rgba(255,255,255,0.1)' : 'rgba(239,68,68,0.2)', border: `1px solid ${micOn ? 'rgba(255,255,255,0.1)' : 'rgba(239,68,68,0.4)'}`, color: micOn ? '#fff' : '#f87171', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'all 0.2s' }}>
+                {micOn ? <Mic size={24} /> : <MicOff size={24} />}
+              </button>
+              <button onClick={() => setCamOn(!camOn)} style={{ width: 56, height: 56, borderRadius: '50%', background: camOn ? 'rgba(255,255,255,0.1)' : 'rgba(239,68,68,0.2)', border: `1px solid ${camOn ? 'rgba(255,255,255,0.1)' : 'rgba(239,68,68,0.4)'}`, color: camOn ? '#fff' : '#f87171', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'all 0.2s' }}>
+                {camOn ? <Camera size={24} /> : <CameraOff size={24} />}
+              </button>
+              <button style={{ width: 56, height: 56, borderRadius: '50%', background: 'rgba(59,130,246,0.15)', border: '1px solid rgba(59,130,246,0.3)', color: '#60a5fa', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                <MonitorUp size={24} />
+              </button>
+              <button onClick={handleLeave} style={{ width: 72, height: 56, borderRadius: '28px', background: '#ef4444', border: 'none', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', marginLeft: '16px', boxShadow: '0 4px 12px rgba(239,68,68,0.3)' }}>
+                <PhoneOff size={24} />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Sidebar */}
+        <div style={{ width: '320px', background: 'rgba(255,255,255,0.02)', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+          {/* Tabs */}
+          <div style={{ display: 'flex', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+            <button onClick={() => setActiveTab('ai')} style={{ flex: 1, padding: '16px', background: activeTab === 'ai' ? 'rgba(124,58,237,0.1)' : 'transparent', border: 'none', color: activeTab === 'ai' ? '#a78bfa' : '#64748b', fontSize: 13, fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, cursor: 'pointer' }}>
+              <Brain size={14} /> AI Notes
+            </button>
+            <button onClick={() => setActiveTab('chat')} style={{ flex: 1, padding: '16px', background: activeTab === 'chat' ? 'rgba(255,255,255,0.05)' : 'transparent', border: 'none', color: activeTab === 'chat' ? '#f8fafc' : '#64748b', fontSize: 13, fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, cursor: 'pointer' }}>
+              <MessageSquare size={14} /> Chat
+            </button>
+          </div>
+
+          <div style={{ flex: 1, padding: '16px', overflowY: 'auto' }}>
+            {activeTab === 'ai' ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                <div style={{ padding: '12px', borderRadius: '10px', background: 'rgba(124,58,237,0.1)', border: '1px solid rgba(124,58,237,0.2)' }}>
+                  <div style={{ fontSize: 11, color: '#a78bfa', fontWeight: 700, marginBottom: 4, textTransform: 'uppercase' }}>Live Summary</div>
+                  <div style={{ fontSize: 13, color: '#e2e8f0', lineHeight: 1.5 }}>
+                    Investor is asking about Customer Acquisition Cost (CAC) and LTV ratio. You mentioned LTV/CAC is 3.2, which is a strong point.
+                  </div>
+                </div>
+                <div style={{ padding: '12px', borderRadius: '10px', background: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.2)' }}>
+                  <div style={{ fontSize: 11, color: '#60a5fa', fontWeight: 700, marginBottom: 4, textTransform: 'uppercase' }}>AI Suggestion</div>
+                  <div style={{ fontSize: 13, color: '#e2e8f0', lineHeight: 1.5 }}>
+                    Bring up the recent B2B partnership with local banks to support your growth claims.
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                 <div style={{ fontSize: 13, color: '#94a3b8', textAlign: 'center', marginTop: 20 }}>No messages yet</div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
