@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { Rocket, Building2, Globe, ChevronRight, ChevronLeft, Sparkles, CheckCircle, Upload, MapPin, Users } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { doc, setDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 
 const INDUSTRIES = ['FinTech', 'EdTech', 'AgriTech', 'HealthTech', 'E-Commerce', 'PropTech', 'HRTech', 'LegalTech', 'Other'];
 const STAGES = [
@@ -70,7 +72,48 @@ export default function OnboardingPage() {
 
   const handleFinish = async () => {
     setSubmitting(true);
-    await new Promise(r => setTimeout(r, 1200));
+    try {
+      const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true';
+
+      if (!isDemoMode && profile?.uid) {
+        // 1. Создаём стартап в Firestore
+        const startupRef = doc(collection(db, 'startups'));
+        await setDoc(startupRef, {
+          name: data.startupName,
+          tagline: data.tagline,
+          industry: data.industry,
+          stage: data.stage,
+          location: data.location,
+          problem: data.problem,
+          founderIds: [profile.uid],
+          founderName: profile.displayName || '',
+          founderEmail: profile.email || '',
+          metrics: { mrr: 0, arr: 0, mau: 0, runwayMonths: 0, teamSize: parseInt(data.teamSize) || 1, churnRate: 0, ltv: 0, cac: 0, ltvCacRatio: 0 },
+          aiScores: { overallReadinessScore: 0, pitchDeckScore: 0 },
+          roadmapProgress: 0,
+          status: 'active',
+          createdAt: serverTimestamp(),
+          lastActivityAt: serverTimestamp(),
+        });
+
+        // 2. Отмечаем онбординг как завершённый
+        await setDoc(doc(db, 'onboarding', profile.uid), {
+          completed: true,
+          completedAt: serverTimestamp(),
+          startupId: startupRef.id,
+          startupName: data.startupName,
+        }, { merge: true });
+
+        // 3. Обновляем профиль пользователя — привязываем стартап
+        await setDoc(doc(db, 'users', profile.uid), {
+          linkedStartupId: startupRef.id,
+          onboardingCompleted: true,
+        }, { merge: true });
+      }
+    } catch (err) {
+      console.warn('Firestore save failed (demo mode?):', err);
+    }
+
     toast.success('🎉 Стартап создан! Добро пожаловать в Founder OS', { duration: 4000 });
     router.push('/founder');
   };

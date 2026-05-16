@@ -41,6 +41,46 @@ export default function FounderPitchesPage() {
         </button>
       </div>
 
+      {/* Analytics Funnel */}
+      <div className="card" style={{ marginBottom: '24px', background: 'rgba(124,58,237,0.04)', borderColor: 'rgba(124,58,237,0.15)' }}>
+        <div style={{ fontSize: 12, color: '#a78bfa', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '20px' }}>
+          📊 Pitch Analytics — Conversion Funnel
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0', position: 'relative' }}>
+          {[
+            { label: 'Sent', val: pitches.length, color: '#7c3aed', pct: 100 },
+            { label: 'Viewed', val: pitches.filter(p => p.status !== 'pending').length, color: '#3b82f6', pct: Math.round((pitches.filter(p => p.status !== 'pending').length / pitches.length) * 100) },
+            { label: 'Meeting', val: pitches.filter(p => p.meeting.confirmedDate).length, color: '#f59e0b', pct: Math.round((pitches.filter(p => p.meeting.confirmedDate).length / pitches.length) * 100) },
+            { label: 'Decision', val: pitches.filter(p => p.status === 'accepted' || p.status === 'rejected' || p.status === 'closed').length, color: '#10b981', pct: Math.round((pitches.filter(p => p.status === 'accepted' || p.status === 'rejected' || p.status === 'closed').length / pitches.length) * 100) },
+          ].map((step, i) => (
+            <div key={i} style={{ textAlign: 'center', padding: '0 12px', position: 'relative' }}>
+              {i > 0 && <div style={{ position: 'absolute', left: -1, top: '50%', transform: 'translateY(-80%)', fontSize: 20, color: '#334155' }}>→</div>}
+              <div style={{ fontFamily: 'Space Grotesk', fontSize: 32, fontWeight: 800, color: step.color, marginBottom: 4 }}>{step.val}</div>
+              <div style={{ fontSize: 12, color: '#64748b', fontWeight: 600, marginBottom: 8 }}>{step.label}</div>
+              <div className="progress-bar">
+                <div style={{ height: '100%', width: `${step.pct}%`, borderRadius: 99, background: step.color, boxShadow: `0 0 8px ${step.color}50` }} />
+              </div>
+              <div style={{ fontSize: 11, color: step.color, marginTop: 4, fontWeight: 700 }}>{step.pct}%</div>
+            </div>
+          ))}
+        </div>
+
+        {/* Response time + rate */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px', marginTop: '24px', paddingTop: '20px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+          {[
+            { label: 'Response Rate', value: `${Math.round((pitches.filter(p => p.status !== 'pending').length / pitches.length) * 100)}%`, color: '#3b82f6', desc: 'Инвесторов ответили' },
+            { label: 'Avg Response Time', value: '4.2 дня', color: '#f59e0b', desc: 'Среднее время ответа' },
+            { label: 'Accept Rate', value: `${Math.round((pitches.filter(p => p.status === 'accepted' || p.status === 'feedback_pending').length / pitches.length) * 100)}%`, color: '#10b981', desc: 'Питчей приняты' },
+          ].map((kpi, i) => (
+            <div key={i} style={{ textAlign: 'center', padding: '14px', borderRadius: '12px', background: `${kpi.color}08`, border: `1px solid ${kpi.color}20` }}>
+              <div style={{ fontFamily: 'Space Grotesk', fontSize: 22, fontWeight: 800, color: kpi.color, marginBottom: 4 }}>{kpi.value}</div>
+              <div style={{ fontSize: 12, fontWeight: 700, color: '#94a3b8', marginBottom: 2 }}>{kpi.label}</div>
+              <div style={{ fontSize: 11, color: '#475569' }}>{kpi.desc}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* Stats */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '28px' }}>
         {[

@@ -10,10 +10,23 @@ export const metadata: Metadata = {
   title: 'Founder OS — Turn Chaos Into System',
   description: 'AI-powered startup CRM and ecosystem management platform by UNTITLED. Track startup journeys, connect founders with investors, and automate your deal flow.',
   keywords: 'startup, CRM, investor, founder, AI, ecosystem, UNTITLED',
-  openGraph: {
+  manifest: '/manifest.json',
+  themeColor: '#7c3aed',
+  viewport: 'width=device-width, initial-scale=1, maximum-scale=1',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
     title: 'Founder OS',
-    description: 'Turn Chaos Into System — AI Startup Platform',
+  },
+  openGraph: {
+    title: 'Founder OS — Turn Chaos Into System',
+    description: 'AI-powered startup ecosystem platform by UNTITLED',
     type: 'website',
+    siteName: 'Founder OS',
+  },
+  icons: {
+    icon: '/icons/icon-192x192.png',
+    apple: '/icons/icon-192x192.png',
   },
 };
 

@@ -134,6 +134,92 @@ export default function FounderDashboard() {
         ))}
       </div>
 
+      {/* ── Founder Health Widget ──────────────────────────────────────────── */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px', marginBottom: '24px' }}>
+        {/* AI Score detail */}
+        <div className="card" style={{ background: 'rgba(124,58,237,0.05)', borderColor: 'rgba(124,58,237,0.2)' }}>
+          <div style={{ fontSize: 11, color: '#a78bfa', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 14, display: 'flex', alignItems: 'center', gap: 6 }}>
+            <Brain size={12} /> AI Score Breakdown
+          </div>
+          {[
+            { label: 'Pitch Deck', val: s.aiScores.pitchDeckScore || 0, color: '#7c3aed' },
+            { label: 'Market Fit', val: Math.round((s.aiScores.overallReadinessScore || 0) * 0.9), color: '#3b82f6' },
+            { label: 'Traction', val: Math.round((s.aiScores.overallReadinessScore || 0) * 0.8), color: '#10b981' },
+            { label: 'Team', val: Math.round((s.aiScores.overallReadinessScore || 0) * 1.05), color: '#f59e0b' },
+          ].map((item, i) => (
+            <div key={i} style={{ marginBottom: 10 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, marginBottom: 4 }}>
+                <span style={{ color: '#64748b' }}>{item.label}</span>
+                <span style={{ color: item.color, fontWeight: 700 }}>{Math.min(item.val, 100)}</span>
+              </div>
+              <div className="progress-bar">
+                <div style={{ height: '100%', width: `${Math.min(item.val, 100)}%`, borderRadius: 99, background: item.color, boxShadow: `0 0 6px ${item.color}60` }} />
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Next Step */}
+        <div className="card" style={{ background: 'rgba(16,185,129,0.04)', borderColor: 'rgba(16,185,129,0.15)' }}>
+          <div style={{ fontSize: 11, color: '#34d399', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 14 }}>
+            ⚡ Следующий шаг
+          </div>
+          {currentStage && (
+            <>
+              <div style={{ fontFamily: 'Space Grotesk', fontSize: 15, fontWeight: 700, marginBottom: 8 }}>{currentStage.title}</div>
+              <p style={{ fontSize: 12, color: '#64748b', lineHeight: 1.6, marginBottom: 14 }}>{currentStage.description}</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                {currentStage.requiredArtifacts.slice(0, 2).map(a => (
+                  <div key={a.key} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
+                    <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#f59e0b', flexShrink: 0 }} />
+                    <span style={{ color: '#94a3b8' }}>{a.label}</span>
+                    {a.isRequired && <span style={{ fontSize: 9, color: '#f59e0b', fontWeight: 700 }}>REQUIRED</span>}
+                  </div>
+                ))}
+              </div>
+              <Link href="/founder/roadmap" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, marginTop: 14, fontSize: 12, color: '#34d399', fontWeight: 600, textDecoration: 'none' }}>
+                Открыть Roadmap <ArrowUpRight size={12} />
+              </Link>
+            </>
+          )}
+        </div>
+
+        {/* Ecosystem rank */}
+        <div className="card" style={{ background: 'rgba(245,158,11,0.04)', borderColor: 'rgba(245,158,11,0.15)' }}>
+          <div style={{ fontSize: 11, color: '#fbbf24', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 14 }}>
+            🏆 Ecosystem Rank
+          </div>
+          {(() => {
+            const sorted = [...MOCK_STARTUPS].sort((a, b) => (b.aiScores.overallReadinessScore || 0) - (a.aiScores.overallReadinessScore || 0));
+            const rank = sorted.findIndex(st => st.id === s.id) + 1;
+            const medals = ['🥇', '🥈', '🥉'];
+            return (
+              <>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 }}>
+                  <span style={{ fontSize: 36 }}>{medals[rank - 1] || `#${rank}`}</span>
+                  <div>
+                    <div style={{ fontFamily: 'Space Grotesk', fontSize: 22, fontWeight: 800, color: '#fbbf24' }}>#{rank}</div>
+                    <div style={{ fontSize: 11, color: '#64748b' }}>из {MOCK_STARTUPS.length} стартапов</div>
+                  </div>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  {sorted.slice(0, 3).map((st, i) => (
+                    <div key={st.id} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 10px', borderRadius: 8, background: st.id === s.id ? 'rgba(245,158,11,0.1)' : 'transparent', border: st.id === s.id ? '1px solid rgba(245,158,11,0.2)' : 'none' }}>
+                      <span style={{ fontSize: 12 }}>{medals[i]}</span>
+                      <span style={{ fontSize: 12, flex: 1, color: st.id === s.id ? '#fbbf24' : '#64748b', fontWeight: st.id === s.id ? 700 : 400 }}>{st.name}</span>
+                      <span style={{ fontSize: 11, color: '#475569' }}>{st.aiScores.overallReadinessScore}</span>
+                    </div>
+                  ))}
+                </div>
+                <Link href="/leaderboard" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, marginTop: 12, fontSize: 12, color: '#fbbf24', fontWeight: 600, textDecoration: 'none' }}>
+                  Весь лидерборд <ArrowUpRight size={12} />
+                </Link>
+              </>
+            );
+          })()}
+        </div>
+      </div>
+
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
         {/* Current Stage */}
         <div className="card">
