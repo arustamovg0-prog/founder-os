@@ -5,22 +5,28 @@
  * ╠═══════════════════════════════════════════════════════════════╣
  * ║  Functions:                                                   ║
  * ║  1. onPitchDeckUploaded  — AI Scoring Pipeline               ║
- * ║  2. investorMatchEngine  — Weekly personalized digest         ║
+ * ║  2. investorMatchEngine  — Weekly digest + SendGrid email     ║
  * ║  3. onStageVerified      — Notify founder on approval         ║
  * ║  4. onPitchFeedback      — Post-pitch AI loop                 ║
  * ║  5. onUserCreated        — Set Custom Claims + onboarding     ║
+ * ║  6. aiRoadmapHints       — Daily AI hints for stuck startups  ║
  * ╚═══════════════════════════════════════════════════════════════╝
  */
 
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import * as sgMail from '@sendgrid/mail';
 
 admin.initializeApp();
 const db = admin.firestore();
 const storage = admin.storage();
-
 const gemini = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
+
+// Init SendGrid
+if (process.env.SENDGRID_API_KEY) {
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+}
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -28,15 +34,21 @@ function log(fn: string, msg: string, data?: any) {
   functions.logger.info(`[${fn}] ${msg}`, data || {});
 }
 
-async function writeNotification(
-  userId: string,
-  notif: { type: string; title: string; body: string; href?: string }
-) {
+async function writeNotification(userId: string, notif: { type: string; title: string; body: string; href?: string }) {
   await db.collection('notifications').add({
-    userId,
-    ...notif,
-    read: false,
+    userId, ...notif, read: false,
     createdAt: admin.firestore.FieldValue.serverTimestamp(),
+  });
+}
+
+async function sendEmail(to: string, subject: string, html: string) {
+  if (!process.env.SENDGRID_API_KEY) {
+    functions.logger.warn('SendGrid not configured — skipping email to:', to);
+    return;
+  }
+  await sgMail.send({
+    to, from: process.env.SENDGRID_FROM_EMAIL || 'noreply@founderos.io',
+    subject, html,
   });
 }
 
@@ -285,7 +297,7 @@ Rank top 3 matches based on alignment with investor profile.
           week: new Date().toISOString().split('T')[0],
         });
 
-        // 5. Пишем in-app уведомление
+        // 5. In-app уведомление
         await writeNotification(investor.id, {
           type: 'new_startup',
           title: '🎯 Еженедельный AI Match Digest',
@@ -293,7 +305,48 @@ Rank top 3 matches based on alignment with investor profile.
           href: '/investor/deal-flow',
         });
 
-        log('investorMatchEngine', `Generated digest for investor: ${investor.displayName}`);
+        // 6. SendGrid email digest
+        if (investor.email) {
+          const topHtml = matchData.topMatches.map((m: any, i: number) => `
+            <tr style="border-bottom:1px solid #1e1e3a">
+              <td style="padding:14px;font-size:13px;color:#a78bfa;font-weight:700">${i + 1}. ${m.startupName}</td>
+              <td style="padding:14px;font-size:13px;color:#10b981;font-weight:700">${m.matchScore}/100</td>
+              <td style="padding:14px;font-size:12px;color:#94a3b8">${m.reason}</td>
+            </tr>`).join('');
+
+          const html = `
+            <!DOCTYPE html><html><body style="margin:0;padding:0;background:#050510;font-family:Inter,sans-serif">
+            <div style="max-width:600px;margin:0 auto;padding:40px 24px">
+              <div style="text-align:center;margin-bottom:32px">
+                <h1 style="color:#a78bfa;font-size:24px;margin:0">⚡ Founder OS</h1>
+                <p style="color:#475569;font-size:13px;margin:8px 0 0">Weekly AI Match Digest</p>
+              </div>
+              <div style="background:#0d0d20;border:1px solid rgba(124,58,237,0.2);border-radius:16px;padding:28px">
+                <h2 style="color:#f8fafc;font-size:18px;margin:0 0 8px">Привет, ${investor.displayName || 'Investor'}!</h2>
+                <p style="color:#64748b;font-size:14px;line-height:1.6;margin:0 0 24px">
+                  ${matchData.weeklyInsight}
+                </p>
+                <h3 style="color:#a78bfa;font-size:13px;text-transform:uppercase;letter-spacing:1px;margin:0 0 12px">🎯 Топ совпадения этой недели</h3>
+                <table width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;background:#050510;border-radius:10px;overflow:hidden">
+                  ${topHtml}
+                </table>
+                <div style="text-align:center;margin-top:28px">
+                  <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://founderos.io'}/investor/deal-flow"
+                     style="display:inline-block;padding:14px 32px;background:linear-gradient(135deg,#7c3aed,#3b82f6);color:white;text-decoration:none;border-radius:10px;font-weight:600;font-size:14px">
+                    Открыть Deal Flow →
+                  </a>
+                </div>
+              </div>
+              <p style="text-align:center;color:#334155;font-size:11px;margin-top:24px">
+                UNTITLED Ecosystem · Turn Chaos Into System
+              </p>
+            </div></body></html>`;
+
+          await sendEmail(investor.email, '🎯 Founder OS — Еженедельный AI Match Digest', html);
+          log('investorMatchEngine', `Email sent to: ${investor.email}`);
+        }
+
+        log('investorMatchEngine', `Digest complete for: ${investor.displayName}`);
       }
 
       log('investorMatchEngine', `Completed run. Processed ${investors.length} investors`);
@@ -485,4 +538,79 @@ export const onUserCreated = functions
       functions.logger.error('onUserCreated error:', err);
       return null;
     }
+  });
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 6. AI ROADMAP HINTS — Daily scheduler for stuck startups
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const aiRoadmapHints = functions
+  .region('us-central1')
+  .runWith({ memory: '256MB', timeoutSeconds: 300 })
+  .pubsub.schedule('every day 08:00').timeZone('Asia/Tashkent')
+  .onRun(async () => {
+    log('aiRoadmapHints', 'Running daily roadmap hints check');
+
+    const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+    const snap = await db.collection('startups')
+      .where('lastActivityAt', '<', sevenDaysAgo)
+      .where('stage', 'not-in', ['investment_ready'])
+      .limit(30).get();
+
+    if (snap.empty) { log('aiRoadmapHints', 'No stuck startups'); return null; }
+
+    const model = gemini.getGenerativeModel({ model: 'gemini-1.5-flash' });
+
+    for (const startupDoc of snap.docs) {
+      const s = startupDoc.data();
+      try {
+        const result = await model.generateContent(
+          `Startup coach at UNTITLED. Startup: "${s.name}" (${s.industry}, ${s.stage}).
+           MRR:$${s.metrics?.mrr||0} MAU:${s.metrics?.mau||0} Days stuck:7+
+           Give ONE specific actionable hint (2-3 sentences) to unblock them this week.
+           Return ONLY JSON: {"hint":"string","category":"product|market|funding|team|legal"}`
+        );
+        const match = result.response.text().match(/\{[\s\S]*\}/);
+        if (!match) continue;
+        const { hint, category } = JSON.parse(match[0]);
+
+        // Сохраняем в AI Copilot history
+        await db.collection('ai_copilot_messages').add({
+          startupId: startupDoc.id, role: 'assistant',
+          content: `💡 **AI Roadmap Hint (${category}):** ${hint}`,
+          source: 'roadmap_hints_scheduler',
+          createdAt: admin.firestore.FieldValue.serverTimestamp(),
+        });
+
+        // Уведомляем и отправляем email фаундерам
+        for (const founderId of (s.founderIds || [])) {
+          await writeNotification(founderId, {
+            type: 'feedback_received', title: '💡 AI Roadmap Hint',
+            body: hint.slice(0, 90) + '...', href: '/founder/ai-copilot',
+          });
+        }
+        if (s.founderEmail) {
+          await sendEmail(
+            s.founderEmail, `💡 AI Hint для ${s.name}`,
+            `<div style="max-width:560px;margin:0 auto;padding:32px;background:#050510;font-family:Inter,sans-serif">
+              <h2 style="color:#a78bfa">⚡ Founder OS · AI Roadmap Hint</h2>
+              <div style="background:#0d0d20;border:1px solid rgba(124,58,237,0.2);border-radius:12px;padding:20px">
+                <p style="color:#64748b;font-size:12px">${s.name} · ${s.stage} · ${category}</p>
+                <p style="color:#f8fafc;font-size:15px;line-height:1.7">${hint}</p>
+              </div>
+              <p style="text-align:center;margin-top:20px">
+                <a href="${process.env.NEXT_PUBLIC_APP_URL||'https://founderos.io'}/founder/ai-copilot"
+                   style="padding:12px 28px;background:#7c3aed;color:white;text-decoration:none;border-radius:8px">
+                  Открыть AI Copilot →
+                </a>
+              </p>
+            </div>`
+          );
+        }
+        log('aiRoadmapHints', `Hint sent for ${s.name} (${category})`);
+      } catch (e) { functions.logger.warn('hint failed for', startupDoc.id, e); }
+    }
+
+    log('aiRoadmapHints', `Done. Processed ${snap.size} startups`);
+    return null;
   });

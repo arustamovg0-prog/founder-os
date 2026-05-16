@@ -7,9 +7,11 @@ import { useAuth } from '@/contexts/AuthContext';
 import {
   LayoutDashboard, Map, FolderOpen, Presentation, Brain,
   Users, TrendingUp, Briefcase, LogOut, Zap,
-  BarChart3, CheckCircle, ChevronRight, Bell, X,
+  BarChart3, CheckCircle, ChevronRight, Bell, X, Heart,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { collection, query, where, onSnapshot, orderBy, limit, updateDoc, doc } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 
 // ─── Notification types ───────────────────────────────────────────────────────
 
@@ -44,6 +46,7 @@ const NAV = {
     { href: '/admin/startups', icon: <Users size={16} />, label: 'Startups', notifKey: 'new_startup' },
     { href: '/admin/stages', icon: <CheckCircle size={16} />, label: 'Stage Review', notifKey: 'stage' },
     { href: '/admin/analytics', icon: <BarChart3 size={16} />, label: 'Analytics', notifKey: null },
+    { href: '/admin/health', icon: <Heart size={16} />, label: 'Ecosystem Health', notifKey: null },
   ],
 };
 
@@ -104,26 +107,81 @@ function NotificationBell({ role }: { role: keyof typeof DEMO_NOTIFS }) {
     return () => document.removeEventListener('mousedown', handler);
   }, []);
 
-  // Симуляция realtime — новое уведомление каждые 45 сек в demo
+  // Realtime notifications — Firestore onSnapshot (с fallback на demo data)
   useEffect(() => {
-    if (process.env.NEXT_PUBLIC_DEMO_MODE !== 'true') return;
-    const timer = setInterval(() => {
-      const newNotif: Notification = {
-        id: `rt_${Date.now()}`,
-        type: 'pitch_request',
-        title: 'Новое событие',
-        body: 'Обновление в реальном времени (demo)',
-        timestamp: new Date(),
-        read: false,
-      };
-      setNotifs(prev => [newNotif, ...prev].slice(0, 15));
-      toast('🔔 Новое уведомление', { duration: 2000 });
-    }, 45000);
-    return () => clearInterval(timer);
+    const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true';
+
+    if (isDemoMode) {
+      // Demo mode — статичные данные, без Firestore
+      return;
+    }
+
+    // Production — Firestore realtime listener
+    // Слушаем коллекцию notifications для текущего пользователя
+    let userId: string | undefined;
+    try {
+      // Импортируем auth динамически чтобы не сломать SSR
+      const { getAuth } = require('firebase/auth');
+      userId = getAuth().currentUser?.uid;
+    } catch { return; }
+
+    if (!userId) return;
+
+    const q = query(
+      collection(db, 'notifications'),
+      where('userId', '==', userId),
+      orderBy('createdAt', 'desc'),
+      limit(20)
+    );
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const newNotifs: Notification[] = snapshot.docs.map(d => {
+        const data = d.data();
+        return {
+          id: d.id,
+          type: data.type as Notification['type'],
+          title: data.title,
+          body: data.body,
+          timestamp: data.createdAt?.toDate() || new Date(),
+          read: data.read || false,
+          href: data.href,
+        };
+      });
+
+      if (newNotifs.length > 0) {
+        const prevUnread = notifs.filter(n => !n.read).length;
+        const newUnread = newNotifs.filter(n => !n.read).length;
+        if (newUnread > prevUnread) {
+          toast('🔔 Новое уведомление', { duration: 2500 });
+        }
+        setNotifs(newNotifs);
+      }
+    }, (error) => {
+      console.warn('[Notifications] Firestore error:', error.message);
+    });
+
+    return () => unsubscribe();
   }, []);
 
-  const markAllRead = () => setNotifs(prev => prev.map(n => ({ ...n, read: true })));
-  const dismiss = (id: string) => setNotifs(prev => prev.filter(n => n.id !== id));
+  const markAllRead = async () => {
+    // Demo mode — только локально
+    setNotifs(prev => prev.map(n => ({ ...n, read: true })));
+
+    // Production — обновляем Firestore
+    if (process.env.NEXT_PUBLIC_DEMO_MODE !== 'true') {
+      const unreadIds = notifs.filter(n => !n.read).map(n => n.id);
+      await Promise.allSettled(
+        unreadIds.map(id => updateDoc(doc(db, 'notifications', id), { read: true }))
+      );
+    }
+  };
+
+  const dismiss = async (id: string) => {
+    setNotifs(prev => prev.filter(n => n.id !== id));
+    if (process.env.NEXT_PUBLIC_DEMO_MODE !== 'true') {
+      await updateDoc(doc(db, 'notifications', id), { dismissed: true }).catch(() => {});
+    }
+  };
 
   return (
     <div ref={panelRef} style={{ position: 'relative' }}>
