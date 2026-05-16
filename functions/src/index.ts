@@ -1,0 +1,488 @@
+/**
+ * ╔═══════════════════════════════════════════════════════════════╗
+ * ║       FOUNDER OS — Firebase Cloud Functions                   ║
+ * ║       Turn Chaos Into System · UNTITLED Ecosystem             ║
+ * ╠═══════════════════════════════════════════════════════════════╣
+ * ║  Functions:                                                   ║
+ * ║  1. onPitchDeckUploaded  — AI Scoring Pipeline               ║
+ * ║  2. investorMatchEngine  — Weekly personalized digest         ║
+ * ║  3. onStageVerified      — Notify founder on approval         ║
+ * ║  4. onPitchFeedback      — Post-pitch AI loop                 ║
+ * ║  5. onUserCreated        — Set Custom Claims + onboarding     ║
+ * ╚═══════════════════════════════════════════════════════════════╝
+ */
+
+import * as functions from 'firebase-functions';
+import * as admin from 'firebase-admin';
+import { GoogleGenerativeAI } from '@google/generative-ai';
+
+admin.initializeApp();
+const db = admin.firestore();
+const storage = admin.storage();
+
+const gemini = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function log(fn: string, msg: string, data?: any) {
+  functions.logger.info(`[${fn}] ${msg}`, data || {});
+}
+
+async function writeNotification(
+  userId: string,
+  notif: { type: string; title: string; body: string; href?: string }
+) {
+  await db.collection('notifications').add({
+    userId,
+    ...notif,
+    read: false,
+    createdAt: admin.firestore.FieldValue.serverTimestamp(),
+  });
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 1. AI PITCH SCORING PIPELINE
+// Trigger: файл загружен в Storage → startup_documents/{startupId}/{fileName}
+// Flow: Download PDF → Extract text → Gemini scoring → Firestore update → Notify
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const onPitchDeckUploaded = functions
+  .region('us-central1')
+  .runWith({ memory: '1GB', timeoutSeconds: 300 })
+  .storage.object()
+  .onFinalize(async (object) => {
+    const filePath = object.name || '';
+
+    // Проверяем что это pitch deck (PDF в папке startup_documents)
+    if (!filePath.startsWith('startup_documents/') || !filePath.endsWith('.pdf')) {
+      return null;
+    }
+
+    const pathParts = filePath.split('/');
+    const startupId = pathParts[1];
+
+    if (!startupId) {
+      functions.logger.error('Cannot extract startupId from path:', filePath);
+      return null;
+    }
+
+    log('onPitchDeckUploaded', `Processing pitch deck for startup: ${startupId}`);
+
+    try {
+      // 1. Получаем данные стартапа из Firestore
+      const startupDoc = await db.collection('startups').doc(startupId).get();
+      if (!startupDoc.exists) {
+        functions.logger.error('Startup not found:', startupId);
+        return null;
+      }
+      const startupData = startupDoc.data()!;
+
+      // 2. Скачиваем PDF из Cloud Storage
+      const bucket = storage.bucket(object.bucket);
+      const file = bucket.file(filePath);
+      const [fileBuffer] = await file.download();
+
+      // 3. Анализируем с Gemini 1.5 Pro
+      const model = gemini.getGenerativeModel({ model: 'gemini-1.5-pro' });
+      const pdfBase64 = fileBuffer.toString('base64');
+
+      const scoringPrompt = `
+You are an expert startup investment analyst. Analyze this pitch deck for a startup called "${startupData.name}" 
+in the ${startupData.industry} industry at the "${startupData.stage}" stage.
+
+Evaluate and return ONLY a valid JSON object with this exact structure:
+{
+  "overallReadinessScore": <0-100>,
+  "pitchDeckScore": <0-100>,
+  "scores": {
+    "problemClarity": <0-10>,
+    "solutionStrength": <0-10>,
+    "marketSize": <0-10>,
+    "businessModel": <0-10>,
+    "traction": <0-10>,
+    "team": <0-10>,
+    "financials": <0-10>,
+    "competitiveAdvantage": <0-10>
+  },
+  "executiveSummary": "<2-3 sentence objective summary>",
+  "strengths": ["strength1", "strength2", "strength3"],
+  "weaknesses": ["weakness1", "weakness2"],
+  "recommendation": "pass" | "consider" | "strong_pass",
+  "nextSteps": "<specific actionable advice for the founder>"
+}
+`;
+
+      const result = await model.generateContent([
+        scoringPrompt,
+        {
+          inlineData: {
+            mimeType: 'application/pdf',
+            data: pdfBase64,
+          },
+        },
+      ]);
+
+      const responseText = result.response.text().trim();
+
+      // 4. Парсим JSON из ответа Gemini
+      let aiData;
+      try {
+        const jsonMatch = responseText.match(/\{[\s\S]*\}/);
+        aiData = jsonMatch ? JSON.parse(jsonMatch[0]) : null;
+      } catch {
+        functions.logger.error('Failed to parse Gemini JSON response:', responseText.slice(0, 500));
+        return null;
+      }
+
+      if (!aiData) return null;
+
+      // 5. Обновляем Firestore
+      const updateData = {
+        'aiScores.pitchDeckScore': aiData.pitchDeckScore,
+        'aiScores.overallReadinessScore': aiData.overallReadinessScore,
+        'aiScores.scores': aiData.scores,
+        'aiScores.lastAnalyzedAt': admin.firestore.FieldValue.serverTimestamp(),
+        executiveSummaryAI: aiData.executiveSummary,
+        strengths: aiData.strengths,
+        weaknesses: aiData.weaknesses,
+        aiRecommendation: aiData.recommendation,
+        aiNextSteps: aiData.nextSteps,
+      };
+
+      await db.collection('startups').doc(startupId).update(updateData);
+
+      // 6. Если score >= 75 — переводим в investment_ready
+      if (aiData.overallReadinessScore >= 75 && startupData.stage !== 'investment_ready') {
+        await db.collection('startups').doc(startupId).update({
+          status: 'investment_ready',
+        });
+        log('onPitchDeckUploaded', `Startup ${startupId} reached investment_ready! Score: ${aiData.overallReadinessScore}`);
+      }
+
+      // 7. Логируем в Digital Footprint
+      await db.collection('digital_footprint').doc(startupId).collection('logs').add({
+        event: 'ai_pitch_deck_scored',
+        score: aiData.overallReadinessScore,
+        pitchDeckScore: aiData.pitchDeckScore,
+        recommendation: aiData.recommendation,
+        filePath,
+        timestamp: admin.firestore.FieldValue.serverTimestamp(),
+      });
+
+      // 8. Уведомляем фаундера
+      if (startupData.founderIds?.length > 0) {
+        for (const founderId of startupData.founderIds) {
+          await writeNotification(founderId, {
+            type: 'ai_score_ready',
+            title: `AI Score готов: ${aiData.overallReadinessScore}/100`,
+            body: `Pitch Deck проанализирован — ${aiData.recommendation === 'strong_pass' ? '🚀 Strong Pass!' : aiData.recommendation === 'pass' ? '✅ Pass' : '🤔 Consider'}`,
+            href: '/founder/data-room',
+          });
+        }
+      }
+
+      log('onPitchDeckUploaded', `Scoring complete for ${startupId}. Score: ${aiData.overallReadinessScore}`);
+      return { success: true, score: aiData.overallReadinessScore };
+
+    } catch (err) {
+      functions.logger.error('onPitchDeckUploaded error:', err);
+      return null;
+    }
+  });
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 2. INVESTOR MATCH ENGINE
+// Trigger: Cloud Scheduler — каждый понедельник в 09:00 UTC
+// Flow: Читаем всех инвесторов → Список investment_ready стартапов
+//       → Gemini генерирует персонализированный топ-3 → Email через SendGrid
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const investorMatchEngine = functions
+  .region('us-central1')
+  .runWith({ memory: '512MB', timeoutSeconds: 540 })
+  .pubsub
+  .schedule('every monday 09:00')
+  .timeZone('Asia/Tashkent')
+  .onRun(async () => {
+    log('investorMatchEngine', 'Starting weekly match engine run');
+
+    try {
+      // 1. Получаем всех инвесторов
+      const investorsSnap = await db.collection('users').where('role', '==', 'investor').get();
+      const investors = investorsSnap.docs.map(d => ({ id: d.id, ...d.data() })) as any[];
+
+      // 2. Получаем investment_ready стартапы
+      const startupsSnap = await db.collection('startups')
+        .where('status', '==', 'investment_ready')
+        .orderBy('aiScores.overallReadinessScore', 'desc')
+        .limit(20)
+        .get();
+      const startups = startupsSnap.docs.map(d => ({ id: d.id, ...d.data() })) as any[];
+
+      if (startups.length === 0) {
+        log('investorMatchEngine', 'No investment_ready startups found, skipping');
+        return null;
+      }
+
+      const model = gemini.getGenerativeModel({ model: 'gemini-1.5-flash' });
+
+      // 3. Для каждого инвестора — генерируем персонализированный digest
+      for (const investor of investors) {
+        const matchPrompt = `
+You are an AI matching engine for a startup investment platform.
+
+Investor profile:
+- Name: ${investor.displayName}
+- Focus areas: ${investor.focusAreas?.join(', ') || 'General tech'}
+- Preferred stage: ${investor.preferredStage || 'Series A and earlier'}
+- Ticket size: ${investor.ticketSize || 'Not specified'}
+
+Available startups (top ${Math.min(10, startups.length)}):
+${startups.slice(0, 10).map((s: any, i: number) => `
+${i + 1}. ${s.name} (${s.industry}, ${s.stage})
+   AI Score: ${s.aiScores?.overallReadinessScore || 'N/A'}/100
+   MRR: $${s.metrics?.mrr?.toLocaleString() || 0}
+   MAU: ${s.metrics?.mau?.toLocaleString() || 0}
+   Location: ${s.location}
+   Summary: ${s.executiveSummaryAI || 'No summary available'}
+`).join('')}
+
+Return ONLY a valid JSON:
+{
+  "topMatches": [
+    {
+      "startupName": "string",
+      "matchScore": 0-100,
+      "reason": "2 sentence explanation why this investor should consider this startup",
+      "keyMetric": "most impressive metric"
+    }
+  ],
+  "weeklyInsight": "1-2 sentence market insight for this investor"
+}
+
+Rank top 3 matches based on alignment with investor profile.
+`;
+
+        const result = await model.generateContent(matchPrompt);
+        const responseText = result.response.text().trim();
+
+        let matchData;
+        try {
+          const jsonMatch = responseText.match(/\{[\s\S]*\}/);
+          matchData = jsonMatch ? JSON.parse(jsonMatch[0]) : null;
+        } catch {
+          continue;
+        }
+
+        if (!matchData?.topMatches?.length) continue;
+
+        // 4. Сохраняем digest в Firestore
+        await db.collection('investor_digests').add({
+          investorId: investor.id,
+          topMatches: matchData.topMatches,
+          weeklyInsight: matchData.weeklyInsight,
+          generatedAt: admin.firestore.FieldValue.serverTimestamp(),
+          week: new Date().toISOString().split('T')[0],
+        });
+
+        // 5. Пишем in-app уведомление
+        await writeNotification(investor.id, {
+          type: 'new_startup',
+          title: '🎯 Еженедельный AI Match Digest',
+          body: `${matchData.topMatches.length} персонализированных рекомендаций готово`,
+          href: '/investor/deal-flow',
+        });
+
+        log('investorMatchEngine', `Generated digest for investor: ${investor.displayName}`);
+      }
+
+      log('investorMatchEngine', `Completed run. Processed ${investors.length} investors`);
+      return { success: true, investors: investors.length, startups: startups.length };
+
+    } catch (err) {
+      functions.logger.error('investorMatchEngine error:', err);
+      return null;
+    }
+  });
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 3. ON STAGE VERIFIED
+// Trigger: Firestore update на startup_roadmap_progress/.../stages/{stageId}
+// Flow: Если status === 'verified' → notify founder
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const onStageVerified = functions
+  .region('us-central1')
+  .firestore
+  .document('startup_roadmap_progress/{startupId}/stages/{stageId}')
+  .onUpdate(async (change, context) => {
+    const before = change.before.data();
+    const after = change.after.data();
+    const { startupId, stageId } = context.params;
+
+    // Только если статус изменился на verified или rejected
+    if (before.verificationStatus === after.verificationStatus) return null;
+
+    const isApproved = after.verificationStatus === 'verified';
+    const isRejected = after.verificationStatus === 'rejected';
+
+    if (!isApproved && !isRejected) return null;
+
+    // Получаем стартап для founderIds
+    const startupDoc = await db.collection('startups').doc(startupId).get();
+    if (!startupDoc.exists) return null;
+    const { name: startupName, founderIds = [] } = startupDoc.data() as any;
+
+    for (const founderId of founderIds) {
+      await writeNotification(founderId, {
+        type: isApproved ? 'stage_approved' : 'stage_rejected',
+        title: isApproved ? '✅ Стадия одобрена!' : '❌ Стадия отклонена',
+        body: isApproved
+          ? `UNTITLED верифицировал этап "${after.title || stageId}" для ${startupName}`
+          : `Требуются доработки для "${after.title || stageId}": ${after.rejectionComment || '—'}`,
+        href: '/founder/roadmap',
+      });
+    }
+
+    // Логируем событие
+    await db.collection('digital_footprint').doc(startupId).collection('logs').add({
+      event: isApproved ? 'stage_verified' : 'stage_rejected',
+      stageId,
+      comment: after.rejectionComment || null,
+      verifiedBy: after.verifiedBy || 'admin',
+      timestamp: admin.firestore.FieldValue.serverTimestamp(),
+    });
+
+    log('onStageVerified', `Stage ${stageId} for ${startupId}: ${after.verificationStatus}`);
+    return null;
+  });
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 4. ON PITCH FEEDBACK (Post-Pitch AI Loop)
+// Trigger: pitch_events/{pitchId} обновляется с investor feedback
+// Flow: Gemini анализирует фидбек → генерирует action plan → уведомляет фаундера
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const onPitchFeedback = functions
+  .region('us-central1')
+  .runWith({ memory: '256MB', timeoutSeconds: 120 })
+  .firestore
+  .document('pitch_events/{pitchId}')
+  .onUpdate(async (change, context) => {
+    const before = change.before.data();
+    const after = change.after.data();
+
+    // Триггер только при добавлении фидбека
+    if (before.status === after.status && before.feedback) return null;
+    if (!after.feedback || after.status !== 'feedback_submitted') return null;
+
+    const { pitchId } = context.params;
+    log('onPitchFeedback', `Analyzing post-pitch feedback for: ${pitchId}`);
+
+    try {
+      const model = gemini.getGenerativeModel({ model: 'gemini-1.5-flash' });
+
+      const feedback = after.feedback;
+      const prompt = `
+You are a startup coach analyzing investor feedback after a pitch meeting.
+
+Startup: ${after.startupName || 'Unknown'}
+Investor verdict: ${feedback.verdict}
+Scores: Team ${feedback.teamScore}/5, Product ${feedback.productScore}/5, Market ${feedback.marketScore}/5, Financials ${feedback.financialsScore}/5
+Comments: "${feedback.comments || 'No comments'}"
+
+Generate a concise action plan for the founder. Return ONLY valid JSON:
+{
+  "summary": "2 sentence summary of the feedback",
+  "actionPlan": ["action1", "action2", "action3"],
+  "nextInvestorReadinessScore": 0-100,
+  "timeToReady": "estimated weeks/months to address feedback"
+}
+`;
+
+      const result = await model.generateContent(prompt);
+      let analysis;
+      try {
+        const text = result.response.text().trim();
+        const jsonMatch = text.match(/\{[\s\S]*\}/);
+        analysis = jsonMatch ? JSON.parse(jsonMatch[0]) : null;
+      } catch { analysis = null; }
+
+      if (analysis) {
+        // Обновляем питч с AI анализом
+        await db.collection('pitch_events').doc(pitchId).update({
+          'feedback.aiAnalysis': analysis,
+          'feedback.analyzedAt': admin.firestore.FieldValue.serverTimestamp(),
+        });
+
+        // Уведомляем фаундера
+        if (after.founderIds?.length) {
+          for (const founderId of after.founderIds) {
+            await writeNotification(founderId, {
+              type: 'feedback_received',
+              title: `Фидбек проанализирован AI`,
+              body: analysis.summary,
+              href: '/founder/pitches',
+            });
+          }
+        }
+      }
+
+      return null;
+    } catch (err) {
+      functions.logger.error('onPitchFeedback error:', err);
+      return null;
+    }
+  });
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 5. ON USER CREATED (New Registration)
+// Trigger: Новый пользователь в Firebase Auth
+// Flow: Устанавливаем Custom Claims (роль) → Создаём onboarding запись → Уведомляем Admin
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const onUserCreated = functions
+  .region('us-central1')
+  .auth.user()
+  .onCreate(async (user) => {
+    log('onUserCreated', `New user: ${user.email} (${user.uid})`);
+
+    try {
+      // Читаем профиль из Firestore (создаётся при регистрации на клиенте)
+      const userDoc = await db.collection('users').doc(user.uid).get();
+      const userData = userDoc.exists ? userDoc.data() : null;
+      const role = userData?.role || 'founder';
+
+      // Устанавливаем Custom Claims
+      await admin.auth().setCustomUserClaims(user.uid, {
+        role,
+        linkedStartupId: userData?.linkedStartupId || null,
+      });
+
+      // Создаём onboarding запись
+      if (role === 'founder') {
+        await db.collection('onboarding').doc(user.uid).set({
+          step: 1,
+          completed: false,
+          startedAt: admin.firestore.FieldValue.serverTimestamp(),
+        });
+      }
+
+      // Уведомляем всех adminов о новой регистрации
+      const adminsSnap = await db.collection('users').where('role', '==', 'admin').get();
+      for (const adminDoc of adminsSnap.docs) {
+        await writeNotification(adminDoc.id, {
+          type: 'new_startup',
+          title: 'Новый пользователь',
+          body: `${userData?.displayName || user.email} зарегистрировался как ${role}`,
+          href: '/admin/startups',
+        });
+      }
+
+      log('onUserCreated', `Claims set for ${user.uid}: role=${role}`);
+      return null;
+    } catch (err) {
+      functions.logger.error('onUserCreated error:', err);
+      return null;
+    }
+  });

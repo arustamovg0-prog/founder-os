@@ -1,0 +1,50 @@
+name: 🔍 PR Preview Deploy
+
+on:
+  pull_request:
+    branches: [main, develop]
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  preview:
+    name: Preview → Vercel
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    permissions:
+      pull-requests: write
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 📦 Install Vercel CLI
+        run: npm install -g vercel@latest
+
+      - name: 🔍 Deploy Preview
+        id: preview
+        run: |
+          URL=$(vercel deploy --token=${{ secrets.VERCEL_TOKEN }} \
+            --env NEXT_PUBLIC_DEMO_MODE=true \
+            --env NEXT_PUBLIC_APP_ENV=preview \
+            2>&1 | tail -1)
+          echo "url=$URL" >> $GITHUB_OUTPUT
+
+      - name: 💬 Comment PR with preview URL
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## 🚀 Preview Deploy Ready\n\n**URL:** ${{ steps.preview.outputs.url }}\n\n> Demo Mode активен — Firebase не требуется для проверки UI.\n\n| Портал | Ссылка |\n|--------|--------|\n| 🚀 Founder | ${{ steps.preview.outputs.url }}/founder |\n| 💼 Investor | ${{ steps.preview.outputs.url }}/investor |\n| ⚡ Admin | ${{ steps.preview.outputs.url }}/admin |`
+            })
