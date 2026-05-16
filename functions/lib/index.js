@@ -89,7 +89,7 @@ exports.onPitchDeckUploaded = functions
     .onFinalize(async (object) => {
     var _a;
     const filePath = object.name || '';
-    // Проверяем что это pitch deck (PDF в папке startup_documents)
+    // Проверяем что это документ из Data Room (PDF в папке startup_documents)
     if (!filePath.startsWith('startup_documents/') || !filePath.endsWith('.pdf')) {
         return null;
     }
@@ -116,8 +116,10 @@ exports.onPitchDeckUploaded = functions
         const model = gemini.getGenerativeModel({ model: 'gemini-1.5-pro' });
         const pdfBase64 = fileBuffer.toString('base64');
         const scoringPrompt = `
-You are an expert startup investment analyst. Analyze this pitch deck for a startup called "${startupData.name}" 
+You are an expert startup investment analyst. Analyze this document (Pitch Deck or Financial Model) for a startup called "${startupData.name}" 
 in the ${startupData.industry} industry at the "${startupData.stage}" stage.
+
+Extract key financial and traction metrics if present, and provide a full AI Readiness scoring.
 
 Evaluate and return ONLY a valid JSON object with this exact structure:
 {
@@ -137,7 +139,16 @@ Evaluate and return ONLY a valid JSON object with this exact structure:
   "strengths": ["strength1", "strength2", "strength3"],
   "weaknesses": ["weakness1", "weakness2"],
   "recommendation": "pass" | "consider" | "strong_pass",
-  "nextSteps": "<specific actionable advice for the founder>"
+  "nextSteps": "<specific actionable advice for the founder>",
+  "extractedMetrics": {
+    "mrr": <number or null>,
+    "arr": <number or null>,
+    "mau": <number or null>,
+    "teamSize": <number or null>,
+    "runwayMonths": <number or null>,
+    "ltv": <number or null>,
+    "cac": <number or null>
+  }
 }
 `;
         const result = await model.generateContent([
@@ -162,7 +173,15 @@ Evaluate and return ONLY a valid JSON object with this exact structure:
         }
         if (!aiData)
             return null;
-        // 5. Обновляем Firestore
+        // 5. Обновляем Firestore и извлеченные метрики
+        const newMetrics = Object.assign({}, startupData.metrics);
+        if (aiData.extractedMetrics) {
+            for (const [key, value] of Object.entries(aiData.extractedMetrics)) {
+                if (typeof value === 'number' && value > 0) {
+                    newMetrics[key] = value;
+                }
+            }
+        }
         const updateData = {
             'aiScores.pitchDeckScore': aiData.pitchDeckScore,
             'aiScores.overallReadinessScore': aiData.overallReadinessScore,
@@ -173,6 +192,7 @@ Evaluate and return ONLY a valid JSON object with this exact structure:
             weaknesses: aiData.weaknesses,
             aiRecommendation: aiData.recommendation,
             aiNextSteps: aiData.nextSteps,
+            metrics: newMetrics,
         };
         await db.collection('startups').doc(startupId).update(updateData);
         // 6. Если score >= 75 — переводим в investment_ready
