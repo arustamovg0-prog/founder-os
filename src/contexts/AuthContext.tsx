@@ -92,6 +92,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               role: 'founder', isVerified: false, createdAt: new Date(), lastActiveAt: new Date(),
             };
             setProfile(fallback);
+            // Auto-heal: create the missing document in Firestore
+            try {
+              const { uid, ...profileData } = fallback;
+              await setDoc(doc(db, 'users', u.uid), {
+                ...profileData,
+                createdAt: serverTimestamp(),
+                lastActiveAt: serverTimestamp(),
+              });
+            } catch (e) {
+              console.error('Failed to auto-create user document:', e);
+            }
           }
         } catch {
           // Demo mode — Firebase недоступен, проверяем demo email
