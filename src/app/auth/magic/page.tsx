@@ -68,15 +68,13 @@ export default function MagicLinkCallbackPage() {
         else if (role === 'investor') router.push('/investor');
         else router.push('/founder');
       }, 1200);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      setError(err.message || 'Ошибка входа. Ссылка могла истечь.');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Ошибка входа. Ссылка могла истечь.');
       setState('error');
     }
   };
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     handleMagicLink();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
