@@ -1,118 +1,65 @@
 rules_version = '2';
+
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // ── Вспомогательные функции ───────────────────────────────────────────────
-    function isAuth() {
+    // Вспомогательные функции
+    function isAuthenticated() {
       return request.auth != null;
     }
-
-    function role() {
-      return request.auth.token.role;
+    
+    function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
     }
-
+    
     function isAdmin() {
-      return isAuth() && role() == 'admin';
-    }
-
-    function isFounder() {
-      return isAuth() && role() == 'founder';
+      return isAuthenticated() && getUserData().role == 'admin';
     }
 
     function isInvestor() {
-      return isAuth() && role() == 'investor';
+      return isAuthenticated() && getUserData().role == 'investor';
     }
 
-    function isOwner(uid) {
-      return isAuth() && request.auth.uid == uid;
+    function isFounder() {
+      return isAuthenticated() && getUserData().role == 'founder';
     }
 
-    function isStartupFounder(startupData) {
-      return isAuth() && request.auth.uid in startupData.founderIds;
-    }
-
-    // ── users/{userId} ────────────────────────────────────────────────────────
+    // Правила для коллекции users
     match /users/{userId} {
-      // Пользователь читает/пишет только свой профиль
-      allow read, write: if isOwner(userId);
-      // Admins читают всех
-      allow read: if isAdmin();
-      // Публичное создание при регистрации
-      allow create: if isAuth() && request.auth.uid == userId;
+      // Читать может сам пользователь, админ, или инвесторы (для просмотра фаундеров)
+      allow read: if isAuthenticated(); 
+      // Создавать может только сам пользователь при регистрации
+      allow create: if isAuthenticated() && request.auth.uid == userId;
+      // Обновлять может сам пользователь или админ
+      allow update: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+      allow delete: if isAdmin();
     }
 
-    // ── startups/{startupId} ─────────────────────────────────────────────────
+    // Правила для коллекции startups
     match /startups/{startupId} {
-      // Founder читает и редактирует только свои стартапы
-      allow read, write: if isAuth() &&
-        request.auth.uid in resource.data.founderIds;
-
-      // Инвесторы видят только investment_ready стартапы
-      allow read: if isInvestor() &&
-        resource.data.status == 'investment_ready';
-
-      // Admin — полный доступ
-      allow read, write: if isAdmin();
-
-      // Создание стартапа (только founder)
-      allow create: if isFounder() &&
-        request.auth.uid in request.resource.data.founderIds;
+      // Читать могут все авторизованные (инвесторам нужен доступ к Deal Flow)
+      allow read: if isAuthenticated();
+      
+      // Создавать стартап может фаундер (в процессе онбординга)
+      allow create: if isFounder() 
+        && request.auth.uid in request.resource.data.founderIds;
+        
+      // Обновлять стартап может фаундер этого стартапа или админ
+      allow update: if isAdmin() || (isFounder() && request.auth.uid in resource.data.founderIds);
+      
+      allow delete: if isAdmin();
     }
-
-    // ── roadmap_stages/{stageId} (системные шаблоны, read-only) ─────────────
-    match /roadmap_stages/{stageId} {
-      allow read: if isAuth();
-      allow write: if isAdmin();
-    }
-
-    // ── startup_roadmap_progress/{startupId}/stages/{stageId} ────────────────
-    match /startup_roadmap_progress/{startupId}/stages/{stageId} {
-      allow read: if isAuth() && (
-        isAdmin() ||
-        request.auth.uid in get(/databases/$(database)/documents/startups/$(startupId)).data.founderIds
-      );
-      // Founder обновляет прогресс
-      allow write: if isAuth() &&
-        request.auth.uid in get(/databases/$(database)/documents/startups/$(startupId)).data.founderIds;
-      // Admin верифицирует стадии
-      allow write: if isAdmin();
-    }
-
-    // ── digital_footprint/{startupId}/logs/{logId} ───────────────────────────
-    match /digital_footprint/{startupId}/logs/{logId} {
-      // Читают: founder своего стартапа, investor (investment_ready), admin
-      allow read: if isAdmin() ||
-        (isAuth() && request.auth.uid in get(/databases/$(database)/documents/startups/$(startupId)).data.founderIds) ||
-        (isInvestor() && get(/databases/$(database)/documents/startups/$(startupId)).data.status == 'investment_ready');
-
-      // Запись — только Cloud Functions (service account)
-      allow write: if false;
-    }
-
-    // ── pitch_events/{pitchId} ────────────────────────────────────────────────
-    match /pitch_events/{pitchId} {
-      // Читают: участники питча + admin
-      allow read: if isAdmin() ||
-        (isAuth() && (
-          request.auth.uid == resource.data.investorId ||
-          request.auth.uid in resource.data.founderIds
-        ));
-
-      // Founder создаёт питч-запрос
-      allow create: if isFounder() &&
-        request.auth.uid in request.resource.data.founderIds;
-
-      // Обновление — только через API (Cloud Functions), либо investor отвечает
-      allow update: if isInvestor() &&
-        request.auth.uid == resource.data.investorId;
-
-      // Admin — полный доступ
-      allow read, write: if isAdmin();
-    }
-
-    // ── onboarding/{userId} ───────────────────────────────────────────────────
-    match /onboarding/{userId} {
-      allow read, write: if isOwner(userId) || isAdmin();
+    
+    // Правила для питчей
+    match /pitches/{pitchId} {
+      // Фаундеры видят питчи своего стартапа, инвесторы видят питчи, адресованные им, админы видят все
+      allow read: if isAdmin() 
+        || (isFounder() && request.auth.uid in resource.data.founderIds)
+        || (isInvestor() && resource.data.investorId == request.auth.uid);
+        
+      allow create: if isAuthenticated();
+      allow update: if isAuthenticated();
+      allow delete: if isAdmin();
     }
 
   }

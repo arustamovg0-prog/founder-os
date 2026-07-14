@@ -8,8 +8,8 @@ import toast from 'react-hot-toast';
 const MY_STARTUP = MOCK_STARTUPS[0];
 
 const PHASE_COLORS: Record<string, string> = {
-  discovery: '#06b6d4', validation: '#f59e0b',
-  building: '#7c3aed', scaling: '#10b981', fundraising: '#ec4899',
+  discovery: '#3F3F46', validation: '#71717A',
+  building: '#9333EA', scaling: '#D4D4D8', fundraising: '#52525B',
 };
 
 type StageState = 'completed' | 'in_progress' | 'pending_review' | 'locked';
@@ -23,9 +23,9 @@ const STAGE_STATES: Record<string, StageState> = {
 };
 
 const STATE_CONFIG: Record<StageState, { icon: React.ReactNode; label: string; color: string }> = {
-  completed: { icon: <CheckCircle size={16} />, label: 'Completed', color: '#10b981' },
-  in_progress: { icon: <Clock size={16} />, label: 'In Progress', color: '#f59e0b' },
-  pending_review: { icon: <AlertCircle size={16} />, label: 'Pending Review', color: '#3b82f6' },
+  completed: { icon: <CheckCircle size={16} />, label: 'Completed', color: '#D4D4D8' },
+  in_progress: { icon: <Clock size={16} />, label: 'In Progress', color: '#71717A' },
+  pending_review: { icon: <AlertCircle size={16} />, label: 'Pending Review', color: '#A1A1AA' },
   locked: { icon: <Lock size={16} />, label: 'Locked', color: '#334155' },
 };
 
@@ -57,10 +57,10 @@ export default function RoadmapPage() {
       </div>
 
       {/* Overall Progress */}
-      <div className="card" style={{ marginBottom: '28px', background: 'rgba(124,58,237,0.06)', borderColor: 'rgba(124,58,237,0.2)' }}>
+      <div className="card" style={{ marginBottom: '28px', background: 'rgba(147,51,234,0.06)', borderColor: 'rgba(147,51,234,0.2)' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
           <div>
-            <div style={{ fontSize: 24, fontWeight: 800, fontFamily: 'Space Grotesk, sans-serif', color: '#a78bfa' }}>
+            <div style={{ fontSize: 24, fontWeight: 800, fontFamily: 'Space Grotesk, sans-serif', color: '#D8B4FE' }}>
               {MY_STARTUP.roadmapProgress}%
             </div>
             <div style={{ fontSize: 13, color: '#64748b' }}>
@@ -86,10 +86,10 @@ export default function RoadmapPage() {
           return (
             <div key={stage.id} style={{
               borderRadius: '16px',
-              border: `1px solid ${isActive ? 'rgba(124,58,237,0.3)' : state === 'completed' ? 'rgba(16,185,129,0.2)' : 'rgba(255,255,255,0.06)'}`,
-              background: isActive ? 'rgba(124,58,237,0.05)' : state === 'locked' ? 'rgba(255,255,255,0.01)' : 'rgba(13,13,32,0.8)',
+              border: `1px solid ${isActive ? 'rgba(147,51,234,0.3)' : state === 'completed' ? 'rgba(212,212,216,0.2)' : 'rgba(255,255,255,0.06)'}`,
+              background: isActive ? 'rgba(147,51,234,0.05)' : state === 'locked' ? 'rgba(255,255,255,0.01)' : 'rgba(13,13,32,0.8)',
               overflow: 'hidden',
-              transition: 'all 0.2s ease',
+              transition: 'var(--transition-standard)',
             }}>
               {/* Stage Header */}
               <button
@@ -105,11 +105,11 @@ export default function RoadmapPage() {
                 {/* Step number */}
                 <div style={{
                   width: 40, height: 40, borderRadius: '50%', flexShrink: 0,
-                  background: state === 'completed' ? 'rgba(16,185,129,0.2)' : state === 'locked' ? 'rgba(255,255,255,0.03)' : `${phaseColor}20`,
-                  border: `2px solid ${state === 'completed' ? '#10b981' : state === 'locked' ? 'rgba(255,255,255,0.08)' : phaseColor}`,
+                  background: state === 'completed' ? 'rgba(212,212,216,0.2)' : state === 'locked' ? 'rgba(255,255,255,0.03)' : `${phaseColor}20`,
+                  border: `2px solid ${state === 'completed' ? '#D4D4D8' : state === 'locked' ? 'rgba(255,255,255,0.08)' : phaseColor}`,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, fontSize: 15,
-                  color: state === 'completed' ? '#10b981' : state === 'locked' ? '#334155' : phaseColor,
+                  color: state === 'completed' ? '#D4D4D8' : state === 'locked' ? '#334155' : phaseColor,
                 }}>
                   {state === 'completed' ? '✓' : idx + 1}
                 </div>
@@ -159,16 +159,16 @@ export default function RoadmapPage() {
                           <div key={art.key} style={{
                             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                             padding: '12px 16px', borderRadius: '10px',
-                            background: isDone ? 'rgba(16,185,129,0.07)' : 'rgba(255,255,255,0.03)',
-                            border: `1px solid ${isDone ? 'rgba(16,185,129,0.2)' : 'rgba(255,255,255,0.06)'}`,
+                            background: isDone ? 'rgba(212,212,216,0.07)' : 'rgba(255,255,255,0.03)',
+                            border: `1px solid ${isDone ? 'rgba(212,212,216,0.2)' : 'rgba(255,255,255,0.06)'}`,
                           }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                               {isDone
-                                ? <CheckCircle size={14} color="#10b981" />
+                                ? <CheckCircle size={14} color="#D4D4D8" />
                                 : <Upload size={14} color="#64748b" />
                               }
                               <div>
-                                <div style={{ fontSize: 13, fontWeight: 500, color: isDone ? '#34d399' : '#94a3b8' }}>{art.label}</div>
+                                <div style={{ fontSize: 13, fontWeight: 500, color: isDone ? '#A1A1AA' : '#94a3b8' }}>{art.label}</div>
                                 <div style={{ fontSize: 11, color: '#334155' }}>Type: {art.type} • {art.isRequired ? 'Required' : 'Optional'}</div>
                               </div>
                             </div>
@@ -195,7 +195,7 @@ export default function RoadmapPage() {
                     </div>
 
                     {stage.unlockConditions.adminVerificationRequired && (
-                      <div style={{ marginTop: '16px', padding: '12px 16px', borderRadius: '10px', background: 'rgba(59,130,246,0.08)', border: '1px solid rgba(59,130,246,0.2)' }}>
+                      <div style={{ marginTop: '16px', padding: '12px 16px', borderRadius: '10px', background: 'rgba(161,161,170,0.08)', border: '1px solid rgba(161,161,170,0.2)' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                           <Zap size={14} color="#60a5fa" />
                           <span style={{ fontSize: 13, color: '#60a5fa' }}>

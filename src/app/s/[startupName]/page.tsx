@@ -8,6 +8,7 @@ import { MapPin, Users, Target, Rocket, Award, ExternalLink, Mail } from 'lucide
 import Link from 'next/link';
 
 export default function PublicStartupProfile({ params }: { params: { startupName: string } }) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [startup, setStartup] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -57,16 +58,16 @@ export default function PublicStartupProfile({ params }: { params: { startupName
     <div className="animate-fade-in" style={{ minHeight: '100vh', padding: '40px 20px', maxWidth: '800px', margin: '0 auto' }}>
       <div className="card glass" style={{ padding: '40px', position: 'relative', overflow: 'hidden' }}>
         {/* Decorative BG */}
-        <div style={{ position: 'absolute', top: -100, right: -100, width: 300, height: 300, borderRadius: '50%', background: 'radial-gradient(circle, rgba(124,58,237,0.15) 0%, transparent 70%)', filter: 'blur(40px)', zIndex: 0 }} />
+        <div style={{ position: 'absolute', top: -100, right: -100, width: 300, height: 300, borderRadius: '50%', background: 'radial-gradient(circle, rgba(147,51,234,0.15) 0%, transparent 70%)', filter: 'blur(40px)', zIndex: 0 }} />
 
         <div style={{ position: 'relative', zIndex: 1 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '24px', marginBottom: '32px' }}>
-            <div style={{ width: 80, height: 80, borderRadius: '20px', background: 'linear-gradient(135deg,rgba(124,58,237,0.2),rgba(59,130,246,0.2))', border: '1px solid rgba(124,58,237,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Space Grotesk', fontSize: 36, fontWeight: 800, color: '#a78bfa' }}>
+            <div style={{ width: 80, height: 80, borderRadius: '20px', background: 'linear-gradient(135deg,rgba(147,51,234,0.2),rgba(161,161,170,0.2))', border: '1px solid rgba(147,51,234,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Space Grotesk', fontSize: 36, fontWeight: 800, color: '#D8B4FE' }}>
               {startup.name.charAt(0)}
             </div>
             <div>
               <h1 style={{ fontFamily: 'Space Grotesk', fontSize: 36, fontWeight: 800, margin: 0, color: '#f8fafc' }}>{startup.name}</h1>
-              <div style={{ fontSize: 16, color: '#a78bfa', fontWeight: 600, marginTop: 4 }}>{startup.tagline || 'Building the future'}</div>
+              <div style={{ fontSize: 16, color: '#D8B4FE', fontWeight: 600, marginTop: 4 }}>{startup.tagline || 'Building the future'}</div>
             </div>
           </div>
 
@@ -82,14 +83,14 @@ export default function PublicStartupProfile({ params }: { params: { startupName
 
           <div style={{ marginBottom: '32px' }}>
             <h3 style={{ fontFamily: 'Space Grotesk', fontSize: 18, color: '#f8fafc', marginBottom: '12px' }}>Problem</h3>
-            <p style={{ fontSize: 15, color: '#cbd5e1', lineHeight: 1.6, background: 'rgba(255,255,255,0.02)', padding: '16px', borderRadius: '12px', borderLeft: '2px solid rgba(124,58,237,0.4)' }}>
+            <p style={{ fontSize: 15, color: '#cbd5e1', lineHeight: 1.6, background: 'rgba(255,255,255,0.02)', padding: '16px', borderRadius: '12px', borderLeft: '2px solid rgba(147,51,234,0.4)' }}>
               {startup.problem || 'Not specified'}
             </p>
           </div>
 
           {startup.executiveSummaryAI && (
             <div style={{ marginBottom: '32px' }}>
-              <h3 style={{ fontFamily: 'Space Grotesk', fontSize: 18, color: '#a78bfa', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: 8 }}>
+              <h3 style={{ fontFamily: 'Space Grotesk', fontSize: 18, color: '#D8B4FE', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: 8 }}>
                 <Rocket size={18} /> AI Executive Summary
               </h3>
               <p style={{ fontSize: 15, color: '#94a3b8', lineHeight: 1.6 }}>
@@ -101,11 +102,11 @@ export default function PublicStartupProfile({ params }: { params: { startupName
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '32px' }}>
             <div style={{ padding: '20px', borderRadius: '16px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}>
               <div style={{ fontSize: 12, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', marginBottom: 8 }}>Traction (MRR)</div>
-              <div style={{ fontFamily: 'Space Grotesk', fontSize: 28, fontWeight: 800, color: '#10b981' }}>${startup.metrics?.mrr || 0}</div>
+              <div style={{ fontFamily: 'Space Grotesk', fontSize: 28, fontWeight: 800, color: '#D4D4D8' }}>${startup.metrics?.mrr || 0}</div>
             </div>
             <div style={{ padding: '20px', borderRadius: '16px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}>
               <div style={{ fontSize: 12, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', marginBottom: 8 }}>Users (MAU)</div>
-              <div style={{ fontFamily: 'Space Grotesk', fontSize: 28, fontWeight: 800, color: '#3b82f6' }}>{startup.metrics?.mau?.toLocaleString() || 0}</div>
+              <div style={{ fontFamily: 'Space Grotesk', fontSize: 28, fontWeight: 800, color: '#A1A1AA' }}>{startup.metrics?.mau?.toLocaleString() || 0}</div>
             </div>
           </div>
 

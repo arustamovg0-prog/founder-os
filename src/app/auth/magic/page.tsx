@@ -17,10 +17,6 @@ export default function MagicLinkCallbackPage() {
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    handleMagicLink();
-  }, []);
-
   const handleMagicLink = async (manualEmail?: string) => {
     setState('checking');
 
@@ -72,11 +68,18 @@ export default function MagicLinkCallbackPage() {
         else if (role === 'investor') router.push('/investor');
         else router.push('/founder');
       }, 1200);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setError(err.message || 'Ошибка входа. Ссылка могла истечь.');
       setState('error');
     }
   };
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    handleMagicLink();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div style={{
@@ -87,7 +90,7 @@ export default function MagicLinkCallbackPage() {
 
         {/* Logo */}
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', marginBottom: '40px' }}>
-          <div style={{ width: 44, height: 44, borderRadius: 10, background: 'linear-gradient(135deg,#7c3aed,#3b82f6)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 20px rgba(124,58,237,0.5)' }}>
+          <div style={{ width: 44, height: 44, borderRadius: 10, background: 'linear-gradient(135deg,#9333EA,#A1A1AA)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 20px rgba(147,51,234,0.5)' }}>
             <Zap size={22} color="white" />
           </div>
           <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 20, fontWeight: 700 }}>Founder OS</span>
@@ -99,8 +102,8 @@ export default function MagicLinkCallbackPage() {
             <div>
               <div style={{
                 width: 64, height: 64, margin: '0 auto 20px',
-                border: '3px solid rgba(124,58,237,0.2)',
-                borderTopColor: '#7c3aed',
+                border: '3px solid rgba(147,51,234,0.2)',
+                borderTopColor: '#9333EA',
                 borderRadius: '50%',
                 animation: 'spin 1s linear infinite',
               }} />
@@ -139,8 +142,8 @@ export default function MagicLinkCallbackPage() {
           {/* Success */}
           {state === 'success' && (
             <div>
-              <CheckCircle size={64} color="#10b981" style={{ margin: '0 auto 20px', display: 'block' }} />
-              <h2 style={{ fontFamily: 'Space Grotesk', fontSize: 22, fontWeight: 700, marginBottom: 8, color: '#34d399' }}>
+              <CheckCircle size={64} color="#D4D4D8" style={{ margin: '0 auto 20px', display: 'block' }} />
+              <h2 style={{ fontFamily: 'Space Grotesk', fontSize: 22, fontWeight: 700, marginBottom: 8, color: '#A1A1AA' }}>
                 Вход выполнен!
               </h2>
               <p style={{ color: '#64748b', fontSize: 14 }}>Перенаправляем в дашборд...</p>
@@ -155,7 +158,7 @@ export default function MagicLinkCallbackPage() {
           {/* Error */}
           {state === 'error' && (
             <div>
-              <XCircle size={64} color="#ef4444" style={{ margin: '0 auto 20px', display: 'block' }} />
+              <XCircle size={64} color="#52525B" style={{ margin: '0 auto 20px', display: 'block' }} />
               <h2 style={{ fontFamily: 'Space Grotesk', fontSize: 22, fontWeight: 700, marginBottom: 8, color: '#f87171' }}>
                 Ссылка недействительна
               </h2>

@@ -1,9 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { MOCK_PITCHES } from '@/lib/mockData';
+import { PitchEvent } from '@/types';
 import { Calendar, MapPin, Video, CheckCircle, Clock, XCircle, Send, ArrowRight } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { collection, query, where, onSnapshot, addDoc } from 'firebase/firestore';
+import { db, isDemoConfig } from '@/lib/firebase';
+import { useAuth } from '@/contexts/AuthContext';
 
 const STATUS_CONFIG: Record<string, { label: string; badge: string; icon: React.ReactNode }> = {
   pending: { label: 'Ожидает ответа', badge: 'badge-yellow', icon: <Clock size={14} /> },
@@ -15,15 +19,56 @@ const STATUS_CONFIG: Record<string, { label: string; badge: string; icon: React.
 };
 
 export default function FounderPitchesPage() {
-  const [pitches] = useState(MOCK_PITCHES.filter(p => p.startupId === 'startup_1'));
+  const { profile } = useAuth();
+  const [pitches, setPitches] = useState<PitchEvent[]>(MOCK_PITCHES.filter(p => p.startupId === 'startup_1'));
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState({ investorName: '', proposedDate: '', message: '' });
 
-  const handleSend = () => {
+  useEffect(() => {
+    if (isDemoConfig || !profile) {
+      setPitches(MOCK_PITCHES.filter(p => p.startupId === 'startup_1'));
+      return;
+    }
+
+    // В MVP считаем, что ID фаундера = ID его стартапа
+    const q = query(collection(db, 'pitches'), where('startupId', '==', profile.uid));
+    const unsubscribe = onSnapshot(q, (snap) => {
+      const data = snap.docs.map(d => ({ id: d.id, ...d.data() } as PitchEvent));
+      setPitches(data);
+    });
+
+    return () => unsubscribe();
+  }, [profile]);
+
+  const handleSend = async () => {
     if (!form.investorName || !form.proposedDate || !form.message) {
       toast.error('Заполните все поля');
       return;
     }
+    
+    if (!isDemoConfig && profile) {
+      const newPitch: Partial<PitchEvent> = {
+        startupId: profile.uid,
+        startupName: profile.displayName || 'My Startup',
+        investorId: 'investor_1', // MVP: отправляем любому хардкоженому инвестору или заглушке
+        investorName: form.investorName,
+        status: 'pending',
+        request: {
+          message: form.message,
+          snapshotScore: 85,
+          sentAt: new Date(),
+          proposedDate: new Date(form.proposedDate)
+        },
+        meeting: {
+          confirmedDate: null,
+          calendarEventId: null,
+          location: 'online',
+          meetingUrl: null
+        }
+      };
+      await addDoc(collection(db, 'pitches'), newPitch);
+    }
+    
     toast.success('Запрос на питч отправлен!', { icon: '🚀' });
     setShowModal(false);
     setForm({ investorName: '', proposedDate: '', message: '' });
@@ -42,16 +87,16 @@ export default function FounderPitchesPage() {
       </div>
 
       {/* Analytics Funnel */}
-      <div className="card" style={{ marginBottom: '24px', background: 'rgba(124,58,237,0.04)', borderColor: 'rgba(124,58,237,0.15)' }}>
-        <div style={{ fontSize: 12, color: '#a78bfa', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '20px' }}>
+      <div className="card" style={{ marginBottom: '24px', background: 'rgba(147,51,234,0.04)', borderColor: 'rgba(147,51,234,0.15)' }}>
+        <div style={{ fontSize: 12, color: '#D8B4FE', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '20px' }}>
           📊 Pitch Analytics — Conversion Funnel
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0', position: 'relative' }}>
           {[
-            { label: 'Sent', val: pitches.length, color: '#7c3aed', pct: 100 },
-            { label: 'Viewed', val: pitches.filter(p => p.status !== 'pending').length, color: '#3b82f6', pct: Math.round((pitches.filter(p => p.status !== 'pending').length / pitches.length) * 100) },
-            { label: 'Meeting', val: pitches.filter(p => p.meeting.confirmedDate).length, color: '#f59e0b', pct: Math.round((pitches.filter(p => p.meeting.confirmedDate).length / pitches.length) * 100) },
-            { label: 'Decision', val: pitches.filter(p => p.status === 'accepted' || p.status === 'rejected' || p.status === 'closed').length, color: '#10b981', pct: Math.round((pitches.filter(p => p.status === 'accepted' || p.status === 'rejected' || p.status === 'closed').length / pitches.length) * 100) },
+            { label: 'Sent', val: pitches.length, color: '#9333EA', pct: 100 },
+            { label: 'Viewed', val: pitches.filter(p => p.status !== 'pending').length, color: '#A1A1AA', pct: Math.round((pitches.filter(p => p.status !== 'pending').length / pitches.length) * 100) },
+            { label: 'Meeting', val: pitches.filter(p => p.meeting.confirmedDate).length, color: '#71717A', pct: Math.round((pitches.filter(p => p.meeting.confirmedDate).length / pitches.length) * 100) },
+            { label: 'Decision', val: pitches.filter(p => p.status === 'accepted' || p.status === 'rejected' || p.status === 'closed').length, color: '#D4D4D8', pct: Math.round((pitches.filter(p => p.status === 'accepted' || p.status === 'rejected' || p.status === 'closed').length / pitches.length) * 100) },
           ].map((step, i) => (
             <div key={i} style={{ textAlign: 'center', padding: '0 12px', position: 'relative' }}>
               {i > 0 && <div style={{ position: 'absolute', left: -1, top: '50%', transform: 'translateY(-80%)', fontSize: 20, color: '#334155' }}>→</div>}
@@ -68,9 +113,9 @@ export default function FounderPitchesPage() {
         {/* Response time + rate */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px', marginTop: '24px', paddingTop: '20px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
           {[
-            { label: 'Response Rate', value: `${Math.round((pitches.filter(p => p.status !== 'pending').length / pitches.length) * 100)}%`, color: '#3b82f6', desc: 'Инвесторов ответили' },
-            { label: 'Avg Response Time', value: '4.2 дня', color: '#f59e0b', desc: 'Среднее время ответа' },
-            { label: 'Accept Rate', value: `${Math.round((pitches.filter(p => p.status === 'accepted' || p.status === 'feedback_pending').length / pitches.length) * 100)}%`, color: '#10b981', desc: 'Питчей приняты' },
+            { label: 'Response Rate', value: `${Math.round((pitches.filter(p => p.status !== 'pending').length / pitches.length) * 100)}%`, color: '#A1A1AA', desc: 'Инвесторов ответили' },
+            { label: 'Avg Response Time', value: '4.2 дня', color: '#71717A', desc: 'Среднее время ответа' },
+            { label: 'Accept Rate', value: `${Math.round((pitches.filter(p => p.status === 'accepted' || p.status === 'feedback_pending').length / pitches.length) * 100)}%`, color: '#D4D4D8', desc: 'Питчей приняты' },
           ].map((kpi, i) => (
             <div key={i} style={{ textAlign: 'center', padding: '14px', borderRadius: '12px', background: `${kpi.color}08`, border: `1px solid ${kpi.color}20` }}>
               <div style={{ fontFamily: 'Space Grotesk', fontSize: 22, fontWeight: 800, color: kpi.color, marginBottom: 4 }}>{kpi.value}</div>
@@ -84,9 +129,9 @@ export default function FounderPitchesPage() {
       {/* Stats */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '28px' }}>
         {[
-          { label: 'Total Pitches', value: pitches.length, color: '#7c3aed' },
-          { label: 'Accepted', value: pitches.filter(p => p.status === 'accepted' || p.status === 'feedback_pending').length, color: '#10b981' },
-          { label: 'Pending', value: pitches.filter(p => p.status === 'pending').length, color: '#f59e0b' },
+          { label: 'Total Pitches', value: pitches.length, color: '#9333EA' },
+          { label: 'Accepted', value: pitches.filter(p => p.status === 'accepted' || p.status === 'feedback_pending').length, color: '#D4D4D8' },
+          { label: 'Pending', value: pitches.filter(p => p.status === 'pending').length, color: '#71717A' },
           { label: 'Closed', value: pitches.filter(p => p.status === 'closed').length, color: '#64748b' },
         ].map((stat, i) => (
           <div key={i} className="stat-card" style={{ textAlign: 'center' }}>
@@ -116,31 +161,31 @@ export default function FounderPitchesPage() {
                       <span className={`badge ${cfg.badge}`}>{cfg.icon}&nbsp;{cfg.label}</span>
                     </div>
                     <p style={{ fontSize: 13, color: '#475569' }}>
-                      AI Score at request: <strong style={{ color: '#a78bfa' }}>{pitch.request.snapshotScore}/100</strong>
+                      AI Score at request: <strong style={{ color: '#D8B4FE' }}>{pitch.request.snapshotScore}/100</strong>
                     </p>
                   </div>
                   <div style={{ fontSize: 12, color: '#334155' }}>
-                    {pitch.request.sentAt.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short', year: 'numeric' })}
+                    {pitch.request.sentAt instanceof Date ? pitch.request.sentAt.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short', year: 'numeric' }) : new Date((pitch.request.sentAt as any).seconds * 1000).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short', year: 'numeric' })}
                   </div>
                 </div>
 
-                <p style={{ fontSize: 13, color: '#64748b', lineHeight: 1.6, marginBottom: '16px', padding: '12px', background: 'rgba(255,255,255,0.02)', borderRadius: '8px', borderLeft: '3px solid rgba(124,58,237,0.3)' }}>
+                <p style={{ fontSize: 13, color: '#64748b', lineHeight: 1.6, marginBottom: '16px', padding: '12px', background: 'rgba(255,255,255,0.02)', borderRadius: '8px', borderLeft: '3px solid rgba(147,51,234,0.3)' }}>
                   &ldquo;{pitch.request.message}&rdquo;
                 </p>
 
                 {pitch.meeting.confirmedDate && (
                   <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: 13, color: '#94a3b8' }}>
-                      <Calendar size={13} color="#7c3aed" />
-                      {pitch.meeting.confirmedDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })}
+                      <Calendar size={13} color="#9333EA" />
+                      {pitch.meeting.confirmedDate instanceof Date ? pitch.meeting.confirmedDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }) : new Date((pitch.meeting.confirmedDate as any).seconds * 1000).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })}
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: 13, color: '#94a3b8' }}>
-                      {pitch.meeting.location === 'online' ? <Video size={13} color="#3b82f6" /> : <MapPin size={13} color="#10b981" />}
+                      {pitch.meeting.location === 'online' ? <Video size={13} color="#A1A1AA" /> : <MapPin size={13} color="#D4D4D8" />}
                       {pitch.meeting.location === 'online' ? 'Online Meeting' : 'In-Person'}
                     </div>
                     {pitch.meeting.meetingUrl && (
                       <a href={pitch.meeting.meetingUrl} target="_blank" rel="noopener noreferrer"
-                        style={{ fontSize: 13, color: '#7c3aed', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        style={{ fontSize: 13, color: '#9333EA', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px' }}>
                         Join Meeting <ArrowRight size={12} />
                       </a>
                     )}
@@ -160,7 +205,7 @@ export default function FounderPitchesPage() {
               Request Investor Pitch
             </h2>
             <p style={{ color: '#64748b', fontSize: 13, marginBottom: '24px' }}>
-              Your current AI Readiness Score: <strong style={{ color: '#a78bfa' }}>85/100</strong>
+              Your current AI Readiness Score: <strong style={{ color: '#D8B4FE' }}>85/100</strong>
             </p>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>

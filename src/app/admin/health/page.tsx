@@ -1,10 +1,9 @@
 'use client';
 
-import { useState, useMemo } from 'react';
 import { MOCK_STARTUPS } from '@/lib/mockData';
 import {
   AreaChart, Area, BarChart, Bar, XAxis, YAxis, Tooltip,
-  ResponsiveContainer, CartesianGrid, FunnelChart, Funnel, LabelList,
+  ResponsiveContainer, CartesianGrid,
   RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis,
 } from 'recharts';
 import {
@@ -22,16 +21,18 @@ function fmt(n: number) {
 
 const STAGE_ORDER = ['idea', 'validation', 'mvp', 'growth', 'investment_ready'];
 const STAGE_COLORS = {
-  idea: '#64748b', validation: '#f59e0b', mvp: '#3b82f6',
-  growth: '#7c3aed', investment_ready: '#10b981',
+  idea: '#64748b', validation: '#71717A', mvp: '#A1A1AA',
+  growth: '#9333EA', investment_ready: '#D4D4D8',
 };
 
 // ─── Custom Tooltip ───────────────────────────────────────────────────────────
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const CT = ({ active, payload, label }: any) => {
   if (!active || !payload?.length) return null;
   return (
     <div className="custom-tooltip">
       <p style={{ fontSize: 12, fontWeight: 600, marginBottom: 4 }}>{label}</p>
+      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
       {payload.map((p: any, i: number) => (
         <p key={i} style={{ fontSize: 12, color: p.color || p.fill }}>
           {p.name}: {typeof p.value === 'number' && p.value > 1000 ? fmt(p.value) : p.value}
@@ -47,7 +48,7 @@ function Trend({ val, suffix = '' }: { val: number; suffix?: string }) {
   const zero = val === 0;
   return (
     <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px', fontSize: 12,
-      color: zero ? '#64748b' : up ? '#10b981' : '#ef4444' }}>
+      color: zero ? '#64748b' : up ? '#D4D4D8' : '#52525B' }}>
       {zero ? <Minus size={11} /> : up ? <ArrowUp size={11} /> : <ArrowDown size={11} />}
       {Math.abs(val)}{suffix}
     </span>
@@ -102,16 +103,16 @@ export default function EcosystemHealthPage() {
   // ─── Simulated 6-month MRR trend ──────────────────────────────────────────
   const mrrTrend = ['Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May'].map((month, i) => ({
     month,
-    mrr: Math.round(totalMRR * (0.6 + i * 0.08) + Math.random() * 5000),
+    mrr: Math.round(totalMRR * (0.6 + i * 0.08) + ((i * 1337) % 5000)),
     arr: Math.round(totalARR * (0.6 + i * 0.08)),
   }));
 
   // ─── Runway buckets ───────────────────────────────────────────────────────
   const runwayBuckets = [
-    { label: '≤3 мес', count: S.filter(s => s.metrics.runwayMonths > 0 && s.metrics.runwayMonths <= 3).length, color: '#ef4444' },
-    { label: '3-6 мес', count: S.filter(s => s.metrics.runwayMonths > 3 && s.metrics.runwayMonths <= 6).length, color: '#f59e0b' },
-    { label: '6-12 мес', count: S.filter(s => s.metrics.runwayMonths > 6 && s.metrics.runwayMonths <= 12).length, color: '#3b82f6' },
-    { label: '>12 мес', count: S.filter(s => s.metrics.runwayMonths > 12).length, color: '#10b981' },
+    { label: '≤3 мес', count: S.filter(s => s.metrics.runwayMonths > 0 && s.metrics.runwayMonths <= 3).length, color: '#52525B' },
+    { label: '3-6 мес', count: S.filter(s => s.metrics.runwayMonths > 3 && s.metrics.runwayMonths <= 6).length, color: '#71717A' },
+    { label: '6-12 мес', count: S.filter(s => s.metrics.runwayMonths > 6 && s.metrics.runwayMonths <= 12).length, color: '#A1A1AA' },
+    { label: '>12 мес', count: S.filter(s => s.metrics.runwayMonths > 12).length, color: '#D4D4D8' },
   ];
 
   // ─── Ecosystem health score ────────────────────────────────────────────────
@@ -121,7 +122,7 @@ export default function EcosystemHealthPage() {
     ((S.length - criticalRunway) / S.length * 100 * 0.25) +
     (Math.min(totalMRR / 100000, 1) * 100 * 0.2)
   );
-  const scoreColor = ecosystemScore >= 70 ? '#10b981' : ecosystemScore >= 50 ? '#f59e0b' : '#ef4444';
+  const scoreColor = ecosystemScore >= 70 ? '#D4D4D8' : ecosystemScore >= 50 ? '#71717A' : '#52525B';
 
   return (
     <div className="animate-fade-in">
@@ -142,10 +143,10 @@ export default function EcosystemHealthPage() {
       {/* KPI Row */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '28px' }}>
         {[
-          { label: 'Total Ecosystem MRR', value: fmt(totalMRR), sub: `ARR ${fmt(totalARR)}`, icon: <DollarSign size={18} />, color: '#10b981', trend: 12 },
-          { label: 'Total MAU', value: totalMAU.toLocaleString(), sub: `${S.length} стартапов`, icon: <Users size={18} />, color: '#7c3aed', trend: 8 },
-          { label: 'Investment Ready', value: `${investReady}/${S.length}`, sub: `${Math.round(investReady / S.length * 100)}% conversion`, icon: <Target size={18} />, color: '#3b82f6', trend: 1 },
-          { label: 'Critical Runway', value: criticalRunway > 0 ? `⚠️ ${criticalRunway}` : '✅ 0', sub: `Avg ${avgRunway} мес runway`, icon: <AlertTriangle size={18} />, color: criticalRunway > 0 ? '#ef4444' : '#10b981', trend: -criticalRunway },
+          { label: 'Total Ecosystem MRR', value: fmt(totalMRR), sub: `ARR ${fmt(totalARR)}`, icon: <DollarSign size={18} />, color: '#D4D4D8', trend: 12 },
+          { label: 'Total MAU', value: totalMAU.toLocaleString(), sub: `${S.length} стартапов`, icon: <Users size={18} />, color: '#9333EA', trend: 8 },
+          { label: 'Investment Ready', value: `${investReady}/${S.length}`, sub: `${Math.round(investReady / S.length * 100)}% conversion`, icon: <Target size={18} />, color: '#A1A1AA', trend: 1 },
+          { label: 'Critical Runway', value: criticalRunway > 0 ? `⚠️ ${criticalRunway}` : '✅ 0', sub: `Avg ${avgRunway} мес runway`, icon: <AlertTriangle size={18} />, color: criticalRunway > 0 ? '#52525B' : '#D4D4D8', trend: -criticalRunway },
         ].map((stat, i) => (
           <div key={i} className="stat-card">
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
@@ -164,22 +165,22 @@ export default function EcosystemHealthPage() {
         {/* MRR Trend */}
         <div className="card">
           <div style={{ fontSize: 13, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: 8 }}>
-            <TrendingUp size={14} color="#7c3aed" /> Ecosystem MRR Growth (6 мес)
+            <TrendingUp size={14} color="#9333EA" /> Ecosystem MRR Growth (6 мес)
           </div>
           <ResponsiveContainer width="100%" height={220}>
             <AreaChart data={mrrTrend}>
               <defs>
                 <linearGradient id="mrrGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#7c3aed" stopOpacity={0.3} />
-                  <stop offset="95%" stopColor="#7c3aed" stopOpacity={0} />
+                  <stop offset="5%" stopColor="#9333EA" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#9333EA" stopOpacity={0} />
                 </linearGradient>
               </defs>
               <CartesianGrid vertical={false} stroke="rgba(255,255,255,0.04)" />
               <XAxis dataKey="month" tick={{ fontSize: 11, fill: '#475569' }} axisLine={false} tickLine={false} />
               <YAxis tickFormatter={v => `$${v / 1000}K`} tick={{ fontSize: 11, fill: '#475569' }} axisLine={false} tickLine={false} />
               <Tooltip content={<CT />} />
-              <Area type="monotone" dataKey="mrr" name="MRR" stroke="#7c3aed" strokeWidth={2} fill="url(#mrrGrad)" />
-              <Area type="monotone" dataKey="arr" name="ARR (÷12)" stroke="#3b82f6" strokeWidth={1.5} fill="none" strokeDasharray="4 2" />
+              <Area type="monotone" dataKey="mrr" name="MRR" stroke="#9333EA" strokeWidth={2} fill="url(#mrrGrad)" />
+              <Area type="monotone" dataKey="arr" name="ARR (÷12)" stroke="#A1A1AA" strokeWidth={1.5} fill="none" strokeDasharray="4 2" />
             </AreaChart>
           </ResponsiveContainer>
         </div>
@@ -187,15 +188,15 @@ export default function EcosystemHealthPage() {
         {/* Radar */}
         <div className="card">
           <div style={{ fontSize: 13, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: 8 }}>
-            <Activity size={14} color="#10b981" /> Health Radar
+            <Activity size={14} color="#D4D4D8" /> Health Radar
           </div>
           <ResponsiveContainer width="100%" height={220}>
             <RadarChart data={radarData} cx="50%" cy="50%" outerRadius="70%">
               <PolarGrid stroke="rgba(255,255,255,0.06)" />
               <PolarAngleAxis dataKey="metric" tick={{ fontSize: 9, fill: '#475569' }} />
               <PolarRadiusAxis angle={30} domain={[0, 100]} tick={{ fontSize: 9, fill: '#334155' }} />
-              <Radar name="Ecosystem" dataKey="value" stroke="#10b981" fill="#10b981" fillOpacity={0.2} strokeWidth={2} />
-              <Tooltip formatter={(v) => [`${v}%`, '']} contentStyle={{ background: '#0d0d20', border: '1px solid rgba(16,185,129,0.3)', borderRadius: '10px' }} />
+              <Radar name="Ecosystem" dataKey="value" stroke="#D4D4D8" fill="#D4D4D8" fillOpacity={0.2} strokeWidth={2} />
+              <Tooltip formatter={(v) => [`${v}%`, '']} contentStyle={{ background: '#0d0d20', border: '1px solid rgba(212,212,216,0.3)', borderRadius: '10px' }} />
             </RadarChart>
           </ResponsiveContainer>
         </div>
@@ -224,7 +225,7 @@ export default function EcosystemHealthPage() {
               );
             })}
           </div>
-          <div style={{ marginTop: '16px', padding: '10px', borderRadius: '10px', background: 'rgba(16,185,129,0.06)', border: '1px solid rgba(16,185,129,0.15)', fontSize: 12, color: '#34d399', textAlign: 'center' }}>
+          <div style={{ marginTop: '16px', padding: '10px', borderRadius: '10px', background: 'rgba(212,212,216,0.06)', border: '1px solid rgba(212,212,216,0.15)', fontSize: 12, color: '#A1A1AA', textAlign: 'center' }}>
             Conversion: idea → ready = {Math.round((investReady / S.length) * 100)}%
           </div>
         </div>
@@ -273,7 +274,7 @@ export default function EcosystemHealthPage() {
           </div>
 
           {criticalRunway > 0 && (
-            <div style={{ marginTop: '16px', padding: '10px 12px', borderRadius: '10px', background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div style={{ marginTop: '16px', padding: '10px 12px', borderRadius: '10px', background: 'rgba(82,82,91,0.08)', border: '1px solid rgba(82,82,91,0.2)', display: 'flex', alignItems: 'center', gap: '8px' }}>
               <AlertTriangle size={13} color="#f87171" />
               <span style={{ fontSize: 12, color: '#f87171' }}>{criticalRunway} стартап{criticalRunway > 1 ? 'а' : ''} требует внимания</span>
             </div>
@@ -291,7 +292,7 @@ export default function EcosystemHealthPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {byIndustry.map(([industry, count], i) => {
               const pct = Math.round((count / S.length) * 100);
-              const colors = ['#7c3aed', '#3b82f6', '#10b981', '#f59e0b', '#ef4444'];
+              const colors = ['#9333EA', '#A1A1AA', '#D4D4D8', '#71717A', '#52525B'];
               const c = colors[i % colors.length];
               return (
                 <div key={industry} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -314,7 +315,7 @@ export default function EcosystemHealthPage() {
         {/* Top performers */}
         <div className="card">
           <div style={{ fontSize: 13, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: 8 }}>
-            <Zap size={14} color="#f59e0b" /> Top Performers
+            <Zap size={14} color="#71717A" /> Top Performers
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {[...S]
@@ -322,10 +323,10 @@ export default function EcosystemHealthPage() {
               .slice(0, 5)
               .map((s, i) => {
                 const score = s.aiScores.overallReadinessScore || 0;
-                const sc = score >= 75 ? '#10b981' : score >= 50 ? '#f59e0b' : '#ef4444';
+                const sc = score >= 75 ? '#D4D4D8' : score >= 50 ? '#71717A' : '#52525B';
                 const medals = ['🥇', '🥈', '🥉', '4️⃣', '5️⃣'];
                 return (
-                  <div key={s.id} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 14px', borderRadius: '10px', background: i === 0 ? 'rgba(16,185,129,0.06)' : 'rgba(255,255,255,0.02)', border: `1px solid ${i === 0 ? 'rgba(16,185,129,0.15)' : 'rgba(255,255,255,0.04)'}` }}>
+                  <div key={s.id} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 14px', borderRadius: '10px', background: i === 0 ? 'rgba(212,212,216,0.06)' : 'rgba(255,255,255,0.02)', border: `1px solid ${i === 0 ? 'rgba(212,212,216,0.15)' : 'rgba(255,255,255,0.04)'}` }}>
                     <span style={{ fontSize: 16 }}>{medals[i]}</span>
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ fontWeight: 600, fontSize: 13, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{s.name}</div>

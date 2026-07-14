@@ -86,6 +86,7 @@ export const MOCK_STARTUPS: Startup[] = [
     tagline: 'B2B Payment Infrastructure for Central Asia',
     industry: 'FinTech',
     stage: 'investment_ready',
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     status: 'investment_ready' as any,
     currentRoadmapStageId: 'stage_5_fundraising',
     roadmapProgress: 88,

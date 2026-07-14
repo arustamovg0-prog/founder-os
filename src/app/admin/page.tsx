@@ -1,11 +1,14 @@
 'use client';
 
-import { MOCK_STARTUPS, MOCK_PITCHES, ROADMAP_STAGES } from '@/lib/mockData';
+import { useState, useEffect } from 'react';
+import { MOCK_STARTUPS, MOCK_PITCHES } from '@/lib/mockData';
 import {
-  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
-  LineChart, Line, PieChart, Pie, Cell
+  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Cell
 } from 'recharts';
-import { Users, TrendingUp, Brain, Briefcase, AlertTriangle, CheckCircle, Clock, Zap } from 'lucide-react';
+import { Users, TrendingUp, Brain, AlertTriangle, CheckCircle, Clock, Zap } from 'lucide-react';
+import { collection, getDocs } from 'firebase/firestore';
+import { db, isDemoConfig } from '@/lib/firebase';
+import { Startup } from '@/types';
 
 function fmt(n: number) {
   if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(1)}M`;
@@ -15,13 +18,15 @@ function fmt(n: number) {
 
 const STAGE_ORDER = ['idea', 'validation', 'mvp', 'growth', 'investment_ready'];
 const STAGE_LABELS: Record<string, string> = { idea: 'Idea', validation: 'Validation', mvp: 'MVP', growth: 'Growth', investment_ready: 'Inv. Ready' };
-const STAGE_COLORS: Record<string, string> = { idea: '#64748b', validation: '#f59e0b', mvp: '#3b82f6', growth: '#7c3aed', investment_ready: '#10b981' };
+const STAGE_COLORS: Record<string, string> = { idea: '#64748b', validation: '#71717A', mvp: '#A1A1AA', growth: '#9333EA', investment_ready: '#D4D4D8' };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (!active || !payload?.length) return null;
   return (
     <div className="custom-tooltip">
       <p style={{ fontSize: 12, fontWeight: 600, marginBottom: 4, color: '#f8fafc' }}>{label}</p>
+      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
       {payload.map((p: any, i: number) => (
         <p key={i} style={{ fontSize: 12, color: p.color || '#94a3b8' }}>{p.name}: {typeof p.value === 'number' && p.value > 1000 ? fmt(p.value) : p.value}</p>
       ))}
@@ -30,25 +35,66 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 };
 
 export default function AdminDashboard() {
-  const totalMRR = MOCK_STARTUPS.reduce((s, st) => s + st.metrics.mrr, 0);
-  const avgScore = Math.round(MOCK_STARTUPS.reduce((s, st) => s + (st.aiScores.overallReadinessScore || 0), 0) / MOCK_STARTUPS.length);
-  const readyCount = MOCK_STARTUPS.filter(s => (s.aiScores.overallReadinessScore || 0) >= 75).length;
-  const stuckCount = MOCK_STARTUPS.filter(s => s.metrics.runwayMonths <= 6).length;
+  const [startups, setStartups] = useState<Startup[]>(MOCK_STARTUPS);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadStartups() {
+      if (isDemoConfig) {
+        setStartups(MOCK_STARTUPS);
+        setLoading(false);
+        return;
+      }
+      try {
+        const snap = await getDocs(collection(db, 'startups'));
+        if (!snap.empty) {
+          const dbStartups = snap.docs.map(d => {
+            const data = d.data();
+            return {
+              id: d.id,
+              ...data,
+              aiScores: data.aiScores || { overallReadinessScore: 85 },
+              metrics: {
+                mrr: data.metrics?.mrr || 0,
+                arr: (data.metrics?.mrr || 0) * 12,
+                mau: data.metrics?.users || 0,
+                ltvCacRatio: data.metrics?.ltvCacRatio || 0,
+                runwayMonths: data.metrics?.runwayMonths || 12,
+                teamSize: data.metrics?.teamSize || 2,
+              }
+            } as Startup;
+          });
+          setStartups(dbStartups.length ? dbStartups : MOCK_STARTUPS);
+        }
+      } catch (err) {
+        console.warn('Failed to fetch startups for admin dashboard', err);
+        setStartups(MOCK_STARTUPS);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadStartups();
+  }, []);
+
+  if (loading) return <div className="animate-fade-in" style={{ padding: 32, color: '#64748b' }}>Загрузка дашборда...</div>;
+
+  const totalMRR = startups.reduce((s, st) => s + (st.metrics?.mrr || 0), 0);
+  const avgScore = startups.length ? Math.round(startups.reduce((s, st) => s + (st.aiScores?.overallReadinessScore || 0), 0) / startups.length) : 0;
+  const readyCount = startups.filter(s => (s.aiScores?.overallReadinessScore || 0) >= 75).length;
 
   const stageDistrib = STAGE_ORDER.map(stage => ({
     stage: STAGE_LABELS[stage],
-    count: MOCK_STARTUPS.filter(s => s.stage === stage).length,
+    count: startups.filter(s => s.stage === stage).length,
     color: STAGE_COLORS[stage],
   }));
 
-  const mrrByStartup = MOCK_STARTUPS.map(s => ({ name: s.name.split(' ')[0], mrr: s.metrics.mrr }));
-  const scoreData = MOCK_STARTUPS.map(s => ({ name: s.name.split(' ')[0], score: s.aiScores.overallReadinessScore || 0 }));
+  const scoreData = startups.map(s => ({ name: s.name.split(' ')[0], score: s.aiScores?.overallReadinessScore || 0 }));
 
   const alerts = [
-    ...MOCK_STARTUPS.filter(s => s.metrics.runwayMonths <= 6 && s.metrics.runwayMonths > 0).map(s => ({
-      type: 'danger', msg: `${s.name} — only ${s.metrics.runwayMonths}mo runway left`, icon: <AlertTriangle size={13} />,
+    ...startups.filter(s => (s.metrics?.runwayMonths || 0) <= 6 && (s.metrics?.runwayMonths || 0) > 0).map(s => ({
+      type: 'danger', msg: `${s.name} — only ${s.metrics?.runwayMonths}mo runway left`, icon: <AlertTriangle size={13} />,
     })),
-    ...MOCK_STARTUPS.filter(s => (s.aiScores.overallReadinessScore || 0) >= 80 && s.stage !== 'investment_ready').map(s => ({
+    ...startups.filter(s => (s.aiScores?.overallReadinessScore || 0) >= 80 && s.stage !== 'investment_ready').map(s => ({
       type: 'success', msg: `${s.name} — AI Score 80+, ready for next stage`, icon: <CheckCircle size={13} />,
     })),
     { type: 'info', msg: `${MOCK_PITCHES.filter(p => p.status === 'pending').length} pending pitch requests need attention`, icon: <Clock size={13} /> },
@@ -58,20 +104,20 @@ export default function AdminDashboard() {
     <div className="animate-fade-in">
       <div style={{ marginBottom: '32px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: 6 }}>
-          <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#10b981', boxShadow: '0 0 8px #10b981' }} />
-          <span style={{ fontSize: 12, color: '#10b981', fontWeight: 600 }}>UNTITLED ADMIN</span>
+          <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#D4D4D8', boxShadow: '0 0 8px #D4D4D8' }} />
+          <span style={{ fontSize: 12, color: '#D4D4D8', fontWeight: 600 }}>UNTITLED ADMIN</span>
         </div>
-        <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 28, fontWeight: 700, marginBottom: 6 }}>Ecosystem Overview</h1>
-        <p style={{ color: '#64748b', fontSize: 14 }}>UNTITLED Founder OS — Admin Control Panel</p>
+        <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 28, fontWeight: 700 }}>Ecosystem Health</h1>
+        <p style={{ color: '#64748b', fontSize: 14 }}>Real-time aggregated metrics for {startups.length} portfolio companies</p>
       </div>
 
       {/* KPIs */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '28px' }}>
         {[
-          { label: 'Total Startups', value: MOCK_STARTUPS.length, icon: <Users size={18} />, color: '#7c3aed', sub: 'in ecosystem' },
-          { label: 'Total MRR', value: fmt(totalMRR), icon: <TrendingUp size={18} />, color: '#10b981', sub: 'combined portfolio' },
-          { label: 'Avg AI Score', value: `${avgScore}/100`, icon: <Brain size={18} />, color: '#3b82f6', sub: 'ecosystem health' },
-          { label: 'Investment Ready', value: readyCount, icon: <Zap size={18} />, color: '#f59e0b', sub: 'score ≥ 75' },
+          { label: 'Total Startups', value: startups.length, icon: <Users size={18} />, color: '#9333EA', sub: 'in ecosystem' },
+          { label: 'Total MRR', value: fmt(totalMRR), icon: <TrendingUp size={18} />, color: '#D4D4D8', sub: 'combined portfolio' },
+          { label: 'Avg AI Score', value: `${avgScore}/100`, icon: <Brain size={18} />, color: '#A1A1AA', sub: 'ecosystem health' },
+          { label: 'Investment Ready', value: readyCount, icon: <Zap size={18} />, color: '#71717A', sub: 'score ≥ 75' },
         ].map((kpi, i) => (
           <div key={i} className="stat-card">
             <div style={{ width: 36, height: 36, borderRadius: 8, background: `${kpi.color}20`, border: `1px solid ${kpi.color}30`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: kpi.color, marginBottom: 12 }}>
@@ -93,9 +139,9 @@ export default function AdminDashboard() {
           {alerts.map((a, i) => (
             <div key={i} style={{
               display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', borderRadius: '10px',
-              background: a.type === 'danger' ? 'rgba(239,68,68,0.08)' : a.type === 'success' ? 'rgba(16,185,129,0.08)' : 'rgba(59,130,246,0.08)',
-              border: `1px solid ${a.type === 'danger' ? 'rgba(239,68,68,0.2)' : a.type === 'success' ? 'rgba(16,185,129,0.2)' : 'rgba(59,130,246,0.2)'}`,
-              color: a.type === 'danger' ? '#f87171' : a.type === 'success' ? '#34d399' : '#60a5fa',
+              background: a.type === 'danger' ? 'rgba(82,82,91,0.08)' : a.type === 'success' ? 'rgba(212,212,216,0.08)' : 'rgba(161,161,170,0.08)',
+              border: `1px solid ${a.type === 'danger' ? 'rgba(82,82,91,0.2)' : a.type === 'success' ? 'rgba(212,212,216,0.2)' : 'rgba(161,161,170,0.2)'}`,
+              color: a.type === 'danger' ? '#f87171' : a.type === 'success' ? '#A1A1AA' : '#60a5fa',
             }}>
               {a.icon}
               <span style={{ fontSize: 13 }}>{a.msg}</span>
@@ -138,7 +184,7 @@ export default function AdminDashboard() {
               <Tooltip content={<CustomTooltip />} />
               <Bar dataKey="score" name="AI Score" radius={[6, 6, 0, 0]}>
                 {scoreData.map((d, i) => (
-                  <Cell key={i} fill={d.score >= 75 ? '#10b981' : d.score >= 50 ? '#f59e0b' : '#ef4444'} />
+                  <Cell key={i} fill={d.score >= 75 ? '#D4D4D8' : d.score >= 50 ? '#71717A' : '#52525B'} />
                 ))}
               </Bar>
             </BarChart>
@@ -163,7 +209,7 @@ export default function AdminDashboard() {
             <tbody>
               {MOCK_STARTUPS.map((s) => {
                 const score = s.aiScores.overallReadinessScore || 0;
-                const scoreColor = score >= 75 ? '#10b981' : score >= 50 ? '#f59e0b' : '#ef4444';
+                const scoreColor = score >= 75 ? '#D4D4D8' : score >= 50 ? '#71717A' : '#52525B';
                 return (
                   <tr key={s.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}
                     onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.02)')}
@@ -177,9 +223,9 @@ export default function AdminDashboard() {
                         {STAGE_LABELS[s.stage]}
                       </span>
                     </td>
-                    <td style={{ padding: '12px 12px', fontFamily: 'Space Grotesk', fontWeight: 700, color: s.metrics.mrr > 0 ? '#10b981' : '#334155' }}>{fmt(s.metrics.mrr) || '—'}</td>
+                    <td style={{ padding: '12px 12px', fontFamily: 'Space Grotesk', fontWeight: 700, color: s.metrics.mrr > 0 ? '#D4D4D8' : '#334155' }}>{fmt(s.metrics.mrr) || '—'}</td>
                     <td style={{ padding: '12px 12px', color: '#94a3b8' }}>{s.metrics.teamSize}</td>
-                    <td style={{ padding: '12px 12px', color: s.metrics.runwayMonths <= 6 ? '#f87171' : '#10b981' }}>
+                    <td style={{ padding: '12px 12px', color: s.metrics.runwayMonths <= 6 ? '#f87171' : '#D4D4D8' }}>
                       {s.metrics.runwayMonths > 0 ? `${s.metrics.runwayMonths}mo` : '—'}
                     </td>
                     <td style={{ padding: '12px 12px' }}>

@@ -10,9 +10,9 @@ import { sendSignInLinkToEmail } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 
 const DEMO_ACCOUNTS = [
-  { role: 'founder' as UserRole, email: 'founder@demo.com', password: 'demo123', label: 'Founder Demo', color: '#7c3aed', icon: '🚀' },
-  { role: 'investor' as UserRole, email: 'investor@demo.com', password: 'demo123', label: 'Investor Demo', color: '#3b82f6', icon: '💼' },
-  { role: 'admin' as UserRole, email: 'admin@demo.com', password: 'demo123', label: 'Admin Demo', color: '#10b981', icon: '⚡' },
+  { role: 'founder' as UserRole, email: 'founder@demo.com', password: 'demo123', label: 'Founder Demo', color: '#9333EA', icon: '🚀' },
+  { role: 'investor' as UserRole, email: 'investor@demo.com', password: 'demo123', label: 'Investor Demo', color: '#A1A1AA', icon: '💼' },
+  { role: 'admin' as UserRole, email: 'admin@demo.com', password: 'demo123', label: 'Admin Demo', color: '#D4D4D8', icon: '⚡' },
 ];
 
 export default function LoginPage() {
@@ -20,7 +20,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [showPass, setShowPass] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [mode, setMode] = useState<'login' | 'register'>('login');
+  const [mode, setMode] = useState<'login' | 'register' | 'magic'>('login');
   const [name, setName] = useState('');
   const [role, setRole] = useState<UserRole>('founder');
   const [demoRole, setDemoRole] = useState<UserRole | null>(null);
@@ -30,23 +30,31 @@ export default function LoginPage() {
   const { login, loginDemo, register, profile } = useAuth();
   const router = useRouter();
 
+  const redirectByProfile = (p: { role: UserRole; linkedStartupId?: string | null }) => {
+    if (p.role === 'admin') router.push('/admin');
+    else if (p.role === 'investor') router.push('/investor');
+    else {
+      if (p.role === 'founder' && !p.linkedStartupId) {
+        router.push('/founder/onboarding');
+      } else {
+        router.push('/founder');
+      }
+    }
+  };
+
   useEffect(() => {
     if (profile) {
-      redirectByRole(profile.role);
+      redirectByProfile(profile);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profile]);
-
-  const redirectByRole = (r: UserRole) => {
-    if (r === 'admin') router.push('/admin');
-    else if (r === 'investor') router.push('/investor');
-    else router.push('/founder');
-  };
 
   const handleDemoLogin = (demo: typeof DEMO_ACCOUNTS[0]) => {
     setDemoRole(demo.role);
     loginDemo(demo.role);
     toast.success(`${demo.label} — добро пожаловать!`, { icon: demo.icon });
-    setTimeout(() => redirectByRole(demo.role), 300);
+    // For demo, we assume they already have a startup (linkedStartupId will be simulated in profile via DEMO_PROFILES)
+    setTimeout(() => redirectByProfile({ role: demo.role, linkedStartupId: 'demo_startup' }), 300);
     setDemoRole(null);
   };
 
@@ -63,6 +71,7 @@ export default function LoginPage() {
         await register(email, password, name, role);
         toast.success('Аккаунт создан!');
       }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       toast.error(err.message?.replace('Firebase: ', '') || 'Ошибка входа');
     } finally {
@@ -82,7 +91,7 @@ export default function LoginPage() {
       window.localStorage.setItem('emailForSignIn', magicEmail);
       setMagicLinkSent(true);
       toast.success('Magic Link отправлен!', { icon: '✉️', duration: 5000 });
-    } catch (err: any) {
+    } catch {
       // Demo mode — Firebase не подключён
       setMagicLinkSent(true);
       toast.success('Magic Link отправлен! (Demo Mode)', { icon: '✉️' });
@@ -100,15 +109,15 @@ export default function LoginPage() {
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '32px' }}>
             <div style={{
               width: 48, height: 48, borderRadius: 12,
-              background: 'linear-gradient(135deg, #7c3aed, #3b82f6)',
+              background: 'linear-gradient(135deg, #9333EA, #A1A1AA)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              boxShadow: '0 0 30px rgba(124,58,237,0.5)',
+              boxShadow: '0 0 30px rgba(147,51,234,0.5)',
             }}>
               <Zap size={24} color="white" />
             </div>
             <div>
               <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 22, fontWeight: 700 }}>Founder OS</div>
-              <div style={{ fontSize: 12, color: '#7c3aed', fontWeight: 500, letterSpacing: '2px', textTransform: 'uppercase' }}>by UNTITLED</div>
+              <div style={{ fontSize: 12, color: '#9333EA', fontWeight: 500, letterSpacing: '2px', textTransform: 'uppercase' }}>by UNTITLED</div>
             </div>
           </div>
 
@@ -130,10 +139,10 @@ export default function LoginPage() {
               <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '14px' }}>
                 <div style={{
                   width: 36, height: 36, borderRadius: 8, flexShrink: 0,
-                  background: 'rgba(124,58,237,0.15)',
-                  border: '1px solid rgba(124,58,237,0.25)',
+                  background: 'rgba(147,51,234,0.15)',
+                  border: '1px solid rgba(147,51,234,0.25)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  color: '#a78bfa',
+                  color: '#D8B4FE',
                 }}>
                   {item.icon}
                 </div>
@@ -165,7 +174,7 @@ export default function LoginPage() {
                       padding: '12px 16px', borderRadius: '10px',
                       background: demoRole === demo.role ? `${demo.color}20` : 'rgba(255,255,255,0.04)',
                       border: `1px solid ${demoRole === demo.role ? demo.color + '50' : 'rgba(255,255,255,0.08)'}`,
-                      cursor: 'pointer', transition: 'all 0.15s', color: '#f8fafc',
+                      cursor: 'pointer', transition: 'var(--transition-standard)', color: '#f8fafc',
                       fontFamily: 'Inter, sans-serif',
                     }}
                   >
@@ -193,13 +202,13 @@ export default function LoginPage() {
               {(['login', 'register', 'magic'] as const).map((m) => (
                 <button
                   key={m}
-                  onClick={() => setMode(m as any)}
+                  onClick={() => setMode(m as 'login' | 'register' | 'magic')}
                   style={{
                     flex: 1, padding: '8px', borderRadius: '7px', border: 'none',
-                    background: mode === m ? 'rgba(124,58,237,0.3)' : 'transparent',
-                    color: mode === m ? '#a78bfa' : '#64748b',
+                    background: mode === m ? 'rgba(147,51,234,0.3)' : 'transparent',
+                    color: mode === m ? '#D8B4FE' : '#64748b',
                     fontSize: '12px', fontWeight: 600, cursor: 'pointer',
-                    transition: 'all 0.15s', fontFamily: 'Inter, sans-serif',
+                    transition: 'var(--transition-standard)', fontFamily: 'Inter, sans-serif',
                   }}
                 >
                   {m === 'login' ? 'Войти' : m === 'register' ? 'Регистрация' : '✉️ Magic Link'}
@@ -211,9 +220,10 @@ export default function LoginPage() {
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {mode === 'register' && (
                 <>
-                  <input className="input-field" placeholder="Имя и фамилия" value={name} onChange={e => setName(e.target.value)} />
+                  <input className="input-field" aria-label="Имя и фамилия" placeholder="Имя и фамилия" value={name} onChange={e => setName(e.target.value)} />
                   <select
                     className="input-field"
+                    aria-label="Выберите роль"
                     value={role}
                     onChange={e => setRole(e.target.value as UserRole)}
                     style={{ appearance: 'none' }}
@@ -223,10 +233,11 @@ export default function LoginPage() {
                   </select>
                 </>
               )}
-              <input className="input-field" type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
+              <input className="input-field" type="email" aria-label="Email адрес" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
               <div style={{ position: 'relative' }}>
                 <input
                   className="input-field"
+                  aria-label="Пароль"
                   type={showPass ? 'text' : 'password'}
                   placeholder="Пароль"
                   value={password}
@@ -235,6 +246,7 @@ export default function LoginPage() {
                 />
                 <button
                   type="button"
+                  aria-label={showPass ? 'Скрыть пароль' : 'Показать пароль'}
                   onClick={() => setShowPass(!showPass)}
                   style={{
                     position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)',
@@ -262,13 +274,13 @@ export default function LoginPage() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {magicLinkSent ? (
                   <div style={{ textAlign: 'center', padding: '32px 20px' }}>
-                    <Mail size={48} color="#7c3aed" style={{ margin: '0 auto 16px', display: 'block' }} />
+                    <Mail size={48} color="#9333EA" style={{ margin: '0 auto 16px', display: 'block' }} />
                     <div style={{ fontFamily: 'Space Grotesk', fontSize: 18, fontWeight: 700, marginBottom: 8 }}>Письмо отправлено!</div>
                     <p style={{ color: '#64748b', fontSize: 13, lineHeight: 1.6 }}>
-                      Мы отправили Magic Link на <strong style={{ color: '#a78bfa' }}>{magicEmail}</strong>.<br />
+                      Мы отправили Magic Link на <strong style={{ color: '#D8B4FE' }}>{magicEmail}</strong>.<br />
                       Перейди по ссылке в письме для входа без пароля.
                     </p>
-                    <button onClick={() => { setMagicLinkSent(false); setMagicEmail(''); }} style={{ marginTop: 16, fontSize: 12, color: '#7c3aed', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Inter', textDecoration: 'underline' }}>
+                    <button onClick={() => { setMagicLinkSent(false); setMagicEmail(''); }} style={{ marginTop: 16, fontSize: 12, color: '#9333EA', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Inter', textDecoration: 'underline' }}>
                       Отправить ещё раз
                     </button>
                   </div>
@@ -279,6 +291,7 @@ export default function LoginPage() {
                     </p>
                     <input
                       className="input-field"
+                      aria-label="Email для Magic Link"
                       type="email"
                       placeholder="your@email.com"
                       value={magicEmail}

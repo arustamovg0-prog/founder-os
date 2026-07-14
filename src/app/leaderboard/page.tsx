@@ -6,8 +6,8 @@ import { Trophy, MapPin, TrendingUp, Users, Zap, Star, ArrowUpRight, Globe } fro
 import Link from 'next/link';
 
 const STAGE_COLORS: Record<string, string> = {
-  idea: '#64748b', validation: '#f59e0b', mvp: '#3b82f6',
-  growth: '#7c3aed', investment_ready: '#10b981',
+  idea: '#64748b', validation: '#71717A', mvp: '#A1A1AA',
+  growth: '#9333EA', investment_ready: '#D4D4D8',
 };
 
 function fmt(n: number) {
@@ -49,12 +49,12 @@ export default function LeaderboardPage() {
 
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '6px 16px', borderRadius: 99, background: 'rgba(245,158,11,0.12)', border: '1px solid rgba(245,158,11,0.25)', marginBottom: 16 }}>
-            <Trophy size={13} color="#fbbf24" />
-            <span style={{ fontSize: 12, color: '#fbbf24', fontWeight: 600 }}>UNTITLED Ecosystem</span>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '6px 16px', borderRadius: 99, background: 'rgba(113,113,122,0.12)', border: '1px solid rgba(113,113,122,0.25)', marginBottom: 16 }}>
+            <Trophy size={13} color="#D4D4D8" />
+            <span style={{ fontSize: 12, color: '#D4D4D8', fontWeight: 600 }}>UNTITLED Ecosystem</span>
           </div>
           <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 40, fontWeight: 800, marginBottom: 10 }}>
-            Startup <span style={{ background: 'linear-gradient(135deg,#f59e0b,#ef4444)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Leaderboard</span>
+            Startup <span style={{ background: 'linear-gradient(135deg,#71717A,#52525B)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Leaderboard</span>
           </h1>
           <p style={{ color: '#64748b', fontSize: 15 }}>
             Рейтинг стартапов UNTITLED по AI Score, MRR и прогрессу
@@ -67,8 +67,8 @@ export default function LeaderboardPage() {
             {FILTERS.map(f => (
               <button key={f.key} onClick={() => setSortBy(f.key)} style={{
                 padding: '8px 16px', borderRadius: '7px', border: 'none', fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: 'Inter',
-                background: sortBy === f.key ? 'rgba(245,158,11,0.2)' : 'transparent',
-                color: sortBy === f.key ? '#fbbf24' : '#64748b',
+                background: sortBy === f.key ? 'rgba(113,113,122,0.2)' : 'transparent',
+                color: sortBy === f.key ? '#D4D4D8' : '#64748b',
               }}>{f.label}</button>
             ))}
           </div>
@@ -76,8 +76,8 @@ export default function LeaderboardPage() {
             {INDUSTRY_FILTERS.map(ind => (
               <button key={ind} onClick={() => setIndustryFilter(ind)} style={{
                 padding: '8px 12px', borderRadius: '7px', border: 'none', fontSize: 12, cursor: 'pointer', fontFamily: 'Inter', fontWeight: 500, whiteSpace: 'nowrap',
-                background: industryFilter === ind ? 'rgba(124,58,237,0.2)' : 'transparent',
-                color: industryFilter === ind ? '#a78bfa' : '#64748b',
+                background: industryFilter === ind ? 'rgba(147,51,234,0.2)' : 'transparent',
+                color: industryFilter === ind ? '#D8B4FE' : '#64748b',
               }}>{ind}</button>
             ))}
           </div>
@@ -99,18 +99,18 @@ export default function LeaderboardPage() {
               </div>
             </div>
             {/* 1st */}
-            <div style={{ textAlign: 'center', padding: '32px 20px', borderRadius: '20px', background: 'linear-gradient(135deg,rgba(245,158,11,0.12),rgba(239,68,68,0.08))', border: '2px solid rgba(245,158,11,0.3)', boxShadow: '0 0 40px rgba(245,158,11,0.15)' }}>
+            <div style={{ textAlign: 'center', padding: '32px 20px', borderRadius: '20px', background: 'linear-gradient(135deg,rgba(113,113,122,0.12),rgba(82,82,91,0.08))', border: '2px solid rgba(113,113,122,0.3)', boxShadow: '0 0 40px rgba(113,113,122,0.15)' }}>
               <div style={{ fontSize: 40, marginBottom: 10 }}>🥇</div>
-              <div style={{ width: 64, height: 64, borderRadius: '50%', background: 'linear-gradient(135deg,#f59e0b,#ef4444)', margin: '0 auto 12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Space Grotesk', fontSize: 26, fontWeight: 800, color: 'white', boxShadow: '0 0 20px rgba(245,158,11,0.4)' }}>
+              <div style={{ width: 64, height: 64, borderRadius: '50%', background: 'linear-gradient(135deg,#71717A,#52525B)', margin: '0 auto 12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Space Grotesk', fontSize: 26, fontWeight: 800, color: 'white', boxShadow: '0 0 20px rgba(113,113,122,0.4)' }}>
                 {topThree[0].name.charAt(0)}
               </div>
               <div style={{ fontFamily: 'Space Grotesk', fontWeight: 800, fontSize: 17, marginBottom: 4 }}>{topThree[0].name}</div>
               <div style={{ fontSize: 12, color: '#94a3b8', marginBottom: 10 }}>{topThree[0].industry} · {topThree[0].location}</div>
-              <div style={{ fontFamily: 'Space Grotesk', fontSize: 32, fontWeight: 900, color: '#fbbf24' }}>
+              <div style={{ fontFamily: 'Space Grotesk', fontSize: 32, fontWeight: 900, color: '#D4D4D8' }}>
                 {sortBy === 'score' ? topThree[0].aiScores.overallReadinessScore : sortBy === 'mrr' ? fmt(topThree[0].metrics.mrr) : sortBy === 'mau' ? topThree[0].metrics.mau.toLocaleString() : `${topThree[0].roadmapProgress}%`}
               </div>
               <div style={{ marginTop: 12 }}>
-                <span style={{ fontSize: 10, fontWeight: 700, color: '#fbbf24', background: 'rgba(245,158,11,0.15)', padding: '3px 10px', borderRadius: 99 }}>
+                <span style={{ fontSize: 10, fontWeight: 700, color: '#D4D4D8', background: 'rgba(113,113,122,0.15)', padding: '3px 10px', borderRadius: 99 }}>
                   {topThree[0].stage.replace('_', ' ').toUpperCase()}
                 </span>
               </div>
@@ -134,13 +134,13 @@ export default function LeaderboardPage() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '48px' }}>
           {rest.map((s, i) => {
             const score = s.aiScores.overallReadinessScore || 0;
-            const sc = score >= 75 ? '#10b981' : score >= 50 ? '#f59e0b' : '#ef4444';
+            const sc = score >= 75 ? '#D4D4D8' : score >= 50 ? '#71717A' : '#52525B';
             const stageColor = STAGE_COLORS[s.stage] || '#64748b';
             return (
               <div key={s.id} style={{
                 display: 'flex', alignItems: 'center', gap: '16px', padding: '16px 20px',
                 borderRadius: '14px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)',
-                transition: 'all 0.15s',
+                transition: 'var(--transition-standard)',
               }}>
                 <div style={{ width: 32, fontSize: 16, fontFamily: 'Space Grotesk', fontWeight: 700, color: '#334155', textAlign: 'center', flexShrink: 0 }}>#{i + 4}</div>
                 <div style={{ width: 40, height: 40, borderRadius: '10px', background: `${stageColor}20`, border: `1px solid ${stageColor}30`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Space Grotesk', fontSize: 16, fontWeight: 800, color: stageColor, flexShrink: 0 }}>
@@ -160,7 +160,7 @@ export default function LeaderboardPage() {
                   <div style={{ fontSize: 10, color: '#334155' }}>AI Score</div>
                 </div>
                 <div style={{ textAlign: 'right', flexShrink: 0, minWidth: '60px' }}>
-                  <div style={{ fontFamily: 'Space Grotesk', fontSize: 14, fontWeight: 700, color: '#10b981' }}>{fmt(s.metrics.mrr)}</div>
+                  <div style={{ fontFamily: 'Space Grotesk', fontSize: 14, fontWeight: 700, color: '#D4D4D8' }}>{fmt(s.metrics.mrr)}</div>
                   <div style={{ fontSize: 10, color: '#334155' }}>MRR</div>
                 </div>
               </div>
@@ -171,7 +171,7 @@ export default function LeaderboardPage() {
         {/* Footer */}
         <div style={{ textAlign: 'center' }}>
           <p style={{ fontSize: 12, color: '#334155' }}>
-            Рейтинг обновляется в реальном времени · <Link href="/" style={{ color: '#7c3aed', textDecoration: 'none' }}>Founder OS</Link> · UNTITLED Ecosystem
+            Рейтинг обновляется в реальном времени · <Link href="/" style={{ color: '#9333EA', textDecoration: 'none' }}>Founder OS</Link> · UNTITLED Ecosystem
           </p>
         </div>
       </div>

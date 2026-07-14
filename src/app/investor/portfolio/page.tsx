@@ -12,7 +12,21 @@ function fmt(n: number) {
 
 const PORTFOLIO = MOCK_STARTUPS.filter(s => (s.aiScores.overallReadinessScore || 0) >= 60);
 
-const PIE_COLORS = ['#7c3aed', '#3b82f6', '#10b981', '#f59e0b'];
+const PIE_COLORS = ['#9333EA', '#A1A1AA', '#D4D4D8', '#71717A'];
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const CustomTooltip = ({ active, payload, label }: any) => {
+  if (!active || !payload?.length) return null;
+  return (
+    <div className="custom-tooltip">
+      <p style={{ fontSize: 12, fontWeight: 600, marginBottom: 4 }}>{label}</p>
+      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+      {payload.map((p: any, i: number) => (
+        <p key={i} style={{ fontSize: 12, color: p.color }}>{p.name}: {fmt(p.value)}</p>
+      ))}
+    </div>
+  );
+};
 
 export default function PortfolioPage() {
   const totalMRR = PORTFOLIO.reduce((s, p) => s + p.metrics.mrr, 0);
@@ -24,17 +38,6 @@ export default function PortfolioPage() {
     PORTFOLIO.reduce((acc, s) => ({ ...acc, [s.industry]: (acc[s.industry] || 0) + 1 }), {} as Record<string, number>)
   ).map(([name, value]) => ({ name, value }));
 
-  const CustomTooltip = ({ active, payload, label }: any) => {
-    if (!active || !payload?.length) return null;
-    return (
-      <div className="custom-tooltip">
-        <p style={{ fontSize: 12, fontWeight: 600, marginBottom: 4 }}>{label}</p>
-        {payload.map((p: any, i: number) => (
-          <p key={i} style={{ fontSize: 12, color: p.color }}>{p.name}: {fmt(p.value)}</p>
-        ))}
-      </div>
-    );
-  };
 
   return (
     <div className="animate-fade-in">
@@ -46,9 +49,9 @@ export default function PortfolioPage() {
       {/* Stats */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '28px' }}>
         {[
-          { label: 'Total MRR (Watchlist)', value: fmt(totalMRR), icon: <DollarSign size={18} />, color: '#10b981' },
-          { label: 'Total MAU', value: totalMAU.toLocaleString(), icon: <TrendingUp size={18} />, color: '#7c3aed' },
-          { label: 'Avg AI Score', value: `${avgScore}/100`, icon: <Briefcase size={18} />, color: '#3b82f6' },
+          { label: 'Total MRR (Watchlist)', value: fmt(totalMRR), icon: <DollarSign size={18} />, color: '#D4D4D8' },
+          { label: 'Total MAU', value: totalMAU.toLocaleString(), icon: <TrendingUp size={18} />, color: '#9333EA' },
+          { label: 'Avg AI Score', value: `${avgScore}/100`, icon: <Briefcase size={18} />, color: '#A1A1AA' },
         ].map((stat, i) => (
           <div key={i} className="stat-card">
             <div style={{ width: 36, height: 36, borderRadius: 8, background: `${stat.color}20`, border: `1px solid ${stat.color}30`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: stat.color, marginBottom: 12 }}>{stat.icon}</div>
@@ -70,8 +73,8 @@ export default function PortfolioPage() {
               <XAxis dataKey="name" tick={{ fontSize: 11, fill: '#475569' }} axisLine={false} tickLine={false} />
               <YAxis tickFormatter={v => `$${v / 1000}K`} tick={{ fontSize: 11, fill: '#475569' }} axisLine={false} tickLine={false} />
               <Tooltip content={<CustomTooltip />} />
-              <Bar dataKey="mrr" name="MRR" fill="#7c3aed" radius={[6, 6, 0, 0]} />
-              <Bar dataKey="arr" name="ARR" fill="#3b82f6" radius={[6, 6, 0, 0]} />
+              <Bar dataKey="mrr" name="MRR" fill="#9333EA" radius={[6, 6, 0, 0]} />
+              <Bar dataKey="arr" name="ARR" fill="#A1A1AA" radius={[6, 6, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -89,7 +92,7 @@ export default function PortfolioPage() {
                 ))}
               </Pie>
               <Legend formatter={v => <span style={{ fontSize: 12, color: '#94a3b8' }}>{v}</span>} />
-              <Tooltip formatter={(v) => [`${v} startup${(v as number) > 1 ? 's' : ''}`, 'Count']} contentStyle={{ background: '#0d0d20', border: '1px solid rgba(124,58,237,0.3)', borderRadius: '12px' }} />
+              <Tooltip formatter={(v) => [`${v} startup${(v as number) > 1 ? 's' : ''}`, 'Count']} contentStyle={{ background: '#0d0d20', border: '1px solid rgba(147,51,234,0.3)', borderRadius: '12px' }} />
             </PieChart>
           </ResponsiveContainer>
         </div>
@@ -112,11 +115,11 @@ export default function PortfolioPage() {
               </tr>
             </thead>
             <tbody>
-              {PORTFOLIO.map((s, i) => {
+              {PORTFOLIO.map((s) => {
                 const score = s.aiScores.overallReadinessScore || 0;
-                const scoreColor = score >= 75 ? '#10b981' : score >= 50 ? '#f59e0b' : '#ef4444';
+                const scoreColor = score >= 75 ? '#D4D4D8' : score >= 50 ? '#71717A' : '#52525B';
                 return (
-                  <tr key={s.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)', transition: 'background 0.15s' }}
+                  <tr key={s.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)', transition: 'background 160ms var(--ease-out)' }}
                     onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.02)')}
                     onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
                     <td style={{ padding: '14px 12px' }}>
@@ -128,12 +131,12 @@ export default function PortfolioPage() {
                         {s.stage.replace('_', ' ')}
                       </span>
                     </td>
-                    <td style={{ padding: '14px 12px', fontFamily: 'Space Grotesk', fontWeight: 700, color: '#10b981' }}>{fmt(s.metrics.mrr)}</td>
+                    <td style={{ padding: '14px 12px', fontFamily: 'Space Grotesk', fontWeight: 700, color: '#D4D4D8' }}>{fmt(s.metrics.mrr)}</td>
                     <td style={{ padding: '14px 12px', color: '#94a3b8' }}>{s.metrics.mau.toLocaleString()}</td>
-                    <td style={{ padding: '14px 12px', color: s.metrics.ltvCacRatio >= 5 ? '#10b981' : '#f59e0b' }}>
+                    <td style={{ padding: '14px 12px', color: s.metrics.ltvCacRatio >= 5 ? '#D4D4D8' : '#71717A' }}>
                       {s.metrics.ltvCacRatio > 0 ? `${s.metrics.ltvCacRatio}x` : '—'}
                     </td>
-                    <td style={{ padding: '14px 12px', color: s.metrics.runwayMonths >= 12 ? '#10b981' : '#f59e0b' }}>
+                    <td style={{ padding: '14px 12px', color: s.metrics.runwayMonths >= 12 ? '#D4D4D8' : '#71717A' }}>
                       {s.metrics.runwayMonths > 0 ? `${s.metrics.runwayMonths}mo` : '—'}
                     </td>
                     <td style={{ padding: '14px 12px' }}>

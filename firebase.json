@@ -14,15 +14,9 @@
   "storage": {
     "rules": "storage.rules"
   },
-  "hosting": {
-    "public": ".next",
-    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
-    ]
+  "apphosting": {
+    "rootDir": "/",
+    "ignore": ["node_modules", ".git", "firebase-debug.log", "firebase-debug.*.log", "functions"]
   },
   "emulators": {
     "auth": { "port": 9099 },

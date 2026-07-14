@@ -17,4 +17,5 @@ const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
+export const isDemoConfig = !process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
 export default app;

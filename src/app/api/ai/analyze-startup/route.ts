@@ -70,6 +70,7 @@ Return ONLY a valid JSON object:
     const aiData = JSON.parse(match[0]);
     return NextResponse.json(aiData);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     console.error('[analyze-startup]', err.message);
     return NextResponse.json({ error: 'AI analysis failed' }, { status: 500 });

@@ -23,8 +23,8 @@ export default function VideoPitchRoomPage({ params }: { params: { id: string } 
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
         <div>
           <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 24, fontWeight: 700 }}>Pitch Room</h1>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#10b981' }}>
-            <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#10b981', boxShadow: '0 0 6px #10b981' }} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#D4D4D8' }}>
+            <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#D4D4D8', boxShadow: '0 0 6px #D4D4D8' }} />
             Session Recording Active
           </div>
         </div>
@@ -55,7 +55,7 @@ export default function VideoPitchRoomPage({ params }: { params: { id: string } 
                {camOn ? (
                 <div style={{ textAlign: 'center', color: '#64748b', fontSize: 12 }}>Self Feed Placeholder</div>
               ) : (
-                <div style={{ width: 60, height: 60, borderRadius: '50%', background: 'rgba(124,58,237,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, color: '#a78bfa' }}>Me</div>
+                <div style={{ width: 60, height: 60, borderRadius: '50%', background: 'rgba(147,51,234,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, color: '#D8B4FE' }}>Me</div>
               )}
               <div style={{ position: 'absolute', bottom: 12, left: 12, padding: '4px 8px', background: 'rgba(0,0,0,0.6)', borderRadius: '6px', fontSize: 11, color: '#f8fafc', backdropFilter: 'blur(4px)' }}>
                 You (Founder)
@@ -64,16 +64,16 @@ export default function VideoPitchRoomPage({ params }: { params: { id: string } 
 
             {/* Controls */}
             <div style={{ flex: 1, background: 'rgba(255,255,255,0.02)', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>
-              <button onClick={() => setMicOn(!micOn)} style={{ width: 56, height: 56, borderRadius: '50%', background: micOn ? 'rgba(255,255,255,0.1)' : 'rgba(239,68,68,0.2)', border: `1px solid ${micOn ? 'rgba(255,255,255,0.1)' : 'rgba(239,68,68,0.4)'}`, color: micOn ? '#fff' : '#f87171', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'all 0.2s' }}>
+              <button onClick={() => setMicOn(!micOn)} style={{ width: 56, height: 56, borderRadius: '50%', background: micOn ? 'rgba(255,255,255,0.1)' : 'rgba(82,82,91,0.2)', border: `1px solid ${micOn ? 'rgba(255,255,255,0.1)' : 'rgba(82,82,91,0.4)'}`, color: micOn ? '#fff' : '#f87171', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'var(--transition-standard)' }}>
                 {micOn ? <Mic size={24} /> : <MicOff size={24} />}
               </button>
-              <button onClick={() => setCamOn(!camOn)} style={{ width: 56, height: 56, borderRadius: '50%', background: camOn ? 'rgba(255,255,255,0.1)' : 'rgba(239,68,68,0.2)', border: `1px solid ${camOn ? 'rgba(255,255,255,0.1)' : 'rgba(239,68,68,0.4)'}`, color: camOn ? '#fff' : '#f87171', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'all 0.2s' }}>
+              <button onClick={() => setCamOn(!camOn)} style={{ width: 56, height: 56, borderRadius: '50%', background: camOn ? 'rgba(255,255,255,0.1)' : 'rgba(82,82,91,0.2)', border: `1px solid ${camOn ? 'rgba(255,255,255,0.1)' : 'rgba(82,82,91,0.4)'}`, color: camOn ? '#fff' : '#f87171', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'var(--transition-standard)' }}>
                 {camOn ? <Camera size={24} /> : <CameraOff size={24} />}
               </button>
-              <button style={{ width: 56, height: 56, borderRadius: '50%', background: 'rgba(59,130,246,0.15)', border: '1px solid rgba(59,130,246,0.3)', color: '#60a5fa', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+              <button style={{ width: 56, height: 56, borderRadius: '50%', background: 'rgba(161,161,170,0.15)', border: '1px solid rgba(161,161,170,0.3)', color: '#60a5fa', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                 <MonitorUp size={24} />
               </button>
-              <button onClick={handleLeave} style={{ width: 72, height: 56, borderRadius: '28px', background: '#ef4444', border: 'none', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', marginLeft: '16px', boxShadow: '0 4px 12px rgba(239,68,68,0.3)' }}>
+              <button onClick={handleLeave} style={{ width: 72, height: 56, borderRadius: '28px', background: '#52525B', border: 'none', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', marginLeft: '16px', boxShadow: '0 4px 12px rgba(82,82,91,0.3)' }}>
                 <PhoneOff size={24} />
               </button>
             </div>
@@ -84,7 +84,7 @@ export default function VideoPitchRoomPage({ params }: { params: { id: string } 
         <div style={{ width: '320px', background: 'rgba(255,255,255,0.02)', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
           {/* Tabs */}
           <div style={{ display: 'flex', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-            <button onClick={() => setActiveTab('ai')} style={{ flex: 1, padding: '16px', background: activeTab === 'ai' ? 'rgba(124,58,237,0.1)' : 'transparent', border: 'none', color: activeTab === 'ai' ? '#a78bfa' : '#64748b', fontSize: 13, fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, cursor: 'pointer' }}>
+            <button onClick={() => setActiveTab('ai')} style={{ flex: 1, padding: '16px', background: activeTab === 'ai' ? 'rgba(147,51,234,0.1)' : 'transparent', border: 'none', color: activeTab === 'ai' ? '#D8B4FE' : '#64748b', fontSize: 13, fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, cursor: 'pointer' }}>
               <Brain size={14} /> AI Notes
             </button>
             <button onClick={() => setActiveTab('chat')} style={{ flex: 1, padding: '16px', background: activeTab === 'chat' ? 'rgba(255,255,255,0.05)' : 'transparent', border: 'none', color: activeTab === 'chat' ? '#f8fafc' : '#64748b', fontSize: 13, fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, cursor: 'pointer' }}>
@@ -95,13 +95,13 @@ export default function VideoPitchRoomPage({ params }: { params: { id: string } 
           <div style={{ flex: 1, padding: '16px', overflowY: 'auto' }}>
             {activeTab === 'ai' ? (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                <div style={{ padding: '12px', borderRadius: '10px', background: 'rgba(124,58,237,0.1)', border: '1px solid rgba(124,58,237,0.2)' }}>
-                  <div style={{ fontSize: 11, color: '#a78bfa', fontWeight: 700, marginBottom: 4, textTransform: 'uppercase' }}>Live Summary</div>
+                <div style={{ padding: '12px', borderRadius: '10px', background: 'rgba(147,51,234,0.1)', border: '1px solid rgba(147,51,234,0.2)' }}>
+                  <div style={{ fontSize: 11, color: '#D8B4FE', fontWeight: 700, marginBottom: 4, textTransform: 'uppercase' }}>Live Summary</div>
                   <div style={{ fontSize: 13, color: '#e2e8f0', lineHeight: 1.5 }}>
                     Investor is asking about Customer Acquisition Cost (CAC) and LTV ratio. You mentioned LTV/CAC is 3.2, which is a strong point.
                   </div>
                 </div>
-                <div style={{ padding: '12px', borderRadius: '10px', background: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.2)' }}>
+                <div style={{ padding: '12px', borderRadius: '10px', background: 'rgba(161,161,170,0.1)', border: '1px solid rgba(161,161,170,0.2)' }}>
                   <div style={{ fontSize: 11, color: '#60a5fa', fontWeight: 700, marginBottom: 4, textTransform: 'uppercase' }}>AI Suggestion</div>
                   <div style={{ fontSize: 13, color: '#e2e8f0', lineHeight: 1.5 }}>
                     Bring up the recent B2B partnership with local banks to support your growth claims.

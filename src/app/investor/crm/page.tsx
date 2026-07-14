@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { MOCK_STARTUPS } from '@/lib/mockData';
-import { Eye, Mail, FileSearch, FileText, CheckCircle, ArrowRight, Plus, X, MapPin, TrendingUp } from 'lucide-react';
+import { Eye, Mail, FileSearch, FileText, CheckCircle, ArrowRight, Plus, X, MapPin } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -23,13 +23,13 @@ interface Deal {
 
 const STAGES: { key: PipelineStage; label: string; color: string; icon: React.ReactNode; desc: string }[] = [
   { key: 'watching', label: 'Watching', color: '#64748b', icon: <Eye size={14} />, desc: 'На радаре' },
-  { key: 'contacted', label: 'Contacted', color: '#3b82f6', icon: <Mail size={14} />, desc: 'Связались' },
-  { key: 'due_diligence', label: 'Due Diligence', color: '#f59e0b', icon: <FileSearch size={14} />, desc: 'Проверка' },
-  { key: 'term_sheet', label: 'Term Sheet', color: '#7c3aed', icon: <FileText size={14} />, desc: 'Условия' },
-  { key: 'closed', label: 'Closed', color: '#10b981', icon: <CheckCircle size={14} />, desc: 'Сделка' },
+  { key: 'contacted', label: 'Contacted', color: '#A1A1AA', icon: <Mail size={14} />, desc: 'Связались' },
+  { key: 'due_diligence', label: 'Due Diligence', color: '#71717A', icon: <FileSearch size={14} />, desc: 'Проверка' },
+  { key: 'term_sheet', label: 'Term Sheet', color: '#9333EA', icon: <FileText size={14} />, desc: 'Условия' },
+  { key: 'closed', label: 'Closed', color: '#D4D4D8', icon: <CheckCircle size={14} />, desc: 'Сделка' },
 ];
 
-const PRIORITY_COLORS = { low: '#64748b', medium: '#f59e0b', high: '#ef4444' };
+const PRIORITY_COLORS = { low: '#64748b', medium: '#71717A', high: '#52525B' };
 
 function fmt(n: number) {
   if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(1)}M`;
@@ -62,6 +62,7 @@ export default function InvestorCRMPage() {
   const move = (dealId: string, toStage: PipelineStage) => {
     setDeals(prev => prev.map(d => d.id === dealId ? { ...d, stage: toStage } : d));
     const stageCfg = STAGES.find(s => s.key === toStage);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     toast.success(`Moved to ${stageCfg?.label}`, { icon: stageCfg?.icon as any });
   };
 
@@ -125,7 +126,7 @@ export default function InvestorCRMPage() {
           <button onClick={exportCsv} className="btn-secondary" style={{ fontSize: 13, padding: '8px 16px' }}>
             Export CSV
           </button>
-          <div style={{ padding: '8px 16px', borderRadius: 10, background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.2)', fontSize: 13, color: '#34d399', fontFamily: 'Space Grotesk', fontWeight: 700 }}>
+          <div style={{ padding: '8px 16px', borderRadius: 10, background: 'rgba(212,212,216,0.1)', border: '1px solid rgba(212,212,216,0.2)', fontSize: 13, color: '#A1A1AA', fontFamily: 'Space Grotesk', fontWeight: 700 }}>
             Portfolio est. {fmt(totalValue)}
           </div>
         </div>
@@ -178,7 +179,7 @@ export default function InvestorCRMPage() {
                 const s = getStartup(deal.startupId);
                 if (!s) return null;
                 const score = s.aiScores.overallReadinessScore || 0;
-                const sc = score >= 75 ? '#10b981' : score >= 50 ? '#f59e0b' : '#ef4444';
+                const sc = score >= 75 ? '#D4D4D8' : score >= 50 ? '#71717A' : '#52525B';
                 return (
                   <div
                     key={deal.id}
@@ -188,9 +189,9 @@ export default function InvestorCRMPage() {
                     onClick={() => { setSelectedDeal(deal); setNoteEdit(deal.notes); setDealAmountEdit(deal.dealAmount || ''); }}
                     style={{
                       padding: '14px', borderRadius: '12px', cursor: 'grab',
-                      background: dragId === deal.id ? 'rgba(124,58,237,0.15)' : 'rgba(255,255,255,0.04)',
-                      border: `1px solid ${dragId === deal.id ? 'rgba(124,58,237,0.4)' : 'rgba(255,255,255,0.07)'}`,
-                      transition: 'all 0.15s', userSelect: 'none',
+                      background: dragId === deal.id ? 'rgba(147,51,234,0.15)' : 'rgba(255,255,255,0.04)',
+                      border: `1px solid ${dragId === deal.id ? 'rgba(147,51,234,0.4)' : 'rgba(255,255,255,0.07)'}`,
+                      transition: 'var(--transition-standard)', userSelect: 'none',
                     }}
                   >
                     {/* Priority dot */}
@@ -205,7 +206,7 @@ export default function InvestorCRMPage() {
                     </div>
 
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ fontFamily: 'Space Grotesk', fontSize: 12, fontWeight: 700, color: '#10b981' }}>{fmt(s.metrics.mrr)} MRR</span>
+                      <span style={{ fontFamily: 'Space Grotesk', fontSize: 12, fontWeight: 700, color: '#D4D4D8' }}>{fmt(s.metrics.mrr)} MRR</span>
                       <span style={{ fontFamily: 'Space Grotesk', fontSize: 13, fontWeight: 800, color: sc }}>{score}</span>
                     </div>
 
@@ -250,10 +251,10 @@ export default function InvestorCRMPage() {
                 .filter(s => !deals.find(d => d.startupId === s.id))
                 .map(s => {
                   const score = s.aiScores.overallReadinessScore || 0;
-                  const sc = score >= 75 ? '#10b981' : score >= 50 ? '#f59e0b' : '#ef4444';
+                  const sc = score >= 75 ? '#D4D4D8' : score >= 50 ? '#71717A' : '#52525B';
                   return (
-                    <button key={s.id} onClick={() => addDeal(s.id, addModal!)} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 16px', borderRadius: '12px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', cursor: 'pointer', textAlign: 'left', width: '100%', fontFamily: 'Inter', transition: 'all 0.15s' }}>
-                      <div style={{ width: 36, height: 36, borderRadius: 8, background: 'rgba(124,58,237,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Space Grotesk', fontWeight: 800, color: '#a78bfa', flexShrink: 0 }}>{s.name.charAt(0)}</div>
+                    <button key={s.id} onClick={() => addDeal(s.id, addModal!)} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 16px', borderRadius: '12px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', cursor: 'pointer', textAlign: 'left', width: '100%', fontFamily: 'Inter', transition: 'var(--transition-standard)' }}>
+                      <div style={{ width: 36, height: 36, borderRadius: 8, background: 'rgba(147,51,234,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Space Grotesk', fontWeight: 800, color: '#D8B4FE', flexShrink: 0 }}>{s.name.charAt(0)}</div>
                       <div style={{ flex: 1 }}>
                         <div style={{ fontWeight: 700, fontSize: 14, color: '#f8fafc' }}>{s.name}</div>
                         <div style={{ fontSize: 11, color: '#475569' }}>{s.industry} · {fmt(s.metrics.mrr)} MRR</div>
@@ -298,7 +299,7 @@ export default function InvestorCRMPage() {
               <label style={{ fontSize: 12, color: '#64748b', fontWeight: 600, display: 'block', marginBottom: 6 }}>Notes</label>
               <textarea className="input-field" rows={4} value={noteEdit} onChange={e => setNoteEdit(e.target.value)} style={{ resize: 'vertical' }} />
               <div style={{ display: 'flex', gap: 10, marginTop: 12 }}>
-                <button onClick={() => removeDeal(selectedDeal.id)} style={{ padding: '10px 16px', borderRadius: 10, background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)', color: '#f87171', cursor: 'pointer', fontSize: 13, fontFamily: 'Inter' }}>Remove</button>
+                <button onClick={() => removeDeal(selectedDeal.id)} style={{ padding: '10px 16px', borderRadius: 10, background: 'rgba(82,82,91,0.1)', border: '1px solid rgba(82,82,91,0.2)', color: '#f87171', cursor: 'pointer', fontSize: 13, fontFamily: 'Inter' }}>Remove</button>
                 <button onClick={saveNote} className="btn-primary" style={{ flex: 1 }}>Save Notes</button>
               </div>
             </div>

@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   description: 'AI-powered startup CRM and ecosystem management platform by UNTITLED. Track startup journeys, connect founders with investors, and automate your deal flow.',
   keywords: 'startup, CRM, investor, founder, AI, ecosystem, UNTITLED',
   manifest: '/manifest.json',
-  themeColor: '#7c3aed',
+  themeColor: '#9333EA',
   viewport: 'width=device-width, initial-scale=1, maximum-scale=1',
   appleWebApp: {
     capable: true,
@@ -45,7 +45,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               style: {
                 background: '#0d0d20',
                 color: '#f8fafc',
-                border: '1px solid rgba(124,58,237,0.3)',
+                border: '1px solid rgba(147,51,234,0.3)',
                 borderRadius: '12px',
                 fontSize: '14px',
               },

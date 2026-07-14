@@ -10,7 +10,7 @@ import {
   User,
 } from 'firebase/auth';
 import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
-import { auth, db } from '@/lib/firebase';
+import { auth, db, isDemoConfig } from '@/lib/firebase';
 import { UserProfile, UserRole } from '@/types';
 
 // ─── Cookie helpers (edge-compatible) ────────────────────────────────────────
@@ -79,6 +79,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(u);
       if (u) {
         try {
+          if (isDemoConfig) throw new Error('Demo config: skipping Firebase fetch');
           const snap = await getDoc(doc(db, 'users', u.uid));
           if (snap.exists()) {
             const data = snap.data() as Omit<UserProfile, 'uid'>;
@@ -103,7 +104,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setIsDemoMode(true);
         }
       } else {
-        setProfile(null);
+        // Попытка восстановить Demo сессию из куки
+        const match = document.cookie.match(new RegExp('(^| )' + ROLE_COOKIE + '=([^;]+)'));
+        if (match && match[2]) {
+          const r = match[2] as UserRole;
+          const emailMap: Record<UserRole, string> = {
+            founder: 'founder@demo.com',
+            investor: 'investor@demo.com',
+            admin: 'admin@demo.com',
+          };
+          const demoProfile = DEMO_PROFILES[emailMap[r]];
+          if (demoProfile) {
+            setProfile(demoProfile);
+            setIsDemoMode(true);
+          } else {
+            setProfile(null);
+          }
+        } else {
+          setProfile(null);
+        }
       }
       setLoading(false);
     });
@@ -117,6 +136,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Session cookie записывается через Firebase Admin на сервере в продакшене.
       // В dev режиме используем UID как временную сессию.
       setCookie(SESSION_COOKIE, u.uid);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       // Если Firebase недоступен — пробуем demo mode
       const demoProfile = DEMO_PROFILES[email];
@@ -148,9 +168,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // ─── Logout ─────────────────────────────────────────────────────────────────
   const logout = async () => {
-    if (!isDemoMode) {
-      try { await signOut(auth); } catch { /* ignore */ }
-    }
+    try { await signOut(auth); } catch { /* ignore */ }
     setUser(null);
     setProfile(null);
     setIsDemoMode(false);

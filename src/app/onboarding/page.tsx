@@ -47,6 +47,7 @@ export default function OnboardingPage() {
     problem: '', pitchDeckFile: null,
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const set = (key: keyof OnboardingData, val: any) =>
     setData(prev => ({ ...prev, [key]: val }));
 
@@ -153,9 +154,9 @@ export default function OnboardingPage() {
 
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '6px 16px', borderRadius: '99px', background: 'rgba(124,58,237,0.15)', border: '1px solid rgba(124,58,237,0.3)', marginBottom: '16px' }}>
-            <Sparkles size={13} color="#a78bfa" />
-            <span style={{ fontSize: 12, color: '#a78bfa', fontWeight: 600 }}>Добро пожаловать, {profile?.displayName?.split(' ')[0] || 'Founder'}</span>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '6px 16px', borderRadius: '99px', background: 'rgba(147,51,234,0.15)', border: '1px solid rgba(147,51,234,0.3)', marginBottom: '16px' }}>
+            <Sparkles size={13} color="#D8B4FE" />
+            <span style={{ fontSize: 12, color: '#D8B4FE', fontWeight: 600 }}>Добро пожаловать, {profile?.displayName?.split(' ')[0] || 'Founder'}</span>
           </div>
           <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 32, fontWeight: 800, marginBottom: 8 }}>
             Настроим твой стартап
@@ -172,21 +173,21 @@ export default function OnboardingPage() {
               }} onClick={() => step > s.id && setStep(s.id)}>
                 <div style={{
                   width: 44, height: 44, borderRadius: '50%',
-                  background: step > s.id ? '#10b981' : step === s.id ? 'rgba(124,58,237,0.3)' : 'rgba(255,255,255,0.05)',
-                  border: `2px solid ${step > s.id ? '#10b981' : step === s.id ? '#7c3aed' : 'rgba(255,255,255,0.1)'}`,
+                  background: step > s.id ? '#D4D4D8' : step === s.id ? 'rgba(147,51,234,0.3)' : 'rgba(255,255,255,0.05)',
+                  border: `2px solid ${step > s.id ? '#D4D4D8' : step === s.id ? '#9333EA' : 'rgba(255,255,255,0.1)'}`,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  color: step > s.id ? 'white' : step === s.id ? '#a78bfa' : '#334155',
-                  transition: 'all 0.3s',
-                  boxShadow: step === s.id ? '0 0 20px rgba(124,58,237,0.4)' : 'none',
+                  color: step > s.id ? 'white' : step === s.id ? '#D8B4FE' : '#334155',
+                  transition: 'var(--transition-standard)',
+                  boxShadow: step === s.id ? '0 0 20px rgba(147,51,234,0.4)' : 'none',
                 }}>
                   {step > s.id ? <CheckCircle size={18} /> : s.icon}
                 </div>
-                <span style={{ fontSize: 11, color: step === s.id ? '#a78bfa' : '#334155', fontWeight: 600, whiteSpace: 'nowrap' }}>
+                <span style={{ fontSize: 11, color: step === s.id ? '#D8B4FE' : '#334155', fontWeight: 600, whiteSpace: 'nowrap' }}>
                   {s.title}
                 </span>
               </div>
               {i < STEPS.length - 1 && (
-                <div style={{ width: '80px', height: '2px', background: step > s.id ? '#10b981' : 'rgba(255,255,255,0.06)', margin: '0 4px 20px', transition: 'background 0.3s' }} />
+                <div style={{ width: '80px', height: '2px', background: step > s.id ? '#D4D4D8' : 'rgba(255,255,255,0.06)', margin: '0 4px 20px', transition: 'background 160ms var(--ease-out)' }} />
               )}
             </div>
           ))}
@@ -215,10 +216,10 @@ export default function OnboardingPage() {
                     {INDUSTRIES.map(ind => (
                       <button key={ind} onClick={() => set('industry', ind)} style={{
                         padding: '8px 14px', borderRadius: '10px', fontSize: 13, fontWeight: 500,
-                        background: data.industry === ind ? 'rgba(124,58,237,0.2)' : 'rgba(255,255,255,0.04)',
-                        border: `1px solid ${data.industry === ind ? '#7c3aed' : 'rgba(255,255,255,0.08)'}`,
-                        color: data.industry === ind ? '#a78bfa' : '#64748b',
-                        cursor: 'pointer', fontFamily: 'Inter', transition: 'all 0.15s',
+                        background: data.industry === ind ? 'rgba(147,51,234,0.2)' : 'rgba(255,255,255,0.04)',
+                        border: `1px solid ${data.industry === ind ? '#9333EA' : 'rgba(255,255,255,0.08)'}`,
+                        color: data.industry === ind ? '#D8B4FE' : '#64748b',
+                        cursor: 'pointer', fontFamily: 'Inter', transition: 'var(--transition-standard)',
                       }}>{ind}</button>
                     ))}
                   </div>
@@ -229,11 +230,11 @@ export default function OnboardingPage() {
                     {STAGES.map(s => (
                       <button key={s.id} onClick={() => set('stage', s.id)} style={{
                         padding: '12px 16px', borderRadius: '12px', textAlign: 'left',
-                        background: data.stage === s.id ? 'rgba(124,58,237,0.15)' : 'rgba(255,255,255,0.03)',
-                        border: `1px solid ${data.stage === s.id ? '#7c3aed' : 'rgba(255,255,255,0.08)'}`,
-                        cursor: 'pointer', fontFamily: 'Inter', transition: 'all 0.15s',
+                        background: data.stage === s.id ? 'rgba(147,51,234,0.15)' : 'rgba(255,255,255,0.03)',
+                        border: `1px solid ${data.stage === s.id ? '#9333EA' : 'rgba(255,255,255,0.08)'}`,
+                        cursor: 'pointer', fontFamily: 'Inter', transition: 'var(--transition-standard)',
                       }}>
-                        <div style={{ fontSize: 13, fontWeight: 600, color: data.stage === s.id ? '#a78bfa' : '#94a3b8', marginBottom: 2 }}>{s.label}</div>
+                        <div style={{ fontSize: 13, fontWeight: 600, color: data.stage === s.id ? '#D8B4FE' : '#94a3b8', marginBottom: 2 }}>{s.label}</div>
                         <div style={{ fontSize: 11, color: '#334155' }}>{s.desc}</div>
                       </button>
                     ))}
@@ -288,20 +289,20 @@ export default function OnboardingPage() {
                       style={{
                         display: 'flex', alignItems: 'center', gap: '8px',
                         width: '100%', padding: '12px 16px', borderRadius: '12px',
-                        background: 'rgba(124,58,237,0.1)', border: '1px solid rgba(124,58,237,0.25)',
-                        color: '#a78bfa', cursor: 'pointer', fontFamily: 'Inter', fontSize: 13, fontWeight: 600,
-                        transition: 'all 0.15s',
+                        background: 'rgba(147,51,234,0.1)', border: '1px solid rgba(147,51,234,0.25)',
+                        color: '#D8B4FE', cursor: 'pointer', fontFamily: 'Inter', fontSize: 13, fontWeight: 600,
+                        transition: 'var(--transition-standard)',
                       }}
                     >
                       {aiGenerating ? (
-                        <><span style={{ width: 14, height: 14, border: '2px solid rgba(167,139,250,0.3)', borderTopColor: '#a78bfa', borderRadius: '50%', animation: 'spin 0.8s linear infinite', display: 'inline-block' }} /> Gemini генерирует AI Summary...</>
+                        <><span style={{ width: 14, height: 14, border: '2px solid rgba(216,180,254,0.3)', borderTopColor: '#D8B4FE', borderRadius: '50%', animation: 'spin 0.8s linear infinite', display: 'inline-block' }} /> Gemini генерирует AI Summary...</>
                       ) : (
                         <><Sparkles size={14} /> ✨ Сгенерировать AI Executive Summary</>
                       )}
                     </button>
                     {aiSummary && (
-                      <div style={{ marginTop: '10px', padding: '14px', borderRadius: '10px', background: 'rgba(16,185,129,0.07)', border: '1px solid rgba(16,185,129,0.2)', fontSize: 13, color: '#94a3b8', lineHeight: 1.7 }}>
-                        <span style={{ color: '#34d399', fontWeight: 600, display: 'block', marginBottom: 6 }}>🤖 AI Summary:</span>
+                      <div style={{ marginTop: '10px', padding: '14px', borderRadius: '10px', background: 'rgba(212,212,216,0.07)', border: '1px solid rgba(212,212,216,0.2)', fontSize: 13, color: '#94a3b8', lineHeight: 1.7 }}>
+                        <span style={{ color: '#A1A1AA', fontWeight: 600, display: 'block', marginBottom: 6 }}>🤖 AI Summary:</span>
                         {aiSummary}
                       </div>
                     )}
@@ -323,25 +324,25 @@ export default function OnboardingPage() {
 
               <div
                 style={{
-                  border: `2px dashed ${data.pitchDeckFile ? 'rgba(16,185,129,0.4)' : 'rgba(255,255,255,0.1)'}`,
+                  border: `2px dashed ${data.pitchDeckFile ? 'rgba(212,212,216,0.4)' : 'rgba(255,255,255,0.1)'}`,
                   borderRadius: '16px', padding: '48px 24px', textAlign: 'center',
-                  background: data.pitchDeckFile ? 'rgba(16,185,129,0.05)' : 'rgba(255,255,255,0.02)',
-                  cursor: 'pointer', transition: 'all 0.2s',
+                  background: data.pitchDeckFile ? 'rgba(212,212,216,0.05)' : 'rgba(255,255,255,0.02)',
+                  cursor: 'pointer', transition: 'var(--transition-standard)',
                 }}
                 onClick={() => document.getElementById('pitch-deck-input')?.click()}
               >
                 {data.pitchDeckFile ? (
                   <>
-                    <CheckCircle size={40} color="#10b981" style={{ margin: '0 auto 12px', display: 'block' }} />
-                    <div style={{ fontWeight: 600, color: '#34d399', marginBottom: 4 }}>{data.pitchDeckFile.name}</div>
+                    <CheckCircle size={40} color="#D4D4D8" style={{ margin: '0 auto 12px', display: 'block' }} />
+                    <div style={{ fontWeight: 600, color: '#A1A1AA', marginBottom: 4 }}>{data.pitchDeckFile.name}</div>
                     <div style={{ fontSize: 12, color: '#475569' }}>{(data.pitchDeckFile.size / 1024 / 1024).toFixed(1)} MB</div>
-                    <div style={{ marginTop: 12, fontSize: 12, color: '#a78bfa' }}>🤖 AI Score будет рассчитан после загрузки</div>
+                    <div style={{ marginTop: 12, fontSize: 12, color: '#D8B4FE' }}>🤖 AI Score будет рассчитан после загрузки</div>
                   </>
                 ) : (
                   <>
                     <Upload size={40} style={{ margin: '0 auto 12px', display: 'block', color: '#334155' }} />
                     <div style={{ fontSize: 14, color: '#64748b', marginBottom: 4 }}>
-                      <span style={{ color: '#7c3aed', fontWeight: 600 }}>Нажми или перетащи</span> PDF файл
+                      <span style={{ color: '#9333EA', fontWeight: 600 }}>Нажми или перетащи</span> PDF файл
                     </div>
                     <div style={{ fontSize: 12, color: '#334155' }}>PDF до 50 MB · Pitch Deck, Executive Summary</div>
                   </>
@@ -353,7 +354,7 @@ export default function OnboardingPage() {
               </div>
 
               {/* Summary */}
-              <div style={{ marginTop: '24px', padding: '20px', borderRadius: '14px', background: 'rgba(124,58,237,0.07)', border: '1px solid rgba(124,58,237,0.15)' }}>
+              <div style={{ marginTop: '24px', padding: '20px', borderRadius: '14px', background: 'rgba(147,51,234,0.07)', border: '1px solid rgba(147,51,234,0.15)' }}>
                 <div style={{ fontSize: 12, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '12px' }}>Итог:</div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                   {[

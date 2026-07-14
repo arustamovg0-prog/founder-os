@@ -1,8 +1,13 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { MOCK_STARTUPS, MOCK_PITCHES, MOCK_LOGS, ROADMAP_STAGES } from '@/lib/mockData';
-import { TrendingUp, DollarSign, Users, Target, Zap, ArrowUpRight, Clock, CheckCircle, AlertCircle, Brain } from 'lucide-react';
+import { TrendingUp, DollarSign, Users, Target, Zap, ArrowUpRight, Clock, CheckCircle, AlertCircle, Brain, Trophy, Star, Gift, Flame } from 'lucide-react';
 import Link from 'next/link';
+import { useAuth } from '@/contexts/AuthContext';
+import { doc, onSnapshot, collection, getDocs } from 'firebase/firestore';
+import { db, isDemoConfig } from '@/lib/firebase';
+import { Startup } from '@/types';
 
 const MY_STARTUP = MOCK_STARTUPS[0]; // PayFlow UZ demo
 
@@ -17,7 +22,7 @@ const STAGE_LABELS: Record<string, string> = {
   building: 'Building', scaling: 'Scaling', fundraising: 'Fundraising',
 };
 
-function ScoreRing({ score, color = '#7c3aed' }: { score: number; color?: string }) {
+function ScoreRing({ score, color = '#9333EA' }: { score: number; color?: string }) {
   const r = 30, circ = 2 * Math.PI * r;
   const fill = (score / 100) * circ;
   return (
@@ -41,20 +46,68 @@ function ScoreRing({ score, color = '#7c3aed' }: { score: number; color?: string
 }
 
 export default function FounderDashboard() {
-  const s = MY_STARTUP;
+  const { profile } = useAuth();
+  const [startup, setStartup] = useState<Startup | null>(null);
+  const [allStartups, setAllStartups] = useState<Startup[]>(MOCK_STARTUPS);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (isDemoConfig || !profile?.linkedStartupId) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setStartup(MY_STARTUP);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setAllStartups(MOCK_STARTUPS);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setLoading(false);
+      return;
+    }
+
+    const unsubscribe = onSnapshot(doc(db, 'startups', profile.linkedStartupId), (snap) => {
+      if (snap.exists()) {
+        const data = snap.data();
+        setStartup({
+          id: snap.id,
+          ...data,
+          aiScores: data.aiScores || { overallReadinessScore: 85 },
+          metrics: {
+            mrr: data.metrics?.mrr || 0,
+            arr: (data.metrics?.mrr || 0) * 12,
+            mau: data.metrics?.users || 0,
+            ltvCacRatio: data.metrics?.ltvCacRatio || 0,
+            runwayMonths: data.metrics?.runwayMonths || 12,
+            teamSize: data.metrics?.teamSize || 2,
+          }
+        } as Startup);
+      }
+      setLoading(false);
+    });
+
+    getDocs(collection(db, 'startups')).then(snap => {
+      if (!snap.empty) {
+        setAllStartups(snap.docs.map(d => ({ id: d.id, ...d.data(), aiScores: d.data().aiScores || { overallReadinessScore: 85 } } as Startup)));
+      }
+    }).catch(err => console.warn('Failed to fetch all startups for leaderboard', err));
+
+    return () => unsubscribe();
+  }, [profile]);
+
+  if (loading) return <div className="animate-fade-in" style={{ padding: 32, color: '#64748b' }}>Загрузка дашборда...</div>;
+  if (!startup) return <div className="animate-fade-in" style={{ padding: 32, color: '#64748b' }}>Стартап не найден.</div>;
+
+  const s = startup;
   const metrics = s.metrics;
-  const currentStageIdx = ROADMAP_STAGES.findIndex(st => st.id === s.currentRoadmapStageId);
-  const currentStage = ROADMAP_STAGES[currentStageIdx];
+  const currentStageIdx = ROADMAP_STAGES.findIndex(st => st.id === s.currentRoadmapStageId) || 0;
+  const currentStage = ROADMAP_STAGES[currentStageIdx >= 0 ? currentStageIdx : 0];
   const pitches = MOCK_PITCHES.filter(p => p.startupId === s.id);
   const recentLogs = MOCK_LOGS.filter(l => l.startupId === s.id).slice(0, 4);
 
   const kpis = [
-    { label: 'MRR', value: fmt(metrics.mrr), icon: <DollarSign size={18} />, color: '#10b981', change: '+16.7%', positive: true },
-    { label: 'ARR', value: fmt(metrics.arr), icon: <TrendingUp size={18} />, color: '#7c3aed', change: '+16.7%', positive: true },
-    { label: 'MAU', value: metrics.mau.toLocaleString(), icon: <Users size={18} />, color: '#3b82f6', change: '+9.1%', positive: true },
-    { label: 'LTV/CAC', value: `${metrics.ltvCacRatio}x`, icon: <Target size={18} />, color: '#f59e0b', change: '', positive: true },
-    { label: 'Runway', value: `${metrics.runwayMonths}mo`, icon: <Clock size={18} />, color: '#ec4899', change: '', positive: true },
-    { label: 'Team', value: `${metrics.teamSize} ppl`, icon: <Users size={18} />, color: '#06b6d4', change: '', positive: true },
+    { label: 'MRR', value: fmt(metrics.mrr), icon: <DollarSign size={18} />, color: '#D8B4FE', change: '+16.7%', positive: true },
+    { label: 'ARR', value: fmt(metrics.arr), icon: <TrendingUp size={18} />, color: '#9333EA', change: '+16.7%', positive: true },
+    { label: 'MAU', value: metrics.mau.toLocaleString(), icon: <Users size={18} />, color: '#A1A1AA', change: '+9.1%', positive: true },
+    { label: 'LTV/CAC', value: `${metrics.ltvCacRatio}x`, icon: <Target size={18} />, color: '#D8B4FE', change: '', positive: true },
+    { label: 'Runway', value: `${metrics.runwayMonths}mo`, icon: <Clock size={18} />, color: '#71717A', change: '', positive: true },
+    { label: 'Team', value: `${metrics.teamSize} ppl`, icon: <Users size={18} />, color: '#9333EA', change: '', positive: true },
   ];
 
   const logIcons: Record<string, string> = {
@@ -68,7 +121,7 @@ export default function FounderDashboard() {
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '32px' }}>
         <div>
           <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 28, fontWeight: 700, marginBottom: 6 }}>
-            {s.name} <span style={{ fontSize: 14, color: '#7c3aed', fontWeight: 500 }}>#{s.industry}</span>
+            {s.name} <span style={{ fontSize: 14, color: '#9333EA', fontWeight: 500 }}>#{s.industry}</span>
           </h1>
           <p style={{ color: '#64748b', fontSize: 14 }}>{s.tagline}</p>
         </div>
@@ -79,20 +132,20 @@ export default function FounderDashboard() {
       </div>
 
       {/* AI Readiness + Progress */}
-      <div className="card" style={{ marginBottom: '24px', background: 'linear-gradient(135deg, rgba(124,58,237,0.08), rgba(59,130,246,0.05))', borderColor: 'rgba(124,58,237,0.2)' }}>
+      <div className="card" style={{ marginBottom: '24px', background: 'linear-gradient(135deg, rgba(147,51,234,0.08), rgba(161,161,170,0.05))', borderColor: 'rgba(147,51,234,0.2)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '24px', flexWrap: 'wrap' }}>
           <ScoreRing score={s.aiScores.overallReadinessScore || 0} />
           <div style={{ flex: 1 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-              <Brain size={14} color="#a78bfa" />
-              <span style={{ fontSize: 12, color: '#a78bfa', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px' }}>AI Readiness Score</span>
+              <Brain size={14} color="#D8B4FE" />
+              <span style={{ fontSize: 12, color: '#D8B4FE', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px' }}>AI Readiness Score</span>
             </div>
             <p style={{ fontSize: 14, color: '#94a3b8', lineHeight: 1.6, marginBottom: '12px' }}>
               {s.executiveSummaryAI}
             </p>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
               <div style={{ fontSize: 13, color: '#64748b' }}>
-                Roadmap: <strong style={{ color: '#a78bfa' }}>{s.roadmapProgress}%</strong>
+                Roadmap: <strong style={{ color: '#D8B4FE' }}>{s.roadmapProgress}%</strong>
               </div>
               <div className="progress-bar" style={{ flex: 1 }}>
                 <div className="progress-fill" style={{ width: `${s.roadmapProgress}%` }} />
@@ -121,7 +174,7 @@ export default function FounderDashboard() {
                 {kpi.icon}
               </div>
               {kpi.change && (
-                <span style={{ fontSize: 11, color: '#10b981', fontWeight: 600, background: 'rgba(16,185,129,0.1)', padding: '2px 8px', borderRadius: '99px' }}>
+                <span style={{ fontSize: 11, color: '#D4D4D8', fontWeight: 600, background: 'rgba(212,212,216,0.1)', padding: '2px 8px', borderRadius: '99px' }}>
                   {kpi.change}
                 </span>
               )}
@@ -137,15 +190,15 @@ export default function FounderDashboard() {
       {/* ── Founder Health Widget ──────────────────────────────────────────── */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px', marginBottom: '24px' }}>
         {/* AI Score detail */}
-        <div className="card" style={{ background: 'rgba(124,58,237,0.05)', borderColor: 'rgba(124,58,237,0.2)' }}>
-          <div style={{ fontSize: 11, color: '#a78bfa', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 14, display: 'flex', alignItems: 'center', gap: 6 }}>
+        <div className="card" style={{ background: 'rgba(147,51,234,0.05)', borderColor: 'rgba(147,51,234,0.2)' }}>
+          <div style={{ fontSize: 11, color: '#D8B4FE', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 14, display: 'flex', alignItems: 'center', gap: 6 }}>
             <Brain size={12} /> AI Score Breakdown
           </div>
           {[
-            { label: 'Pitch Deck', val: s.aiScores.pitchDeckScore || 0, color: '#7c3aed' },
-            { label: 'Market Fit', val: Math.round((s.aiScores.overallReadinessScore || 0) * 0.9), color: '#3b82f6' },
-            { label: 'Traction', val: Math.round((s.aiScores.overallReadinessScore || 0) * 0.8), color: '#10b981' },
-            { label: 'Team', val: Math.round((s.aiScores.overallReadinessScore || 0) * 1.05), color: '#f59e0b' },
+            { label: 'Pitch Deck', val: s.aiScores.pitchDeckScore || 0, color: '#9333EA' },
+            { label: 'Market Fit', val: Math.round((s.aiScores.overallReadinessScore || 0) * 0.9), color: '#A1A1AA' },
+            { label: 'Traction', val: Math.round((s.aiScores.overallReadinessScore || 0) * 0.8), color: '#D4D4D8' },
+            { label: 'Team', val: Math.round((s.aiScores.overallReadinessScore || 0) * 1.05), color: '#71717A' },
           ].map((item, i) => (
             <div key={i} style={{ marginBottom: 10 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, marginBottom: 4 }}>
@@ -160,8 +213,8 @@ export default function FounderDashboard() {
         </div>
 
         {/* Next Step */}
-        <div className="card" style={{ background: 'rgba(16,185,129,0.04)', borderColor: 'rgba(16,185,129,0.15)' }}>
-          <div style={{ fontSize: 11, color: '#34d399', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 14 }}>
+        <div className="card" style={{ background: 'rgba(212,212,216,0.04)', borderColor: 'rgba(212,212,216,0.15)' }}>
+          <div style={{ fontSize: 11, color: '#A1A1AA', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 14 }}>
             ⚡ Следующий шаг
           </div>
           {currentStage && (
@@ -171,13 +224,13 @@ export default function FounderDashboard() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                 {currentStage.requiredArtifacts.slice(0, 2).map(a => (
                   <div key={a.key} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
-                    <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#f59e0b', flexShrink: 0 }} />
+                    <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#71717A', flexShrink: 0 }} />
                     <span style={{ color: '#94a3b8' }}>{a.label}</span>
-                    {a.isRequired && <span style={{ fontSize: 9, color: '#f59e0b', fontWeight: 700 }}>REQUIRED</span>}
+                    {a.isRequired && <span style={{ fontSize: 9, color: '#71717A', fontWeight: 700 }}>REQUIRED</span>}
                   </div>
                 ))}
               </div>
-              <Link href="/founder/roadmap" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, marginTop: 14, fontSize: 12, color: '#34d399', fontWeight: 600, textDecoration: 'none' }}>
+              <Link href="/founder/roadmap" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, marginTop: 14, fontSize: 12, color: '#A1A1AA', fontWeight: 600, textDecoration: 'none' }}>
                 Открыть Roadmap <ArrowUpRight size={12} />
               </Link>
             </>
@@ -185,33 +238,34 @@ export default function FounderDashboard() {
         </div>
 
         {/* Ecosystem rank */}
-        <div className="card" style={{ background: 'rgba(245,158,11,0.04)', borderColor: 'rgba(245,158,11,0.15)' }}>
-          <div style={{ fontSize: 11, color: '#fbbf24', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 14 }}>
+        <div className="card" style={{ background: 'rgba(113,113,122,0.04)', borderColor: 'rgba(113,113,122,0.15)' }}>
+          <div style={{ fontSize: 11, color: '#D4D4D8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 14 }}>
             🏆 Ecosystem Rank
           </div>
           {(() => {
-            const sorted = [...MOCK_STARTUPS].sort((a, b) => (b.aiScores.overallReadinessScore || 0) - (a.aiScores.overallReadinessScore || 0));
-            const rank = sorted.findIndex(st => st.id === s.id) + 1;
+            const sorted = [...allStartups].sort((a, b) => (b.aiScores.overallReadinessScore || 0) - (a.aiScores.overallReadinessScore || 0));
+            let rank = sorted.findIndex(st => st.id === s.id) + 1;
+            if (rank === 0) rank = sorted.length + 1;
             const medals = ['🥇', '🥈', '🥉'];
             return (
               <>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 }}>
-                  <span style={{ fontSize: 36 }}>{medals[rank - 1] || `#${rank}`}</span>
+                  <span style={{ fontSize: 36 }}>{rank <= 3 ? medals[rank - 1] : `#${rank}`}</span>
                   <div>
-                    <div style={{ fontFamily: 'Space Grotesk', fontSize: 22, fontWeight: 800, color: '#fbbf24' }}>#{rank}</div>
-                    <div style={{ fontSize: 11, color: '#64748b' }}>из {MOCK_STARTUPS.length} стартапов</div>
+                    <div style={{ fontFamily: 'Space Grotesk', fontSize: 22, fontWeight: 800, color: '#D4D4D8' }}>#{rank}</div>
+                    <div style={{ fontSize: 11, color: '#64748b' }}>из {allStartups.length} стартапов</div>
                   </div>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                   {sorted.slice(0, 3).map((st, i) => (
-                    <div key={st.id} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 10px', borderRadius: 8, background: st.id === s.id ? 'rgba(245,158,11,0.1)' : 'transparent', border: st.id === s.id ? '1px solid rgba(245,158,11,0.2)' : 'none' }}>
+                    <div key={st.id} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 10px', borderRadius: 8, background: st.id === s.id ? 'rgba(113,113,122,0.1)' : 'transparent', border: st.id === s.id ? '1px solid rgba(113,113,122,0.2)' : 'none' }}>
                       <span style={{ fontSize: 12 }}>{medals[i]}</span>
-                      <span style={{ fontSize: 12, flex: 1, color: st.id === s.id ? '#fbbf24' : '#64748b', fontWeight: st.id === s.id ? 700 : 400 }}>{st.name}</span>
+                      <span style={{ fontSize: 12, flex: 1, color: st.id === s.id ? '#D4D4D8' : '#64748b', fontWeight: st.id === s.id ? 700 : 400 }}>{st.name}</span>
                       <span style={{ fontSize: 11, color: '#475569' }}>{st.aiScores.overallReadinessScore}</span>
                     </div>
                   ))}
                 </div>
-                <Link href="/leaderboard" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, marginTop: 12, fontSize: 12, color: '#fbbf24', fontWeight: 600, textDecoration: 'none' }}>
+                <Link href="/leaderboard" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, marginTop: 12, fontSize: 12, color: '#D4D4D8', fontWeight: 600, textDecoration: 'none' }}>
                   Весь лидерборд <ArrowUpRight size={12} />
                 </Link>
               </>
@@ -239,10 +293,10 @@ export default function FounderDashboard() {
                   return (
                     <div key={art.key} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       {done
-                        ? <CheckCircle size={14} color="#10b981" />
-                        : <AlertCircle size={14} color="#f59e0b" />
+                        ? <CheckCircle size={14} color="#D4D4D8" />
+                        : <AlertCircle size={14} color="#71717A" />
                       }
-                      <span style={{ fontSize: 13, color: done ? '#10b981' : '#f59e0b' }}>{art.label}</span>
+                      <span style={{ fontSize: 13, color: done ? '#D4D4D8' : '#71717A' }}>{art.label}</span>
                       {art.isRequired && !done && <span className="badge badge-yellow">Required</span>}
                     </div>
                   );
@@ -258,7 +312,7 @@ export default function FounderDashboard() {
             <div style={{ fontSize: 13, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px' }}>
               Active Pitches
             </div>
-            <Link href="/founder/pitches" style={{ fontSize: 12, color: '#7c3aed', textDecoration: 'none', fontWeight: 500 }}>
+            <Link href="/founder/pitches" style={{ fontSize: 12, color: '#9333EA', textDecoration: 'none', fontWeight: 500 }}>
               View all →
             </Link>
           </div>
@@ -286,6 +340,63 @@ export default function FounderDashboard() {
           )}
         </div>
 
+        {/* Badges & Quick Links */}
+        <div className="card" style={{ gridColumn: '1 / -1' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20, flexWrap: 'wrap', gap: 12 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <Trophy size={16} color="#71717A" />
+              <span style={{ fontSize: 13, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px' }}>Достижения & Рейтинг</span>
+            </div>
+            <span style={{ fontSize: 11, color: '#475569' }}>Батч Spring 2026 · Позиция <strong style={{ color: '#71717A' }}>#1</strong> из 12 стартапов</span>
+          </div>
+
+          {/* Badges row */}
+          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 20 }}>
+            {[
+              { emoji: '🚀', label: 'First Pitch', earned: true, color: '#9333EA' },
+              { emoji: '💡', label: 'MVP Ready', earned: true, color: '#A1A1AA' },
+              { emoji: '📊', label: '$10K MRR', earned: true, color: '#D4D4D8' },
+              { emoji: '🏆', label: 'Investment Ready', earned: true, color: '#71717A' },
+              { emoji: '🌍', label: 'First Export', earned: false, color: '#64748b' },
+              { emoji: '💼', label: 'Series A', earned: false, color: '#64748b' },
+            ].map((b, i) => (
+              <div key={i} title={b.label} style={{
+                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5, padding: '10px 14px', borderRadius: 12,
+                background: b.earned ? `${b.color}12` : 'rgba(255,255,255,0.02)',
+                border: `1px solid ${b.earned ? `${b.color}30` : 'rgba(255,255,255,0.06)'}`,
+                opacity: b.earned ? 1 : 0.4, transition: 'var(--transition-standard)', cursor: 'default', minWidth: 72,
+              }}>
+                <span style={{ fontSize: 22, filter: b.earned ? 'none' : 'grayscale(100%)' }}>{b.emoji}</span>
+                <span style={{ fontSize: 10, fontWeight: 600, color: b.earned ? b.color : '#334155', whiteSpace: 'nowrap' }}>{b.label}</span>
+                {b.earned && <Star size={8} color={b.color} fill={b.color} />}
+              </div>
+            ))}
+          </div>
+
+          {/* Quick links to new modules */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 10 }}>
+            {[
+              { href: '/founder/perks', icon: <Gift size={14} />, label: 'Ecosystem Perks', sub: '$106K+ ценность', color: '#71717A' },
+              { href: '/founder/legal', icon: <Zap size={14} />, label: 'Legal Toolkit', sub: '10 шаблонов + чек-листы', color: '#A1A1AA' },
+              { href: '/founder/challenges', icon: <Flame size={14} />, label: 'Challenges', sub: '6 задач от корпораций', color: '#52525B' },
+              { href: '/founder/community', icon: <Users size={14} />, label: 'Co-founder Match', sub: '6 профилей доступно', color: '#D4D4D8' },
+            ].map((link, i) => (
+              <Link key={i} href={link.href} style={{ textDecoration: 'none' }}>
+                <div style={{ padding: '12px 14px', borderRadius: 10, background: `${link.color}08`, border: `1px solid ${link.color}20`, cursor: 'pointer', transition: 'var(--transition-standard)' }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.borderColor = `${link.color}40`; (e.currentTarget as HTMLDivElement).style.background = `${link.color}12`; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor = `${link.color}20`; (e.currentTarget as HTMLDivElement).style.background = `${link.color}08`; }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4, color: link.color }}>
+                    {link.icon}
+                    <span style={{ fontSize: 13, fontWeight: 700 }}>{link.label}</span>
+                  </div>
+                  <div style={{ fontSize: 11, color: '#475569' }}>{link.sub}</div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+
         {/* Activity Feed */}
         <div className="card" style={{ gridColumn: '1 / -1' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
@@ -303,7 +414,7 @@ export default function FounderDashboard() {
               }}>
                 <div style={{
                   width: 32, height: 32, borderRadius: '8px', flexShrink: 0,
-                  background: 'rgba(124,58,237,0.15)', border: '1px solid rgba(124,58,237,0.2)',
+                  background: 'rgba(147,51,234,0.15)', border: '1px solid rgba(147,51,234,0.2)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontSize: '14px',
                 }}>

@@ -3,64 +3,80 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
-import Sidebar from '@/components/Sidebar';
+import SpotlightSearch from '@/components/SpotlightSearch';
+import SideNav from '@/components/SideNav';
 import { doc, getDoc } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { db, isDemoConfig } from '@/lib/firebase';
 
 export default function FounderLayout({ children }: { children: React.ReactNode }) {
-  const { profile, isDemoMode } = useAuth();
+  const { profile, loading, isDemoMode } = useAuth();
   const router = useRouter();
+  
+  const [isInitializing, setIsInitializing] = useState(true);
   const [onboardingChecked, setOnboardingChecked] = useState(false);
 
   useEffect(() => {
-    if (!profile || profile.role !== 'founder') {
-      setOnboardingChecked(true);
+    if (loading) return;
+
+    if (!profile) {
+      router.replace('/');
+      return;
+    }
+    if (profile.role !== 'founder') {
+      router.replace(profile.role === 'admin' ? '/admin' : '/investor');
       return;
     }
 
-    // Demo mode — пропускаем проверку онбординга
     if (isDemoMode) {
-      setOnboardingChecked(true);
+      setTimeout(() => setOnboardingChecked(true), 0);
       return;
     }
 
-    // Проверяем статус онбординга в Firestore
     const checkOnboarding = async () => {
+      if (isDemoConfig) {
+        setTimeout(() => setOnboardingChecked(true), 0);
+        return;
+      }
       try {
         const snap = await getDoc(doc(db, 'onboarding', profile.uid));
         if (snap.exists() && snap.data().completed === false) {
           router.replace('/onboarding');
           return;
         }
-      } catch {
-        // Firebase недоступен или документа нет — онбординг уже завершён
-      }
-      setOnboardingChecked(true);
+      } catch {}
+      setTimeout(() => setOnboardingChecked(true), 0);
     };
 
     checkOnboarding();
-  }, [profile?.uid]);
+  }, [profile, loading, isDemoMode, router]);
 
-  // Показываем ничего пока проверяем онбординг (избегаем flash)
-  if (!onboardingChecked) {
+  useEffect(() => {
+    if (loading) return;
+    if (onboardingChecked) {
+      setTimeout(() => setIsInitializing(false), 0);
+    }
+  }, [onboardingChecked, loading]);
+
+  if (loading || isInitializing || !onboardingChecked) {
     return (
-      <div style={{ display: 'flex' }}>
-        <Sidebar />
-        <main className="page-content">
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '60vh', flexDirection: 'column', gap: '16px' }}>
-            <div style={{ width: 36, height: 36, border: '3px solid rgba(124,58,237,0.2)', borderTopColor: '#7c3aed', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
-            <p style={{ color: '#475569', fontSize: 13 }}>Загружаем твой профиль...</p>
-          </div>
-        </main>
+      <div className="dashboard-layout">
+        <SideNav />
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', width: '100%', flexDirection: 'column', gap: '16px' }}>
+          <div style={{ width: 36, height: 36, border: '3px solid rgba(147,51,234,0.2)', borderTopColor: '#9333EA', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+          <p style={{ color: '#52525B', fontSize: 14 }}>Initializing Secure Protocol...</p>
+        </div>
         <style jsx global>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>
     );
   }
 
   return (
-    <div style={{ display: 'flex' }}>
-      <Sidebar />
-      <main className="page-content">{children}</main>
+    <div className="dashboard-layout">
+      <SideNav />
+      <SpotlightSearch />
+      <main className="dashboard-main animate-fade-in">
+        {children}
+      </main>
     </div>
   );
 }

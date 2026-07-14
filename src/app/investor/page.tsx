@@ -1,6 +1,10 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { MOCK_STARTUPS, MOCK_PITCHES } from '@/lib/mockData';
+import { collection, getDocs } from 'firebase/firestore';
+import { db, isDemoConfig } from '@/lib/firebase';
+import { Startup } from '@/types';
 import { TrendingUp, Users, Briefcase, DollarSign, ArrowUpRight, Star, Clock } from 'lucide-react';
 import Link from 'next/link';
 
@@ -27,7 +31,50 @@ function ScoreBar({ score, color = '#7c3aed' }: { score: number; color?: string 
 }
 
 export default function InvestorDashboard() {
-  const readyStartups = MOCK_STARTUPS.filter(s => s.aiScores.overallReadinessScore && s.aiScores.overallReadinessScore >= 60);
+  const [startups, setStartups] = useState<Startup[]>(MOCK_STARTUPS);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadStartups() {
+      if (isDemoConfig) {
+        setStartups(MOCK_STARTUPS);
+        setLoading(false);
+        return;
+      }
+      try {
+        const snap = await getDocs(collection(db, 'startups'));
+        if (!snap.empty) {
+          const dbStartups = snap.docs.map(d => {
+            const data = d.data();
+            return {
+              id: d.id,
+              ...data,
+              aiScores: data.aiScores || { overallReadinessScore: 85 },
+              metrics: {
+                mrr: data.metrics?.mrr || 0,
+                arr: (data.metrics?.mrr || 0) * 12,
+                mau: data.metrics?.users || 0,
+                ltvCacRatio: data.metrics?.ltvCacRatio || 0,
+                runwayMonths: data.metrics?.runwayMonths || 12,
+                teamSize: data.metrics?.teamSize || 2,
+              }
+            } as Startup;
+          });
+          setStartups(dbStartups.length ? dbStartups : MOCK_STARTUPS);
+        }
+      } catch (err) {
+        console.warn('Failed to fetch startups for investor dashboard', err);
+        setStartups(MOCK_STARTUPS);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadStartups();
+  }, []);
+
+  if (loading) return <div className="animate-fade-in" style={{ padding: 32, color: '#64748b' }}>Загрузка дашборда...</div>;
+
+  const readyStartups = startups.filter(s => s.aiScores.overallReadinessScore && s.aiScores.overallReadinessScore >= 60);
   const pendingPitches = MOCK_PITCHES.filter(p => p.status === 'pending').length;
   const activePitches = MOCK_PITCHES.filter(p => ['accepted', 'feedback_pending'].includes(p.status)).length;
 
@@ -43,8 +90,8 @@ export default function InvestorDashboard() {
       {/* KPIs */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '28px' }}>
         {[
-          { label: 'Investment-Ready Startups', value: MOCK_STARTUPS.filter(s => (s.aiScores.overallReadinessScore || 0) >= 75).length, icon: <Star size={18} />, color: '#f59e0b' },
-          { label: 'Active Pipeline', value: MOCK_STARTUPS.length, icon: <TrendingUp size={18} />, color: '#7c3aed' },
+          { label: 'Investment-Ready Startups', value: startups.filter(s => (s.aiScores.overallReadinessScore || 0) >= 75).length, icon: <Star size={18} />, color: '#f59e0b' },
+          { label: 'Active Pipeline', value: startups.length, icon: <TrendingUp size={18} />, color: '#7c3aed' },
           { label: 'Pending Pitches', value: pendingPitches, icon: <Clock size={18} />, color: '#3b82f6' },
           { label: 'Active Pitches', value: activePitches, icon: <Briefcase size={18} />, color: '#10b981' },
         ].map((kpi, i) => (

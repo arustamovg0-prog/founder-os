@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import { getAdminAuth } from '@/lib/firebaseAdmin';
 
 const gemini = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 
@@ -28,9 +29,25 @@ const DEMO_ANSWERS: Record<string, string> = {
 
 export async function POST(req: NextRequest) {
   try {
-    const { history, message } = await req.json();
+    const { history, message, startupData } = await req.json();
 
     if (!message) return NextResponse.json({ error: 'message required' }, { status: 400 });
+
+    // Auth verification
+    if (process.env.NEXT_PUBLIC_DEMO_MODE !== 'true') {
+      const authHeader = req.headers.get('Authorization');
+      if (!authHeader?.startsWith('Bearer ')) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      }
+      
+      try {
+        const token = authHeader.split('Bearer ')[1];
+        await getAdminAuth().verifyIdToken(token);
+      } catch (err) {
+        console.error('API Auth Error', err);
+        return NextResponse.json({ error: 'Invalid or expired token' }, { status: 401 });
+      }
+    }
 
     // Demo mode: scan for keywords and return canned answers
     if (process.env.NEXT_PUBLIC_DEMO_MODE === 'true' || !process.env.GEMINI_API_KEY) {
@@ -48,7 +65,17 @@ export async function POST(req: NextRequest) {
     }
 
     const model = gemini.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const startupContext = startupData ? `
+Startup Context:
+Name: ${startupData.name}
+Industry: ${startupData.industry}
+Metrics: $${startupData.metrics?.mrr || 0} MRR, ${startupData.metrics?.users || 0} users.
+AI Score: ${startupData.aiScores?.overallReadinessScore || 0}/100
+` : '';
+
     const prompt = `${SYSTEM_PROMPT}
+
+${startupContext}
 
 Recent conversation:
 ${history || '(new conversation)'}
@@ -61,6 +88,7 @@ Respond as UNTITLED AI Support:`;
     const reply = result.response.text().trim();
 
     return NextResponse.json({ reply });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     console.error('[chat]', err.message);
     return NextResponse.json({ error: 'chat failed' }, { status: 500 });

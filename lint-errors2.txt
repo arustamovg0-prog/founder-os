@@ -1,0 +1,292 @@
+
+> founder-os@0.1.0 lint
+> eslint
+
+
+/Users/akmalrustamov/Documents/FOUNDER OS/founder-os/src/app/admin/analytics/page.tsx
+    6:3    warning  'LineChart' is defined but never used     @typescript-eslint/no-unused-vars
+    6:14   warning  'Line' is defined but never used          @typescript-eslint/no-unused-vars
+    6:58   warning  'Legend' is defined but never used        @typescript-eslint/no-unused-vars
+    8:10   warning  'TrendingUp' is defined but never used    @typescript-eslint/no-unused-vars
+   16:52   error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   21:24   error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  136:103  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  136:167  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/akmalrustamov/Documents/FOUNDER OS/founder-os/src/app/admin/health/page.tsx
+    3:10  warning  'useState' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             @typescript-eslint/no-unused-vars
+    3:20  warning  'useMemo' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              @typescript-eslint/no-unused-vars
+    7:39  warning  'FunnelChart' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          @typescript-eslint/no-unused-vars
+    7:52  warning  'Funnel' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               @typescript-eslint/no-unused-vars
+    7:60  warning  'LabelList' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            @typescript-eslint/no-unused-vars
+   30:41  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         @typescript-eslint/no-explicit-any
+   35:24  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         @typescript-eslint/no-explicit-any
+  105:51  error    Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/Users/akmalrustamov/Documents/FOUNDER OS/founder-os/src/app/admin/health/page.tsx:105:51
+  103 |   const mrrTrend = ['Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May'].map((month, i) => ({
+  104 |     month,
+> 105 |     mrr: Math.round(totalMRR * (0.6 + i * 0.08) + Math.random() * 5000),
+      |                                                   ^^^^^^^^^^^^^ Cannot call impure function
+  106 |     arr: Math.round(totalARR * (0.6 + i * 0.08)),
+  107 |   }));
+  108 |  react-hooks/purity
+
+/Users/akmalrustamov/Documents/FOUNDER OS/founder-os/src/app/admin/page.tsx
+   3:39  warning  'ROADMAP_STAGES' is defined but never used         @typescript-eslint/no-unused-vars
+   6:3   warning  'LineChart' is defined but never used              @typescript-eslint/no-unused-vars
+   6:14  warning  'Line' is defined but never used                   @typescript-eslint/no-unused-vars
+   6:20  warning  'PieChart' is defined but never used               @typescript-eslint/no-unused-vars
+   6:30  warning  'Pie' is defined but never used                    @typescript-eslint/no-unused-vars
+   8:36  warning  'Briefcase' is defined but never used              @typescript-eslint/no-unused-vars
+  20:52  error    Unexpected any. Specify a different type           @typescript-eslint/no-explicit-any
+  25:24  error    Unexpected any. Specify a different type           @typescript-eslint/no-explicit-any
+  36:9   warning  'stuckCount' is assigned a value but never used    @typescript-eslint/no-unused-vars
+  44:9   warning  'mrrByStartup' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/akmalrustamov/Documents/FOUNDER OS/founder-os/src/app/admin/stages/page.tsx
+   4:10  warning  'MOCK_STARTUPS' is defined but never used        @typescript-eslint/no-unused-vars
+   5:43  warning  'Lock' is defined but never used                 @typescript-eslint/no-unused-vars
+  18:19  warning  'setReviews' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/akmalrustamov/Documents/FOUNDER OS/founder-os/src/app/api/ai/analyze-startup/route.ts
+  73:17  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/akmalrustamov/Documents/FOUNDER OS/founder-os/src/app/api/ai/chat/route.ts
+  64:17  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/akmalrustamov/Documents/FOUNDER OS/founder-os/src/app/api/auth/session/route.ts
+  32:13  warning  'getAuth' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  78:17  error    Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+
+/Users/akmalrustamov/Documents/FOUNDER OS/founder-os/src/app/auth/magic/page.tsx
+  21:5   error    Error: Cannot access variable before it is declared
+
+`handleMagicLink` is accessed before it is declared, which prevents the earlier access from updating when this value changes over time.
+
+/Users/akmalrustamov/Documents/FOUNDER OS/founder-os/src/app/auth/magic/page.tsx:21:5
+  19 |
+  20 |   useEffect(() => {
+> 21 |     handleMagicLink();
+     |     ^^^^^^^^^^^^^^^ `handleMagicLink` accessed before it is declared
+  22 |   }, []);
+  23 |
+  24 |   const handleMagicLink = async (manualEmail?: string) => {
+
+/Users/akmalrustamov/Documents/FOUNDER OS/founder-os/src/app/auth/magic/page.tsx:24:3
+  22 |   }, []);
+  23 |
+> 24 |   const handleMagicLink = async (manualEmail?: string) => {
+     |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 25 |     setState('checking');
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 26 |
+     …
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 78 |     }
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 79 |   };
+     | ^^^^^ `handleMagicLink` is declared here
+  80 |
+  81 |   return (
+  82 |     <div style={{  react-hooks/immutability
+  22:6   warning  React Hook useEffect has a missing dependency: 'handleMagicLink'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            react-hooks/exhaustive-deps
+  75:19  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      @typescript-eslint/no-explicit-any
+
+/Users/akmalrustamov/Documents/FOUNDER OS/founder-os/src/app/founder/ai-copilot/page.tsx
+  4:63  warning  'RefreshCw' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/akmalrustamov/Documents/FOUNDER OS/founder-os/src/app/founder/chat/page.tsx
+    5:34  warning  'Sparkles' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               @typescript-eslint/no-unused-vars
+    5:55  warning  'MessageSquare' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          @typescript-eslint/no-unused-vars
+   82:54  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           @typescript-eslint/no-explicit-any
+  104:16  error    Error: Cannot call impure function during render
+
+`Date.now` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/Users/akmalrustamov/Documents/FOUNDER OS/founder-os/src/app/founder/chat/page.tsx:104:16
+  102 |
+  103 |     const userMsg: Message = {
+> 104 |       id: `u_${Date.now()}`, role: 'user', content: msg, timestamp: new Date(),
+      |                ^^^^^^^^^^ Cannot call impure function
+  105 |     };
+  106 |     const newMsgs = [...messages, userMsg];
+  107 |     setMessages(newMsgs);                                                                                                 react-hooks/purity
+  118:18  error    Error: Cannot call impure function during render
+
+`Date.now` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/Users/akmalrustamov/Documents/FOUNDER OS/founder-os/src/app/founder/chat/page.tsx:118:18
+  116 |       const reply = await callGemini(messages, msg);
+  117 |       const botMsg: Message = {
+> 118 |         id: `a_${Date.now()}`, role: 'assistant', content: reply, timestamp: new Date(),
+      |                  ^^^^^^^^^^ Cannot call impure function
+  119 |       };
+  120 |       const finalMsgs = [...newMsgs, botMsg];
+  121 |       setMessages(finalMsgs);                        react-hooks/purity
+  128:18  error    Error: Cannot call impure function during render
+
+`Date.now` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/Users/akmalrustamov/Documents/FOUNDER OS/founder-os/src/app/founder/chat/page.tsx:128:18
+  126 |       toast.error('Ошибка соединения с AI');
+  127 |       const errMsg: Message = {
+> 128 |         id: `e_${Date.now()}`, role: 'assistant',
+      |                  ^^^^^^^^^^ Cannot call impure function
+  129 |         content: 'Извини, не могу ответить прямо сейчас. Попробуй ещё раз или напиши нам на support@untitled.vc',
+  130 |         timestamp: new Date(),
+  131 |       };  react-hooks/purity
+
+/Users/akmalrustamov/Documents/FOUNDER OS/founder-os/src/app/founder/data-room/page.tsx
+  4:80  warning  'Plus' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/akmalrustamov/Documents/FOUNDER OS/founder-os/src/app/founder/layout.tsx
+  17:7  error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/Users/akmalrustamov/Documents/FOUNDER OS/founder-os/src/app/founder/layout.tsx:17:7
+  15 |   useEffect(() => {
+  16 |     if (!profile || profile.role !== 'founder') {
+> 17 |       setOnboardingChecked(true);
+     |       ^^^^^^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  18 |       return;
+  19 |     }
+  20 |  react-hooks/set-state-in-effect
+  42:6  warning  React Hook useEffect has missing dependencies: 'isDemoMode', 'profile', and 'router'. Either include them or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            react-hooks/exhaustive-deps
+
+/Users/akmalrustamov/Documents/FOUNDER OS/founder-os/src/app/founder/page.tsx
+  297:35  warning  'i' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/akmalrustamov/Documents/FOUNDER OS/founder-os/src/app/founder/pitches/[id]/room/page.tsx
+  4:10  warning  'MOCK_STARTUPS' is defined but never used  @typescript-eslint/no-unused-vars
+  5:70  warning  'Users' is defined but never used          @typescript-eslint/no-unused-vars
+  9:46  warning  'params' is defined but never used         @typescript-eslint/no-unused-vars
+
+/Users/akmalrustamov/Documents/FOUNDER OS/founder-os/src/app/investor/crm/page.tsx
+   5:85  warning  'TrendingUp' is defined but never used    @typescript-eslint/no-unused-vars
+  65:76  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/akmalrustamov/Documents/FOUNDER OS/founder-os/src/app/investor/deal-flow/page.tsx
+  6:40  warning  'TrendingUp' is defined but never used  @typescript-eslint/no-unused-vars
+  6:52  warning  'Users' is defined but never used       @typescript-eslint/no-unused-vars
+  6:59  warning  'Clock' is defined but never used       @typescript-eslint/no-unused-vars
+
+/Users/akmalrustamov/Documents/FOUNDER OS/founder-os/src/app/investor/page.tsx
+    4:22  warning  'Users' is defined but never used             @typescript-eslint/no-unused-vars
+    4:40  warning  'DollarSign' is defined but never used        @typescript-eslint/no-unused-vars
+  137:21  warning  'startup' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/akmalrustamov/Documents/FOUNDER OS/founder-os/src/app/investor/pitches/page.tsx
+    6:27  warning  'MapPin' is defined but never used   @typescript-eslint/no-unused-vars
+  144:24  warning  'pitchId' is defined but never used  @typescript-eslint/no-unused-vars
+  148:25  warning  'pitchId' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/akmalrustamov/Documents/FOUNDER OS/founder-os/src/app/investor/portfolio/page.tsx
+   27:54  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          @typescript-eslint/no-explicit-any
+   32:26  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          @typescript-eslint/no-explicit-any
+   72:34  error    Error: Cannot create components during render
+
+Components created during render will reset their state each time they are created. Declare components outside of render.
+
+/Users/akmalrustamov/Documents/FOUNDER OS/founder-os/src/app/investor/portfolio/page.tsx:72:34
+  70 |               <XAxis dataKey="name" tick={{ fontSize: 11, fill: '#475569' }} axisLine={false} tickLine={false} />
+  71 |               <YAxis tickFormatter={v => `$${v / 1000}K`} tick={{ fontSize: 11, fill: '#475569' }} axisLine={false} tickLine={false} />
+> 72 |               <Tooltip content={<CustomTooltip />} />
+     |                                  ^^^^^^^^^^^^^ This component is created during render
+  73 |               <Bar dataKey="mrr" name="MRR" fill="#7c3aed" radius={[6, 6, 0, 0]} />
+  74 |               <Bar dataKey="arr" name="ARR" fill="#3b82f6" radius={[6, 6, 0, 0]} />
+  75 |             </BarChart>
+
+/Users/akmalrustamov/Documents/FOUNDER OS/founder-os/src/app/investor/portfolio/page.tsx:27:25
+  25 |   ).map(([name, value]) => ({ name, value }));
+  26 |
+> 27 |   const CustomTooltip = ({ active, payload, label }: any) => {
+     |                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 28 |     if (!active || !payload?.length) return null;
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 29 |     return (
+     …
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 36 |     );
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 37 |   };
+     | ^^^^ The component is created during render here
+  38 |
+  39 |   return (
+  40 |     <div className="animate-fade-in">  react-hooks/static-components
+  115:34  warning  'i' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     @typescript-eslint/no-unused-vars
+
+/Users/akmalrustamov/Documents/FOUNDER OS/founder-os/src/app/leaderboard/page.tsx
+   5:26  warning  'TrendingUp' is defined but never used       @typescript-eslint/no-unused-vars
+   5:38  warning  'Users' is defined but never used            @typescript-eslint/no-unused-vars
+   5:45  warning  'Zap' is defined but never used              @typescript-eslint/no-unused-vars
+   5:50  warning  'Star' is defined but never used             @typescript-eslint/no-unused-vars
+   5:56  warning  'ArrowUpRight' is defined but never used     @typescript-eslint/no-unused-vars
+   5:70  warning  'Globe' is defined but never used            @typescript-eslint/no-unused-vars
+  42:9   warning  'MEDALS' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/akmalrustamov/Documents/FOUNDER OS/founder-os/src/app/onboarding/page.tsx
+  50:48  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/akmalrustamov/Documents/FOUNDER OS/founder-os/src/app/page.tsx
+   35:7   error    Error: Cannot access variable before it is declared
+
+`redirectByRole` is accessed before it is declared, which prevents the earlier access from updating when this value changes over time.
+
+/Users/akmalrustamov/Documents/FOUNDER OS/founder-os/src/app/page.tsx:35:7
+  33 |   useEffect(() => {
+  34 |     if (profile) {
+> 35 |       redirectByRole(profile.role);
+     |       ^^^^^^^^^^^^^^ `redirectByRole` accessed before it is declared
+  36 |     }
+  37 |   }, [profile]);
+  38 |
+
+/Users/akmalrustamov/Documents/FOUNDER OS/founder-os/src/app/page.tsx:39:3
+  37 |   }, [profile]);
+  38 |
+> 39 |   const redirectByRole = (r: UserRole) => {
+     |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 40 |     if (r === 'admin') router.push('/admin');
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 41 |     else if (r === 'investor') router.push('/investor');
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 42 |     else router.push('/founder');
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 43 |   };
+     | ^^^^^ `redirectByRole` is declared here
+  44 |
+  45 |   const handleDemoLogin = (demo: typeof DEMO_ACCOUNTS[0]) => {
+  46 |     setDemoRole(demo.role);  react-hooks/immutability
+   37:6   warning  React Hook useEffect has a missing dependency: 'redirectByRole'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         react-hooks/exhaustive-deps
+   66:19  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  @typescript-eslint/no-explicit-any
+   85:14  warning  'err' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           @typescript-eslint/no-unused-vars
+   85:19  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  @typescript-eslint/no-explicit-any
+  196:47  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  @typescript-eslint/no-explicit-any
+
+/Users/akmalrustamov/Documents/FOUNDER OS/founder-os/src/app/s/[startupName]/page.tsx
+  11:42  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/akmalrustamov/Documents/FOUNDER OS/founder-os/src/components/ImpersonationPanel.tsx
+  56:10  warning  'selectedId' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/akmalrustamov/Documents/FOUNDER OS/founder-os/src/components/Sidebar.tsx
+  126:27  error    A `require()` style import is forbidden                                                                    @typescript-eslint/no-require-imports
+  166:6   warning  React Hook useEffect has a missing dependency: 'notifs'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  346:64  error    Unexpected any. Specify a different type                                                                   @typescript-eslint/no-explicit-any
+
+/Users/akmalrustamov/Documents/FOUNDER OS/founder-os/src/contexts/AuthContext.tsx
+  120:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/akmalrustamov/Documents/FOUNDER OS/founder-os/src/lib/mockData.ts
+  89:35  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+✖ 86 problems (33 errors, 53 warnings)
+

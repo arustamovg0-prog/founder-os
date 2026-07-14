@@ -29,8 +29,6 @@ export async function POST(req: NextRequest) {
 
     // 2. Получаем роль пользователя из Firestore
     const db = getAdminFirestore();
-    const { getAuth } = await import('firebase-admin/auth');
-
     // Верифицируем ID Token чтобы получить UID
     const { uid } = await (await import('firebase-admin/auth'))
       .getAuth()
@@ -75,6 +73,7 @@ export async function POST(req: NextRequest) {
     });
 
     return response;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     console.error('[/api/auth/session] Error:', err);
     return NextResponse.json(

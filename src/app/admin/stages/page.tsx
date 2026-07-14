@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { MOCK_STARTUPS, ROADMAP_STAGES } from '@/lib/mockData';
-import { CheckCircle, Clock, AlertCircle, Lock, Shield, ChevronRight } from 'lucide-react';
+import { ROADMAP_STAGES } from '@/lib/mockData';
+import { CheckCircle, Clock, AlertCircle, Shield, ChevronRight } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 const PENDING_REVIEWS = [
@@ -11,11 +11,11 @@ const PENDING_REVIEWS = [
 ];
 
 const STAGE_COLORS: Record<string, string> = {
-  discovery: '#06b6d4', validation: '#f59e0b', building: '#7c3aed', scaling: '#10b981', fundraising: '#ec4899',
+  discovery: '#3F3F46', validation: '#71717A', building: '#9333EA', scaling: '#D4D4D8', fundraising: '#52525B',
 };
 
 export default function StageReviewPage() {
-  const [reviews, setReviews] = useState(PENDING_REVIEWS);
+  const [reviews] = useState(PENDING_REVIEWS);
   const [verifiedMap, setVerifiedMap] = useState<Record<string, 'approved' | 'rejected'>>({});
   const [comment, setComment] = useState<Record<string, string>>({});
 
@@ -43,9 +43,9 @@ export default function StageReviewPage() {
       {/* Stats */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '28px' }}>
         {[
-          { label: 'Pending Review', value: pending.length, color: '#f59e0b', icon: <Clock size={18} /> },
-          { label: 'Approved Today', value: done.filter(d => verifiedMap[d.startupId] === 'approved').length, color: '#10b981', icon: <CheckCircle size={18} /> },
-          { label: 'Total Gatekeeper Stages', value: ROADMAP_STAGES.filter(s => s.isGatekeeper).length, color: '#7c3aed', icon: <Shield size={18} /> },
+          { label: 'Pending Review', value: pending.length, color: '#71717A', icon: <Clock size={18} /> },
+          { label: 'Approved Today', value: done.filter(d => verifiedMap[d.startupId] === 'approved').length, color: '#D4D4D8', icon: <CheckCircle size={18} /> },
+          { label: 'Total Gatekeeper Stages', value: ROADMAP_STAGES.filter(s => s.isGatekeeper).length, color: '#9333EA', icon: <Shield size={18} /> },
         ].map((stat, i) => (
           <div key={i} className="stat-card">
             <div style={{ width: 36, height: 36, borderRadius: 8, background: `${stat.color}20`, border: `1px solid ${stat.color}30`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: stat.color, marginBottom: 12 }}>{stat.icon}</div>
@@ -58,16 +58,16 @@ export default function StageReviewPage() {
       {/* Pending */}
       {pending.length > 0 && (
         <div style={{ marginBottom: '28px' }}>
-          <div style={{ fontSize: 13, color: '#f59e0b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ fontSize: 13, color: '#71717A', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
             <Clock size={14} /> Awaiting Review ({pending.length})
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {pending.map((r) => {
               const stage = ROADMAP_STAGES.find(s => s.id === r.stageId);
-              const phaseColor = stage ? STAGE_COLORS[stage.phase] : '#7c3aed';
+              const phaseColor = stage ? STAGE_COLORS[stage.phase] : '#9333EA';
 
               return (
-                <div key={r.startupId} className="card" style={{ borderColor: 'rgba(245,158,11,0.2)', background: 'rgba(245,158,11,0.03)' }}>
+                <div key={r.startupId} className="card" style={{ borderColor: 'rgba(113,113,122,0.2)', background: 'rgba(113,113,122,0.03)' }}>
                   <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '16px' }}>
                     <div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
@@ -78,7 +78,7 @@ export default function StageReviewPage() {
                         </span>
                       </div>
                       <div style={{ fontSize: 13, color: '#64748b' }}>
-                        Submitted {r.submittedAt.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })} • AI Score: <strong style={{ color: '#a78bfa' }}>{r.score}/100</strong>
+                        Submitted {r.submittedAt.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })} • AI Score: <strong style={{ color: '#D8B4FE' }}>{r.score}/100</strong>
                       </div>
                     </div>
                     <span className="badge badge-yellow"><Clock size={10} /> Pending</span>
@@ -89,9 +89,9 @@ export default function StageReviewPage() {
                     <div style={{ fontSize: 11, color: '#475569', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '10px' }}>Submitted Artifacts</div>
                     <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                       {r.artifacts.map((art, i) => (
-                        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 12px', borderRadius: '8px', background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.2)' }}>
-                          <CheckCircle size={12} color="#10b981" />
-                          <span style={{ fontSize: 12, color: '#34d399' }}>{art}</span>
+                        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 12px', borderRadius: '8px', background: 'rgba(212,212,216,0.08)', border: '1px solid rgba(212,212,216,0.2)' }}>
+                          <CheckCircle size={12} color="#D4D4D8" />
+                          <span style={{ fontSize: 12, color: '#A1A1AA' }}>{art}</span>
                         </div>
                       ))}
                     </div>
@@ -114,7 +114,7 @@ export default function StageReviewPage() {
                     <button onClick={() => reject(r.startupId, r.startupName)} style={{
                       flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
                       padding: '10px', borderRadius: '10px', fontSize: 14, fontWeight: 600,
-                      background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.25)',
+                      background: 'rgba(82,82,91,0.1)', border: '1px solid rgba(82,82,91,0.25)',
                       color: '#f87171', cursor: 'pointer', fontFamily: 'Inter',
                     }}>
                       <AlertCircle size={14} /> Reject & Send Feedback
@@ -137,9 +137,9 @@ export default function StageReviewPage() {
             {done.map(r => {
               const status = verifiedMap[r.startupId];
               return (
-                <div key={r.startupId} style={{ padding: '16px 20px', borderRadius: '14px', border: `1px solid ${status === 'approved' ? 'rgba(16,185,129,0.2)' : 'rgba(239,68,68,0.2)'}`, background: status === 'approved' ? 'rgba(16,185,129,0.04)' : 'rgba(239,68,68,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <div key={r.startupId} style={{ padding: '16px 20px', borderRadius: '14px', border: `1px solid ${status === 'approved' ? 'rgba(212,212,216,0.2)' : 'rgba(82,82,91,0.2)'}`, background: status === 'approved' ? 'rgba(212,212,216,0.04)' : 'rgba(82,82,91,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    {status === 'approved' ? <CheckCircle size={18} color="#10b981" /> : <AlertCircle size={18} color="#ef4444" />}
+                    {status === 'approved' ? <CheckCircle size={18} color="#D4D4D8" /> : <AlertCircle size={18} color="#52525B" />}
                     <div>
                       <div style={{ fontWeight: 600 }}>{r.startupName}</div>
                       <div style={{ fontSize: 12, color: '#475569' }}>{r.stageTitle}</div>

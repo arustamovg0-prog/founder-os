@@ -13,22 +13,22 @@ function fmt(n: number) {
 }
 
 const STAGE_COLORS: Record<string, string> = {
-  idea: '#64748b', validation: '#f59e0b', mvp: '#3b82f6', growth: '#7c3aed', investment_ready: '#10b981',
+  idea: '#64748b', validation: '#71717A', mvp: '#A1A1AA', growth: '#9333EA', investment_ready: '#D4D4D8',
 };
 
 function StartupDetailRow({ s }: { s: Startup }) {
   const [open, setOpen] = useState(false);
   const score = s.aiScores.overallReadinessScore || 0;
-  const scoreColor = score >= 75 ? '#10b981' : score >= 50 ? '#f59e0b' : '#ef4444';
+  const scoreColor = score >= 75 ? '#D4D4D8' : score >= 50 ? '#71717A' : '#52525B';
   const stageColor = STAGE_COLORS[s.stage];
   const currentStage = ROADMAP_STAGES.find(r => r.id === s.currentRoadmapStageId);
 
   return (
-    <div style={{ borderRadius: '14px', border: `1px solid ${open ? 'rgba(124,58,237,0.25)' : 'rgba(255,255,255,0.06)'}`, marginBottom: '10px', overflow: 'hidden', transition: 'all 0.2s' }}>
+    <div style={{ borderRadius: '14px', border: `1px solid ${open ? 'rgba(147,51,234,0.25)' : 'rgba(255,255,255,0.06)'}`, marginBottom: '10px', overflow: 'hidden', transition: 'var(--transition-standard)' }}>
       {/* Row */}
       <div
         onClick={() => setOpen(!open)}
-        style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '16px 20px', cursor: 'pointer', background: open ? 'rgba(124,58,237,0.05)' : 'transparent', transition: 'background 0.15s' }}
+        style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '16px 20px', cursor: 'pointer', background: open ? 'rgba(147,51,234,0.05)' : 'transparent', transition: 'background 160ms var(--ease-out)' }}
       >
         <div style={{
           width: 44, height: 44, borderRadius: '12px', flexShrink: 0,
@@ -52,9 +52,9 @@ function StartupDetailRow({ s }: { s: Startup }) {
 
         <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '16px' }}>
           {[
-            { l: 'MRR', v: fmt(s.metrics.mrr), c: '#10b981' },
-            { l: 'MAU', v: s.metrics.mau > 0 ? s.metrics.mau.toLocaleString() : '—', c: '#3b82f6' },
-            { l: 'Runway', v: s.metrics.runwayMonths > 0 ? `${s.metrics.runwayMonths}mo` : '—', c: s.metrics.runwayMonths <= 6 && s.metrics.runwayMonths > 0 ? '#ef4444' : '#94a3b8' },
+            { l: 'MRR', v: fmt(s.metrics.mrr), c: '#D4D4D8' },
+            { l: 'MAU', v: s.metrics.mau > 0 ? s.metrics.mau.toLocaleString() : '—', c: '#A1A1AA' },
+            { l: 'Runway', v: s.metrics.runwayMonths > 0 ? `${s.metrics.runwayMonths}mo` : '—', c: s.metrics.runwayMonths <= 6 && s.metrics.runwayMonths > 0 ? '#52525B' : '#94a3b8' },
           ].map((m, i) => (
             <div key={i}>
               <div style={{ fontSize: 11, color: '#334155', fontWeight: 600 }}>{m.l}</div>
@@ -70,7 +70,7 @@ function StartupDetailRow({ s }: { s: Startup }) {
 
         <div style={{ flex: '0 0 100px' }}>
           <div className="progress-bar">
-            <div style={{ height: '100%', borderRadius: 99, width: `${s.roadmapProgress}%`, background: '#7c3aed', boxShadow: '0 0 6px rgba(124,58,237,0.5)' }} />
+            <div style={{ height: '100%', borderRadius: 99, width: `${s.roadmapProgress}%`, background: '#9333EA', boxShadow: '0 0 6px rgba(147,51,234,0.5)' }} />
           </div>
           <div style={{ fontSize: 11, color: '#475569', marginTop: 4, textAlign: 'center' }}>{s.roadmapProgress}% done</div>
         </div>
@@ -85,11 +85,11 @@ function StartupDetailRow({ s }: { s: Startup }) {
             {/* AI Summary */}
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '10px' }}>
-                <Brain size={13} color="#a78bfa" />
-                <span style={{ fontSize: 11, color: '#a78bfa', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>AI Copilot Analysis</span>
+                <Brain size={13} color="#D8B4FE" />
+                <span style={{ fontSize: 11, color: '#D8B4FE', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>AI Copilot Analysis</span>
               </div>
               {s.executiveSummaryAI ? (
-                <p style={{ fontSize: 13, color: '#94a3b8', lineHeight: 1.7, padding: '12px', background: 'rgba(124,58,237,0.07)', borderRadius: '10px', border: '1px solid rgba(124,58,237,0.15)' }}>
+                <p style={{ fontSize: 13, color: '#94a3b8', lineHeight: 1.7, padding: '12px', background: 'rgba(147,51,234,0.07)', borderRadius: '10px', border: '1px solid rgba(147,51,234,0.15)' }}>
                   {s.executiveSummaryAI}
                 </p>
               ) : (
@@ -121,9 +121,9 @@ function StartupDetailRow({ s }: { s: Startup }) {
               </div>
 
               {currentStage && (
-                <div style={{ marginTop: '12px', padding: '10px 14px', borderRadius: '10px', background: 'rgba(124,58,237,0.08)', border: '1px solid rgba(124,58,237,0.15)' }}>
+                <div style={{ marginTop: '12px', padding: '10px 14px', borderRadius: '10px', background: 'rgba(147,51,234,0.08)', border: '1px solid rgba(147,51,234,0.15)' }}>
                   <div style={{ fontSize: 11, color: '#475569', marginBottom: 4 }}>Current Roadmap Stage</div>
-                  <div style={{ fontSize: 14, fontWeight: 600, color: '#a78bfa' }}>{currentStage.title}</div>
+                  <div style={{ fontSize: 14, fontWeight: 600, color: '#D8B4FE' }}>{currentStage.title}</div>
                 </div>
               )}
             </div>
@@ -143,7 +143,7 @@ function StartupDetailRow({ s }: { s: Startup }) {
               </button>
             )}
             {s.metrics.runwayMonths <= 6 && s.metrics.runwayMonths > 0 && (
-              <button style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: 12, padding: '7px 16px', borderRadius: '8px', background: 'rgba(245,158,11,0.1)', border: '1px solid rgba(245,158,11,0.3)', color: '#fbbf24', cursor: 'pointer', fontFamily: 'Inter' }}>
+              <button style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: 12, padding: '7px 16px', borderRadius: '8px', background: 'rgba(113,113,122,0.1)', border: '1px solid rgba(113,113,122,0.3)', color: '#D4D4D8', cursor: 'pointer', fontFamily: 'Inter' }}>
                 <AlertTriangle size={13} /> Flag Critical
               </button>
             )}
@@ -191,8 +191,8 @@ export default function AdminStartupsPage() {
           ].map(f => (
             <button key={f.key} onClick={() => setFilter(f.key)} style={{
               padding: '7px 14px', borderRadius: '7px', border: 'none',
-              background: filter === f.key ? 'rgba(124,58,237,0.3)' : 'transparent',
-              color: filter === f.key ? '#a78bfa' : '#64748b',
+              background: filter === f.key ? 'rgba(147,51,234,0.3)' : 'transparent',
+              color: filter === f.key ? '#D8B4FE' : '#64748b',
               fontSize: '12px', fontWeight: 600, cursor: 'pointer', fontFamily: 'Inter', whiteSpace: 'nowrap',
             }}>
               {f.label}

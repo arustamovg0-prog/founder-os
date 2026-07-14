@@ -1,16 +1,19 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { MOCK_PITCHES, MOCK_STARTUPS } from '@/lib/mockData';
-import { PitchEvent } from '@/types';
+import { PitchEvent, Startup } from '@/types';
 import { Calendar, Video, MapPin, CheckCircle, XCircle, Clock, MessageSquare, Star } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { collection, query, where, onSnapshot, doc, updateDoc, getDocs } from 'firebase/firestore';
+import { db, isDemoConfig, auth } from '@/lib/firebase';
+import { useAuth } from '@/contexts/AuthContext';
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string }> = {
-  pending: { label: 'Pending', color: '#f59e0b', bg: 'rgba(245,158,11,0.1)' },
-  accepted: { label: 'Accepted', color: '#10b981', bg: 'rgba(16,185,129,0.1)' },
-  rejected: { label: 'Rejected', color: '#ef4444', bg: 'rgba(239,68,68,0.1)' },
-  feedback_pending: { label: 'Feedback Pending', color: '#3b82f6', bg: 'rgba(59,130,246,0.1)' },
+  pending: { label: 'Pending', color: '#71717A', bg: 'rgba(113,113,122,0.1)' },
+  accepted: { label: 'Accepted', color: '#D4D4D8', bg: 'rgba(212,212,216,0.1)' },
+  rejected: { label: 'Rejected', color: '#52525B', bg: 'rgba(82,82,91,0.1)' },
+  feedback_pending: { label: 'Feedback Pending', color: '#A1A1AA', bg: 'rgba(161,161,170,0.1)' },
   completed: { label: 'Completed', color: '#64748b', bg: 'rgba(100,116,139,0.1)' },
   closed: { label: 'Closed', color: '#64748b', bg: 'rgba(100,116,139,0.1)' },
 };
@@ -27,11 +30,11 @@ function FeedbackModal({ pitch, onClose }: { pitch: PitchEvent; onClose: () => v
   };
 
   const IMPRESSIONS = [
-    { value: 'strong_yes', label: '🔥 Strong Yes', color: '#10b981' },
-    { value: 'yes', label: '👍 Yes', color: '#34d399' },
-    { value: 'neutral', label: '😐 Neutral', color: '#f59e0b' },
+    { value: 'strong_yes', label: '🔥 Strong Yes', color: '#D4D4D8' },
+    { value: 'yes', label: '👍 Yes', color: '#A1A1AA' },
+    { value: 'neutral', label: '😐 Neutral', color: '#71717A' },
     { value: 'no', label: '👎 No', color: '#f87171' },
-    { value: 'strong_no', label: '❌ Strong No', color: '#ef4444' },
+    { value: 'strong_no', label: '❌ Strong No', color: '#52525B' },
   ];
 
   return (
@@ -54,7 +57,7 @@ function FeedbackModal({ pitch, onClose }: { pitch: PitchEvent; onClose: () => v
                 background: impression === imp.value ? `${imp.color}20` : 'rgba(255,255,255,0.04)',
                 border: `1px solid ${impression === imp.value ? imp.color : 'rgba(255,255,255,0.08)'}`,
                 color: impression === imp.value ? imp.color : '#64748b',
-                cursor: 'pointer', fontFamily: 'Inter', transition: 'all 0.15s',
+                cursor: 'pointer', fontFamily: 'Inter', transition: 'var(--transition-standard)',
               }}>
                 {imp.label}
               </button>
@@ -73,11 +76,11 @@ function FeedbackModal({ pitch, onClose }: { pitch: PitchEvent; onClose: () => v
                 <span style={{ width: 80, fontSize: 13, color: '#94a3b8', textTransform: 'capitalize', flexShrink: 0 }}>{key}</span>
                 <input type="range" min={1} max={5} value={val}
                   onChange={e => setScores(p => ({ ...p, [key]: Number(e.target.value) }))}
-                  style={{ flex: 1, accentColor: '#7c3aed' }}
+                  style={{ flex: 1, accentColor: '#9333EA' }}
                 />
                 <div style={{ display: 'flex', gap: '2px', flexShrink: 0 }}>
                   {[1, 2, 3, 4, 5].map(i => (
-                    <Star key={i} size={12} fill={i <= val ? '#f59e0b' : 'none'} color={i <= val ? '#f59e0b' : '#334155'} />
+                    <Star key={i} size={12} fill={i <= val ? '#71717A' : 'none'} color={i <= val ? '#71717A' : '#334155'} />
                   ))}
                 </div>
               </div>
@@ -100,11 +103,11 @@ function FeedbackModal({ pitch, onClose }: { pitch: PitchEvent; onClose: () => v
           </label>
           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
             {[
-              { value: 'deal', label: '🤝 Deal', color: '#10b981' },
-              { value: 'follow_up', label: '📅 Follow Up', color: '#3b82f6' },
-              { value: 'traction', label: '📈 Improve Traction', color: '#f59e0b' },
-              { value: 'pivot', label: '🔄 Pivot', color: '#7c3aed' },
-              { value: 'reject', label: '✖ Pass', color: '#ef4444' },
+              { value: 'deal', label: '🤝 Deal', color: '#D4D4D8' },
+              { value: 'follow_up', label: '📅 Follow Up', color: '#A1A1AA' },
+              { value: 'traction', label: '📈 Improve Traction', color: '#71717A' },
+              { value: 'pivot', label: '🔄 Pivot', color: '#9333EA' },
+              { value: 'reject', label: '✖ Pass', color: '#52525B' },
             ].map(ns => (
               <button key={ns.value} onClick={() => setNextStep(ns.value)} style={{
                 padding: '7px 14px', borderRadius: '10px', fontSize: 12, fontWeight: 500,
@@ -131,21 +134,61 @@ function FeedbackModal({ pitch, onClose }: { pitch: PitchEvent; onClose: () => v
 }
 
 export default function InvestorPitchesPage() {
+  const { profile } = useAuth();
+  const [pitches, setPitches] = useState<PitchEvent[]>(MOCK_PITCHES);
+  const [startups, setStartups] = useState<Record<string, Startup>>({});
   const [activeFeedback, setActiveFeedback] = useState<PitchEvent | null>(null);
   const [activeTab, setActiveTab] = useState<'all' | 'pending' | 'active' | 'closed'>('all');
 
-  const filtered = MOCK_PITCHES.filter(p => {
+  useEffect(() => {
+    if (isDemoConfig || !profile) {
+      setPitches(MOCK_PITCHES);
+      const sMap: Record<string, Startup> = {};
+      MOCK_STARTUPS.forEach(s => sMap[s.id!] = s);
+      setStartups(sMap);
+      return;
+    }
+
+    const q = query(collection(db, 'pitches'), where('investorId', '==', profile.uid));
+    const unsubscribe = onSnapshot(q, async (snap) => {
+      const data = snap.docs.map(d => ({ id: d.id, ...d.data() } as PitchEvent));
+      setPitches(data);
+      
+      // Fetch related startups if missing
+      const newSMap = { ...startups };
+      let missing = false;
+      for (const p of data) {
+        if (!newSMap[p.startupId]) {
+          missing = true;
+          break;
+        }
+      }
+      
+      if (missing) {
+        const sSnap = await getDocs(collection(db, 'startups'));
+        sSnap.forEach(s => newSMap[s.id] = { id: s.id, ...s.data() } as Startup);
+        setStartups(newSMap);
+      }
+    });
+
+    return () => unsubscribe();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [profile]);
+
+  const filtered = pitches.filter(p => {
     if (activeTab === 'pending') return p.status === 'pending';
     if (activeTab === 'active') return ['accepted', 'feedback_pending'].includes(p.status);
     if (activeTab === 'closed') return ['closed', 'rejected'].includes(p.status);
     return true;
   });
 
-  const acceptPitch = (pitchId: string) => {
+  const acceptPitch = async (pitchId: string) => {
+    if (!isDemoConfig) await updateDoc(doc(db, 'pitches', pitchId), { status: 'accepted' });
     toast.success('Pitch accepted! Calendar invite sent.', { icon: '📅' });
   };
 
-  const declinePitch = (pitchId: string) => {
+  const declinePitch = async (pitchId: string) => {
+    if (!isDemoConfig) await updateDoc(doc(db, 'pitches', pitchId), { status: 'rejected' });
     toast.error('Pitch declined. Founder notified.', { icon: '❌' });
   };
 
@@ -161,19 +204,19 @@ export default function InvestorPitchesPage() {
         {(['all', 'pending', 'active', 'closed'] as const).map(tab => (
           <button key={tab} onClick={() => setActiveTab(tab)} style={{
             padding: '8px 20px', borderRadius: '9px', border: 'none',
-            background: activeTab === tab ? 'rgba(124,58,237,0.3)' : 'transparent',
-            color: activeTab === tab ? '#a78bfa' : '#64748b',
+            background: activeTab === tab ? 'rgba(147,51,234,0.3)' : 'transparent',
+            color: activeTab === tab ? '#D8B4FE' : '#64748b',
             fontSize: '13px', fontWeight: 600, cursor: 'pointer',
-            transition: 'all 0.15s', fontFamily: 'Inter', textTransform: 'capitalize',
+            transition: 'var(--transition-standard)', fontFamily: 'Inter', textTransform: 'capitalize',
           }}>
-            {tab} {tab === 'all' ? `(${MOCK_PITCHES.length})` : tab === 'pending' ? `(${MOCK_PITCHES.filter(p => p.status === 'pending').length})` : ''}
+            {tab} {tab === 'all' ? `(${pitches.length})` : tab === 'pending' ? `(${pitches.filter(p => p.status === 'pending').length})` : ''}
           </button>
         ))}
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
         {filtered.map((pitch) => {
-          const startup = MOCK_STARTUPS.find(s => s.id === pitch.startupId);
+          const startup = startups[pitch.startupId] || MOCK_STARTUPS.find(s => s.id === pitch.startupId);
           const cfg = STATUS_CONFIG[pitch.status];
 
           return (
@@ -181,9 +224,9 @@ export default function InvestorPitchesPage() {
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '20px' }}>
                 <div style={{
                   width: 52, height: 52, borderRadius: '14px', flexShrink: 0,
-                  background: 'rgba(124,58,237,0.15)', border: '1px solid rgba(124,58,237,0.25)',
+                  background: 'rgba(147,51,234,0.15)', border: '1px solid rgba(147,51,234,0.25)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontFamily: 'Space Grotesk', fontSize: 22, fontWeight: 800, color: '#a78bfa',
+                  fontFamily: 'Space Grotesk', fontSize: 22, fontWeight: 800, color: '#D8B4FE',
                 }}>
                   {pitch.startupName?.charAt(0)}
                 </div>
@@ -197,38 +240,38 @@ export default function InvestorPitchesPage() {
                       </span>
                     </div>
                     <span style={{ fontSize: 12, color: '#334155' }}>
-                      {pitch.request.sentAt.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
+                      {pitch.request.sentAt instanceof Date ? pitch.request.sentAt.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : new Date((pitch.request.sentAt as any).seconds * 1000).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
                     </span>
                   </div>
 
-                  <p style={{ fontSize: 13, color: '#64748b', lineHeight: 1.6, marginBottom: '12px' }}>
-                    {pitch.request.message}
+                  <p style={{ fontSize: 13, color: '#64748b', lineHeight: 1.5, marginBottom: '16px', background: 'rgba(255,255,255,0.02)', padding: '12px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                    &ldquo;{pitch.request.message}&rdquo;
                   </p>
 
                   <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', marginBottom: '16px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: 13, color: '#94a3b8' }}>
-                      <Calendar size={13} color="#7c3aed" />
+                      <Calendar size={13} color="#9333EA" />
                       Proposed: {pitch.request.proposedDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
                     </div>
                     {startup && (
                       <>
                         <div style={{ fontSize: 13, color: '#94a3b8' }}>
-                          MRR: <strong style={{ color: '#10b981' }}>${(startup.metrics.mrr / 1000).toFixed(1)}K</strong>
+                          MRR: <strong style={{ color: '#D4D4D8' }}>${(startup.metrics.mrr / 1000).toFixed(1)}K</strong>
                         </div>
                         <div style={{ fontSize: 13, color: '#94a3b8' }}>
-                          AI Score: <strong style={{ color: '#a78bfa' }}>{pitch.request.snapshotScore}/100</strong>
+                          AI Score: <strong style={{ color: '#D8B4FE' }}>{pitch.request.snapshotScore}/100</strong>
                         </div>
                       </>
                     )}
                   </div>
 
                   {pitch.meeting.confirmedDate && (
-                    <div style={{ display: 'flex', gap: '12px', padding: '10px 14px', borderRadius: '10px', background: 'rgba(16,185,129,0.07)', border: '1px solid rgba(16,185,129,0.15)', marginBottom: '12px' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: 13, color: '#34d399' }}>
+                    <div style={{ display: 'flex', gap: '12px', padding: '10px 14px', borderRadius: '10px', background: 'rgba(212,212,216,0.07)', border: '1px solid rgba(212,212,216,0.15)', marginBottom: '12px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: 13, color: '#A1A1AA' }}>
                         <CheckCircle size={13} />
                         Meeting: {pitch.meeting.confirmedDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })}
                       </div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: 13, color: '#34d399' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: 13, color: '#A1A1AA' }}>
                         <Video size={13} /> Online
                       </div>
                     </div>
@@ -242,8 +285,8 @@ export default function InvestorPitchesPage() {
                         </button>
                         <button onClick={() => declinePitch(pitch.id)} style={{
                           display: 'flex', alignItems: 'center', gap: '6px',
-                          padding: '7px 16px', fontSize: 12, borderRadius: '8px', border: '1px solid rgba(239,68,68,0.3)',
-                          background: 'rgba(239,68,68,0.1)', color: '#f87171', cursor: 'pointer', fontFamily: 'Inter',
+                          padding: '7px 16px', fontSize: 12, borderRadius: '8px', border: '1px solid rgba(82,82,91,0.3)',
+                          background: 'rgba(82,82,91,0.1)', color: '#f87171', cursor: 'pointer', fontFamily: 'Inter',
                         }}>
                           <XCircle size={13} /> Decline
                         </button>
