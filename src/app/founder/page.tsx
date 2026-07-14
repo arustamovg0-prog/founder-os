@@ -126,7 +126,7 @@ export default function FounderDashboard() {
           <p style={{ color: '#64748b', fontSize: 14 }}>{s.tagline}</p>
         </div>
         <div style={{ display: 'flex', gap: '10px' }}>
-          <span className="badge badge-purple">{s.stage.replace('_', ' ')}</span>
+          <span className="badge badge-purple">{(s.stage || '').replace('_', ' ')}</span>
           <span className="badge badge-green">{s.status}</span>
         </div>
       </div>
@@ -289,7 +289,7 @@ export default function FounderDashboard() {
               <p style={{ fontSize: 13, color: '#64748b', marginBottom: '16px' }}>{currentStage.description}</p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 {currentStage.requiredArtifacts.map((art) => {
-                  const done = s.dataRoom.pitchDeckUrl && art.key.includes('pitch');
+                  const done = s.dataRoom?.pitchDeckUrl && art.key.includes('pitch');
                   return (
                     <div key={art.key} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       {done
