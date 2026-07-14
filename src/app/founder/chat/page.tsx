@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Brain, Send, Bot, User, RefreshCw } from 'lucide-react';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import { db } from '@/lib/firebase';
 import { doc, onSnapshot, setDoc, serverTimestamp } from 'firebase/firestore';
 

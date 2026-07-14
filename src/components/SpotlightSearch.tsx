@@ -7,7 +7,8 @@ import {
   Search, LayoutDashboard, Map, FolderOpen, Presentation, Brain, 
   Users, TrendingUp, Briefcase, LogOut, Command, Zap, ChevronRight, BarChart3, Heart, Kanban, Scale, Flame, Gift, CheckCircle, MessageSquare
 } from 'lucide-react';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const NAV = {
   founder: [
@@ -164,12 +165,26 @@ export default function SpotlightSearch() {
       </div>
 
       {/* Spotlight Overlay */}
-      {isOpen && (
-        <div className="spotlight-overlay" onClick={() => setIsOpen(false)}>
-          <div 
-            className="spotlight-menu" 
-            onClick={e => e.stopPropagation()}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div 
+            initial={{ opacity: 0, backdropFilter: 'blur(0px)' }}
+            animate={{ opacity: 1, backdropFilter: 'blur(8px)' }}
+            exit={{ opacity: 0, backdropFilter: 'blur(0px)' }}
+            transition={{ duration: 0.2 }}
+            className="spotlight-overlay" 
+            onClick={() => setIsOpen(false)}
+            style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}
           >
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 10 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+              className="spotlight-menu" 
+              onClick={e => e.stopPropagation()}
+              style={{ background: '#050510', border: '1px solid rgba(124,58,237,0.25)', borderRadius: '16px', width: '100%', maxWidth: '600px', overflow: 'hidden', boxShadow: '0 20px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05)' }}
+            >
             {/* Search Input Header */}
             <div style={{ 
               display: 'flex', alignItems: 'center', padding: '20px 24px', 
@@ -276,9 +291,10 @@ export default function SpotlightSearch() {
                 {profile.email}
               </div>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       )}
+    </AnimatePresence>
     </>
   );
 }

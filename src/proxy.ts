@@ -28,6 +28,30 @@ const ROLE_COOKIE = '__founder_os_role';  // Роль, кешируется пр
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // 0. Basic Auth for staging environment
+  if (process.env.NEXT_PUBLIC_APP_ENV === 'staging') {
+    const basicAuth = request.headers.get('authorization');
+    if (basicAuth) {
+      const authValue = basicAuth.split(' ')[1];
+      const [user, pwd] = atob(authValue).split(':');
+
+      const expectedUser = process.env.STAGING_USERNAME || 'admin';
+      const expectedPwd = process.env.STAGING_PASSWORD || 'staging123';
+
+      if (user !== expectedUser || pwd !== expectedPwd) {
+        return new NextResponse('Auth required', {
+          status: 401,
+          headers: { 'WWW-Authenticate': 'Basic realm="Secure Area"' },
+        });
+      }
+    } else {
+      return new NextResponse('Auth required', {
+        status: 401,
+        headers: { 'WWW-Authenticate': 'Basic realm="Secure Area"' },
+      });
+    }
+  }
+
   // 1. Статические файлы и API роуты — пропускаем
   if (
     pathname.startsWith('/_next') ||

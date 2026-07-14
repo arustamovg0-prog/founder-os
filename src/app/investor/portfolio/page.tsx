@@ -1,16 +1,17 @@
 'use client';
 
-import { MOCK_STARTUPS } from '@/lib/mockData';
+import { useState, useEffect } from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, PieChart, Pie, Cell, Legend } from 'recharts';
 import { TrendingUp, DollarSign, Briefcase } from 'lucide-react';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
+import { Startup } from '@/types';
 
 function fmt(n: number) {
   if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(1)}M`;
   if (n >= 1_000) return `$${(n / 1_000).toFixed(0)}K`;
   return `$${n}`;
 }
-
-const PORTFOLIO = MOCK_STARTUPS.filter(s => (s.aiScores.overallReadinessScore || 0) >= 60);
 
 const PIE_COLORS = ['#9333EA', '#A1A1AA', '#D4D4D8', '#71717A'];
 
@@ -29,15 +30,49 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 };
 
 export default function PortfolioPage() {
-  const totalMRR = PORTFOLIO.reduce((s, p) => s + p.metrics.mrr, 0);
-  const totalMAU = PORTFOLIO.reduce((s, p) => s + p.metrics.mau, 0);
-  const avgScore = Math.round(PORTFOLIO.reduce((s, p) => s + (p.aiScores.overallReadinessScore || 0), 0) / PORTFOLIO.length);
+  const [portfolio, setPortfolio] = useState<Startup[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const mrrData = PORTFOLIO.map(s => ({ name: s.name, mrr: s.metrics.mrr, arr: s.metrics.arr }));
+  useEffect(() => {
+    async function fetchStartups() {
+      try {
+        const snap = await getDocs(collection(db, 'startups'));
+        const dbStartups = snap.docs.map(d => {
+          const data = d.data();
+          return {
+            id: d.id,
+            ...data,
+            aiScores: data.aiScores || { overallReadinessScore: 85 },
+            metrics: {
+              mrr: data.metrics?.mrr || 0,
+              mau: data.metrics?.users || 0,
+              ltvCacRatio: data.metrics?.ltvCacRatio || 0,
+              runwayMonths: data.metrics?.runwayMonths || 0,
+              arr: data.metrics?.arr || (data.metrics?.mrr || 0) * 12,
+            },
+            tags: data.tags || [],
+          } as Startup;
+        });
+        setPortfolio(dbStartups.filter(s => (s.aiScores.overallReadinessScore || 0) >= 60));
+      } catch (err) {
+        console.warn('Failed to fetch portfolio', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchStartups();
+  }, []);
+
+  const totalMRR = portfolio.reduce((s, p) => s + (p.metrics?.mrr || 0), 0);
+  const totalMAU = portfolio.reduce((s, p) => s + (p.metrics?.mau || 0), 0);
+  const avgScore = portfolio.length > 0 ? Math.round(portfolio.reduce((s, p) => s + (p.aiScores?.overallReadinessScore || 0), 0) / portfolio.length) : 0;
+
+  const mrrData = portfolio.map(s => ({ name: s.name, mrr: s.metrics?.mrr || 0, arr: s.metrics?.arr || 0 }));
   const industryData = Object.entries(
-    PORTFOLIO.reduce((acc, s) => ({ ...acc, [s.industry]: (acc[s.industry] || 0) + 1 }), {} as Record<string, number>)
+    portfolio.reduce((acc, s) => ({ ...acc, [s.industry]: (acc[s.industry] || 0) + 1 }), {} as Record<string, number>)
   ).map(([name, value]) => ({ name, value }));
 
+  if (loading) return <div style={{ minHeight: '100vh', background: 'var(--bg-primary)', padding: '48px 24px', color: '#64748b' }}>Loading portfolio...</div>;
 
   return (
     <div className="animate-fade-in">
@@ -115,7 +150,7 @@ export default function PortfolioPage() {
               </tr>
             </thead>
             <tbody>
-              {PORTFOLIO.map((s) => {
+              {portfolio.map((s) => {
                 const score = s.aiScores.overallReadinessScore || 0;
                 const scoreColor = score >= 75 ? '#D4D4D8' : score >= 50 ? '#71717A' : '#52525B';
                 return (

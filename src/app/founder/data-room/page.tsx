@@ -2,16 +2,13 @@
 
 import { useState, useEffect } from 'react';
 import { Upload, FileText, BarChart2, Users, Shield, CheckCircle, Eye, Trash2, Plus } from 'lucide-react';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import { useAuth } from '@/contexts/AuthContext';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, isDemoConfig, auth, storage } from '@/lib/firebase';
 import { Startup } from '@/types';
-import { MOCK_STARTUPS } from '@/lib/mockData';
 
-// MY_STARTUP fallback if no firebase data
-const MY_STARTUP = MOCK_STARTUPS[0];
 
 interface DocItem {
   key: string;
@@ -46,11 +43,18 @@ export default function DataRoomPage() {
             setStartup({ id: snap.id, ...data } as Startup);
             
             setDocs(prev => prev.map(d => {
-              if (d.key === 'pitch_deck' && data.dataRoom?.pitchDeckUrl) {
-                return { ...d, url: data.dataRoom.pitchDeckUrl, aiScore: data.aiScores?.overallReadinessScore || null };
-              }
-              if (d.key === 'financial_model' && data.dataRoom?.financialModelUrl) {
-                return { ...d, url: data.dataRoom.financialModelUrl };
+              let url = null;
+              if (d.key === 'pitch_deck') url = data.dataRoom?.pitchDeckUrl;
+              else if (d.key === 'financial_model') url = data.dataRoom?.financialModelUrl;
+              else if (d.key === 'executive_summary') url = data.dataRoom?.executiveSummaryUrl;
+              else if (d.key === 'customer_dev_report') url = data.dataRoom?.customerDevReportUrl;
+              else if (d.key === 'legal_docs') url = data.dataRoom?.legalDocsUrl;
+
+              if (url) {
+                if (d.key === 'pitch_deck') {
+                  return { ...d, url, aiScore: data.aiScores?.overallReadinessScore || null };
+                }
+                return { ...d, url };
               }
               return d;
             }));
@@ -58,14 +62,6 @@ export default function DataRoomPage() {
         } catch (e) {
           console.warn('Failed to fetch startup for Data Room', e);
         }
-      } else {
-        // Demo fallback
-        setDocs(prev => prev.map(d => {
-          if (d.key === 'pitch_deck') return { ...d, url: MY_STARTUP.dataRoom.pitchDeckUrl, aiScore: MY_STARTUP.aiScores.overallReadinessScore };
-          if (d.key === 'financial_model') return { ...d, url: MY_STARTUP.dataRoom.financialModelUrl };
-          return d;
-        }));
-        setStartup(MY_STARTUP);
       }
     }
     loadStartup();
@@ -86,9 +82,18 @@ export default function DataRoomPage() {
         await uploadBytes(fileRef, file);
         downloadUrl = await getDownloadURL(fileRef);
         
-        await updateDoc(doc(db, 'startups', startup.id), {
-          [`dataRoom.${key === 'pitch_deck' ? 'pitchDeck' : 'financialModel'}Url`]: downloadUrl
-        });
+        let urlField = '';
+        if (key === 'pitch_deck') urlField = 'dataRoom.pitchDeckUrl';
+        else if (key === 'financial_model') urlField = 'dataRoom.financialModelUrl';
+        else if (key === 'executive_summary') urlField = 'dataRoom.executiveSummaryUrl';
+        else if (key === 'customer_dev_report') urlField = 'dataRoom.customerDevReportUrl';
+        else if (key === 'legal_docs') urlField = 'dataRoom.legalDocsUrl';
+
+        if (urlField) {
+          await updateDoc(doc(db, 'startups', startup.id), {
+            [urlField]: downloadUrl
+          });
+        }
       } else {
         await new Promise(r => setTimeout(r, 1500));
       }

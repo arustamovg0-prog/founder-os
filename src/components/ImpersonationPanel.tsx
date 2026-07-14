@@ -1,9 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { MOCK_STARTUPS } from '@/lib/mockData';
+import { collection, getDocs, limit, query } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
+import { Startup } from '@/types';
 import { Eye, X, AlertTriangle, Shield, UserCheck } from 'lucide-react';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface ImpersonationBannerProps {
   targetName: string;
@@ -16,13 +19,19 @@ interface ImpersonationBannerProps {
  */
 export function ImpersonationBanner({ targetName, targetRole, onExit }: ImpersonationBannerProps) {
   return (
-    <div style={{
-      position: 'fixed', top: 0, left: 0, right: 0, zIndex: 9999,
-      background: 'linear-gradient(90deg, rgba(113,113,122,0.95), rgba(82,82,91,0.95))',
-      padding: '10px 24px',
-      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-      backdropFilter: 'blur(10px)',
-    }}>
+    <motion.div 
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      exit={{ y: -100 }}
+      transition={{ type: 'spring', damping: 20, stiffness: 200 }}
+      style={{
+        position: 'fixed', top: 0, left: 0, right: 0, zIndex: 9999,
+        background: 'linear-gradient(90deg, rgba(113,113,122,0.95), rgba(82,82,91,0.95))',
+        padding: '10px 24px',
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        backdropFilter: 'blur(10px)',
+      }}
+    >
       <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
         <Shield size={16} color="white" />
         <span style={{ fontSize: 13, fontWeight: 700, color: 'white' }}>
@@ -44,7 +53,7 @@ export function ImpersonationBanner({ targetName, targetRole, onExit }: Imperson
       >
         <X size={13} /> Выйти из режима
       </button>
-    </div>
+    </motion.div>
   );
 }
 
@@ -55,10 +64,21 @@ export function ImpersonationBanner({ targetName, targetRole, onExit }: Imperson
 export function ImpersonationPanel() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [impersonating, setImpersonating] = useState(false);
+  const [startups, setStartups] = useState<Startup[]>([]);
+
+  import('react').then(({ useEffect }) => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useEffect(() => {
+      getDocs(query(collection(db, 'startups'), limit(4))).then(snap => {
+        setStartups(snap.docs.map(d => ({ id: d.id, ...d.data() } as Startup)));
+      }).catch(err => console.warn('Failed to fetch startups for impersonation', err));
+    }, []);
+  });
+
   const [impersonateTarget, setImpersonateTarget] = useState<{ name: string; role: string } | null>(null);
 
   const startImpersonation = (startupId: string) => {
-    const startup = MOCK_STARTUPS.find(s => s.id === startupId);
+    const startup = startups.find(s => s.id === startupId);
     if (!startup) return;
 
     // Логируем в digital_footprint (в реальном Firebase — через Server Action)
@@ -83,13 +103,15 @@ export function ImpersonationPanel() {
   return (
     <>
       {/* Impersonation Banner */}
-      {impersonating && impersonateTarget && (
-        <ImpersonationBanner
-          targetName={impersonateTarget.name}
-          targetRole={impersonateTarget.role}
-          onExit={exitImpersonation}
-        />
-      )}
+      <AnimatePresence>
+        {impersonating && impersonateTarget && (
+          <ImpersonationBanner
+            targetName={impersonateTarget.name}
+            targetRole={impersonateTarget.role}
+            onExit={exitImpersonation}
+          />
+        )}
+      </AnimatePresence>
 
       {/* Trigger Block */}
       <div className="card" style={{ marginBottom: '24px', background: 'rgba(113,113,122,0.04)', borderColor: 'rgba(113,113,122,0.15)' }}>
@@ -103,10 +125,10 @@ export function ImpersonationPanel() {
         </p>
 
         <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-          {MOCK_STARTUPS.slice(0, 4).map(s => (
+          {startups.map(s => (
             <button
               key={s.id}
-              onClick={() => startImpersonation(s.id)}
+              onClick={() => startImpersonation(s.id!)}
               style={{
                 display: 'flex', alignItems: 'center', gap: '8px',
                 padding: '8px 16px', borderRadius: '10px', fontSize: 13,

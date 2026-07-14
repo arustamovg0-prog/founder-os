@@ -22,6 +22,12 @@ export interface UserProfile {
   };
 }
 
+export interface HistoricalMetric {
+  month: string;
+  mrr: number;
+  users?: number;
+}
+
 export interface StartupMetrics {
   mrr: number;
   arr: number;
@@ -47,7 +53,7 @@ export interface DataRoom {
   financialModelUrl: string | null;
   executiveSummaryUrl: string | null;
   customerDevReportUrl: string | null;
-  legalDocsUrls: string[];
+  legalDocsUrl: string | null;
 }
 
 export interface Startup {
@@ -65,6 +71,7 @@ export interface Startup {
   createdAt: Date;
   updatedAt: Date;
   metrics: StartupMetrics;
+  historicalMetrics?: HistoricalMetric[];
   dataRoom: DataRoom;
   aiScores: AIScores;
   executiveSummaryAI: string | null;

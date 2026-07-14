@@ -1,14 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { MOCK_STARTUPS, MOCK_PITCHES } from '@/lib/mockData';
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Cell
 } from 'recharts';
 import { Users, TrendingUp, Brain, AlertTriangle, CheckCircle, Clock, Zap } from 'lucide-react';
-import { collection, getDocs } from 'firebase/firestore';
-import { db, isDemoConfig } from '@/lib/firebase';
-import { Startup } from '@/types';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
+import { Startup, PitchEvent } from '@/types';
 
 function fmt(n: number) {
   if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(1)}M`;
@@ -35,18 +34,18 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 };
 
 export default function AdminDashboard() {
-  const [startups, setStartups] = useState<Startup[]>(MOCK_STARTUPS);
+  const [startups, setStartups] = useState<Startup[]>([]);
+  const [pitches, setPitches] = useState<PitchEvent[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function loadStartups() {
-      if (isDemoConfig) {
-        setStartups(MOCK_STARTUPS);
-        setLoading(false);
-        return;
-      }
+    async function loadData() {
       try {
-        const snap = await getDocs(collection(db, 'startups'));
+        const [snap, pitchSnap] = await Promise.all([
+          getDocs(collection(db, 'startups')),
+          getDocs(query(collection(db, 'pitches'), where('status', '==', 'pending')))
+        ]);
+        
         if (!snap.empty) {
           const dbStartups = snap.docs.map(d => {
             const data = d.data();
@@ -64,16 +63,19 @@ export default function AdminDashboard() {
               }
             } as Startup;
           });
-          setStartups(dbStartups.length ? dbStartups : MOCK_STARTUPS);
+          setStartups(dbStartups);
+        }
+        
+        if (!pitchSnap.empty) {
+          setPitches(pitchSnap.docs.map(d => ({ id: d.id, ...d.data() } as PitchEvent)));
         }
       } catch (err) {
-        console.warn('Failed to fetch startups for admin dashboard', err);
-        setStartups(MOCK_STARTUPS);
+        console.warn('Failed to fetch admin data', err);
       } finally {
         setLoading(false);
       }
     }
-    loadStartups();
+    loadData();
   }, []);
 
   if (loading) return <div className="animate-fade-in" style={{ padding: 32, color: '#64748b' }}>Загрузка дашборда...</div>;
@@ -97,7 +99,7 @@ export default function AdminDashboard() {
     ...startups.filter(s => (s.aiScores?.overallReadinessScore || 0) >= 80 && s.stage !== 'investment_ready').map(s => ({
       type: 'success', msg: `${s.name} — AI Score 80+, ready for next stage`, icon: <CheckCircle size={13} />,
     })),
-    { type: 'info', msg: `${MOCK_PITCHES.filter(p => p.status === 'pending').length} pending pitch requests need attention`, icon: <Clock size={13} /> },
+    { type: 'info', msg: `${pitches.length} pending pitch requests need attention`, icon: <Clock size={13} /> },
   ];
 
   return (
@@ -207,7 +209,7 @@ export default function AdminDashboard() {
               </tr>
             </thead>
             <tbody>
-              {MOCK_STARTUPS.map((s) => {
+              {startups.map((s) => {
                 const score = s.aiScores.overallReadinessScore || 0;
                 const scoreColor = score >= 75 ? '#D4D4D8' : score >= 50 ? '#71717A' : '#52525B';
                 return (

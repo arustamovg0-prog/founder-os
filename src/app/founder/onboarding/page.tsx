@@ -6,7 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { doc, updateDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { startupsCol } from '@/lib/db';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import { Rocket, ArrowRight } from 'lucide-react';
 
 

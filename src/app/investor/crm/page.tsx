@@ -1,9 +1,13 @@
 'use client';
 
-import { useState } from 'react';
-import { MOCK_STARTUPS } from '@/lib/mockData';
+import { useState, useEffect } from 'react';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
+import { Startup } from '@/types';
 import { Eye, Mail, FileSearch, FileText, CheckCircle, ArrowRight, Plus, X, MapPin } from 'lucide-react';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
+import { Modal } from '@/components/Modal';
+import { motion } from 'framer-motion';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -56,8 +60,37 @@ export default function InvestorCRMPage() {
   const [selectedDeal, setSelectedDeal] = useState<Deal | null>(null);
   const [noteEdit, setNoteEdit] = useState('');
   const [dealAmountEdit, setDealAmountEdit] = useState<number | ''>('');
+  const [startups, setStartups] = useState<Startup[]>([]);
 
-  const getStartup = (id: string) => MOCK_STARTUPS.find(s => s.id === id);
+  useEffect(() => {
+    async function fetchStartups() {
+      try {
+        const snap = await getDocs(collection(db, 'startups'));
+        const dbStartups = snap.docs.map(d => {
+          const data = d.data();
+          return {
+            id: d.id,
+            ...data,
+            aiScores: data.aiScores || { overallReadinessScore: 85 },
+            metrics: {
+              mrr: data.metrics?.mrr || 0,
+              mau: data.metrics?.users || 0,
+              ltvCacRatio: data.metrics?.ltvCacRatio || 0,
+              runwayMonths: data.metrics?.runwayMonths || 0,
+              arr: data.metrics?.arr || (data.metrics?.mrr || 0) * 12,
+            },
+            tags: data.tags || [],
+          } as Startup;
+        });
+        setStartups(dbStartups);
+      } catch (err) {
+        console.warn('Failed to fetch startups for CRM', err);
+      }
+    }
+    fetchStartups();
+  }, []);
+
+  const getStartup = (id: string) => startups.find(s => s.id === id);
 
   const move = (dealId: string, toStage: PipelineStage) => {
     setDeals(prev => prev.map(d => d.id === dealId ? { ...d, stage: toStage } : d));
@@ -181,7 +214,10 @@ export default function InvestorCRMPage() {
                 const score = s.aiScores.overallReadinessScore || 0;
                 const sc = score >= 75 ? '#D4D4D8' : score >= 50 ? '#71717A' : '#52525B';
                 return (
-                  <div
+                  <motion.div
+                    layout
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
                     key={deal.id}
                     draggable
                     onDragStart={() => setDragId(deal.id)}
@@ -191,7 +227,7 @@ export default function InvestorCRMPage() {
                       padding: '14px', borderRadius: '12px', cursor: 'grab',
                       background: dragId === deal.id ? 'rgba(147,51,234,0.15)' : 'rgba(255,255,255,0.04)',
                       border: `1px solid ${dragId === deal.id ? 'rgba(147,51,234,0.4)' : 'rgba(255,255,255,0.07)'}`,
-                      transition: 'var(--transition-standard)', userSelect: 'none',
+                      transition: 'border 0.2s, background 0.2s', userSelect: 'none',
                     }}
                   >
                     {/* Priority dot */}
@@ -224,7 +260,7 @@ export default function InvestorCRMPage() {
                         </button>
                       ))}
                     </div>
-                  </div>
+                  </motion.div>
                 );
               })}
 
@@ -240,70 +276,94 @@ export default function InvestorCRMPage() {
       </div>
 
       {/* Add deal modal */}
-      {addModal && (
-        <div className="modal-overlay" onClick={() => setAddModal(null)}>
-          <div className="modal-box" onClick={e => e.stopPropagation()} style={{ maxWidth: '480px' }}>
-            <h2 style={{ fontFamily: 'Space Grotesk', fontSize: 18, fontWeight: 700, marginBottom: 16 }}>
-              Add to {STAGES.find(s => s.key === addModal)?.label}
-            </h2>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxHeight: '320px', overflowY: 'auto' }}>
-              {MOCK_STARTUPS
-                .filter(s => !deals.find(d => d.startupId === s.id))
-                .map(s => {
-                  const score = s.aiScores.overallReadinessScore || 0;
-                  const sc = score >= 75 ? '#D4D4D8' : score >= 50 ? '#71717A' : '#52525B';
-                  return (
-                    <button key={s.id} onClick={() => addDeal(s.id, addModal!)} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 16px', borderRadius: '12px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', cursor: 'pointer', textAlign: 'left', width: '100%', fontFamily: 'Inter', transition: 'var(--transition-standard)' }}>
-                      <div style={{ width: 36, height: 36, borderRadius: 8, background: 'rgba(147,51,234,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Space Grotesk', fontWeight: 800, color: '#D8B4FE', flexShrink: 0 }}>{s.name.charAt(0)}</div>
-                      <div style={{ flex: 1 }}>
-                        <div style={{ fontWeight: 700, fontSize: 14, color: '#f8fafc' }}>{s.name}</div>
-                        <div style={{ fontSize: 11, color: '#475569' }}>{s.industry} · {fmt(s.metrics.mrr)} MRR</div>
-                      </div>
-                      <div style={{ fontFamily: 'Space Grotesk', fontSize: 16, fontWeight: 800, color: sc }}>{score}</div>
-                    </button>
-                  );
-                })}
-            </div>
-            <button onClick={() => setAddModal(null)} className="btn-secondary" style={{ marginTop: 16, width: '100%' }}>Cancel</button>
-          </div>
+      <Modal isOpen={!!addModal} onClose={() => setAddModal(null)} maxWidth="480px" title={`Add to ${STAGES.find(s => s.key === addModal)?.label}`}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxHeight: '320px', overflowY: 'auto' }}>
+          {startups
+            .filter(s => !deals.find(d => d.startupId === s.id))
+            .map(s => {
+              const score = s.aiScores.overallReadinessScore || 0;
+              const sc = score >= 75 ? '#D4D4D8' : score >= 50 ? '#71717A' : '#52525B';
+              return (
+                <button key={s.id} onClick={() => addDeal(s.id, addModal!)} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 16px', borderRadius: '12px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', cursor: 'pointer', textAlign: 'left', width: '100%', fontFamily: 'Inter', transition: 'var(--transition-standard)' }}>
+                  <div style={{ width: 36, height: 36, borderRadius: 8, background: 'rgba(147,51,234,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Space Grotesk', fontWeight: 800, color: '#D8B4FE', flexShrink: 0 }}>{s.name.charAt(0)}</div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontWeight: 700, fontSize: 14, color: '#f8fafc' }}>{s.name}</div>
+                    <div style={{ fontSize: 11, color: '#475569' }}>{s.industry} · {fmt(s.metrics.mrr)} MRR</div>
+                  </div>
+                  <div style={{ fontFamily: 'Space Grotesk', fontSize: 16, fontWeight: 800, color: sc }}>{score}</div>
+                </button>
+              );
+            })}
         </div>
-      )}
+        <button onClick={() => setAddModal(null)} className="btn-secondary" style={{ marginTop: 16, width: '100%' }}>Cancel</button>
+      </Modal>
 
       {/* Deal detail modal */}
       {selectedDeal && (() => {
         const s = getStartup(selectedDeal.startupId)!;
         return (
-          <div className="modal-overlay" onClick={() => setSelectedDeal(null)}>
-            <div className="modal-box" onClick={e => e.stopPropagation()} style={{ maxWidth: '480px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 16 }}>
-                <h2 style={{ fontFamily: 'Space Grotesk', fontSize: 18, fontWeight: 700 }}>{s?.name}</h2>
-                <button onClick={() => setSelectedDeal(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748b' }}><X size={18} /></button>
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '16px' }}>
-                {[
-                  { l: 'MRR', v: fmt(s.metrics.mrr) },
-                  { l: 'MAU', v: s.metrics.mau.toLocaleString() },
-                  { l: 'AI Score', v: `${s.aiScores.overallReadinessScore}/100` },
-                  { l: 'Runway', v: `${s.metrics.runwayMonths} мес.` },
-                ].map((kv, i) => (
-                  <div key={i} style={{ padding: '10px 14px', borderRadius: 10, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>
-                    <div style={{ fontSize: 10, color: '#475569', marginBottom: 4 }}>{kv.l}</div>
-                    <div style={{ fontFamily: 'Space Grotesk', fontSize: 16, fontWeight: 700 }}>{kv.v}</div>
-                  </div>
-                ))}
-              </div>
-              <div style={{ marginBottom: 12 }}>
-                <label style={{ fontSize: 12, color: '#64748b', fontWeight: 600, display: 'block', marginBottom: 6 }}>Deal Amount ($)</label>
-                <input className="input-field" type="number" placeholder="e.g. 150000" value={dealAmountEdit} onChange={e => setDealAmountEdit(e.target.value === '' ? '' : Number(e.target.value))} />
-              </div>
-              <label style={{ fontSize: 12, color: '#64748b', fontWeight: 600, display: 'block', marginBottom: 6 }}>Notes</label>
-              <textarea className="input-field" rows={4} value={noteEdit} onChange={e => setNoteEdit(e.target.value)} style={{ resize: 'vertical' }} />
-              <div style={{ display: 'flex', gap: 10, marginTop: 12 }}>
-                <button onClick={() => removeDeal(selectedDeal.id)} style={{ padding: '10px 16px', borderRadius: 10, background: 'rgba(82,82,91,0.1)', border: '1px solid rgba(82,82,91,0.2)', color: '#f87171', cursor: 'pointer', fontSize: 13, fontFamily: 'Inter' }}>Remove</button>
-                <button onClick={saveNote} className="btn-primary" style={{ flex: 1 }}>Save Notes</button>
+          <Modal isOpen={true} onClose={() => setSelectedDeal(null)} maxWidth="480px" title={s?.name}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '16px' }}>
+              {[
+                { l: 'MRR', v: fmt(s.metrics.mrr) },
+                { l: 'MAU', v: s.metrics.mau.toLocaleString() },
+                { l: 'AI Score', v: `${s.aiScores.overallReadinessScore}/100` },
+                { l: 'Runway', v: `${s.metrics.runwayMonths} мес.` },
+              ].map((kv, i) => (
+                <div key={i} style={{ padding: '10px 14px', borderRadius: 10, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>
+                  <div style={{ fontSize: 10, color: '#475569', marginBottom: 4 }}>{kv.l}</div>
+                  <div style={{ fontFamily: 'Space Grotesk', fontSize: 16, fontWeight: 700 }}>{kv.v}</div>
+                </div>
+              ))}
+            </div>
+
+            {/* Data Room Section */}
+            <div style={{ marginBottom: 16 }}>
+              <label style={{ fontSize: 12, color: '#64748b', fontWeight: 600, display: 'block', marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Data Room</label>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                {s.dataRoom?.pitchDeckUrl ? (
+                  <a href={s.dataRoom.pitchDeckUrl} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 14px', borderRadius: '8px', background: 'rgba(147,51,234,0.1)', border: '1px solid rgba(147,51,234,0.2)', color: '#D8B4FE', textDecoration: 'none', fontSize: 13, fontWeight: 500, transition: 'var(--transition-standard)' }}>
+                    <FileText size={14} /> Pitch Deck (PDF)
+                  </a>
+                ) : (
+                  <div style={{ padding: '10px 14px', borderRadius: '8px', background: 'rgba(255,255,255,0.02)', border: '1px dashed rgba(255,255,255,0.1)', color: '#475569', fontSize: 13 }}>Pitch Deck не загружен</div>
+                )}
+                {s.dataRoom?.financialModelUrl ? (
+                  <a href={s.dataRoom.financialModelUrl} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 14px', borderRadius: '8px', background: 'rgba(147,51,234,0.1)', border: '1px solid rgba(147,51,234,0.2)', color: '#D8B4FE', textDecoration: 'none', fontSize: 13, fontWeight: 500, transition: 'var(--transition-standard)' }}>
+                    <FileSearch size={14} /> Financial Model
+                  </a>
+                ) : (
+                  <div style={{ padding: '10px 14px', borderRadius: '8px', background: 'rgba(255,255,255,0.02)', border: '1px dashed rgba(255,255,255,0.1)', color: '#475569', fontSize: 13 }}>Financial Model не загружена</div>
+                )}
+                {s.dataRoom?.executiveSummaryUrl ? (
+                  <a href={s.dataRoom.executiveSummaryUrl} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 14px', borderRadius: '8px', background: 'rgba(147,51,234,0.1)', border: '1px solid rgba(147,51,234,0.2)', color: '#D8B4FE', textDecoration: 'none', fontSize: 13, fontWeight: 500, transition: 'var(--transition-standard)' }}>
+                    <FileText size={14} /> Executive Summary
+                  </a>
+                ) : null}
+                {s.dataRoom?.customerDevReportUrl ? (
+                  <a href={s.dataRoom.customerDevReportUrl} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 14px', borderRadius: '8px', background: 'rgba(147,51,234,0.1)', border: '1px solid rgba(147,51,234,0.2)', color: '#D8B4FE', textDecoration: 'none', fontSize: 13, fontWeight: 500, transition: 'var(--transition-standard)' }}>
+                    <FileText size={14} /> Customer Dev Report
+                  </a>
+                ) : null}
+                {s.dataRoom?.legalDocsUrl ? (
+                  <a href={s.dataRoom.legalDocsUrl} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 14px', borderRadius: '8px', background: 'rgba(147,51,234,0.1)', border: '1px solid rgba(147,51,234,0.2)', color: '#D8B4FE', textDecoration: 'none', fontSize: 13, fontWeight: 500, transition: 'var(--transition-standard)' }}>
+                    <FileText size={14} /> Legal Documents
+                  </a>
+                ) : null}
               </div>
             </div>
-          </div>
+
+            <div style={{ marginBottom: 12 }}>
+              <label style={{ fontSize: 12, color: '#64748b', fontWeight: 600, display: 'block', marginBottom: 6 }}>Deal Amount ($)</label>
+              <input className="input-field" type="number" placeholder="e.g. 150000" value={dealAmountEdit} onChange={e => setDealAmountEdit(e.target.value === '' ? '' : Number(e.target.value))} />
+            </div>
+            <label style={{ fontSize: 12, color: '#64748b', fontWeight: 600, display: 'block', marginBottom: 6 }}>Notes</label>
+            <textarea className="input-field" rows={4} value={noteEdit} onChange={e => setNoteEdit(e.target.value)} style={{ resize: 'vertical' }} />
+            <div style={{ display: 'flex', gap: 10, marginTop: 12 }}>
+              <button onClick={() => removeDeal(selectedDeal.id)} style={{ padding: '10px 16px', borderRadius: 10, background: 'rgba(82,82,91,0.1)', border: '1px solid rgba(82,82,91,0.2)', color: '#f87171', cursor: 'pointer', fontSize: 13, fontFamily: 'Inter' }}>Remove</button>
+              <button onClick={saveNote} className="btn-primary" style={{ flex: 1 }}>Save Notes</button>
+            </div>
+          </Modal>
         );
       })()}
     </div>

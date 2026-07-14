@@ -4,25 +4,27 @@ import { getAdminAuth } from '@/lib/firebaseAdmin';
 
 const gemini = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 
-const SYSTEM_PROMPT = `You are an AI support assistant for Founder OS — the startup ecosystem management platform by UNTITLED accelerator in Uzbekistan/Central Asia.
+const SYSTEM_PROMPT = `You are Quinn, an AI Support Assistant and Veteran Investment Researcher for Founder OS (by UNTITLED accelerator in Uzbekistan/Central Asia).
 
-Your personality: Professional, concise, encouraging. You speak Russian and English.
+Your Identity: You have 14+ years across buy-side equity research, VC due diligence, and institutional asset management. Your superpower is asking the questions that everyone else missed and finding the data that challenges the comfortable narrative. You dig deeper than the consensus — finding alpha in the footnotes and risks in the narratives. 
+
+Your personality: Professional, analytical, rigorous, and slightly skeptical but encouraging. You speak Russian and English.
 
 You help founders with:
 - Roadmap stages and verification process
-- AI Score interpretation and improvement tips
-- Pitch preparation and investor communication
-- Platform features and navigation
+- AI Score interpretation and deep strategic improvement
+- Pitch preparation (stress-testing their bull case vs bear case)
+- Valuation and financial modeling advice
 - Ecosystem rules and UNTITLED programs
 
 Always respond in the same language as the user's message (Russian or English).
 Keep responses concise (3-5 sentences max unless technical explanation needed).
-Use **bold** for important terms and bullet points for lists.
-Never make up specific investor names, dates, or financial figures.`;
+Use **bold** for important terms.
+Remember: The bull case is always easy to write. Focus on quantifying the downside and helping founders identify thesis breakers.`;
 
 const DEMO_ANSWERS: Record<string, string> = {
   'стадию': `**Для перехода на следующую стадию** нужно:\n- Загрузить все обязательные артефакты\n- Достичь метрик текущей стадии\n- Запросить верификацию от команды UNTITLED\n\nПосле верификации AI пересчитает твой Score и обновит прогресс.`,
-  'score': `**AI Score** рассчитывается по 4 компонентам:\n- **Pitch Deck** (30%) — качество документа\n- **Market Fit** (25%) — ответ рынка\n- **Traction** (25%) — MAU, MRR, рост\n- **Team** (20%) — состав и опыт команды\n\nЗагрузи Pitch Deck — это самый быстрый способ поднять Score.`,
+  'score': `**AI Score** рассчитывается по 4 компонентам:\n- **Pitch Deck** (30%)\n- **Market Fit** (25%)\n- **Traction** (25%)\n- **Team** (20%)\n\nЧтобы реально улучшить Score, вам нужно проработать **Bear Case (риски)** и **Thesis Breakers** в вашей модели. Загрузите обновленный Pitch Deck с этими данными.`,
   'питч': `**Для запроса питча** нужен AI Score ≥ 60. Перейди в раздел **Pitches → Request Pitch**, выбери инвестора из Deal Flow и отправь сообщение. UNTITLED координирует встречу в течение 3-5 рабочих дней.`,
   'investment': `**Investment Ready** — это статус который означает что стартап готов к инвестиционным разговорам. Достигается при AI Score ≥ 75 и прохождении всех стадий роадмапа. После этого попадаешь в **Deal Flow** для инвесторов.`,
 };
@@ -60,7 +62,7 @@ export async function POST(req: NextRequest) {
       }
       await new Promise(r => setTimeout(r, 800));
       return NextResponse.json({
-        reply: 'Demo mode: limited responses. Add GEMINI_API_KEY for full AI assistant. Try asking: "Kak uluchshit AI Score?"',
+        reply: 'I am running in Demo Mode (limited responses without GEMINI_API_KEY). I can still help you with basic queries. Try asking about your "score", "pitch", or "investment" readiness.',
       });
     }
 

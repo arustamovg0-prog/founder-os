@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { MOCK_STARTUPS, MOCK_PITCHES, MOCK_LOGS, ROADMAP_STAGES } from '@/lib/mockData';
+import { ROADMAP_STAGES } from '@/lib/constants';
 import { TrendingUp, DollarSign, Users, Target, Zap, ArrowUpRight, Clock, CheckCircle, AlertCircle, Brain, Trophy, Star, Gift, Flame } from 'lucide-react';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
@@ -9,7 +9,6 @@ import { doc, onSnapshot, collection, getDocs } from 'firebase/firestore';
 import { db, isDemoConfig } from '@/lib/firebase';
 import { Startup } from '@/types';
 
-const MY_STARTUP = MOCK_STARTUPS[0]; // PayFlow UZ demo
 
 function fmt(n: number) {
   if (n >= 1000000) return `$${(n / 1000000).toFixed(1)}M`;
@@ -46,18 +45,45 @@ function ScoreRing({ score, color = '#9333EA' }: { score: number; color?: string
 }
 
 export default function FounderDashboard() {
-  const { profile } = useAuth();
+  const { profile, isDemoMode } = useAuth();
   const [startup, setStartup] = useState<Startup | null>(null);
-  const [allStartups, setAllStartups] = useState<Startup[]>(MOCK_STARTUPS);
+  const [allStartups, setAllStartups] = useState<Startup[]>([]);
+  const [pitches, setPitches] = useState<any[]>([]);
+  const [recentLogs, setRecentLogs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (isDemoConfig || !profile?.linkedStartupId) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setStartup(MY_STARTUP);
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setAllStartups(MOCK_STARTUPS);
-      // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (!profile?.linkedStartupId) {
+      setLoading(false);
+      return;
+    }
+
+    if (isDemoMode) {
+      setStartup({
+        id: 'demo_startup',
+        name: 'Nexus AI',
+        tagline: 'AI-driven operations for modern teams',
+        industry: 'B2B SaaS',
+        stage: 'validation',
+        status: 'active',
+        founderIds: ['demo_founder'],
+        metrics: { mrr: 12500, arr: 150000, mau: 4500, ltvCacRatio: 3.2, runwayMonths: 18, teamSize: 5 },
+        currentRoadmapStageId: 'validation_1',
+        roadmapProgress: 45,
+        executiveSummaryAI: 'Strong traction in early validation. Need to focus on GTM scalable channels.',
+        aiScores: { overallReadinessScore: 82, pitchDeckScore: 75 },
+      } as Startup);
+      setPitches([
+        { id: '1', investorName: 'Aibek Ventures', status: 'pending', request: { snapshotScore: 82 } }
+      ]);
+      setAllStartups([
+        { id: '2', name: 'Quantum Core', aiScores: { overallReadinessScore: 91 } } as Startup,
+        { id: 'demo_startup', name: 'Nexus AI', aiScores: { overallReadinessScore: 82 } } as Startup,
+        { id: '3', name: 'DataFlow', aiScores: { overallReadinessScore: 78 } } as Startup,
+      ]);
+      setRecentLogs([
+        { id: '1', eventType: 'artifact_uploaded', description: 'Pitch Deck uploaded', timestamp: new Date(), actorRole: 'founder' }
+      ]);
       setLoading(false);
       return;
     }
@@ -82,6 +108,16 @@ export default function FounderDashboard() {
       setLoading(false);
     });
 
+    import('firebase/firestore').then(({ query, where }) => {
+      getDocs(query(collection(db, 'pitches'), where('startupId', '==', profile.linkedStartupId)))
+        .then(snap => {
+          if (!snap.empty) {
+            setPitches(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+          }
+        })
+        .catch(err => console.warn('Failed to fetch pitches for founder dashboard', err));
+    });
+
     getDocs(collection(db, 'startups')).then(snap => {
       if (!snap.empty) {
         setAllStartups(snap.docs.map(d => ({ id: d.id, ...d.data(), aiScores: d.data().aiScores || { overallReadinessScore: 85 } } as Startup)));
@@ -98,8 +134,6 @@ export default function FounderDashboard() {
   const metrics = s.metrics;
   const currentStageIdx = ROADMAP_STAGES.findIndex(st => st.id === s.currentRoadmapStageId) || 0;
   const currentStage = ROADMAP_STAGES[currentStageIdx >= 0 ? currentStageIdx : 0];
-  const pitches = MOCK_PITCHES.filter(p => p.startupId === s.id);
-  const recentLogs = MOCK_LOGS.filter(l => l.startupId === s.id).slice(0, 4);
 
   const kpis = [
     { label: 'MRR', value: fmt(metrics.mrr), icon: <DollarSign size={18} />, color: '#D8B4FE', change: '+16.7%', positive: true },

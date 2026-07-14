@@ -1,10 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { MOCK_STARTUPS, MOCK_PITCHES } from '@/lib/mockData';
-import { collection, getDocs } from 'firebase/firestore';
-import { db, isDemoConfig } from '@/lib/firebase';
-import { Startup } from '@/types';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
+import { Startup, PitchEvent } from '@/types';
 import { TrendingUp, Users, Briefcase, DollarSign, ArrowUpRight, Star, Clock } from 'lucide-react';
 import Link from 'next/link';
 
@@ -31,20 +30,19 @@ function ScoreBar({ score, color = '#7c3aed' }: { score: number; color?: string 
 }
 
 export default function InvestorDashboard() {
-  const [startups, setStartups] = useState<Startup[]>(MOCK_STARTUPS);
+  const [startups, setStartups] = useState<Startup[]>([]);
+  const [pitches, setPitches] = useState<PitchEvent[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function loadStartups() {
-      if (isDemoConfig) {
-        setStartups(MOCK_STARTUPS);
-        setLoading(false);
-        return;
-      }
+    async function loadData() {
       try {
-        const snap = await getDocs(collection(db, 'startups'));
-        if (!snap.empty) {
-          const dbStartups = snap.docs.map(d => {
+        const [startupsSnap, pitchesSnap] = await Promise.all([
+          getDocs(collection(db, 'startups')),
+          getDocs(collection(db, 'pitches'))
+        ]);
+        if (!startupsSnap.empty) {
+          const dbStartups = startupsSnap.docs.map(d => {
             const data = d.data();
             return {
               id: d.id,
@@ -60,23 +58,34 @@ export default function InvestorDashboard() {
               }
             } as Startup;
           });
-          setStartups(dbStartups.length ? dbStartups : MOCK_STARTUPS);
+          setStartups(dbStartups);
+        }
+        
+        if (!pitchesSnap.empty) {
+          const dbPitches = pitchesSnap.docs.map(d => ({
+            id: d.id,
+            ...d.data(),
+            request: {
+              ...d.data().request,
+              proposedDate: d.data().request?.proposedDate?.toDate ? d.data().request.proposedDate.toDate() : new Date(),
+            }
+          } as PitchEvent));
+          setPitches(dbPitches);
         }
       } catch (err) {
-        console.warn('Failed to fetch startups for investor dashboard', err);
-        setStartups(MOCK_STARTUPS);
+        console.warn('Failed to fetch data for investor dashboard', err);
       } finally {
         setLoading(false);
       }
     }
-    loadStartups();
+    loadData();
   }, []);
 
   if (loading) return <div className="animate-fade-in" style={{ padding: 32, color: '#64748b' }}>Загрузка дашборда...</div>;
 
-  const readyStartups = startups.filter(s => s.aiScores.overallReadinessScore && s.aiScores.overallReadinessScore >= 60);
-  const pendingPitches = MOCK_PITCHES.filter(p => p.status === 'pending').length;
-  const activePitches = MOCK_PITCHES.filter(p => ['accepted', 'feedback_pending'].includes(p.status)).length;
+  const readyStartups = startups.filter(s => s.aiScores?.overallReadinessScore && s.aiScores.overallReadinessScore >= 60);
+  const pendingPitches = pitches.filter(p => p.status === 'pending').length;
+  const activePitches = pitches.filter(p => ['accepted', 'feedback_pending'].includes(p.status)).length;
 
   return (
     <div className="animate-fade-in">
@@ -180,8 +189,8 @@ export default function InvestorDashboard() {
             Pending Pitch Requests
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {MOCK_PITCHES.filter(p => p.status === 'pending').map((p) => {
-              const startup = MOCK_STARTUPS.find(s => s.id === p.startupId);
+            {pitches.filter(p => p.status === 'pending').map((p) => {
+              const startup = startups.find(s => s.id === p.startupId);
               return (
                 <div key={p.id} style={{ padding: '14px', borderRadius: '12px', background: 'rgba(245,158,11,0.05)', border: '1px solid rgba(245,158,11,0.15)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
@@ -204,7 +213,7 @@ export default function InvestorDashboard() {
                 </div>
               );
             })}
-            {MOCK_PITCHES.filter(p => p.status === 'pending').length === 0 && (
+            {pitches.filter(p => p.status === 'pending').length === 0 && (
               <div style={{ textAlign: 'center', padding: '40px 20px', color: '#334155' }}>
                 <Clock size={32} style={{ margin: '0 auto 12px', opacity: 0.3, display: 'block' }} />
                 <p style={{ fontSize: 13 }}>No pending requests</p>

@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { ROADMAP_STAGES } from '@/lib/mockData';
+import { ROADMAP_STAGES } from '@/lib/constants';
 import { CheckCircle, Clock, AlertCircle, Shield, ChevronRight } from 'lucide-react';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 
 const PENDING_REVIEWS = [
   { startupId: 'startup_1', startupName: 'PayFlow UZ', stageId: 'stage_5_fundraising', stageTitle: 'Investment Ready', submittedAt: new Date('2026-05-08'), score: 85, artifacts: ['Pitch Deck (82/100)', 'Financial Model (78/100)', 'Executive Summary'] },

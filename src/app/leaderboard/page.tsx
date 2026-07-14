@@ -1,9 +1,11 @@
 'use client';
 
-import { useState } from 'react';
-import { MOCK_STARTUPS } from '@/lib/mockData';
+import { useState, useEffect } from 'react';
 import { Trophy, MapPin, TrendingUp, Users, Zap, Star, ArrowUpRight, Globe } from 'lucide-react';
 import Link from 'next/link';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
+import { Startup } from '@/types';
 
 const STAGE_COLORS: Record<string, string> = {
   idea: '#64748b', validation: '#71717A', mvp: '#A1A1AA',
@@ -23,25 +25,59 @@ const FILTERS = [
   { key: 'growth', label: '📈 Growth' },
 ] as const;
 
-const INDUSTRY_FILTERS = ['All', ...Array.from(new Set(MOCK_STARTUPS.map(s => s.industry)))];
-
 export default function LeaderboardPage() {
+  const [startups, setStartups] = useState<Startup[]>([]);
+  const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState<'score' | 'mrr' | 'mau' | 'growth'>('score');
   const [industryFilter, setIndustryFilter] = useState('All');
 
-  const sorted = [...MOCK_STARTUPS]
+  useEffect(() => {
+    async function fetchStartups() {
+      try {
+        const snap = await getDocs(collection(db, 'startups'));
+        if (!snap.empty) {
+          const dbStartups = snap.docs.map(d => {
+            const data = d.data();
+            return {
+              id: d.id,
+              ...data,
+              aiScores: data.aiScores || { overallReadinessScore: 85 },
+              metrics: {
+                mrr: data.metrics?.mrr || 0,
+                mau: data.metrics?.users || 0,
+                ltvCacRatio: data.metrics?.ltvCacRatio || 0,
+              },
+              tags: data.tags || [],
+            } as Startup;
+          });
+          setStartups(dbStartups);
+        }
+      } catch (err) {
+        console.warn('Failed to fetch startups for Leaderboard', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchStartups();
+  }, []);
+
+  const INDUSTRY_FILTERS = ['All', ...Array.from(new Set(startups.map(s => s.industry)))];
+
+  const sorted = [...startups]
     .filter(s => industryFilter === 'All' || s.industry === industryFilter)
     .sort((a, b) => {
-      if (sortBy === 'score') return (b.aiScores.overallReadinessScore || 0) - (a.aiScores.overallReadinessScore || 0);
-      if (sortBy === 'mrr') return b.metrics.mrr - a.metrics.mrr;
-      if (sortBy === 'mau') return b.metrics.mau - a.metrics.mau;
-      if (sortBy === 'growth') return b.roadmapProgress - a.roadmapProgress;
+      if (sortBy === 'score') return (b.aiScores?.overallReadinessScore || 0) - (a.aiScores?.overallReadinessScore || 0);
+      if (sortBy === 'mrr') return (b.metrics?.mrr || 0) - (a.metrics?.mrr || 0);
+      if (sortBy === 'mau') return (b.metrics?.mau || 0) - (a.metrics?.mau || 0);
+      if (sortBy === 'growth') return (b.roadmapProgress || 0) - (a.roadmapProgress || 0);
       return 0;
     });
 
   const MEDALS = ['🥇', '🥈', '🥉'];
   const topThree = sorted.slice(0, 3);
   const rest = sorted.slice(3);
+
+  if (loading) return <div style={{ minHeight: '100vh', background: 'var(--bg-primary)', padding: '48px 24px', color: '#64748b' }}>Загрузка лидерборда...</div>;
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg-primary)', padding: '48px 24px', fontFamily: 'Inter, sans-serif' }}>

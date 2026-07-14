@@ -1,7 +1,9 @@
 'use client';
 
-import { useState } from 'react';
-import { MOCK_STARTUPS, ROADMAP_STAGES } from '@/lib/mockData';
+import { useState, useEffect } from 'react';
+import { ROADMAP_STAGES } from '@/lib/constants';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 import { Startup } from '@/types';
 import { Search, Brain, MapPin, Eye, MessageSquare, ChevronDown, ChevronUp, CheckCircle, AlertTriangle } from 'lucide-react';
 import { ImpersonationPanel } from '@/components/ImpersonationPanel';
@@ -155,10 +157,46 @@ function StartupDetailRow({ s }: { s: Startup }) {
 }
 
 export default function AdminStartupsPage() {
+  const [startups, setStartups] = useState<Startup[]>([]);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('all');
 
-  const filtered = MOCK_STARTUPS.filter(s => {
+  useEffect(() => {
+    async function fetchStartups() {
+      try {
+        const snap = await getDocs(collection(db, 'startups'));
+        const dbStartups = snap.docs.map(d => {
+          const data = d.data();
+          return {
+            id: d.id,
+            ...data,
+            aiScores: data.aiScores || { overallReadinessScore: 85 },
+            metrics: {
+              mrr: data.metrics?.mrr || 0,
+              mau: data.metrics?.users || 0,
+              ltvCacRatio: data.metrics?.ltvCacRatio || 0,
+              runwayMonths: data.metrics?.runwayMonths || 0,
+              arr: data.metrics?.arr || (data.metrics?.mrr || 0) * 12,
+              churnRate: data.metrics?.churnRate || 0,
+              ltv: data.metrics?.ltv || 0,
+              cac: data.metrics?.cac || 0,
+              teamSize: data.metrics?.teamSize || 0,
+            },
+            tags: data.tags || [],
+          } as Startup;
+        });
+        setStartups(dbStartups);
+      } catch (err) {
+        console.warn('Failed to fetch startups for Admin Startups', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchStartups();
+  }, []);
+
+  const filtered = startups.filter(s => {
     if (search && !s.name.toLowerCase().includes(search.toLowerCase()) && !s.founderName?.toLowerCase().includes(search.toLowerCase())) return false;
     if (filter === 'ready') return (s.aiScores.overallReadinessScore || 0) >= 75;
     if (filter === 'critical') return s.metrics.runwayMonths <= 6 && s.metrics.runwayMonths > 0;
@@ -184,9 +222,9 @@ export default function AdminStartupsPage() {
         </div>
         <div style={{ display: 'flex', gap: '4px', background: 'rgba(255,255,255,0.04)', borderRadius: '10px', padding: '4px' }}>
           {[
-            { key: 'all', label: `All (${MOCK_STARTUPS.length})` },
-            { key: 'ready', label: `🟢 Ready (${MOCK_STARTUPS.filter(s => (s.aiScores.overallReadinessScore || 0) >= 75).length})` },
-            { key: 'critical', label: `🔴 Critical (${MOCK_STARTUPS.filter(s => s.metrics.runwayMonths <= 6 && s.metrics.runwayMonths > 0).length})` },
+            { key: 'all', label: `All (${startups.length})` },
+            { key: 'ready', label: `🟢 Ready (${startups.filter(s => (s.aiScores?.overallReadinessScore || 0) >= 75).length})` },
+            { key: 'critical', label: `🔴 Critical (${startups.filter(s => (s.metrics?.runwayMonths || 0) <= 6 && (s.metrics?.runwayMonths || 0) > 0).length})` },
             { key: 'early', label: `🌱 Early Stage` },
           ].map(f => (
             <button key={f.key} onClick={() => setFilter(f.key)} style={{
@@ -205,7 +243,13 @@ export default function AdminStartupsPage() {
       <div style={{ fontSize: 13, color: '#475569', marginBottom: '16px' }}>{filtered.length} startups</div>
 
       {/* List */}
-      {filtered.map(s => <StartupDetailRow key={s.id} s={s} />)}
+      <div className="stagger-container" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        {filtered.map(s => (
+          <div key={s.id} className="stagger-item">
+            <StartupDetailRow s={s} />
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

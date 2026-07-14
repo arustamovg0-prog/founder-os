@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { MOCK_STARTUPS } from '@/lib/mockData';
+
 import { db } from '@/lib/firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { MapPin, Users, Target, Rocket, Award, ExternalLink, Mail } from 'lucide-react';
@@ -26,11 +26,8 @@ export default function PublicStartupProfile({ params }: { params: { startupName
           return;
         }
 
-        // 2. Fallback to mock data for demo
-        const mock = MOCK_STARTUPS.find(s => s.name.toLowerCase() === decodedName.toLowerCase());
-        if (mock) {
-          setStartup(mock);
-        }
+        // 2. Not found
+        setStartup(null);
       } catch (err) {
         console.error('Error fetching startup:', err);
       } finally {

@@ -1,9 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { MOCK_STARTUPS } from '@/lib/mockData';
 import { collection, getDocs } from 'firebase/firestore';
-import { db, isDemoConfig } from '@/lib/firebase';
+import { db } from '@/lib/firebase';
 import { Startup } from '@/types';
 import { Search, Filter, ArrowUpRight, Star, Brain, MapPin, LayoutGrid, List } from 'lucide-react';
 import Link from 'next/link';
@@ -148,15 +147,11 @@ export default function DealFlowPage() {
     startup_3: 'watchlist',
     startup_4: 'watchlist',
   });
-  const [startups, setStartups] = useState<Startup[]>(MOCK_STARTUPS);
+  const [startups, setStartups] = useState<Startup[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchStartups() {
-      if (isDemoConfig) {
-        setLoading(false);
-        return;
-      }
       try {
         const snap = await getDocs(collection(db, 'startups'));
         if (!snap.empty) {
@@ -179,7 +174,7 @@ export default function DealFlowPage() {
           setStartups(dbStartups);
         }
       } catch (err) {
-        console.warn('Failed to fetch real startups, using mock', err);
+        console.warn('Failed to fetch real startups', err);
       } finally {
         setLoading(false);
       }

@@ -1,12 +1,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { MOCK_PITCHES } from '@/lib/mockData';
 import { PitchEvent } from '@/types';
 import { Calendar, MapPin, Video, CheckCircle, Clock, XCircle, Send, ArrowRight } from 'lucide-react';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import { collection, query, where, onSnapshot, addDoc } from 'firebase/firestore';
-import { db, isDemoConfig } from '@/lib/firebase';
+import { db } from '@/lib/firebase';
 import { useAuth } from '@/contexts/AuthContext';
 
 const STATUS_CONFIG: Record<string, { label: string; badge: string; icon: React.ReactNode }> = {
@@ -20,13 +19,12 @@ const STATUS_CONFIG: Record<string, { label: string; badge: string; icon: React.
 
 export default function FounderPitchesPage() {
   const { profile } = useAuth();
-  const [pitches, setPitches] = useState<PitchEvent[]>(MOCK_PITCHES.filter(p => p.startupId === 'startup_1'));
+  const [pitches, setPitches] = useState<PitchEvent[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState({ investorName: '', proposedDate: '', message: '' });
 
   useEffect(() => {
-    if (isDemoConfig || !profile) {
-      setPitches(MOCK_PITCHES.filter(p => p.startupId === 'startup_1'));
+    if (!profile) {
       return;
     }
 
@@ -46,7 +44,7 @@ export default function FounderPitchesPage() {
       return;
     }
     
-    if (!isDemoConfig && profile) {
+    if (profile) {
       const newPitch: Partial<PitchEvent> = {
         startupId: profile.uid,
         startupName: profile.displayName || 'My Startup',

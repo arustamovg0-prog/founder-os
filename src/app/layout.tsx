@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from '@/contexts/AuthContext';
-import { Toaster } from 'react-hot-toast';
+import { Toaster } from 'sonner';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -39,17 +39,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div style={{ position: 'relative', zIndex: 1 }}>
             {children}
           </div>
-          <Toaster
-            position="top-right"
+          <Toaster 
+            theme="dark" 
+            position="bottom-right" 
             toastOptions={{
               style: {
                 background: '#0d0d20',
-                color: '#f8fafc',
                 border: '1px solid rgba(147,51,234,0.3)',
-                borderRadius: '12px',
-                fontSize: '14px',
-              },
-            }}
+                color: '#f8fafc',
+              }
+            }} 
           />
         </AuthProvider>
       </body>

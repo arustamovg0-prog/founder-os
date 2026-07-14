@@ -1,11 +1,14 @@
 'use client';
 
-import { useState } from 'react';
-import { ROADMAP_STAGES, MOCK_STARTUPS } from '@/lib/mockData';
+import { useState, useEffect, useRef, ChangeEvent } from 'react';
+import { ROADMAP_STAGES } from '@/lib/constants';
 import { CheckCircle, Lock, Clock, AlertCircle, Upload, ChevronDown, ChevronUp, Zap } from 'lucide-react';
-import toast from 'react-hot-toast';
-
-const MY_STARTUP = MOCK_STARTUPS[0];
+import { toast } from 'sonner';
+import { useAuth } from '@/contexts/AuthContext';
+import { doc, onSnapshot, updateDoc } from 'firebase/firestore';
+import { db, storage } from '@/lib/firebase';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { Startup } from '@/types';
 
 const PHASE_COLORS: Record<string, string> = {
   discovery: '#3F3F46', validation: '#71717A',
@@ -30,22 +33,108 @@ const STATE_CONFIG: Record<StageState, { icon: React.ReactNode; label: string; c
 };
 
 export default function RoadmapPage() {
+  const { profile } = useAuth();
+  const [startup, setStartup] = useState<Startup | null>(null);
+  const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState<string | null>('stage_5_fundraising');
   const [uploading, setUploading] = useState<string | null>(null);
+  const [uploadedArtifacts, setUploadedArtifacts] = useState<string[]>([]);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleUpload = (artifactKey: string) => {
+  useEffect(() => {
+    if (!profile?.linkedStartupId) {
+      setLoading(false);
+      return;
+    }
+    const unsubscribe = onSnapshot(doc(db, 'startups', profile.linkedStartupId), (snap) => {
+      if (snap.exists()) {
+        const data = { id: snap.id, ...snap.data() } as Startup;
+        setStartup(data);
+        
+        // Попытка восстановить состояние загруженных артефактов из Firestore
+        const restored: string[] = [];
+        if (data.dataRoom?.pitchDeckUrl) restored.push('pitch_deck');
+        if (data.dataRoom?.financialModelUrl) restored.push('financial_model');
+        if (data.dataRoom?.executiveSummaryUrl) restored.push('executive_summary');
+        if (data.dataRoom?.customerDevReportUrl) restored.push('customer_dev_report');
+        if (data.dataRoom?.legalDocsUrl) restored.push('legal_docs');
+        setUploadedArtifacts(restored);
+      }
+      setLoading(false);
+    });
+    return () => unsubscribe();
+  }, [profile]);
+
+  const triggerUpload = (artifactKey: string) => {
     setUploading(artifactKey);
-    setTimeout(() => {
-      setUploading(null);
-      toast.success('Artifact uploaded successfully!', { icon: '📎' });
-    }, 1500);
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleFileSelected = (e?: ChangeEvent<HTMLInputElement>) => {
+    const file = e?.target?.files?.[0];
+    if (!file || !uploading || !startup) return;
+
+    setUploadProgress(0);
+    const storageRef = ref(storage, `startup_documents/${startup.id}/${uploading}_${file.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    uploadTask.on(
+      'state_changed',
+      (snapshot) => {
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        setUploadProgress(progress);
+      },
+      (error) => {
+        toast.error('Upload failed: ' + error.message);
+        setUploading(null);
+      },
+      async () => {
+        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+        
+        // Сохранение URL в Firestore
+        let urlField = '';
+        if (uploading === 'pitch_deck') urlField = 'dataRoom.pitchDeckUrl';
+        if (uploading === 'financial_model') urlField = 'dataRoom.financialModelUrl';
+        if (uploading === 'executive_summary') urlField = 'dataRoom.executiveSummaryUrl';
+        if (uploading === 'customer_dev_report') urlField = 'dataRoom.customerDevReportUrl';
+        if (uploading === 'legal_docs') urlField = 'dataRoom.legalDocsUrl';
+
+        if (urlField) {
+          try {
+            await updateDoc(doc(db, 'startups', startup.id), {
+              [urlField]: downloadURL
+            });
+            toast.success(`${file.name} uploaded successfully!`, { icon: '📎' });
+            setUploadedArtifacts(prev => [...prev, uploading]);
+          } catch (err: any) {
+            toast.error('Failed to save to database: ' + err.message);
+          }
+        }
+        setUploading(null);
+        if (fileInputRef.current) fileInputRef.current.value = '';
+      }
+    );
   };
 
   const completedCount = Object.values(STAGE_STATES).filter(s => s === 'completed').length;
   const totalCount = ROADMAP_STAGES.length;
 
+  if (loading) return <div className="animate-fade-in" style={{ padding: 32, color: '#64748b' }}>Загрузка roadmap...</div>;
+  if (!startup) return <div className="animate-fade-in" style={{ padding: 32, color: '#64748b' }}>Стартап не найден.</div>;
+
   return (
     <div className="animate-fade-in">
+      {/* Hidden file input */}
+      <input
+        type="file"
+        ref={fileInputRef}
+        style={{ display: 'none' }}
+        onChange={handleFileSelected}
+      />
+
       {/* Header */}
       <div style={{ marginBottom: '32px' }}>
         <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 28, fontWeight: 700, marginBottom: 6 }}>
@@ -61,7 +150,7 @@ export default function RoadmapPage() {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
           <div>
             <div style={{ fontSize: 24, fontWeight: 800, fontFamily: 'Space Grotesk, sans-serif', color: '#D8B4FE' }}>
-              {MY_STARTUP.roadmapProgress}%
+              {startup.roadmapProgress || 0}%
             </div>
             <div style={{ fontSize: 13, color: '#64748b' }}>
               {completedCount} of {totalCount} stages completed
@@ -70,12 +159,12 @@ export default function RoadmapPage() {
           <span className="badge badge-purple">Investment Ready Track</span>
         </div>
         <div className="progress-bar" style={{ height: '8px' }}>
-          <div className="progress-fill" style={{ width: `${MY_STARTUP.roadmapProgress}%` }} />
+          <div className="progress-fill" style={{ width: `${startup.roadmapProgress || 0}%` }} />
         </div>
       </div>
 
       {/* Stages */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+      <div className="stagger-container" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
         {ROADMAP_STAGES.map((stage, idx) => {
           const state = STAGE_STATES[stage.id] || 'locked';
           const cfg = STATE_CONFIG[state];
@@ -84,7 +173,7 @@ export default function RoadmapPage() {
           const isActive = state === 'in_progress' || state === 'pending_review';
 
           return (
-            <div key={stage.id} style={{
+            <div key={stage.id} className="stagger-item" style={{
               borderRadius: '16px',
               border: `1px solid ${isActive ? 'rgba(147,51,234,0.3)' : state === 'completed' ? 'rgba(212,212,216,0.2)' : 'rgba(255,255,255,0.06)'}`,
               background: isActive ? 'rgba(147,51,234,0.05)' : state === 'locked' ? 'rgba(255,255,255,0.01)' : 'rgba(13,13,32,0.8)',
@@ -154,7 +243,7 @@ export default function RoadmapPage() {
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                       {stage.requiredArtifacts.map((art) => {
-                        const isDone = state === 'completed';
+                        const isDone = state === 'completed' || uploadedArtifacts.includes(art.key);
                         return (
                           <div key={art.key} style={{
                             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
@@ -176,13 +265,13 @@ export default function RoadmapPage() {
                               <button
                                 className="btn-secondary"
                                 style={{ fontSize: 12, padding: '6px 14px' }}
-                                onClick={() => handleUpload(art.key)}
+                                onClick={() => triggerUpload(art.key)}
                                 disabled={uploading === art.key}
                               >
                                 {uploading === art.key ? (
                                   <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                                     <span style={{ width: 12, height: 12, border: '2px solid rgba(255,255,255,0.3)', borderTopColor: 'white', borderRadius: '50%', animation: 'spin 0.8s linear infinite', display: 'inline-block' }} />
-                                    Uploading...
+                                    {Math.round(uploadProgress)}%
                                   </span>
                                 ) : (
                                   <><Upload size={12} /> Upload</>

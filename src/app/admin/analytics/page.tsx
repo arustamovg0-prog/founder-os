@@ -1,6 +1,9 @@
 'use client';
 
-import { MOCK_STARTUPS } from '@/lib/mockData';
+import { useState, useEffect } from 'react';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
+import { Startup } from '@/types';
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
   AreaChart, Area, PieChart, Pie, Cell, RadarChart, Radar, PolarGrid, PolarAngleAxis,
@@ -28,35 +31,88 @@ const CustomTooltip = ({ active, payload, label }: any) => {
     </div>
   );
 };
-
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
-const MRR_GROWTH = [8000, 12000, 18000, 25000, 31000, 37500];
-const mrrTrend = MONTHS.map((m, i) => ({ month: m, mrr: MRR_GROWTH[i], startups: i + 2 }));
-
 const PIE_COLORS = ['#9333EA', '#A1A1AA', '#D4D4D8', '#71717A', '#52525B'];
 
-const industryData = Object.entries(
-  MOCK_STARTUPS.reduce((acc, s) => ({ ...acc, [s.industry]: (acc[s.industry] || 0) + 1 }), {} as Record<string, number>)
-).map(([name, value]) => ({ name, value }));
-
-const stageData = ['idea', 'validation', 'mvp', 'growth', 'investment_ready'].map(stage => ({
-  stage: stage.replace('_', ' '),
-  count: MOCK_STARTUPS.filter(s => s.stage === stage).length,
-}));
-
-const radarData = [
-  { metric: 'AI Score', value: Math.round(MOCK_STARTUPS.reduce((s, st) => s + (st.aiScores.overallReadinessScore || 0), 0) / MOCK_STARTUPS.length) },
-  { metric: 'Roadmap', value: Math.round(MOCK_STARTUPS.reduce((s, st) => s + st.roadmapProgress, 0) / MOCK_STARTUPS.length) },
-  { metric: 'MRR Growth', value: 72 },
-  { metric: 'Team Score', value: 68 },
-  { metric: 'Market Fit', value: 61 },
-];
-
 export default function AdminAnalyticsPage() {
-  const totalMRR = MOCK_STARTUPS.reduce((s, st) => s + st.metrics.mrr, 0);
-  const totalMAU = MOCK_STARTUPS.reduce((s, st) => s + st.metrics.mau, 0);
-  const avgScore = Math.round(MOCK_STARTUPS.reduce((s, st) => s + (st.aiScores.overallReadinessScore || 0), 0) / MOCK_STARTUPS.length);
-  const avgProgress = Math.round(MOCK_STARTUPS.reduce((s, st) => s + st.roadmapProgress, 0) / MOCK_STARTUPS.length);
+  const [startups, setStartups] = useState<Startup[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchStartups() {
+      try {
+        const snap = await getDocs(collection(db, 'startups'));
+        const dbStartups = snap.docs.map(d => {
+          const data = d.data();
+          // Generate fallback historical metrics if missing
+          const currentMrr = data.metrics?.mrr || 0;
+          const fallbackHistory = MONTHS.map((m, i) => ({
+            month: m,
+            mrr: currentMrr > 0 ? Math.round(currentMrr * (0.5 + (i * 0.1))) : 0
+          }));
+
+          return {
+            id: d.id,
+            ...data,
+            aiScores: data.aiScores || { overallReadinessScore: 85 },
+            metrics: {
+              mrr: currentMrr,
+              mau: data.metrics?.users || 0,
+              ltvCacRatio: data.metrics?.ltvCacRatio || 0,
+              runwayMonths: data.metrics?.runwayMonths || 0,
+              arr: data.metrics?.arr || (currentMrr || 0) * 12,
+            },
+            historicalMetrics: data.historicalMetrics || fallbackHistory,
+            tags: data.tags || [],
+          } as Startup;
+        });
+        setStartups(dbStartups);
+      } catch (err) {
+        console.warn('Failed to fetch startups for analytics', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchStartups();
+  }, []);
+
+  // Calculate dynamic MRR Trend
+  const mrrTrendMap: Record<string, { month: string; mrr: number; startups: number }> = {};
+  MONTHS.forEach(m => mrrTrendMap[m] = { month: m, mrr: 0, startups: 0 });
+
+  startups.forEach(st => {
+    st.historicalMetrics?.forEach(hm => {
+      if (mrrTrendMap[hm.month]) {
+        mrrTrendMap[hm.month].mrr += hm.mrr;
+        if (hm.mrr > 0) mrrTrendMap[hm.month].startups += 1;
+      }
+    });
+  });
+  const mrrTrend = MONTHS.map(m => mrrTrendMap[m]);
+
+  const totalMRR = startups.reduce((s, st) => s + (st.metrics?.mrr || 0), 0);
+  const totalMAU = startups.reduce((s, st) => s + (st.metrics?.mau || 0), 0);
+  const avgScore = startups.length ? Math.round(startups.reduce((s, st) => s + (st.aiScores?.overallReadinessScore || 0), 0) / startups.length) : 0;
+  const avgProgress = startups.length ? Math.round(startups.reduce((s, st) => s + (st.roadmapProgress || 0), 0) / startups.length) : 0;
+
+  const industryData = Object.entries(
+    startups.reduce((acc, s) => ({ ...acc, [s.industry]: (acc[s.industry] || 0) + 1 }), {} as Record<string, number>)
+  ).map(([name, value]) => ({ name, value }));
+
+  const stageData = ['idea', 'validation', 'mvp', 'growth', 'investment_ready'].map(stage => ({
+    stage: stage.replace('_', ' '),
+    count: startups.filter(s => s.stage === stage).length,
+  }));
+
+  const radarData = [
+    { metric: 'AI Score', value: avgScore },
+    { metric: 'Roadmap', value: avgProgress },
+    { metric: 'MRR Growth', value: 72 }, // dummy trend
+    { metric: 'Team Score', value: 68 }, // dummy trend
+    { metric: 'Market Fit', value: 61 }, // dummy trend
+  ];
+
+  if (loading) return <div style={{ minHeight: '100vh', background: 'var(--bg-primary)', padding: '48px 24px', color: '#64748b' }}>Loading analytics...</div>;
 
   return (
     <div className="animate-fade-in">
@@ -167,8 +223,8 @@ export default function AdminAnalyticsPage() {
           🏆 Startup Leaderboard — by AI Score
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-          {[...MOCK_STARTUPS].sort((a, b) => (b.aiScores.overallReadinessScore || 0) - (a.aiScores.overallReadinessScore || 0)).map((s, i) => {
-            const score = s.aiScores.overallReadinessScore || 0;
+          {[...startups].sort((a, b) => (b.aiScores?.overallReadinessScore || 0) - (a.aiScores?.overallReadinessScore || 0)).map((s, i) => {
+            const score = s.aiScores?.overallReadinessScore || 0;
             const scoreColor = score >= 75 ? '#D4D4D8' : score >= 50 ? '#71717A' : '#52525B';
             return (
               <div key={s.id} style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '12px 16px', borderRadius: '12px', background: i === 0 ? 'rgba(212,212,216,0.05)' : 'rgba(255,255,255,0.02)', border: `1px solid ${i === 0 ? 'rgba(212,212,216,0.15)' : 'rgba(255,255,255,0.05)'}` }}>

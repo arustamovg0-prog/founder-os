@@ -1,6 +1,9 @@
 'use client';
 
-import { MOCK_STARTUPS } from '@/lib/mockData';
+import { useState, useEffect } from 'react';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
+import { Startup } from '@/types';
 import {
   AreaChart, Area, BarChart, Bar, XAxis, YAxis, Tooltip,
   ResponsiveContainer, CartesianGrid,
@@ -56,7 +59,42 @@ function Trend({ val, suffix = '' }: { val: number; suffix?: string }) {
 }
 
 export default function EcosystemHealthPage() {
-  const S = MOCK_STARTUPS;
+  const [startups, setStartups] = useState<Startup[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchStartups() {
+      try {
+        const snap = await getDocs(collection(db, 'startups'));
+        const dbStartups = snap.docs.map(d => {
+          const data = d.data();
+          return {
+            id: d.id,
+            ...data,
+            aiScores: data.aiScores || { overallReadinessScore: 85 },
+            metrics: {
+              mrr: data.metrics?.mrr || 0,
+              mau: data.metrics?.users || 0,
+              ltvCacRatio: data.metrics?.ltvCacRatio || 0,
+              runwayMonths: data.metrics?.runwayMonths || 0,
+              arr: data.metrics?.arr || (data.metrics?.mrr || 0) * 12,
+            },
+            tags: data.tags || [],
+          } as Startup;
+        });
+        setStartups(dbStartups);
+      } catch (err) {
+        console.warn('Failed to fetch startups for health dashboard', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchStartups();
+  }, []);
+
+  const S = startups;
+
+  if (loading) return <div style={{ minHeight: '100vh', background: 'var(--bg-primary)', padding: '48px 24px', color: '#64748b' }}>Loading ecosystem health...</div>;
 
   // ─── Aggregate metrics ─────────────────────────────────────────────────────
   const totalMRR = S.reduce((a, s) => a + s.metrics.mrr, 0);

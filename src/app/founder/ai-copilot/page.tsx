@@ -211,7 +211,7 @@ How can I help you today? You can ask me to analyze your metrics, review your pi
         </div>
 
         {/* Context cards */}
-        <div style={{ display: 'flex', gap: '10px' }}>
+        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
           {[
             { icon: <TrendingUp size={12} />, label: 'AI Score', value: `${startup?.aiScores?.overallReadinessScore || 0}/100`, color: '#9333EA' },
             { icon: <Target size={12} />, label: 'Stage', value: startup?.stage || 'Idea', color: '#D4D4D8' },
@@ -229,6 +229,48 @@ How can I help you today? You can ask me to analyze your metrics, review your pi
               </div>
             </div>
           ))}
+
+          <button
+            onClick={async () => {
+              if (!startup) return;
+              setLoading(true);
+              try {
+                const token = await auth.currentUser?.getIdToken();
+                const res = await fetch('/api/ai/score', {
+                  method: 'POST',
+                  headers: { 
+                    'Content-Type': 'application/json',
+                    ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+                  },
+                  body: JSON.stringify({ startupId: startup.id })
+                });
+                const data = await res.json();
+                if (data.scores) {
+                  setStartup({ ...startup, aiScores: data.scores });
+                  setMessages(prev => [...prev, {
+                    role: 'assistant',
+                    content: `**Assessment Complete!**\n\nYour new AI Score is **${data.scores.overallReadinessScore}/100**.\n\nBreakdown:\n- Pitch Deck: ${data.scores.pitchDeck}/100\n- Market Fit: ${data.scores.marketFit}/100\n- Traction: ${data.scores.traction}/100\n- Team: ${data.scores.team}/100\n\nKeep pushing! Let me know if you need specific advice.`,
+                    timestamp: new Date()
+                  }]);
+                }
+              } catch (e) {
+                console.error(e);
+              }
+              setLoading(false);
+            }}
+            disabled={loading || !startup}
+            style={{
+              padding: '8px 16px', borderRadius: '10px', height: '100%',
+              background: 'linear-gradient(135deg, rgba(147,51,234,0.2), rgba(99,102,241,0.15))',
+              border: '1px solid rgba(147,51,234,0.3)',
+              color: '#D8B4FE', fontWeight: 600, fontSize: 13, cursor: loading ? 'wait' : 'pointer',
+              display: 'flex', alignItems: 'center', gap: '8px',
+              fontFamily: 'Inter'
+            }}
+          >
+            <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
+            {loading ? 'Analyzing...' : 'Run Assessment'}
+          </button>
         </div>
       </div>
 

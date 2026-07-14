@@ -1,12 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { MOCK_PITCHES, MOCK_STARTUPS } from '@/lib/mockData';
+
 import { PitchEvent, Startup } from '@/types';
 import { Calendar, Video, MapPin, CheckCircle, XCircle, Clock, MessageSquare, Star } from 'lucide-react';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import { collection, query, where, onSnapshot, doc, updateDoc, getDocs } from 'firebase/firestore';
-import { db, isDemoConfig, auth } from '@/lib/firebase';
+import { db, auth } from '@/lib/firebase';
 import { useAuth } from '@/contexts/AuthContext';
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string }> = {
@@ -135,19 +135,13 @@ function FeedbackModal({ pitch, onClose }: { pitch: PitchEvent; onClose: () => v
 
 export default function InvestorPitchesPage() {
   const { profile } = useAuth();
-  const [pitches, setPitches] = useState<PitchEvent[]>(MOCK_PITCHES);
+  const [pitches, setPitches] = useState<PitchEvent[]>([]);
   const [startups, setStartups] = useState<Record<string, Startup>>({});
   const [activeFeedback, setActiveFeedback] = useState<PitchEvent | null>(null);
   const [activeTab, setActiveTab] = useState<'all' | 'pending' | 'active' | 'closed'>('all');
 
   useEffect(() => {
-    if (isDemoConfig || !profile) {
-      setPitches(MOCK_PITCHES);
-      const sMap: Record<string, Startup> = {};
-      MOCK_STARTUPS.forEach(s => sMap[s.id!] = s);
-      setStartups(sMap);
-      return;
-    }
+    if (!profile) return;
 
     const q = query(collection(db, 'pitches'), where('investorId', '==', profile.uid));
     const unsubscribe = onSnapshot(q, async (snap) => {
@@ -183,12 +177,12 @@ export default function InvestorPitchesPage() {
   });
 
   const acceptPitch = async (pitchId: string) => {
-    if (!isDemoConfig) await updateDoc(doc(db, 'pitches', pitchId), { status: 'accepted' });
+    await updateDoc(doc(db, 'pitches', pitchId), { status: 'accepted' });
     toast.success('Pitch accepted! Calendar invite sent.', { icon: '📅' });
   };
 
   const declinePitch = async (pitchId: string) => {
-    if (!isDemoConfig) await updateDoc(doc(db, 'pitches', pitchId), { status: 'rejected' });
+    await updateDoc(doc(db, 'pitches', pitchId), { status: 'rejected' });
     toast.error('Pitch declined. Founder notified.', { icon: '❌' });
   };
 
@@ -214,13 +208,13 @@ export default function InvestorPitchesPage() {
         ))}
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+      <div className="stagger-container" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
         {filtered.map((pitch) => {
-          const startup = startups[pitch.startupId] || MOCK_STARTUPS.find(s => s.id === pitch.startupId);
+          const startup = startups[pitch.startupId];
           const cfg = STATUS_CONFIG[pitch.status];
 
           return (
-            <div key={pitch.id} className="card glass-hover">
+            <div key={pitch.id} className="card stagger-item glass-hover">
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '20px' }}>
                 <div style={{
                   width: 52, height: 52, borderRadius: '14px', flexShrink: 0,
@@ -240,7 +234,7 @@ export default function InvestorPitchesPage() {
                       </span>
                     </div>
                     <span style={{ fontSize: 12, color: '#334155' }}>
-                      {pitch.request.sentAt instanceof Date ? pitch.request.sentAt.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : new Date((pitch.request.sentAt as any).seconds * 1000).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
+                      {pitch.request.sentAt instanceof Date ? pitch.request.sentAt.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : (pitch.request.sentAt as any)?.seconds ? new Date((pitch.request.sentAt as any).seconds * 1000).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : 'Unknown date'}
                     </span>
                   </div>
 
@@ -251,7 +245,7 @@ export default function InvestorPitchesPage() {
                   <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', marginBottom: '16px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: 13, color: '#94a3b8' }}>
                       <Calendar size={13} color="#9333EA" />
-                      Proposed: {pitch.request.proposedDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
+                      Proposed: {pitch.request.proposedDate instanceof Date ? pitch.request.proposedDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : (pitch.request.proposedDate as any)?.seconds ? new Date((pitch.request.proposedDate as any).seconds * 1000).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : 'Unknown date'}
                     </div>
                     {startup && (
                       <>
@@ -269,7 +263,7 @@ export default function InvestorPitchesPage() {
                     <div style={{ display: 'flex', gap: '12px', padding: '10px 14px', borderRadius: '10px', background: 'rgba(212,212,216,0.07)', border: '1px solid rgba(212,212,216,0.15)', marginBottom: '12px' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: 13, color: '#A1A1AA' }}>
                         <CheckCircle size={13} />
-                        Meeting: {pitch.meeting.confirmedDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })}
+                        Meeting: {pitch.meeting.confirmedDate instanceof Date ? pitch.meeting.confirmedDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' }) : (pitch.meeting.confirmedDate as any)?.seconds ? new Date((pitch.meeting.confirmedDate as any).seconds * 1000).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' }) : 'Unknown date'}
                       </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: 13, color: '#A1A1AA' }}>
                         <Video size={13} /> Online

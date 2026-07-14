@@ -7,7 +7,7 @@ import {
   LayoutDashboard, Map, FolderOpen, Presentation, Brain, 
   Users, TrendingUp, Briefcase, BarChart3, Kanban, CheckCircle, Flame, Heart, LogOut, Zap, Scale, Gift, MessageSquare
 } from 'lucide-react';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 
 const NAV = {
   founder: [

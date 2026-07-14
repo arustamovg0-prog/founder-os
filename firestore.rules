@@ -36,14 +36,17 @@ service cloud.firestore {
       // Разрешить создавать стартап любому авторизованному пользователю
       allow create: if isAuthenticated();
       // Обновлять может только если uid есть в founderIds
-      allow update: if isAuthenticated();
-      allow delete: if isAuthenticated();
+      allow update: if isAuthenticated() && 
+                    (isAdmin() || (request.auth.uid in resource.data.founderIds));
+      allow delete: if isAdmin();
     }
     
     // Правила для питчей
     match /pitches/{pitchId} {
       allow read: if isAuthenticated();
-      allow write: if isAuthenticated();
+      allow write: if isAuthenticated() && 
+                   (isAdmin() || 
+                   (request.auth.uid == get(/databases/$(database)/documents/startups/$(request.resource.data.startupId)).data.founderIds[0])); // Simple check for now, ideally check if they own the startup
     }
   }
 }

@@ -6,7 +6,7 @@ import { isSignInWithEmailLink, signInWithEmailLink } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { useAuth } from '@/contexts/AuthContext';
 import { Zap, CheckCircle, XCircle } from 'lucide-react';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 
 type MagicState = 'checking' | 'email_needed' | 'signing_in' | 'success' | 'error';
 

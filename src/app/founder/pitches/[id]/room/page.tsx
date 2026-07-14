@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { MOCK_STARTUPS } from '@/lib/mockData';
+
 import { Video, Mic, MicOff, Camera, CameraOff, MonitorUp, PhoneOff, Users, MessageSquare, Brain } from 'lucide-react';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 
 export default function VideoPitchRoomPage({ params }: { params: { id: string } }) {

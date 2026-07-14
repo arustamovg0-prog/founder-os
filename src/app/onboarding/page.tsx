@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { Rocket, Building2, Globe, ChevronRight, ChevronLeft, Sparkles, CheckCircle, Upload, MapPin, Users } from 'lucide-react';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import { doc, setDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
