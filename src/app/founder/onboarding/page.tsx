@@ -8,7 +8,7 @@ import { db } from '@/lib/firebase';
 import { startupsCol } from '@/lib/db';
 import toast from 'react-hot-toast';
 import { Rocket, ArrowRight } from 'lucide-react';
-import { nanoid } from 'nanoid'; // Need to install or use crypto.randomUUID()
+
 
 export default function OnboardingPage() {
   const { profile } = useAuth();
