@@ -6,13 +6,19 @@ import { Toaster } from 'sonner';
 
 const inter = Inter({ subsets: ['latin'] });
 
+export const viewport = {
+  themeColor: '#9333EA',
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+};
+
 export const metadata: Metadata = {
+  metadataBase: new URL('https://founder-os--founder-os-78cfc.us-east4.hosted.app'),
   title: 'Founder OS — Turn Chaos Into System',
   description: 'AI-powered startup CRM and ecosystem management platform by UNTITLED. Track startup journeys, connect founders with investors, and automate your deal flow.',
   keywords: 'startup, CRM, investor, founder, AI, ecosystem, UNTITLED',
   manifest: '/manifest.json',
-  themeColor: '#9333EA',
-  viewport: 'width=device-width, initial-scale=1, maximum-scale=1',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',

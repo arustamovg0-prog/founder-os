@@ -9,9 +9,9 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
   // ─── Fix turbopack workspace root warning ──────────────────────────────────
-  turbopack: {
-    root: path.resolve(__dirname),
-  },
+  // turbopack: {
+  //   root: path.resolve(__dirname),
+  // },
 
   // ─── Security headers ──────────────────────────────────────────────────────
   async headers() {
