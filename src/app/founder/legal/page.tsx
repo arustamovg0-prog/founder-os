@@ -143,7 +143,7 @@ export default function LegalToolkitPage() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 12, marginBottom: 32 }}>
         {[
           { label: 'Шаблонов', value: DOCUMENTS.length, color: '#A1A1AA' },
-          { label: 'Чек-листов', value: CHECKLISTS.length, color: '#9333EA' },
+          { label: 'Чек-листов', value: CHECKLISTS.length, color: '#FFFFFF' },
           { label: 'Юрисдикций', value: 3, color: '#D4D4D8' },
           { label: 'FAQ вопросов', value: FAQ_ITEMS.length, color: '#71717A' },
         ].map((s, i) => (
@@ -234,7 +234,7 @@ export default function LegalToolkitPage() {
 
                     {/* Progress bar */}
                     <div style={{ height: 2, background: 'rgba(255,255,255,0.06)', margin: '0 16px' }}>
-                      <div style={{ height: '100%', background: progress === 100 ? '#D4D4D8' : '#9333EA', width: `${progress}%`, transition: 'width 0.3s', borderRadius: 99 }} />
+                      <div style={{ height: '100%', background: progress === 100 ? '#D4D4D8' : '#FFFFFF', width: `${progress}%`, transition: 'width 0.3s', borderRadius: 99 }} />
                     </div>
 
                     {isExpanded && (

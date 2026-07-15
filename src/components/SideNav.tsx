@@ -5,7 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { 
   LayoutDashboard, Map, FolderOpen, Presentation, Brain, 
-  Users, TrendingUp, Briefcase, BarChart3, Kanban, CheckCircle, Flame, Heart, LogOut, Zap, Scale, Gift, MessageSquare
+  Users, TrendingUp, Briefcase, BarChart3, Kanban, CheckCircle, Flame, Heart, LogOut, Command, Scale, Gift, MessageSquare
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -59,13 +59,18 @@ export default function SideNav() {
   return (
     <aside className="sidebar">
       {/* Brand Logo */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '12px 14px', marginBottom: '24px' }}>
-        <div style={{ width: 28, height: 28, borderRadius: 8, background: '#9333EA', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 16px rgba(147,51,234,0.4)' }}>
-          <Zap size={14} color="white" />
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 14px', marginBottom: '24px' }}>
+        <div style={{ 
+          width: 32, height: 32, borderRadius: 8, 
+          background: 'rgba(255,255,255,0.03)', 
+          border: '1px solid rgba(255,255,255,0.1)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center' 
+        }}>
+          <Command size={16} color="white" />
         </div>
         <div>
-          <div style={{ fontFamily: 'Space Grotesk', fontSize: '15px', fontWeight: 700, color: '#f8fafc', letterSpacing: '0.5px' }}>UNTITLED OS</div>
-          <div style={{ fontSize: '10px', color: '#9333EA', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px' }}>{role}</div>
+          <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: '16px', fontWeight: 600, color: '#f8fafc', letterSpacing: '0.5px' }}>Founder OS</div>
+          <div style={{ fontSize: '10px', color: '#a1a1aa', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px' }}>by UNTITLED</div>
         </div>
       </div>
 
@@ -79,12 +84,12 @@ export default function SideNav() {
           const isActive = pathname === item.href;
           return (
             <Link key={item.href} href={item.href} className={`nav-item ${isActive ? 'active' : ''}`} style={{ position: 'relative' }}>
-              <div className="nav-icon" style={{ color: isActive ? '#A855F7' : '#52525B' }}>
+              <div className="nav-icon" style={{ color: isActive ? 'var(--text-primary)' : '#52525B' }}>
                 {item.icon}
               </div>
               <span style={{ flex: 1 }}>{item.label}</span>
               {isActive && (
-                <div style={{ width: 4, height: 16, background: '#9333EA', borderRadius: 4, position: 'absolute', right: 12 }} />
+                <div style={{ width: 4, height: 16, background: 'var(--text-primary)', borderRadius: 4, position: 'absolute', right: 12 }} />
               )}
             </Link>
           );

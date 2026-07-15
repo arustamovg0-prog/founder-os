@@ -148,7 +148,7 @@ export default function SpotlightSearch() {
             transition: 'var(--transition-standard)',
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.borderColor = 'rgba(147, 51, 234, 0.4)';
+            e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.4)';
             e.currentTarget.style.color = '#FFFFFF';
           }}
           onMouseLeave={(e) => {
@@ -183,7 +183,7 @@ export default function SpotlightSearch() {
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
               className="spotlight-menu" 
               onClick={e => e.stopPropagation()}
-              style={{ background: '#050510', border: '1px solid rgba(124,58,237,0.25)', borderRadius: '16px', width: '100%', maxWidth: '600px', overflow: 'hidden', boxShadow: '0 20px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05)' }}
+              style={{ background: '#050510', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '16px', width: '100%', maxWidth: '600px', overflow: 'hidden', boxShadow: '0 20px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05)' }}
             >
             {/* Search Input Header */}
             <div style={{ 
@@ -233,19 +233,19 @@ export default function SpotlightSearch() {
                       padding: '14px 16px',
                       borderRadius: '12px',
                       cursor: 'pointer',
-                      background: isSelected ? 'rgba(147, 51, 234, 0.1)' : 'transparent',
-                      color: isSelected ? '#FFFFFF' : (isActive ? '#D8B4FE' : '#A1A1AA'),
+                      background: isSelected ? 'rgba(255, 255, 255, 0.1)' : 'transparent',
+                      color: isSelected ? '#FFFFFF' : (isActive ? '#FFFFFF' : '#A1A1AA'),
                       transition: 'background 160ms var(--ease-out), color 160ms var(--ease-out)',
                       animationDelay: `${index * 30}ms`
                     }}
                   >
-                    <div style={{ color: isSelected || isActive ? '#A855F7' : '#52525B' }}>
+                    <div style={{ color: isSelected || isActive ? '#D4D4D8' : '#52525B' }}>
                       {item.icon}
                     </div>
                     <span style={{ flex: 1, fontSize: '15px', fontWeight: isSelected ? 600 : 500 }}>
                       {item.label}
                     </span>
-                    {isActive && <span style={{ fontSize: '11px', color: '#9333EA', background: 'rgba(147,51,234,0.1)', padding: '2px 8px', borderRadius: '99px' }}>Active</span>}
+                    {isActive && <span style={{ fontSize: '11px', color: '#FFFFFF', background: 'rgba(255,255,255,0.1)', padding: '2px 8px', borderRadius: '99px' }}>Active</span>}
                   </div>
                 );
               })}
@@ -282,10 +282,10 @@ export default function SpotlightSearch() {
             
             <div style={{ padding: '12px 24px', background: 'rgba(0,0,0,0.2)', borderTop: '1px solid rgba(255,255,255,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div style={{ width: 24, height: 24, borderRadius: 6, background: '#9333EA', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Zap size={12} color="white" />
+                <div style={{ width: 24, height: 24, borderRadius: 6, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Command size={12} color="white" />
                 </div>
-                <span style={{ fontFamily: 'Space Grotesk', fontSize: '13px', fontWeight: 700, color: '#A1A1AA' }}>UNTITLED OS</span>
+                <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: '13px', fontWeight: 700, color: '#A1A1AA' }}>Founder OS</span>
               </div>
               <div style={{ fontSize: '11px', color: '#52525B' }}>
                 {profile.email}

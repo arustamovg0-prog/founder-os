@@ -28,7 +28,7 @@ const INITIAL_CHALLENGES: AdminChallenge[] = [
   { id: 'ch5', company: 'MoH UZ', companyLogo: '🏥', industry: 'HealthTech', title: 'Телемедицина для регионов', problem: 'Платформа телемедицины с оффлайн-режимом для отдалённых районов.', reward: 'Госконтракт + $100,000', rewardType: 'investment', deadline: '2026-10-01', daysLeft: 96, tags: ['healthtech', 'b2g', 'rural'], applicants: 15, difficulty: 'hard', status: 'closed' },
 ];
 
-const REWARD_COLORS: Record<string, string> = { pilot: '#A1A1AA', grant: '#D4D4D8', investment: '#9333EA' };
+const REWARD_COLORS: Record<string, string> = { pilot: '#A1A1AA', grant: '#D4D4D8', investment: '#FFFFFF' };
 const STATUS_COLORS: Record<string, string> = { open: '#D4D4D8', review: '#71717A', closed: '#52525B' };
 const STATUS_LABELS: Record<string, string> = { open: 'Открыт', review: 'На рассмотрении', closed: 'Закрыт' };
 
@@ -117,7 +117,7 @@ export default function AdminChallengesPage() {
       {/* Stats */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginBottom: 28 }}>
         {[
-          { label: 'Всего задач', value: stats.total, color: '#9333EA' },
+          { label: 'Всего задач', value: stats.total, color: '#FFFFFF' },
           { label: 'Открытых', value: stats.open, color: '#D4D4D8' },
           { label: 'Всего заявок', value: stats.applications, color: '#71717A' },
         ].map((s, i) => (

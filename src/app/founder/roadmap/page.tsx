@@ -12,7 +12,7 @@ import { Startup } from '@/types';
 
 const PHASE_COLORS: Record<string, string> = {
   discovery: '#3F3F46', validation: '#71717A',
-  building: '#9333EA', scaling: '#D4D4D8', fundraising: '#52525B',
+  building: '#FFFFFF', scaling: '#D4D4D8', fundraising: '#52525B',
 };
 
 type StageState = 'completed' | 'in_progress' | 'pending_review' | 'locked';
@@ -146,7 +146,7 @@ export default function RoadmapPage() {
       </div>
 
       {/* Overall Progress */}
-      <div className="card" style={{ marginBottom: '28px', background: 'rgba(147,51,234,0.06)', borderColor: 'rgba(147,51,234,0.2)' }}>
+      <div className="card" style={{ marginBottom: '28px', background: 'rgba(255,255,255,0.06)', borderColor: 'rgba(255,255,255,0.2)' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
           <div>
             <div style={{ fontSize: 24, fontWeight: 800, fontFamily: 'Space Grotesk, sans-serif', color: '#D8B4FE' }}>
@@ -175,8 +175,8 @@ export default function RoadmapPage() {
           return (
             <div key={stage.id} className="stagger-item" style={{
               borderRadius: '16px',
-              border: `1px solid ${isActive ? 'rgba(147,51,234,0.3)' : state === 'completed' ? 'rgba(212,212,216,0.2)' : 'rgba(255,255,255,0.06)'}`,
-              background: isActive ? 'rgba(147,51,234,0.05)' : state === 'locked' ? 'rgba(255,255,255,0.01)' : 'rgba(13,13,32,0.8)',
+              border: `1px solid ${isActive ? 'rgba(255,255,255,0.3)' : state === 'completed' ? 'rgba(212,212,216,0.2)' : 'rgba(255,255,255,0.06)'}`,
+              background: isActive ? 'rgba(255,255,255,0.05)' : state === 'locked' ? 'rgba(255,255,255,0.01)' : 'rgba(13,13,32,0.8)',
               overflow: 'hidden',
               transition: 'var(--transition-standard)',
             }}>

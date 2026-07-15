@@ -13,7 +13,7 @@ function fmt(n: number) {
   return `$${n}`;
 }
 
-const PIE_COLORS = ['#9333EA', '#A1A1AA', '#D4D4D8', '#71717A'];
+const PIE_COLORS = ['#FFFFFF', '#A1A1AA', '#D4D4D8', '#71717A'];
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const CustomTooltip = ({ active, payload, label }: any) => {
@@ -85,7 +85,7 @@ export default function PortfolioPage() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '28px' }}>
         {[
           { label: 'Total MRR (Watchlist)', value: fmt(totalMRR), icon: <DollarSign size={18} />, color: '#D4D4D8' },
-          { label: 'Total MAU', value: totalMAU.toLocaleString(), icon: <TrendingUp size={18} />, color: '#9333EA' },
+          { label: 'Total MAU', value: totalMAU.toLocaleString(), icon: <TrendingUp size={18} />, color: '#FFFFFF' },
           { label: 'Avg AI Score', value: `${avgScore}/100`, icon: <Briefcase size={18} />, color: '#A1A1AA' },
         ].map((stat, i) => (
           <div key={i} className="stat-card">
@@ -108,7 +108,7 @@ export default function PortfolioPage() {
               <XAxis dataKey="name" tick={{ fontSize: 11, fill: '#475569' }} axisLine={false} tickLine={false} />
               <YAxis tickFormatter={v => `$${v / 1000}K`} tick={{ fontSize: 11, fill: '#475569' }} axisLine={false} tickLine={false} />
               <Tooltip content={<CustomTooltip />} />
-              <Bar dataKey="mrr" name="MRR" fill="#9333EA" radius={[6, 6, 0, 0]} />
+              <Bar dataKey="mrr" name="MRR" fill="#FFFFFF" radius={[6, 6, 0, 0]} />
               <Bar dataKey="arr" name="ARR" fill="#A1A1AA" radius={[6, 6, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
@@ -127,7 +127,7 @@ export default function PortfolioPage() {
                 ))}
               </Pie>
               <Legend formatter={v => <span style={{ fontSize: 12, color: '#94a3b8' }}>{v}</span>} />
-              <Tooltip formatter={(v) => [`${v} startup${(v as number) > 1 ? 's' : ''}`, 'Count']} contentStyle={{ background: '#0d0d20', border: '1px solid rgba(147,51,234,0.3)', borderRadius: '12px' }} />
+              <Tooltip formatter={(v) => [`${v} startup${(v as number) > 1 ? 's' : ''}`, 'Count']} contentStyle={{ background: '#0d0d20', border: '1px solid rgba(255,255,255,0.3)', borderRadius: '12px' }} />
             </PieChart>
           </ResponsiveContainer>
         </div>

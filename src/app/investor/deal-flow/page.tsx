@@ -17,7 +17,7 @@ const INDUSTRIES = ['All', 'FinTech', 'EdTech', 'AgriTech', 'HealthTech'];
 const STAGES = ['All', 'idea', 'validation', 'mvp', 'growth', 'investment_ready'];
 
 const STAGE_COLORS: Record<string, string> = {
-  idea: '#64748b', validation: '#71717A', mvp: '#A1A1AA', growth: '#9333EA', investment_ready: '#D4D4D8',
+  idea: '#64748b', validation: '#71717A', mvp: '#A1A1AA', growth: '#FFFFFF', investment_ready: '#D4D4D8',
 };
 
 const KANBAN_COLUMNS = [
@@ -88,7 +88,7 @@ function StartupCard({ s }: { s: Startup }) {
       </div>
 
       {s.executiveSummaryAI && (
-        <div style={{ padding: '10px 14px', borderRadius: '10px', background: 'rgba(147,51,234,0.08)', border: '1px solid rgba(147,51,234,0.15)' }}>
+        <div style={{ padding: '10px 14px', borderRadius: '10px', background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
             <Brain size={12} color="#D8B4FE" />
             <span style={{ fontSize: 10, color: '#D8B4FE', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>AI Summary</span>
@@ -203,10 +203,10 @@ export default function DealFlowPage() {
           <p style={{ color: '#64748b', fontSize: 14 }}>Browse AI-scored startups in the UNTITLED ecosystem</p>
         </div>
         <div style={{ display: 'flex', gap: 4, padding: 4, background: 'rgba(255,255,255,0.04)', borderRadius: 10, border: '1px solid rgba(255,255,255,0.06)' }}>
-          <button onClick={() => setViewMode('grid')} style={{ padding: '7px 12px', borderRadius: 7, fontSize: 12, fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, fontFamily: 'Inter', transition: 'var(--transition-standard)', background: viewMode === 'grid' ? 'rgba(147,51,234,0.15)' : 'transparent', border: viewMode === 'grid' ? '1px solid rgba(147,51,234,0.3)' : '1px solid transparent', color: viewMode === 'grid' ? '#D8B4FE' : '#64748b' }}>
+          <button onClick={() => setViewMode('grid')} style={{ padding: '7px 12px', borderRadius: 7, fontSize: 12, fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, fontFamily: 'Inter', transition: 'var(--transition-standard)', background: viewMode === 'grid' ? 'rgba(255,255,255,0.15)' : 'transparent', border: viewMode === 'grid' ? '1px solid rgba(255,255,255,0.3)' : '1px solid transparent', color: viewMode === 'grid' ? '#D8B4FE' : '#64748b' }}>
             <List size={13} />Grid
           </button>
-          <button onClick={() => setViewMode('kanban')} style={{ padding: '7px 12px', borderRadius: 7, fontSize: 12, fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, fontFamily: 'Inter', transition: 'var(--transition-standard)', background: viewMode === 'kanban' ? 'rgba(147,51,234,0.15)' : 'transparent', border: viewMode === 'kanban' ? '1px solid rgba(147,51,234,0.3)' : '1px solid transparent', color: viewMode === 'kanban' ? '#D8B4FE' : '#64748b' }}>
+          <button onClick={() => setViewMode('kanban')} style={{ padding: '7px 12px', borderRadius: 7, fontSize: 12, fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, fontFamily: 'Inter', transition: 'var(--transition-standard)', background: viewMode === 'kanban' ? 'rgba(255,255,255,0.15)' : 'transparent', border: viewMode === 'kanban' ? '1px solid rgba(255,255,255,0.3)' : '1px solid transparent', color: viewMode === 'kanban' ? '#D8B4FE' : '#64748b' }}>
             <LayoutGrid size={13} />Kanban
           </button>
         </div>
@@ -228,7 +228,7 @@ export default function DealFlowPage() {
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
             <Star size={13} color="#71717A" />
             <span style={{ fontSize: 12, color: '#64748b', whiteSpace: 'nowrap' }}>Min score:</span>
-            <input type="range" min={0} max={100} step={10} value={minScore} onChange={e => setMinScore(Number(e.target.value))} style={{ width: '80px', accentColor: '#9333EA' }} />
+            <input type="range" min={0} max={100} step={10} value={minScore} onChange={e => setMinScore(Number(e.target.value))} style={{ width: '80px', accentColor: '#FFFFFF' }} />
             <span style={{ fontSize: 13, fontWeight: 700, color: '#D8B4FE', minWidth: 24 }}>{minScore}</span>
           </div>
           <span style={{ fontSize: 13, color: '#475569', flexShrink: 0 }}>{filtered.length} results</span>

@@ -201,7 +201,7 @@ How can I help you today? You can ask me to analyze your metrics, review your pi
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px', flexShrink: 0 }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: 4 }}>
-            <div style={{ width: 32, height: 32, borderRadius: 8, background: 'linear-gradient(135deg,#9333EA,#A1A1AA)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ width: 32, height: 32, borderRadius: 8, background: 'linear-gradient(135deg,#FFFFFF,#71717A)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Brain size={16} color="white" />
             </div>
             <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 24, fontWeight: 700 }}>AI Copilot</h1>
@@ -213,7 +213,7 @@ How can I help you today? You can ask me to analyze your metrics, review your pi
         {/* Context cards */}
         <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
           {[
-            { icon: <TrendingUp size={12} />, label: 'AI Score', value: `${startup?.aiScores?.overallReadinessScore || 0}/100`, color: '#9333EA' },
+            { icon: <TrendingUp size={12} />, label: 'AI Score', value: `${startup?.aiScores?.overallReadinessScore || 0}/100`, color: '#FFFFFF' },
             { icon: <Target size={12} />, label: 'Stage', value: startup?.stage || 'Idea', color: '#D4D4D8' },
             { icon: <FileText size={12} />, label: 'Pitch Deck', value: startup?.dataRoom?.pitchDeckUrl ? 'Uploaded' : 'Missing', color: '#A1A1AA' },
           ].map((c, i) => (
@@ -261,8 +261,8 @@ How can I help you today? You can ask me to analyze your metrics, review your pi
             disabled={loading || !startup}
             style={{
               padding: '8px 16px', borderRadius: '10px', height: '100%',
-              background: 'linear-gradient(135deg, rgba(147,51,234,0.2), rgba(99,102,241,0.15))',
-              border: '1px solid rgba(147,51,234,0.3)',
+              background: 'linear-gradient(135deg, rgba(255,255,255,0.2), rgba(99,102,241,0.15))',
+              border: '1px solid rgba(255,255,255,0.3)',
               color: '#D8B4FE', fontWeight: 600, fontSize: 13, cursor: loading ? 'wait' : 'pointer',
               display: 'flex', alignItems: 'center', gap: '8px',
               fontFamily: 'Inter'
@@ -286,7 +286,7 @@ How can I help you today? You can ask me to analyze your metrics, review your pi
             {msg.role === 'assistant' && (
               <div style={{
                 width: 32, height: 32, borderRadius: '50%', flexShrink: 0,
-                background: 'linear-gradient(135deg,#9333EA,#A1A1AA)',
+                background: 'linear-gradient(135deg,#FFFFFF,#71717A)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
               }}>
                 <Brain size={15} color="white" />
@@ -296,9 +296,9 @@ How can I help you today? You can ask me to analyze your metrics, review your pi
               maxWidth: '75%',
               padding: '14px 18px', borderRadius: msg.role === 'user' ? '16px 16px 4px 16px' : '4px 16px 16px 16px',
               background: msg.role === 'user'
-                ? 'linear-gradient(135deg, rgba(147,51,234,0.3), rgba(99,102,241,0.2))'
+                ? 'linear-gradient(135deg, rgba(255,255,255,0.3), rgba(99,102,241,0.2))'
                 : 'rgba(13,13,32,0.9)',
-              border: `1px solid ${msg.role === 'user' ? 'rgba(147,51,234,0.3)' : 'rgba(255,255,255,0.06)'}`,
+              border: `1px solid ${msg.role === 'user' ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.06)'}`,
             }}>
               {msg.role === 'assistant' ? <MarkdownText text={msg.content} /> : (
                 <p style={{ fontSize: 14, color: '#f8fafc', lineHeight: 1.6 }}>{msg.content}</p>
@@ -310,7 +310,7 @@ How can I help you today? You can ask me to analyze your metrics, review your pi
             {msg.role === 'user' && (
               <div style={{
                 width: 32, height: 32, borderRadius: '50%', flexShrink: 0,
-                background: 'rgba(147,51,234,0.3)',
+                background: 'rgba(255,255,255,0.3)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 fontSize: 13, fontWeight: 700, color: '#D8B4FE',
               }}>
@@ -322,7 +322,7 @@ How can I help you today? You can ask me to analyze your metrics, review your pi
 
         {loading && (
           <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-            <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'linear-gradient(135deg,#9333EA,#A1A1AA)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'linear-gradient(135deg,#FFFFFF,#71717A)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Brain size={15} color="white" />
             </div>
             <div style={{ padding: '16px', borderRadius: '4px 16px 16px 16px', background: 'rgba(13,13,32,0.9)', border: '1px solid rgba(255,255,255,0.06)' }}>
@@ -330,7 +330,7 @@ How can I help you today? You can ask me to analyze your metrics, review your pi
                 {[0, 0.2, 0.4].map((delay, i) => (
                   <div key={i} style={{
                     width: 8, height: 8, borderRadius: '50%',
-                    background: '#9333EA',
+                    background: '#FFFFFF',
                     animation: `bounce 1s ${delay}s infinite`,
                   }} />
                 ))}
@@ -352,7 +352,7 @@ How can I help you today? You can ask me to analyze your metrics, review your pi
               onClick={() => send(s.text)}
               style={{
                 padding: '8px 14px', borderRadius: '99px', fontSize: 12, fontWeight: 500,
-                background: 'rgba(147,51,234,0.1)', border: '1px solid rgba(147,51,234,0.2)',
+                background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)',
                 color: '#D8B4FE', cursor: 'pointer', transition: 'var(--transition-standard)',
                 fontFamily: 'Inter, sans-serif', display: 'flex', alignItems: 'center', gap: '6px',
               }}

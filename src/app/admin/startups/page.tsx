@@ -15,7 +15,7 @@ function fmt(n: number) {
 }
 
 const STAGE_COLORS: Record<string, string> = {
-  idea: '#64748b', validation: '#71717A', mvp: '#A1A1AA', growth: '#9333EA', investment_ready: '#D4D4D8',
+  idea: '#64748b', validation: '#71717A', mvp: '#A1A1AA', growth: '#FFFFFF', investment_ready: '#D4D4D8',
 };
 
 function StartupDetailRow({ s }: { s: Startup }) {
@@ -26,11 +26,11 @@ function StartupDetailRow({ s }: { s: Startup }) {
   const currentStage = ROADMAP_STAGES.find(r => r.id === s.currentRoadmapStageId);
 
   return (
-    <div style={{ borderRadius: '14px', border: `1px solid ${open ? 'rgba(147,51,234,0.25)' : 'rgba(255,255,255,0.06)'}`, marginBottom: '10px', overflow: 'hidden', transition: 'var(--transition-standard)' }}>
+    <div style={{ borderRadius: '14px', border: `1px solid ${open ? 'rgba(255,255,255,0.25)' : 'rgba(255,255,255,0.06)'}`, marginBottom: '10px', overflow: 'hidden', transition: 'var(--transition-standard)' }}>
       {/* Row */}
       <div
         onClick={() => setOpen(!open)}
-        style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '16px 20px', cursor: 'pointer', background: open ? 'rgba(147,51,234,0.05)' : 'transparent', transition: 'background 160ms var(--ease-out)' }}
+        style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '16px 20px', cursor: 'pointer', background: open ? 'rgba(255,255,255,0.05)' : 'transparent', transition: 'background 160ms var(--ease-out)' }}
       >
         <div style={{
           width: 44, height: 44, borderRadius: '12px', flexShrink: 0,
@@ -72,7 +72,7 @@ function StartupDetailRow({ s }: { s: Startup }) {
 
         <div style={{ flex: '0 0 100px' }}>
           <div className="progress-bar">
-            <div style={{ height: '100%', borderRadius: 99, width: `${s.roadmapProgress}%`, background: '#9333EA', boxShadow: '0 0 6px rgba(147,51,234,0.5)' }} />
+            <div style={{ height: '100%', borderRadius: 99, width: `${s.roadmapProgress}%`, background: '#FFFFFF', boxShadow: '0 0 6px rgba(255,255,255,0.5)' }} />
           </div>
           <div style={{ fontSize: 11, color: '#475569', marginTop: 4, textAlign: 'center' }}>{s.roadmapProgress}% done</div>
         </div>
@@ -91,7 +91,7 @@ function StartupDetailRow({ s }: { s: Startup }) {
                 <span style={{ fontSize: 11, color: '#D8B4FE', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>AI Copilot Analysis</span>
               </div>
               {s.executiveSummaryAI ? (
-                <p style={{ fontSize: 13, color: '#94a3b8', lineHeight: 1.7, padding: '12px', background: 'rgba(147,51,234,0.07)', borderRadius: '10px', border: '1px solid rgba(147,51,234,0.15)' }}>
+                <p style={{ fontSize: 13, color: '#94a3b8', lineHeight: 1.7, padding: '12px', background: 'rgba(255,255,255,0.07)', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.15)' }}>
                   {s.executiveSummaryAI}
                 </p>
               ) : (
@@ -123,7 +123,7 @@ function StartupDetailRow({ s }: { s: Startup }) {
               </div>
 
               {currentStage && (
-                <div style={{ marginTop: '12px', padding: '10px 14px', borderRadius: '10px', background: 'rgba(147,51,234,0.08)', border: '1px solid rgba(147,51,234,0.15)' }}>
+                <div style={{ marginTop: '12px', padding: '10px 14px', borderRadius: '10px', background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)' }}>
                   <div style={{ fontSize: 11, color: '#475569', marginBottom: 4 }}>Current Roadmap Stage</div>
                   <div style={{ fontSize: 14, fontWeight: 600, color: '#D8B4FE' }}>{currentStage.title}</div>
                 </div>
@@ -229,7 +229,7 @@ export default function AdminStartupsPage() {
           ].map(f => (
             <button key={f.key} onClick={() => setFilter(f.key)} style={{
               padding: '7px 14px', borderRadius: '7px', border: 'none',
-              background: filter === f.key ? 'rgba(147,51,234,0.3)' : 'transparent',
+              background: filter === f.key ? 'rgba(255,255,255,0.3)' : 'transparent',
               color: filter === f.key ? '#D8B4FE' : '#64748b',
               fontSize: '12px', fontWeight: 600, cursor: 'pointer', fontFamily: 'Inter', whiteSpace: 'nowrap',
             }}>

@@ -11,7 +11,7 @@ const PENDING_REVIEWS = [
 ];
 
 const STAGE_COLORS: Record<string, string> = {
-  discovery: '#3F3F46', validation: '#71717A', building: '#9333EA', scaling: '#D4D4D8', fundraising: '#52525B',
+  discovery: '#3F3F46', validation: '#71717A', building: '#FFFFFF', scaling: '#D4D4D8', fundraising: '#52525B',
 };
 
 export default function StageReviewPage() {
@@ -45,7 +45,7 @@ export default function StageReviewPage() {
         {[
           { label: 'Pending Review', value: pending.length, color: '#71717A', icon: <Clock size={18} /> },
           { label: 'Approved Today', value: done.filter(d => verifiedMap[d.startupId] === 'approved').length, color: '#D4D4D8', icon: <CheckCircle size={18} /> },
-          { label: 'Total Gatekeeper Stages', value: ROADMAP_STAGES.filter(s => s.isGatekeeper).length, color: '#9333EA', icon: <Shield size={18} /> },
+          { label: 'Total Gatekeeper Stages', value: ROADMAP_STAGES.filter(s => s.isGatekeeper).length, color: '#FFFFFF', icon: <Shield size={18} /> },
         ].map((stat, i) => (
           <div key={i} className="stat-card">
             <div style={{ width: 36, height: 36, borderRadius: 8, background: `${stat.color}20`, border: `1px solid ${stat.color}30`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: stat.color, marginBottom: 12 }}>{stat.icon}</div>
@@ -64,7 +64,7 @@ export default function StageReviewPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {pending.map((r) => {
               const stage = ROADMAP_STAGES.find(s => s.id === r.stageId);
-              const phaseColor = stage ? STAGE_COLORS[stage.phase] : '#9333EA';
+              const phaseColor = stage ? STAGE_COLORS[stage.phase] : '#FFFFFF';
 
               return (
                 <div key={r.startupId} className="card" style={{ borderColor: 'rgba(113,113,122,0.2)', background: 'rgba(113,113,122,0.03)' }}>

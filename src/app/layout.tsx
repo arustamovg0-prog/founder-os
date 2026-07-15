@@ -7,7 +7,7 @@ import { Toaster } from 'sonner';
 const inter = Inter({ subsets: ['latin'] });
 
 export const viewport = {
-  themeColor: '#9333EA',
+  themeColor: '#FFFFFF',
   width: 'device-width',
   initialScale: 1,
   maximumScale: 1,
@@ -51,7 +51,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             toastOptions={{
               style: {
                 background: '#0d0d20',
-                border: '1px solid rgba(147,51,234,0.3)',
+                border: '1px solid rgba(255,255,255,0.3)',
                 color: '#f8fafc',
               }
             }} 

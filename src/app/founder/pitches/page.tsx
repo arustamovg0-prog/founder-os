@@ -85,13 +85,13 @@ export default function FounderPitchesPage() {
       </div>
 
       {/* Analytics Funnel */}
-      <div className="card" style={{ marginBottom: '24px', background: 'rgba(147,51,234,0.04)', borderColor: 'rgba(147,51,234,0.15)' }}>
+      <div className="card" style={{ marginBottom: '24px', background: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.15)' }}>
         <div style={{ fontSize: 12, color: '#D8B4FE', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '20px' }}>
           📊 Pitch Analytics — Conversion Funnel
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0', position: 'relative' }}>
           {[
-            { label: 'Sent', val: pitches.length, color: '#9333EA', pct: 100 },
+            { label: 'Sent', val: pitches.length, color: '#FFFFFF', pct: 100 },
             { label: 'Viewed', val: pitches.filter(p => p.status !== 'pending').length, color: '#A1A1AA', pct: Math.round((pitches.filter(p => p.status !== 'pending').length / pitches.length) * 100) },
             { label: 'Meeting', val: pitches.filter(p => p.meeting.confirmedDate).length, color: '#71717A', pct: Math.round((pitches.filter(p => p.meeting.confirmedDate).length / pitches.length) * 100) },
             { label: 'Decision', val: pitches.filter(p => p.status === 'accepted' || p.status === 'rejected' || p.status === 'closed').length, color: '#D4D4D8', pct: Math.round((pitches.filter(p => p.status === 'accepted' || p.status === 'rejected' || p.status === 'closed').length / pitches.length) * 100) },
@@ -127,7 +127,7 @@ export default function FounderPitchesPage() {
       {/* Stats */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '28px' }}>
         {[
-          { label: 'Total Pitches', value: pitches.length, color: '#9333EA' },
+          { label: 'Total Pitches', value: pitches.length, color: '#FFFFFF' },
           { label: 'Accepted', value: pitches.filter(p => p.status === 'accepted' || p.status === 'feedback_pending').length, color: '#D4D4D8' },
           { label: 'Pending', value: pitches.filter(p => p.status === 'pending').length, color: '#71717A' },
           { label: 'Closed', value: pitches.filter(p => p.status === 'closed').length, color: '#64748b' },
@@ -167,14 +167,14 @@ export default function FounderPitchesPage() {
                   </div>
                 </div>
 
-                <p style={{ fontSize: 13, color: '#64748b', lineHeight: 1.6, marginBottom: '16px', padding: '12px', background: 'rgba(255,255,255,0.02)', borderRadius: '8px', borderLeft: '3px solid rgba(147,51,234,0.3)' }}>
+                <p style={{ fontSize: 13, color: '#64748b', lineHeight: 1.6, marginBottom: '16px', padding: '12px', background: 'rgba(255,255,255,0.02)', borderRadius: '8px', borderLeft: '3px solid rgba(255,255,255,0.3)' }}>
                   &ldquo;{pitch.request.message}&rdquo;
                 </p>
 
                 {pitch.meeting.confirmedDate && (
                   <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: 13, color: '#94a3b8' }}>
-                      <Calendar size={13} color="#9333EA" />
+                      <Calendar size={13} color="#FFFFFF" />
                       {pitch.meeting.confirmedDate instanceof Date ? pitch.meeting.confirmedDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }) : new Date((pitch.meeting.confirmedDate as any).seconds * 1000).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })}
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: 13, color: '#94a3b8' }}>
@@ -183,7 +183,7 @@ export default function FounderPitchesPage() {
                     </div>
                     {pitch.meeting.meetingUrl && (
                       <a href={pitch.meeting.meetingUrl} target="_blank" rel="noopener noreferrer"
-                        style={{ fontSize: 13, color: '#9333EA', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        style={{ fontSize: 13, color: '#FFFFFF', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px' }}>
                         Join Meeting <ArrowRight size={12} />
                       </a>
                     )}

@@ -76,7 +76,7 @@ function FeedbackModal({ pitch, onClose }: { pitch: PitchEvent; onClose: () => v
                 <span style={{ width: 80, fontSize: 13, color: '#94a3b8', textTransform: 'capitalize', flexShrink: 0 }}>{key}</span>
                 <input type="range" min={1} max={5} value={val}
                   onChange={e => setScores(p => ({ ...p, [key]: Number(e.target.value) }))}
-                  style={{ flex: 1, accentColor: '#9333EA' }}
+                  style={{ flex: 1, accentColor: '#FFFFFF' }}
                 />
                 <div style={{ display: 'flex', gap: '2px', flexShrink: 0 }}>
                   {[1, 2, 3, 4, 5].map(i => (
@@ -106,7 +106,7 @@ function FeedbackModal({ pitch, onClose }: { pitch: PitchEvent; onClose: () => v
               { value: 'deal', label: '🤝 Deal', color: '#D4D4D8' },
               { value: 'follow_up', label: '📅 Follow Up', color: '#A1A1AA' },
               { value: 'traction', label: '📈 Improve Traction', color: '#71717A' },
-              { value: 'pivot', label: '🔄 Pivot', color: '#9333EA' },
+              { value: 'pivot', label: '🔄 Pivot', color: '#FFFFFF' },
               { value: 'reject', label: '✖ Pass', color: '#52525B' },
             ].map(ns => (
               <button key={ns.value} onClick={() => setNextStep(ns.value)} style={{
@@ -198,7 +198,7 @@ export default function InvestorPitchesPage() {
         {(['all', 'pending', 'active', 'closed'] as const).map(tab => (
           <button key={tab} onClick={() => setActiveTab(tab)} style={{
             padding: '8px 20px', borderRadius: '9px', border: 'none',
-            background: activeTab === tab ? 'rgba(147,51,234,0.3)' : 'transparent',
+            background: activeTab === tab ? 'rgba(255,255,255,0.3)' : 'transparent',
             color: activeTab === tab ? '#D8B4FE' : '#64748b',
             fontSize: '13px', fontWeight: 600, cursor: 'pointer',
             transition: 'var(--transition-standard)', fontFamily: 'Inter', textTransform: 'capitalize',
@@ -218,7 +218,7 @@ export default function InvestorPitchesPage() {
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '20px' }}>
                 <div style={{
                   width: 52, height: 52, borderRadius: '14px', flexShrink: 0,
-                  background: 'rgba(147,51,234,0.15)', border: '1px solid rgba(147,51,234,0.25)',
+                  background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.25)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontFamily: 'Space Grotesk', fontSize: 22, fontWeight: 800, color: '#D8B4FE',
                 }}>
@@ -244,7 +244,7 @@ export default function InvestorPitchesPage() {
 
                   <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', marginBottom: '16px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: 13, color: '#94a3b8' }}>
-                      <Calendar size={13} color="#9333EA" />
+                      <Calendar size={13} color="#FFFFFF" />
                       Proposed: {pitch.request.proposedDate instanceof Date ? pitch.request.proposedDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : (pitch.request.proposedDate as any)?.seconds ? new Date((pitch.request.proposedDate as any).seconds * 1000).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : 'Unknown date'}
                     </div>
                     {startup && (

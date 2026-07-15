@@ -32,7 +32,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   );
 };
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
-const PIE_COLORS = ['#9333EA', '#A1A1AA', '#D4D4D8', '#71717A', '#52525B'];
+const PIE_COLORS = ['#FFFFFF', '#A1A1AA', '#D4D4D8', '#71717A', '#52525B'];
 
 export default function AdminAnalyticsPage() {
   const [startups, setStartups] = useState<Startup[]>([]);
@@ -125,7 +125,7 @@ export default function AdminAnalyticsPage() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '28px' }}>
         {[
           { label: 'Total Portfolio MRR', value: fmt(totalMRR), change: '+24%', icon: <DollarSign size={18} />, color: '#D4D4D8' },
-          { label: 'Combined MAU', value: totalMAU.toLocaleString(), change: '+18%', icon: <Users size={18} />, color: '#9333EA' },
+          { label: 'Combined MAU', value: totalMAU.toLocaleString(), change: '+18%', icon: <Users size={18} />, color: '#FFFFFF' },
           { label: 'Avg AI Score', value: `${avgScore}/100`, change: '+5pts', icon: <Brain size={18} />, color: '#A1A1AA' },
           { label: 'Avg Roadmap Progress', value: `${avgProgress}%`, change: '+12%', icon: <Target size={18} />, color: '#71717A' },
         ].map((kpi, i) => (
@@ -153,15 +153,15 @@ export default function AdminAnalyticsPage() {
             <AreaChart data={mrrTrend}>
               <defs>
                 <linearGradient id="mrrGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#9333EA" stopOpacity={0.3} />
-                  <stop offset="95%" stopColor="#9333EA" stopOpacity={0} />
+                  <stop offset="5%" stopColor="#FFFFFF" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#FFFFFF" stopOpacity={0} />
                 </linearGradient>
               </defs>
               <CartesianGrid stroke="rgba(255,255,255,0.04)" vertical={false} />
               <XAxis dataKey="month" tick={{ fontSize: 11, fill: '#475569' }} axisLine={false} tickLine={false} />
               <YAxis tickFormatter={v => `$${v / 1000}K`} tick={{ fontSize: 11, fill: '#475569' }} axisLine={false} tickLine={false} />
               <Tooltip content={<CustomTooltip />} />
-              <Area type="monotone" dataKey="mrr" name="MRR" stroke="#9333EA" strokeWidth={2} fill="url(#mrrGrad)" />
+              <Area type="monotone" dataKey="mrr" name="MRR" stroke="#FFFFFF" strokeWidth={2} fill="url(#mrrGrad)" />
             </AreaChart>
           </ResponsiveContainer>
         </div>
@@ -175,7 +175,7 @@ export default function AdminAnalyticsPage() {
             <RadarChart data={radarData}>
               <PolarGrid stroke="rgba(255,255,255,0.06)" />
               <PolarAngleAxis dataKey="metric" tick={{ fontSize: 11, fill: '#475569' }} />
-              <Radar name="Score" dataKey="value" stroke="#9333EA" fill="#9333EA" fillOpacity={0.2} />
+              <Radar name="Score" dataKey="value" stroke="#FFFFFF" fill="#FFFFFF" fillOpacity={0.2} />
               <Tooltip content={<CustomTooltip />} />
             </RadarChart>
           </ResponsiveContainer>
@@ -195,7 +195,7 @@ export default function AdminAnalyticsPage() {
               <Pie data={industryData} cx="50%" cy="50%" outerRadius={80} dataKey="value" label={((p: any) => `${p.name} ${((p.percent ?? 0) * 100).toFixed(0)}%`) as any} labelLine={false}>
                 {industryData.map((_, i) => <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />)}
               </Pie>
-              <Tooltip formatter={(v) => [`${v} startup(s)`, 'Count']} contentStyle={{ background: '#0d0d20', border: '1px solid rgba(147,51,234,0.3)', borderRadius: 12 }} />
+              <Tooltip formatter={(v) => [`${v} startup(s)`, 'Count']} contentStyle={{ background: '#0d0d20', border: '1px solid rgba(255,255,255,0.3)', borderRadius: 12 }} />
             </PieChart>
           </ResponsiveContainer>
         </div>
@@ -211,7 +211,7 @@ export default function AdminAnalyticsPage() {
               <XAxis dataKey="stage" tick={{ fontSize: 10, fill: '#475569' }} axisLine={false} tickLine={false} />
               <YAxis tick={{ fontSize: 11, fill: '#475569' }} axisLine={false} tickLine={false} allowDecimals={false} />
               <Tooltip content={<CustomTooltip />} />
-              <Bar dataKey="count" name="Startups" fill="#9333EA" radius={[6, 6, 0, 0]} />
+              <Bar dataKey="count" name="Startups" fill="#FFFFFF" radius={[6, 6, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>

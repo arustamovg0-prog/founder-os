@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { isSignInWithEmailLink, signInWithEmailLink } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { useAuth } from '@/contexts/AuthContext';
-import { Zap, CheckCircle, XCircle } from 'lucide-react';
+import { Command, CheckCircle, XCircle } from 'lucide-react';
 import { toast } from 'sonner';
 
 type MagicState = 'checking' | 'email_needed' | 'signing_in' | 'success' | 'error';
@@ -88,8 +88,13 @@ export default function MagicLinkCallbackPage() {
 
         {/* Logo */}
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', marginBottom: '40px' }}>
-          <div style={{ width: 44, height: 44, borderRadius: 10, background: 'linear-gradient(135deg,#9333EA,#A1A1AA)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 20px rgba(147,51,234,0.5)' }}>
-            <Zap size={22} color="white" />
+          <div style={{ 
+            width: 44, height: 44, borderRadius: 10, 
+            background: 'rgba(255,255,255,0.03)', 
+            border: '1px solid rgba(255,255,255,0.1)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center' 
+          }}>
+            <Command size={22} color="white" />
           </div>
           <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 20, fontWeight: 700 }}>Founder OS</span>
         </div>
@@ -100,8 +105,8 @@ export default function MagicLinkCallbackPage() {
             <div>
               <div style={{
                 width: 64, height: 64, margin: '0 auto 20px',
-                border: '3px solid rgba(147,51,234,0.2)',
-                borderTopColor: '#9333EA',
+                border: '3px solid rgba(255,255,255,0.2)',
+                borderTopColor: '#FFFFFF',
                 borderRadius: '50%',
                 animation: 'spin 1s linear infinite',
               }} />

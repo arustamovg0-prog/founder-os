@@ -55,11 +55,11 @@ export default function PublicStartupProfile({ params }: { params: { startupName
     <div className="animate-fade-in" style={{ minHeight: '100vh', padding: '40px 20px', maxWidth: '800px', margin: '0 auto' }}>
       <div className="card glass" style={{ padding: '40px', position: 'relative', overflow: 'hidden' }}>
         {/* Decorative BG */}
-        <div style={{ position: 'absolute', top: -100, right: -100, width: 300, height: 300, borderRadius: '50%', background: 'radial-gradient(circle, rgba(147,51,234,0.15) 0%, transparent 70%)', filter: 'blur(40px)', zIndex: 0 }} />
+        <div style={{ position: 'absolute', top: -100, right: -100, width: 300, height: 300, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%)', filter: 'blur(40px)', zIndex: 0 }} />
 
         <div style={{ position: 'relative', zIndex: 1 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '24px', marginBottom: '32px' }}>
-            <div style={{ width: 80, height: 80, borderRadius: '20px', background: 'linear-gradient(135deg,rgba(147,51,234,0.2),rgba(161,161,170,0.2))', border: '1px solid rgba(147,51,234,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Space Grotesk', fontSize: 36, fontWeight: 800, color: '#D8B4FE' }}>
+            <div style={{ width: 80, height: 80, borderRadius: '20px', background: 'linear-gradient(135deg,rgba(255,255,255,0.2),rgba(161,161,170,0.2))', border: '1px solid rgba(255,255,255,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Space Grotesk', fontSize: 36, fontWeight: 800, color: '#D8B4FE' }}>
               {startup.name.charAt(0)}
             </div>
             <div>
@@ -80,7 +80,7 @@ export default function PublicStartupProfile({ params }: { params: { startupName
 
           <div style={{ marginBottom: '32px' }}>
             <h3 style={{ fontFamily: 'Space Grotesk', fontSize: 18, color: '#f8fafc', marginBottom: '12px' }}>Problem</h3>
-            <p style={{ fontSize: 15, color: '#cbd5e1', lineHeight: 1.6, background: 'rgba(255,255,255,0.02)', padding: '16px', borderRadius: '12px', borderLeft: '2px solid rgba(147,51,234,0.4)' }}>
+            <p style={{ fontSize: 15, color: '#cbd5e1', lineHeight: 1.6, background: 'rgba(255,255,255,0.02)', padding: '16px', borderRadius: '12px', borderLeft: '2px solid rgba(255,255,255,0.4)' }}>
               {startup.problem || 'Not specified'}
             </p>
           </div>

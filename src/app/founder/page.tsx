@@ -21,7 +21,7 @@ const STAGE_LABELS: Record<string, string> = {
   building: 'Building', scaling: 'Scaling', fundraising: 'Fundraising',
 };
 
-function ScoreRing({ score, color = '#9333EA' }: { score: number; color?: string }) {
+function ScoreRing({ score, color = '#FFFFFF' }: { score: number; color?: string }) {
   const r = 30, circ = 2 * Math.PI * r;
   const fill = (score / 100) * circ;
   return (
@@ -137,11 +137,11 @@ export default function FounderDashboard() {
 
   const kpis = [
     { label: 'MRR', value: fmt(metrics.mrr), icon: <DollarSign size={18} />, color: '#D8B4FE', change: '+16.7%', positive: true },
-    { label: 'ARR', value: fmt(metrics.arr), icon: <TrendingUp size={18} />, color: '#9333EA', change: '+16.7%', positive: true },
+    { label: 'ARR', value: fmt(metrics.arr), icon: <TrendingUp size={18} />, color: '#FFFFFF', change: '+16.7%', positive: true },
     { label: 'MAU', value: metrics.mau.toLocaleString(), icon: <Users size={18} />, color: '#A1A1AA', change: '+9.1%', positive: true },
     { label: 'LTV/CAC', value: `${metrics.ltvCacRatio}x`, icon: <Target size={18} />, color: '#D8B4FE', change: '', positive: true },
     { label: 'Runway', value: `${metrics.runwayMonths}mo`, icon: <Clock size={18} />, color: '#71717A', change: '', positive: true },
-    { label: 'Team', value: `${metrics.teamSize} ppl`, icon: <Users size={18} />, color: '#9333EA', change: '', positive: true },
+    { label: 'Team', value: `${metrics.teamSize} ppl`, icon: <Users size={18} />, color: '#FFFFFF', change: '', positive: true },
   ];
 
   const logIcons: Record<string, string> = {
@@ -155,7 +155,7 @@ export default function FounderDashboard() {
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '32px' }}>
         <div>
           <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 28, fontWeight: 700, marginBottom: 6 }}>
-            {s.name} <span style={{ fontSize: 14, color: '#9333EA', fontWeight: 500 }}>#{s.industry}</span>
+            {s.name} <span style={{ fontSize: 14, color: '#FFFFFF', fontWeight: 500 }}>#{s.industry}</span>
           </h1>
           <p style={{ color: '#64748b', fontSize: 14 }}>{s.tagline}</p>
         </div>
@@ -166,7 +166,7 @@ export default function FounderDashboard() {
       </div>
 
       {/* AI Readiness + Progress */}
-      <div className="card" style={{ marginBottom: '24px', background: 'linear-gradient(135deg, rgba(147,51,234,0.08), rgba(161,161,170,0.05))', borderColor: 'rgba(147,51,234,0.2)' }}>
+      <div className="card" style={{ marginBottom: '24px', background: 'linear-gradient(135deg, rgba(255,255,255,0.08), rgba(161,161,170,0.05))', borderColor: 'rgba(255,255,255,0.2)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '24px', flexWrap: 'wrap' }}>
           <ScoreRing score={s.aiScores.overallReadinessScore || 0} />
           <div style={{ flex: 1 }}>
@@ -224,12 +224,12 @@ export default function FounderDashboard() {
       {/* ── Founder Health Widget ──────────────────────────────────────────── */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px', marginBottom: '24px' }}>
         {/* AI Score detail */}
-        <div className="card" style={{ background: 'rgba(147,51,234,0.05)', borderColor: 'rgba(147,51,234,0.2)' }}>
+        <div className="card" style={{ background: 'rgba(255,255,255,0.05)', borderColor: 'rgba(255,255,255,0.2)' }}>
           <div style={{ fontSize: 11, color: '#D8B4FE', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 14, display: 'flex', alignItems: 'center', gap: 6 }}>
             <Brain size={12} /> AI Score Breakdown
           </div>
           {[
-            { label: 'Pitch Deck', val: s.aiScores.pitchDeckScore || 0, color: '#9333EA' },
+            { label: 'Pitch Deck', val: s.aiScores.pitchDeckScore || 0, color: '#FFFFFF' },
             { label: 'Market Fit', val: Math.round((s.aiScores.overallReadinessScore || 0) * 0.9), color: '#A1A1AA' },
             { label: 'Traction', val: Math.round((s.aiScores.overallReadinessScore || 0) * 0.8), color: '#D4D4D8' },
             { label: 'Team', val: Math.round((s.aiScores.overallReadinessScore || 0) * 1.05), color: '#71717A' },
@@ -346,7 +346,7 @@ export default function FounderDashboard() {
             <div style={{ fontSize: 13, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px' }}>
               Active Pitches
             </div>
-            <Link href="/founder/pitches" style={{ fontSize: 12, color: '#9333EA', textDecoration: 'none', fontWeight: 500 }}>
+            <Link href="/founder/pitches" style={{ fontSize: 12, color: '#FFFFFF', textDecoration: 'none', fontWeight: 500 }}>
               View all →
             </Link>
           </div>
@@ -387,7 +387,7 @@ export default function FounderDashboard() {
           {/* Badges row */}
           <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 20 }}>
             {[
-              { emoji: '🚀', label: 'First Pitch', earned: true, color: '#9333EA' },
+              { emoji: '🚀', label: 'First Pitch', earned: true, color: '#FFFFFF' },
               { emoji: '💡', label: 'MVP Ready', earned: true, color: '#A1A1AA' },
               { emoji: '📊', label: '$10K MRR', earned: true, color: '#D4D4D8' },
               { emoji: '🏆', label: 'Investment Ready', earned: true, color: '#71717A' },
@@ -448,7 +448,7 @@ export default function FounderDashboard() {
               }}>
                 <div style={{
                   width: 32, height: 32, borderRadius: '8px', flexShrink: 0,
-                  background: 'rgba(147,51,234,0.15)', border: '1px solid rgba(147,51,234,0.2)',
+                  background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.2)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontSize: '14px',
                 }}>

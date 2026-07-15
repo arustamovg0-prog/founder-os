@@ -17,7 +17,7 @@ function fmt(n: number) {
 
 const STAGE_ORDER = ['idea', 'validation', 'mvp', 'growth', 'investment_ready'];
 const STAGE_LABELS: Record<string, string> = { idea: 'Idea', validation: 'Validation', mvp: 'MVP', growth: 'Growth', investment_ready: 'Inv. Ready' };
-const STAGE_COLORS: Record<string, string> = { idea: '#64748b', validation: '#71717A', mvp: '#A1A1AA', growth: '#9333EA', investment_ready: '#D4D4D8' };
+const STAGE_COLORS: Record<string, string> = { idea: '#64748b', validation: '#71717A', mvp: '#A1A1AA', growth: '#FFFFFF', investment_ready: '#D4D4D8' };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const CustomTooltip = ({ active, payload, label }: any) => {
@@ -116,7 +116,7 @@ export default function AdminDashboard() {
       {/* KPIs */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '28px' }}>
         {[
-          { label: 'Total Startups', value: startups.length, icon: <Users size={18} />, color: '#9333EA', sub: 'in ecosystem' },
+          { label: 'Total Startups', value: startups.length, icon: <Users size={18} />, color: '#FFFFFF', sub: 'in ecosystem' },
           { label: 'Total MRR', value: fmt(totalMRR), icon: <TrendingUp size={18} />, color: '#D4D4D8', sub: 'combined portfolio' },
           { label: 'Avg AI Score', value: `${avgScore}/100`, icon: <Brain size={18} />, color: '#A1A1AA', sub: 'ecosystem health' },
           { label: 'Investment Ready', value: readyCount, icon: <Zap size={18} />, color: '#71717A', sub: 'score ≥ 75' },

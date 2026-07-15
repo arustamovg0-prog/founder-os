@@ -25,7 +25,7 @@ function fmt(n: number) {
 const STAGE_ORDER = ['idea', 'validation', 'mvp', 'growth', 'investment_ready'];
 const STAGE_COLORS = {
   idea: '#64748b', validation: '#71717A', mvp: '#A1A1AA',
-  growth: '#9333EA', investment_ready: '#D4D4D8',
+  growth: '#FFFFFF', investment_ready: '#D4D4D8',
 };
 
 // ─── Custom Tooltip ───────────────────────────────────────────────────────────
@@ -182,7 +182,7 @@ export default function EcosystemHealthPage() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '28px' }}>
         {[
           { label: 'Total Ecosystem MRR', value: fmt(totalMRR), sub: `ARR ${fmt(totalARR)}`, icon: <DollarSign size={18} />, color: '#D4D4D8', trend: 12 },
-          { label: 'Total MAU', value: totalMAU.toLocaleString(), sub: `${S.length} стартапов`, icon: <Users size={18} />, color: '#9333EA', trend: 8 },
+          { label: 'Total MAU', value: totalMAU.toLocaleString(), sub: `${S.length} стартапов`, icon: <Users size={18} />, color: '#FFFFFF', trend: 8 },
           { label: 'Investment Ready', value: `${investReady}/${S.length}`, sub: `${Math.round(investReady / S.length * 100)}% conversion`, icon: <Target size={18} />, color: '#A1A1AA', trend: 1 },
           { label: 'Critical Runway', value: criticalRunway > 0 ? `⚠️ ${criticalRunway}` : '✅ 0', sub: `Avg ${avgRunway} мес runway`, icon: <AlertTriangle size={18} />, color: criticalRunway > 0 ? '#52525B' : '#D4D4D8', trend: -criticalRunway },
         ].map((stat, i) => (
@@ -203,21 +203,21 @@ export default function EcosystemHealthPage() {
         {/* MRR Trend */}
         <div className="card">
           <div style={{ fontSize: 13, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: 8 }}>
-            <TrendingUp size={14} color="#9333EA" /> Ecosystem MRR Growth (6 мес)
+            <TrendingUp size={14} color="#FFFFFF" /> Ecosystem MRR Growth (6 мес)
           </div>
           <ResponsiveContainer width="100%" height={220}>
             <AreaChart data={mrrTrend}>
               <defs>
                 <linearGradient id="mrrGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#9333EA" stopOpacity={0.3} />
-                  <stop offset="95%" stopColor="#9333EA" stopOpacity={0} />
+                  <stop offset="5%" stopColor="#FFFFFF" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#FFFFFF" stopOpacity={0} />
                 </linearGradient>
               </defs>
               <CartesianGrid vertical={false} stroke="rgba(255,255,255,0.04)" />
               <XAxis dataKey="month" tick={{ fontSize: 11, fill: '#475569' }} axisLine={false} tickLine={false} />
               <YAxis tickFormatter={v => `$${v / 1000}K`} tick={{ fontSize: 11, fill: '#475569' }} axisLine={false} tickLine={false} />
               <Tooltip content={<CT />} />
-              <Area type="monotone" dataKey="mrr" name="MRR" stroke="#9333EA" strokeWidth={2} fill="url(#mrrGrad)" />
+              <Area type="monotone" dataKey="mrr" name="MRR" stroke="#FFFFFF" strokeWidth={2} fill="url(#mrrGrad)" />
               <Area type="monotone" dataKey="arr" name="ARR (÷12)" stroke="#A1A1AA" strokeWidth={1.5} fill="none" strokeDasharray="4 2" />
             </AreaChart>
           </ResponsiveContainer>
@@ -330,7 +330,7 @@ export default function EcosystemHealthPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {byIndustry.map(([industry, count], i) => {
               const pct = Math.round((count / S.length) * 100);
-              const colors = ['#9333EA', '#A1A1AA', '#D4D4D8', '#71717A', '#52525B'];
+              const colors = ['#FFFFFF', '#A1A1AA', '#D4D4D8', '#71717A', '#52525B'];
               const c = colors[i % colors.length];
               return (
                 <div key={industry} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>

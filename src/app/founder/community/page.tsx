@@ -97,7 +97,7 @@ const ROLE_COLORS: Record<string, string> = {
   CFO: '#3F3F46',
   Designer: '#52525B',
   Sales: '#f97316',
-  'AI/ML': '#9333EA',
+  'AI/ML': '#FFFFFF',
 };
 
 const ALL_ROLES = ['Все', 'CTO', 'CMO', 'COO', 'CPO', 'CFO', 'Designer', 'AI/ML', 'Sales'];

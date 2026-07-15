@@ -154,7 +154,7 @@ export default function OnboardingPage() {
 
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '6px 16px', borderRadius: '99px', background: 'rgba(147,51,234,0.15)', border: '1px solid rgba(147,51,234,0.3)', marginBottom: '16px' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '6px 16px', borderRadius: '99px', background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.3)', marginBottom: '16px' }}>
             <Sparkles size={13} color="#D8B4FE" />
             <span style={{ fontSize: 12, color: '#D8B4FE', fontWeight: 600 }}>Добро пожаловать, {profile?.displayName?.split(' ')[0] || 'Founder'}</span>
           </div>
@@ -173,12 +173,12 @@ export default function OnboardingPage() {
               }} onClick={() => step > s.id && setStep(s.id)}>
                 <div style={{
                   width: 44, height: 44, borderRadius: '50%',
-                  background: step > s.id ? '#D4D4D8' : step === s.id ? 'rgba(147,51,234,0.3)' : 'rgba(255,255,255,0.05)',
-                  border: `2px solid ${step > s.id ? '#D4D4D8' : step === s.id ? '#9333EA' : 'rgba(255,255,255,0.1)'}`,
+                  background: step > s.id ? '#D4D4D8' : step === s.id ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.05)',
+                  border: `2px solid ${step > s.id ? '#D4D4D8' : step === s.id ? '#FFFFFF' : 'rgba(255,255,255,0.1)'}`,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   color: step > s.id ? 'white' : step === s.id ? '#D8B4FE' : '#334155',
                   transition: 'var(--transition-standard)',
-                  boxShadow: step === s.id ? '0 0 20px rgba(147,51,234,0.4)' : 'none',
+                  boxShadow: step === s.id ? '0 0 20px rgba(255,255,255,0.4)' : 'none',
                 }}>
                   {step > s.id ? <CheckCircle size={18} /> : s.icon}
                 </div>
@@ -216,8 +216,8 @@ export default function OnboardingPage() {
                     {INDUSTRIES.map(ind => (
                       <button key={ind} onClick={() => set('industry', ind)} style={{
                         padding: '8px 14px', borderRadius: '10px', fontSize: 13, fontWeight: 500,
-                        background: data.industry === ind ? 'rgba(147,51,234,0.2)' : 'rgba(255,255,255,0.04)',
-                        border: `1px solid ${data.industry === ind ? '#9333EA' : 'rgba(255,255,255,0.08)'}`,
+                        background: data.industry === ind ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.04)',
+                        border: `1px solid ${data.industry === ind ? '#FFFFFF' : 'rgba(255,255,255,0.08)'}`,
                         color: data.industry === ind ? '#D8B4FE' : '#64748b',
                         cursor: 'pointer', fontFamily: 'Inter', transition: 'var(--transition-standard)',
                       }}>{ind}</button>
@@ -230,8 +230,8 @@ export default function OnboardingPage() {
                     {STAGES.map(s => (
                       <button key={s.id} onClick={() => set('stage', s.id)} style={{
                         padding: '12px 16px', borderRadius: '12px', textAlign: 'left',
-                        background: data.stage === s.id ? 'rgba(147,51,234,0.15)' : 'rgba(255,255,255,0.03)',
-                        border: `1px solid ${data.stage === s.id ? '#9333EA' : 'rgba(255,255,255,0.08)'}`,
+                        background: data.stage === s.id ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.03)',
+                        border: `1px solid ${data.stage === s.id ? '#FFFFFF' : 'rgba(255,255,255,0.08)'}`,
                         cursor: 'pointer', fontFamily: 'Inter', transition: 'var(--transition-standard)',
                       }}>
                         <div style={{ fontSize: 13, fontWeight: 600, color: data.stage === s.id ? '#D8B4FE' : '#94a3b8', marginBottom: 2 }}>{s.label}</div>
@@ -289,7 +289,7 @@ export default function OnboardingPage() {
                       style={{
                         display: 'flex', alignItems: 'center', gap: '8px',
                         width: '100%', padding: '12px 16px', borderRadius: '12px',
-                        background: 'rgba(147,51,234,0.1)', border: '1px solid rgba(147,51,234,0.25)',
+                        background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.25)',
                         color: '#D8B4FE', cursor: 'pointer', fontFamily: 'Inter', fontSize: 13, fontWeight: 600,
                         transition: 'var(--transition-standard)',
                       }}
@@ -342,7 +342,7 @@ export default function OnboardingPage() {
                   <>
                     <Upload size={40} style={{ margin: '0 auto 12px', display: 'block', color: '#334155' }} />
                     <div style={{ fontSize: 14, color: '#64748b', marginBottom: 4 }}>
-                      <span style={{ color: '#9333EA', fontWeight: 600 }}>Нажми или перетащи</span> PDF файл
+                      <span style={{ color: '#FFFFFF', fontWeight: 600 }}>Нажми или перетащи</span> PDF файл
                     </div>
                     <div style={{ fontSize: 12, color: '#334155' }}>PDF до 50 MB · Pitch Deck, Executive Summary</div>
                   </>
@@ -354,7 +354,7 @@ export default function OnboardingPage() {
               </div>
 
               {/* Summary */}
-              <div style={{ marginTop: '24px', padding: '20px', borderRadius: '14px', background: 'rgba(147,51,234,0.07)', border: '1px solid rgba(147,51,234,0.15)' }}>
+              <div style={{ marginTop: '24px', padding: '20px', borderRadius: '14px', background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.15)' }}>
                 <div style={{ fontSize: 12, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '12px' }}>Итог:</div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                   {[

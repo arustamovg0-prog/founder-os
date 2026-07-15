@@ -55,7 +55,7 @@ export default function VideoPitchRoomPage({ params }: { params: { id: string } 
                {camOn ? (
                 <div style={{ textAlign: 'center', color: '#64748b', fontSize: 12 }}>Self Feed Placeholder</div>
               ) : (
-                <div style={{ width: 60, height: 60, borderRadius: '50%', background: 'rgba(147,51,234,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, color: '#D8B4FE' }}>Me</div>
+                <div style={{ width: 60, height: 60, borderRadius: '50%', background: 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, color: '#D8B4FE' }}>Me</div>
               )}
               <div style={{ position: 'absolute', bottom: 12, left: 12, padding: '4px 8px', background: 'rgba(0,0,0,0.6)', borderRadius: '6px', fontSize: 11, color: '#f8fafc', backdropFilter: 'blur(4px)' }}>
                 You (Founder)
@@ -84,7 +84,7 @@ export default function VideoPitchRoomPage({ params }: { params: { id: string } 
         <div style={{ width: '320px', background: 'rgba(255,255,255,0.02)', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
           {/* Tabs */}
           <div style={{ display: 'flex', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-            <button onClick={() => setActiveTab('ai')} style={{ flex: 1, padding: '16px', background: activeTab === 'ai' ? 'rgba(147,51,234,0.1)' : 'transparent', border: 'none', color: activeTab === 'ai' ? '#D8B4FE' : '#64748b', fontSize: 13, fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, cursor: 'pointer' }}>
+            <button onClick={() => setActiveTab('ai')} style={{ flex: 1, padding: '16px', background: activeTab === 'ai' ? 'rgba(255,255,255,0.1)' : 'transparent', border: 'none', color: activeTab === 'ai' ? '#D8B4FE' : '#64748b', fontSize: 13, fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, cursor: 'pointer' }}>
               <Brain size={14} /> AI Notes
             </button>
             <button onClick={() => setActiveTab('chat')} style={{ flex: 1, padding: '16px', background: activeTab === 'chat' ? 'rgba(255,255,255,0.05)' : 'transparent', border: 'none', color: activeTab === 'chat' ? '#f8fafc' : '#64748b', fontSize: 13, fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, cursor: 'pointer' }}>
@@ -95,7 +95,7 @@ export default function VideoPitchRoomPage({ params }: { params: { id: string } 
           <div style={{ flex: 1, padding: '16px', overflowY: 'auto' }}>
             {activeTab === 'ai' ? (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                <div style={{ padding: '12px', borderRadius: '10px', background: 'rgba(147,51,234,0.1)', border: '1px solid rgba(147,51,234,0.2)' }}>
+                <div style={{ padding: '12px', borderRadius: '10px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)' }}>
                   <div style={{ fontSize: 11, color: '#D8B4FE', fontWeight: 700, marginBottom: 4, textTransform: 'uppercase' }}>Live Summary</div>
                   <div style={{ fontSize: 13, color: '#e2e8f0', lineHeight: 1.5 }}>
                     Investor is asking about Customer Acquisition Cost (CAC) and LTV ratio. You mentioned LTV/CAC is 3.2, which is a strong point.

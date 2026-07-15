@@ -9,7 +9,7 @@ import { Startup } from '@/types';
 
 const STAGE_COLORS: Record<string, string> = {
   idea: '#64748b', validation: '#71717A', mvp: '#A1A1AA',
-  growth: '#9333EA', investment_ready: '#D4D4D8',
+  growth: '#FFFFFF', investment_ready: '#D4D4D8',
 };
 
 function fmt(n: number) {
@@ -112,7 +112,7 @@ export default function LeaderboardPage() {
             {INDUSTRY_FILTERS.map(ind => (
               <button key={ind} onClick={() => setIndustryFilter(ind)} style={{
                 padding: '8px 12px', borderRadius: '7px', border: 'none', fontSize: 12, cursor: 'pointer', fontFamily: 'Inter', fontWeight: 500, whiteSpace: 'nowrap',
-                background: industryFilter === ind ? 'rgba(147,51,234,0.2)' : 'transparent',
+                background: industryFilter === ind ? 'rgba(255,255,255,0.2)' : 'transparent',
                 color: industryFilter === ind ? '#D8B4FE' : '#64748b',
               }}>{ind}</button>
             ))}
@@ -207,7 +207,7 @@ export default function LeaderboardPage() {
         {/* Footer */}
         <div style={{ textAlign: 'center' }}>
           <p style={{ fontSize: 12, color: '#334155' }}>
-            Рейтинг обновляется в реальном времени · <Link href="/" style={{ color: '#9333EA', textDecoration: 'none' }}>Founder OS</Link> · UNTITLED Ecosystem
+            Рейтинг обновляется в реальном времени · <Link href="/" style={{ color: '#FFFFFF', textDecoration: 'none' }}>Founder OS</Link> · UNTITLED Ecosystem
           </p>
         </div>
       </div>

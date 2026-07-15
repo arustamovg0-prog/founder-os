@@ -148,7 +148,7 @@ export default function FounderChatPage() {
     <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 48px)', maxHeight: '900px' }}>
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '20px' }}>
-        <div style={{ width: 44, height: 44, borderRadius: '12px', background: 'linear-gradient(135deg,rgba(147,51,234,0.3),rgba(161,161,170,0.2))', border: '1px solid rgba(147,51,234,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ width: 44, height: 44, borderRadius: '12px', background: 'linear-gradient(135deg,rgba(255,255,255,0.3),rgba(161,161,170,0.2))', border: '1px solid rgba(255,255,255,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <Bot size={20} color="#D8B4FE" />
         </div>
         <div>
@@ -168,15 +168,15 @@ export default function FounderChatPage() {
         {messages.map(msg => (
           <div key={msg.id} style={{ display: 'flex', gap: '12px', alignItems: 'flex-start', flexDirection: msg.role === 'user' ? 'row-reverse' : 'row' }}>
             {/* Avatar */}
-            <div style={{ width: 32, height: 32, borderRadius: '50%', flexShrink: 0, background: msg.role === 'user' ? 'linear-gradient(135deg,#9333EA,#A1A1AA)' : 'rgba(147,51,234,0.15)', border: '1px solid rgba(147,51,234,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ width: 32, height: 32, borderRadius: '50%', flexShrink: 0, background: msg.role === 'user' ? 'linear-gradient(135deg,#FFFFFF,#71717A)' : 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               {msg.role === 'user' ? <User size={14} color="white" /> : <Brain size={14} color="#D8B4FE" />}
             </div>
 
             {/* Bubble */}
             <div style={{
               maxWidth: '70%', padding: '12px 16px', borderRadius: msg.role === 'user' ? '16px 4px 16px 16px' : '4px 16px 16px 16px',
-              background: msg.role === 'user' ? 'linear-gradient(135deg,rgba(147,51,234,0.25),rgba(161,161,170,0.15))' : 'rgba(255,255,255,0.04)',
-              border: `1px solid ${msg.role === 'user' ? 'rgba(147,51,234,0.3)' : 'rgba(255,255,255,0.07)'}`,
+              background: msg.role === 'user' ? 'linear-gradient(135deg,rgba(255,255,255,0.25),rgba(161,161,170,0.15))' : 'rgba(255,255,255,0.04)',
+              border: `1px solid ${msg.role === 'user' ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.07)'}`,
               fontSize: 14, lineHeight: 1.7, color: '#e2e8f0',
             }}>
               <div dangerouslySetInnerHTML={{ __html: renderMarkdown(msg.content) }} />
@@ -190,12 +190,12 @@ export default function FounderChatPage() {
         {/* Loading */}
         {loading && (
           <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-            <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(147,51,234,0.15)', border: '1px solid rgba(147,51,234,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Brain size={14} color="#D8B4FE" />
             </div>
             <div style={{ padding: '16px 20px', borderRadius: '4px 16px 16px 16px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', display: 'flex', gap: '6px', alignItems: 'center' }}>
               {[0, 1, 2].map(i => (
-                <div key={i} style={{ width: 7, height: 7, borderRadius: '50%', background: '#9333EA', animation: `bounce 1.2s ease ${i * 0.2}s infinite` }} />
+                <div key={i} style={{ width: 7, height: 7, borderRadius: '50%', background: '#FFFFFF', animation: `bounce 1.2s ease ${i * 0.2}s infinite` }} />
               ))}
             </div>
           </div>
@@ -207,7 +207,7 @@ export default function FounderChatPage() {
       {messages.length <= 2 && (
         <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '12px' }}>
           {QUICK_QUESTIONS.map((q, i) => (
-            <button key={i} onClick={() => send(q)} style={{ padding: '8px 14px', borderRadius: '99px', fontSize: 12, background: 'rgba(147,51,234,0.1)', border: '1px solid rgba(147,51,234,0.2)', color: '#D8B4FE', cursor: 'pointer', fontFamily: 'Inter', fontWeight: 500, transition: 'var(--transition-standard)' }}>
+            <button key={i} onClick={() => send(q)} style={{ padding: '8px 14px', borderRadius: '99px', fontSize: 12, background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: '#D8B4FE', cursor: 'pointer', fontFamily: 'Inter', fontWeight: 500, transition: 'var(--transition-standard)' }}>
               {q}
             </button>
           ))}
@@ -229,7 +229,7 @@ export default function FounderChatPage() {
             color: '#f8fafc', fontSize: 14, fontFamily: 'Inter', lineHeight: 1.6,
             outline: 'none', boxSizing: 'border-box', transition: 'border 0.15s',
           }}
-          onFocus={e => e.target.style.borderColor = 'rgba(147,51,234,0.5)'}
+          onFocus={e => e.target.style.borderColor = 'rgba(255,255,255,0.5)'}
           onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
           disabled={loading}
         />
@@ -239,10 +239,10 @@ export default function FounderChatPage() {
           style={{
             position: 'absolute', right: 12, bottom: 12,
             width: 36, height: 36, borderRadius: '10px',
-            background: input.trim() ? 'linear-gradient(135deg,#9333EA,#A1A1AA)' : 'rgba(255,255,255,0.05)',
+            background: input.trim() ? 'linear-gradient(135deg,#FFFFFF,#71717A)' : 'rgba(255,255,255,0.05)',
             border: 'none', cursor: input.trim() ? 'pointer' : 'default',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            transition: 'var(--transition-standard)', boxShadow: input.trim() ? '0 0 12px rgba(147,51,234,0.4)' : 'none',
+            transition: 'var(--transition-standard)', boxShadow: input.trim() ? '0 0 12px rgba(255,255,255,0.4)' : 'none',
           }}
         >
           <Send size={15} color={input.trim() ? 'white' : '#334155'} />

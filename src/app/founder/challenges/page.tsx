@@ -97,7 +97,7 @@ const DIFFICULTY_LABELS: Record<string, string> = {
 const REWARD_COLORS: Record<string, string> = {
   pilot: '#A1A1AA',
   grant: '#D4D4D8',
-  investment: '#9333EA',
+  investment: '#FFFFFF',
 };
 const REWARD_LABELS: Record<string, string> = {
   pilot: 'Pilot Deal',
@@ -139,7 +139,7 @@ export default function ChallengesPage() {
           <div style={{ display: 'flex', gap: 12 }}>
             {[
               { label: 'Задач открыто', value: CHALLENGES.filter(c => c.status === 'open').length, color: '#D4D4D8' },
-              { label: 'Всего заявок', value: CHALLENGES.reduce((s, c) => s + c.applicants, 0), color: '#9333EA' },
+              { label: 'Всего заявок', value: CHALLENGES.reduce((s, c) => s + c.applicants, 0), color: '#FFFFFF' },
             ].map((s, i) => (
               <div key={i} style={{ padding: '10px 16px', borderRadius: 10, background: `${s.color}10`, border: `1px solid ${s.color}25`, textAlign: 'center' }}>
                 <div style={{ fontSize: 18, fontWeight: 800, color: s.color, fontFamily: 'Space Grotesk' }}>{s.value}</div>
@@ -156,8 +156,8 @@ export default function ChallengesPage() {
         {(['all', 'pilot', 'grant', 'investment'] as const).map(f => (
           <button key={f} onClick={() => setFilter(f)} style={{
             padding: '6px 14px', borderRadius: 99, fontSize: 12, fontWeight: 600, cursor: 'pointer',
-            background: filter === f ? (f === 'all' ? 'rgba(147,51,234,0.15)' : `${REWARD_COLORS[f]}15`) : 'rgba(255,255,255,0.04)',
-            border: filter === f ? `1px solid ${f === 'all' ? 'rgba(147,51,234,0.4)' : `${REWARD_COLORS[f]}40`}` : '1px solid rgba(255,255,255,0.08)',
+            background: filter === f ? (f === 'all' ? 'rgba(255,255,255,0.15)' : `${REWARD_COLORS[f]}15`) : 'rgba(255,255,255,0.04)',
+            border: filter === f ? `1px solid ${f === 'all' ? 'rgba(255,255,255,0.4)' : `${REWARD_COLORS[f]}40`}` : '1px solid rgba(255,255,255,0.08)',
             color: filter === f ? (f === 'all' ? '#D8B4FE' : REWARD_COLORS[f]) : '#64748b', fontFamily: 'Inter',
           }}>
             {f === 'all' ? 'Все задачи' : REWARD_LABELS[f]}
@@ -247,7 +247,7 @@ export default function ChallengesPage() {
                 ) : (
                   <button onClick={() => setApplyingTo(ch.id)} style={{
                     padding: '7px 14px', borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: 'pointer',
-                    background: 'rgba(147,51,234,0.15)', border: '1px solid rgba(147,51,234,0.3)', color: '#D8B4FE',
+                    background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.3)', color: '#D8B4FE',
                     display: 'flex', alignItems: 'center', gap: 6, fontFamily: 'Inter', transition: 'var(--transition-standard)',
                   }}>
                     <ChevronRight size={12} />Подать заявку
@@ -258,7 +258,7 @@ export default function ChallengesPage() {
 
             {/* Apply form */}
             {applyingTo === ch.id && (
-              <div style={{ padding: '16px 20px', borderTop: '1px solid rgba(255,255,255,0.06)', background: 'rgba(147,51,234,0.04)' }}>
+              <div style={{ padding: '16px 20px', borderTop: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.04)' }}>
                 <p style={{ fontSize: 12, color: '#64748b', marginBottom: 10 }}>Опишите ваш подход к решению задачи и почему именно ваша команда:</p>
                 <textarea
                   value={applicationText}
@@ -276,8 +276,8 @@ export default function ChallengesPage() {
                   </button>
                   <button onClick={() => submitApplication(ch.id)} disabled={!applicationText.trim()} style={{
                     padding: '7px 14px', borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: applicationText.trim() ? 'pointer' : 'not-allowed',
-                    background: applicationText.trim() ? 'rgba(147,51,234,0.3)' : 'rgba(255,255,255,0.04)',
-                    border: `1px solid ${applicationText.trim() ? 'rgba(147,51,234,0.5)' : 'rgba(255,255,255,0.08)'}`,
+                    background: applicationText.trim() ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.04)',
+                    border: `1px solid ${applicationText.trim() ? 'rgba(255,255,255,0.5)' : 'rgba(255,255,255,0.08)'}`,
                     color: applicationText.trim() ? '#D8B4FE' : '#334155', fontFamily: 'Inter',
                   }}>
                     <Send size={12} style={{ display: 'inline', marginRight: 6 }} />Отправить

@@ -68,8 +68,8 @@ export default function OnboardingPage() {
         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
           <div style={{
             width: 56, height: 56, borderRadius: 16,
-            background: 'rgba(147,51,234,0.15)',
-            border: '1px solid rgba(147,51,234,0.25)',
+            background: 'rgba(255,255,255,0.15)',
+            border: '1px solid rgba(255,255,255,0.25)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             color: '#D8B4FE',
           }}>
