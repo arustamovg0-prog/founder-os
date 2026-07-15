@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Gift, ExternalLink, Zap, Shield, BarChart3, Cloud, Scale, Users, Star, CheckCircle } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 const CATEGORIES = [
   { id: 'all', label: 'Все перки', icon: '✨' },
@@ -112,13 +113,15 @@ const CATEGORY_ICONS: Record<string, React.ReactNode> = {
 };
 
 export default function PerksPage() {
+  const t = useTranslations('FounderPerks');
   const [activeCategory, setActiveCategory] = useState('all');
   const [search, setSearch] = useState('');
   const [claimed, setClaimed] = useState<Set<string>>(new Set());
 
   const filtered = PERKS.filter(p => {
     const matchCat = activeCategory === 'all' || p.category === activeCategory;
-    const matchSearch = !search || p.company.toLowerCase().includes(search.toLowerCase()) || p.description.toLowerCase().includes(search.toLowerCase()) || p.tags.some(t => t.includes(search.toLowerCase()));
+    const desc = t(`items.${p.id}.description` as any);
+    const matchSearch = !search || p.company.toLowerCase().includes(search.toLowerCase()) || desc.toLowerCase().includes(search.toLowerCase()) || p.tags.some(t => t.includes(search.toLowerCase()));
     return matchCat && matchSearch;
   });
 
@@ -143,16 +146,16 @@ export default function PerksPage() {
               <div style={{ width: 32, height: 32, borderRadius: 8, background: 'linear-gradient(135deg,#71717A,#52525B)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Gift size={16} color="white" />
               </div>
-              <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 24, fontWeight: 700 }}>Ecosystem Perks</h1>
-              <span className="badge badge-green">Exclusive</span>
+              <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 24, fontWeight: 700 }}>{t('title')}</h1>
+              <span className="badge badge-green">{t('exclusive')}</span>
             </div>
-            <p style={{ color: '#64748b', fontSize: 13 }}>Партнёрские преимущества и скидки — только для резидентов UNTITLED</p>
+            <p style={{ color: '#64748b', fontSize: 13 }}>{t('subtitle')}</p>
           </div>
           <div style={{ padding: '10px 18px', borderRadius: 12, background: 'rgba(113,113,122,0.1)', border: '1px solid rgba(113,113,122,0.2)', textAlign: 'center' }}>
             <div style={{ fontSize: 20, fontWeight: 800, color: '#71717A', fontFamily: 'Space Grotesk' }}>
               ${(totalValue).toLocaleString()}+
             </div>
-            <div style={{ fontSize: 11, color: '#64748b', fontWeight: 600 }}>общая ценность перков</div>
+            <div style={{ fontSize: 11, color: '#64748b', fontWeight: 600 }}>{t('totalValue')}</div>
           </div>
         </div>
       </div>
@@ -161,7 +164,7 @@ export default function PerksPage() {
       <div style={{ marginBottom: 20 }}>
         <input
           className="input-field"
-          placeholder="🔍  Поиск по инструментам, тегам, компаниям..."
+          placeholder={t('searchPlaceholder')}
           value={search}
           onChange={e => setSearch(e.target.value)}
           style={{ width: '100%', maxWidth: 480 }}
@@ -182,7 +185,7 @@ export default function PerksPage() {
               color: activeCategory === cat.id ? '#71717A' : '#64748b',
             }}
           >
-            {cat.icon} {cat.label}
+            {cat.icon} {t(`categories.${cat.id}` as any)}
           </button>
         ))}
       </div>
@@ -193,7 +196,7 @@ export default function PerksPage() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
             <Star size={14} color="#71717A" />
             <span style={{ fontSize: 12, fontWeight: 700, color: '#71717A', textTransform: 'uppercase', letterSpacing: '1px' }}>
-              Топ перки
+              {t('featuredTitle')}
             </span>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 16 }}>
@@ -209,7 +212,7 @@ export default function PerksPage() {
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
             <span style={{ fontSize: 12, fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '1px' }}>
-              Все перки ({regular.length})
+              {t('allTitle', { count: regular.length })}
             </span>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 14 }}>
@@ -223,7 +226,7 @@ export default function PerksPage() {
       {filtered.length === 0 && (
         <div style={{ textAlign: 'center', padding: '60px 20px', color: '#334155' }}>
           <Gift size={40} style={{ margin: '0 auto 12px', display: 'block', opacity: 0.3 }} />
-          <p style={{ fontSize: 14 }}>Перки не найдены. Попробуйте другой поиск.</p>
+          <p style={{ fontSize: 14 }}>{t('notFound')}</p>
         </div>
       )}
     </div>
@@ -231,6 +234,7 @@ export default function PerksPage() {
 }
 
 function PerkCard({ perk, claimed, onClaim, featured }: { perk: Perk; claimed: boolean; onClaim: (id: string) => void; featured: boolean }) {
+  const t = useTranslations('FounderPerks');
   return (
     <div
       style={{
@@ -265,7 +269,7 @@ function PerkCard({ perk, claimed, onClaim, featured }: { perk: Perk; claimed: b
       </div>
 
       {/* Description */}
-      <p style={{ fontSize: 13, color: '#94a3b8', lineHeight: 1.6, marginBottom: 14 }}>{perk.description}</p>
+      <p style={{ fontSize: 13, color: '#94a3b8', lineHeight: 1.6, marginBottom: 14 }}>{t(`items.${perk.id}.description` as any)}</p>
 
       {/* Tags */}
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 14 }}>
@@ -282,8 +286,8 @@ function PerkCard({ perk, claimed, onClaim, featured }: { perk: Perk; claimed: b
       {/* Footer */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div>
-          <div style={{ fontSize: 13, fontWeight: 700, color: '#D4D4D8' }}>{perk.discount}</div>
-          <div style={{ fontSize: 10, color: '#475569' }}>ценность: {perk.value} · используют {perk.usedBy} стартапов</div>
+          <div style={{ fontSize: 13, fontWeight: 700, color: '#D4D4D8' }}>{t(`items.${perk.id}.discount` as any)}</div>
+          <div style={{ fontSize: 10, color: '#475569' }}>{t('card.value')} {perk.value} · {t('card.usedBy', { count: perk.usedBy })}</div>
         </div>
         <button
           onClick={() => onClaim(perk.id)}
@@ -295,7 +299,7 @@ function PerkCard({ perk, claimed, onClaim, featured }: { perk: Perk; claimed: b
             color: claimed ? '#D4D4D8' : '#71717A',
           }}
         >
-          {claimed ? <><CheckCircle size={12} /> Получен</> : <><ExternalLink size={12} /> Получить</>}
+          {claimed ? <><CheckCircle size={12} /> {t('card.claimed')}</> : <><ExternalLink size={12} /> {t('card.claim')}</>}
         </button>
       </div>
     </div>

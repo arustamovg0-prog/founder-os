@@ -22,7 +22,73 @@
     "admin": "Admin",
     "menu": "Menyu"
   },
+  "FounderDashboard": {
+    "loading": "Asosiy oyna yuklanmoqda...",
+    "notFound": "Startap topilmadi.",
+    "aiReadinessScore": "AI Tayyorgarlik Bahosi",
+    "roadmap": "Roadmap",
+    "stage": "Bosqich {current}/{total}",
+    "viewRoadmap": "Roadmapni ko'rish",
+    "kpis": {
+      "runway": "{months} oy",
+      "team": "{count} kishi"
+    },
+    "breakdown": {
+      "title": "AI Score Tahlili",
+      "pitchDeck": "Pich-dek",
+      "marketFit": "Bozorga moslik",
+      "traction": "Trekshen",
+      "team": "Jamoa"
+    },
+    "nextStep": {
+      "title": "⚡ Keyingi qadam",
+      "required": "MAJBURIY",
+      "openRoadmap": "Roadmapni ochish"
+    },
+    "ecosystemRank": {
+      "title": "🏆 Ekosistema Reytingi",
+      "outOfTotal": "{total} ta startapdan",
+      "fullLeaderboard": "Barcha reytinglar"
+    },
+    "currentStage": {
+      "title": "Joriy bosqich"
+    },
+    "activePitches": {
+      "title": "Faol pichlar",
+      "viewAll": "Barchasi →",
+      "noPitches": "Faol pichlar yo'q",
+      "scoreAtRequest": "So'rovdagi baho: {score}/100"
+    },
+    "achievements": {
+      "title": "Yutuqlar va Reyting",
+      "batchInfo": "Spring 2026 Batch · O'rin #{rank} / {total} startapdan"
+    },
+    "badges": {
+      "firstPitch": "Birinchi Pich",
+      "mvpReady": "MVP Tayyor",
+      "mrr": "$10K MRR",
+      "investmentReady": "Investitsiyaga Tayyor",
+      "firstExport": "Birinchi Eksport",
+      "seriesA": "Series A"
+    },
+    "quickLinks": {
+      "perksVal": "$106K+ qiymat",
+      "legalVal": "10 shablon + tekshiruv ro'yxati",
+      "challengesVal": "6 ta korporativ vazifa",
+      "communityVal": "6 ta profil mavjud"
+    },
+    "digitalFootprint": {
+      "title": "Raqamli iz"
+    }
+  },
   "Common": {
+    "stages": {
+      "discovery": "Discovery",
+      "validation": "Validation",
+      "building": "Building",
+      "scaling": "Scaling",
+      "fundraising": "Fundraising"
+    },
     "search": "Qidiruv...",
     "searchPlaceholder": "Qayerga o'tishni xohlaysiz?",
     "noResults": "Hech narsa topilmadi.",
@@ -33,5 +99,508 @@
     "menu": "Menyu",
     "active": "Faol",
     "escToClose": "Yopish uchun ESC"
+  },
+  "FounderRoadmap": {
+    "title": "Yo'l xaritasi",
+    "subtitle": "G'oyadan sarmoyaga tayyorlanishgacha bo'lgan tuzilgan yo'lingiz",
+    "completed": "Yakunlandi",
+    "inProgress": "Jarayonda",
+    "pendingReview": "Ko'rib chiqilmoqda",
+    "locked": "Qulflangan",
+    "loading": "Yo'l xaritasi yuklanmoqda...",
+    "notFound": "Startap topilmadi.",
+    "of": "dan",
+    "stagesCompleted": "bosqich yakunlandi",
+    "investmentReadyTrack": "Sarmoyaga tayyorgarlik treki",
+    "requiredArtifacts": "Kerakli hujjatlar",
+    "uploadFailed": "Yuklashda xatolik: ",
+    "uploadedSuccessfully": "muvaffaqiyatli yuklandi!",
+    "failedToSave": "Ma'lumotlar bazasiga saqlashda xatolik: ",
+    "type": "Turi:",
+    "required": "Majburiy",
+    "optional": "Ixtiyoriy",
+    "upload": "Yuklash",
+    "verificationRequired": "Ushbu bosqichni ochish uchun {team} jamoasining tasdig'i talab qilinadi",
+    "gatekeeper": "Nazoratchi",
+    "stages": {
+      "stage_1_discovery": {
+        "title": "Muammoni aniqlash",
+        "description": "Siz hal qilayotgan asosiy muammoni aniqlang va tasdiqlang",
+        "artifacts": {
+          "problem_statement": "Muammo tavsifi hujjati",
+          "customer_interviews": "Mijozlar bilan intervyu (5+)"
+        }
+      },
+      "stage_2_validation": {
+        "title": "Yechimni tasdiqlash",
+        "description": "O'z yechimingizni haqiqiy foydalanuvchilar bilan sinab ko'ring",
+        "artifacts": {
+          "customer_dev_report": "Customer Dev hisoboti",
+          "value_proposition": "Qiymat taklifi kanvasi"
+        }
+      },
+      "stage_3_mvp": {
+        "title": "MVP yaratish",
+        "description": "Minimal yashovchan mahsulotni (MVP) yarating va ishga tushiring",
+        "artifacts": {
+          "mvp_demo": "MVP Demo / Havola",
+          "unit_economics": "Unit-iqtisodiyot modeli"
+        }
+      },
+      "stage_4_traction": {
+        "title": "Traktsiya va O'sish",
+        "description": "O'lchanadigan traktsiyaga erishing va o'sish potentsialini isbotlang",
+        "artifacts": {
+          "traction_metrics": "Traktsiya dushbodi",
+          "gtm_strategy": "Bozorga chiqish strategiyasi (GTM)"
+        }
+      },
+      "stage_5_fundraising": {
+        "title": "Sarmoyaga tayyor",
+        "description": "Investorlar bilan uchrashuvlarga va moliyalashtirish raundiga tayyorlaning",
+        "artifacts": {
+          "pitch_deck": "Pitch Deck (AI bahosi)",
+          "financial_model": "Moliyaviy model (3 yillik)",
+          "executive_summary": "Loyiha xulosasi (Executive Summary)",
+          "legal_docs": "Yuridik hujjatlar"
+        }
+      }
+    }
+  },
+  "FounderDataRoom": {
+    "title": "Data Room (Ma'lumotlar xonasi)",
+    "subtitle": "Investorlar tekshiruvi uchun hujjatlarni xavfsiz saqlash",
+    "documentsReady": "Hujjatlar tayyor",
+    "completeness": "Data Room to'liqligi",
+    "aiScore": "🤖 AI Bahosi",
+    "uploadedDate": "Yuklangan sana: {date}",
+    "view": "Ko'rish",
+    "uploading": "Yuklanmoqda...",
+    "clickToUpload": "Yuklash uchun bosing",
+    "orDragDrop": "yoki faylni tortib olib keling",
+    "failedToUpload": "Faylni yuklashda xatolik yuz berdi",
+    "analyzingPitchDeck": "🤖 AI Pitch Deckingizni tahlil qilmoqda...",
+    "aiScoreUpdated": "AI Tayyorgarlik bahosi yangilandi: {score}/100!",
+    "demoAiScoreUpdated": "Demo: AI bahosi yangilandi: {score}/100",
+    "documentUploaded": "Hujjat yuklandi!",
+    "documentRemoved": "Hujjat o'chirildi",
+    "docs": {
+      "pitch_deck": {
+        "label": "Pitch Deck",
+        "description": "Kompaniya sharhi, bozor imkoniyatlari va investitsiya g'oyasi"
+      },
+      "financial_model": {
+        "label": "Moliyaviy model",
+        "description": "3 yillik moliyaviy prognozlar va unit-iqtisodiyot"
+      },
+      "executive_summary": {
+        "label": "Loyiha xulosasi",
+        "description": "Biznes va investitsiya imkoniyatlarining qisqacha xulosasi (2 sahifa)"
+      },
+      "customer_dev_report": {
+        "label": "Customer Dev hisoboti",
+        "description": "Mijozlar bilan intervyular va insaytlar"
+      },
+      "legal_docs": {
+        "label": "Yuridik hujjatlar",
+        "description": "Ta'sis hujjatlari, cap table, shartnomalar"
+      }
+    }
+  },
+  "FounderPitches": {
+    "title": "Mening Pitchlarim",
+    "subtitle": "Investorlarga pitch so'rovlari va uchrashuvlarni boshqarish",
+    "requestPitch": "Pitch so'rash",
+    "fillAllFields": "Barcha maydonlarni to'ldiring",
+    "pitchSent": "Pitch so'rovi yuborildi!",
+    "analyticsTitle": "📊 Pitch Analitikasi — Konversiya Voronkasi",
+    "funnel": {
+      "sent": "Yuborildi",
+      "viewed": "Ko'rildi",
+      "meeting": "Uchrashuv",
+      "decision": "Qaror"
+    },
+    "kpis": {
+      "responseRate": "Javob berish darajasi",
+      "responseRateDesc": "Investorlar javob berdi",
+      "avgResponseTime": "O'rtacha javob vaqti",
+      "avgResponseTimeDesc": "O'rtacha javob vaqti",
+      "acceptRate": "Qabul qilish darajasi",
+      "acceptRateDesc": "Pitchlar qabul qilindi"
+    },
+    "stats": {
+      "total": "Jami pitchlar",
+      "accepted": "Qabul qilingan",
+      "pending": "Kutilmoqda",
+      "closed": "Yopilgan"
+    },
+    "noRequests": "Hali pitch so'rovlari yo'q",
+    "sendFirstRequest": "Birinchi pitchni yuborish",
+    "aiScoreAtRequest": "Yuborilgandagi AI bahosi: ",
+    "onlineMeeting": "Onlayn uchrashuv",
+    "inPerson": "Yuzma-yuz",
+    "joinMeeting": "Uchrashuvga ulanish",
+    "modal": {
+      "title": "Investorga pitch so'rovi",
+      "currentScore": "Joriy AI Readiness bahoingiz: ",
+      "investorName": "Investor ismi / Fond",
+      "investorPlaceholder": "masalan, Aibek Ventures",
+      "meetingDate": "Taklif etilayotgan uchrashuv sanasi",
+      "message": "Investorga xabar",
+      "messagePlaceholder": "Startapingiz va nima qidirayotganingizni qisqacha ta'riflang...",
+      "cancel": "Bekor qilish",
+      "send": "So'rovni yuborish"
+    },
+    "status": {
+      "pending": "Javob kutilmoqda",
+      "accepted": "Qabul qilingan",
+      "rejected": "Rad etilgan",
+      "feedback_pending": "Fikr kutilmoqda",
+      "completed": "Yakunlangan",
+      "closed": "Yopilgan"
+    }
+  },
+  "FounderPitchRoom": {
+    "leavingRoom": "Xonani tark etish...",
+    "title": "Pitch Xonasi",
+    "recordingActive": "Sessiya yozilmoqda",
+    "investorCameraPlaceholder": "Investor kamerasi o'rni",
+    "investorLabel": "Investor",
+    "selfFeedPlaceholder": "Sizning kamerangiz o'rni",
+    "youFounder": "Siz (Asoschi)",
+    "tabs": {
+      "aiNotes": "AI Qaydlar",
+      "chat": "Chat"
+    },
+    "ai": {
+      "liveSummary": "Jonli xulosa",
+      "liveSummaryText": "Investor Mijoz jalb qilish narxi (CAC) va LTV nisbati haqida so'ramoqda. Siz LTV/CAC 3.2 ekanligini ta'kidladingiz, bu kuchli argument.",
+      "suggestion": "AI Maslahati",
+      "suggestionText": "O'sishingizni tasdiqlash uchun mahalliy banklar bilan yaqinda tuzilgan B2B hamkorlikni eslatib o'ting."
+    },
+    "chat": {
+      "noMessages": "Hozircha xabarlar yo'q"
+    }
+  },
+  "FounderAICopilot": {
+    "title": "AI Copilot",
+    "poweredBy": "Gemini asosida",
+    "subtitle": "Startap ma'lumotlaringizga to'liq kirish huquqiga ega bo'lgan kontekstdan xabardor maslahatchi",
+    "context": {
+      "aiScore": "AI Bahosi",
+      "stage": "Bosqich",
+      "pitchDeck": "Pitch-dek",
+      "uploaded": "Yuklangan",
+      "missing": "Mavjud emas",
+      "idea": "G'oya"
+    },
+    "assessment": {
+      "run": "Baholashni boshlash",
+      "analyzing": "Tahlil qilinmoqda...",
+      "complete": "**Baholash yakunlandi!**\n\nYangi AI bahoingiz — **{score}/100**.\n\nTafsilotlar:\n- Pitch-dek: {deck}/100\n- Bozorga mosligi: {market}/100\n- Trekshen: {traction}/100\n- Jamoa: {team}/100\n\nShu ruhda davom eting! Aniq maslahat kerak bo'lsa, xabar bering."
+    },
+    "chat": {
+      "initialMsg": "Salom! Men Gemini asosidagi **AI Copilot**ingizman. Startap metrikalari, yo'l xaritasi jarayoni, pitch-dek baholari va raqamli izingiz haqida to'liq ma'lumotga egaman.\n\nBugun sizga qanday yordam bera olaman? Metrikalarni tahlil qilishni, pitch pozitsiyangizni ko'rib chiqishni yoki mablag' jalb qilish bo'yicha keyingi qadamlarni rejalashtirishni so'rashingiz mumkin.",
+      "placeholder": "AI Copilotdan startapingiz haqida istalgan narsani so'rang...",
+      "error": "Xatolik yuz berdi",
+      "connectionError": "Ulanishda xatolik.",
+      "analyzing": "Startapingiz ma'lumotlari tahlil qilinmoqda..."
+    },
+    "suggested": [
+      {
+        "icon": "📊",
+        "text": "Mening joriy metrikalarimni tahlil qiling va o'sish bo'yicha tavsiyalar bering"
+      },
+      {
+        "icon": "🎯",
+        "text": "Investitsiyaga tezroq tayyor bo'lish uchun nimaga e'tibor qaratishim kerak?"
+      },
+      {
+        "icon": "📋",
+        "text": "Pitch-dekimni baholang va yaxshilash bo'yicha takliflar bering"
+      },
+      {
+        "icon": "💡",
+        "text": "Investorlar mening startapimda qanday eng katta xavflarni ko'rishlari mumkin?"
+      }
+    ]
+  },
+  "FounderPerks": {
+    "title": "Ekosistema Imtiyozlari",
+    "exclusive": "Eksklyuziv",
+    "subtitle": "Hamkorlik imtiyozlari va chegirmalar — faqat UNTITLED rezidentlari uchun",
+    "totalValue": "imtiyozlarning umumiy qiymati",
+    "searchPlaceholder": "🔍 Vositalar, teglar, kompaniyalar bo'yicha qidiruv...",
+    "featuredTitle": "Top imtiyozlar",
+    "allTitle": "Barcha imtiyozlar ({count})",
+    "notFound": "Imtiyozlar topilmadi. Boshqa qidiruvni sinab ko'ring.",
+    "card": {
+      "value": "qiymati:",
+      "usedBy": "{count} startaplar foydalanadi",
+      "claimed": "Olingan",
+      "claim": "Olish"
+    },
+    "categories": {
+      "all": "Barcha imtiyozlar",
+      "saas": "SaaS Tools",
+      "cloud": "Cloud & Infra",
+      "legal": "Legal & Finance",
+      "marketing": "Marketing",
+      "hr": "HR & Talent"
+    },
+    "items": {
+      "p1": {
+        "description": "Butun jamoa uchun 6 oylik bepul Notion Plus. Hujjatlar, ma'lumotlar bazalari, rejalashtirish.",
+        "discount": "6 oy bepul"
+      },
+      "p2": {
+        "description": "UNTITLED rezidentlari uchun $100,000 gacha AWS kreditlari. EC2, RDS, S3 va boshqa xizmatlarni qoplaydi.",
+        "discount": "$100K gacha kreditlar"
+      },
+      "p3": {
+        "description": "Markaziy Osiyo startaplari uchun birinchi $50K tranzaksiyaga 0% komissiya + ustuvor onbording.",
+        "discount": "$50K da 0% komissiya"
+      },
+      "p4": {
+        "description": "Figma Professional 1 yilga bepul. Cheksiz loyihalar va muharrirlar.",
+        "discount": "12 oy bepul"
+      },
+      "p5": {
+        "description": "Next.js va React ilovalaringizni joylashtirish uchun 12 oylik Vercel Pro.",
+        "discount": "12 oy Pro"
+      },
+      "p6": {
+        "description": "Shartnomalar, NDA va Term Sheetni avtomatlashtirish. Business tarifiga umrbod 50% chegirma.",
+        "discount": "Umrbod 50% chegirma"
+      },
+      "p7": {
+        "description": "HubSpot Starter CRM 1 yilga bepul + $500 qo'shimcha reklama kreditlari.",
+        "discount": "1 yil bepul"
+      },
+      "p8": {
+        "description": "Linear Plus 12 oyga. Vazifalar va sprintlarni boshqarish uchun eng yaxshi vosita.",
+        "discount": "12 oy Plus"
+      },
+      "p9": {
+        "description": "Dastlabki 5 ta xalqaro xodim yoki pudratchilarni yollashda 3 oy davomida komissiyasiz.",
+        "discount": "3 oy komissiyasiz"
+      },
+      "p10": {
+        "description": "AQShga kengayishni rejalashtirayotgan asoschilar uchun O-1 va EB-1 viza maslahatlariga $500 chegirma.",
+        "discount": "$500 chegirma"
+      },
+      "p11": {
+        "description": "Google Workspace Business Standard 10 nafargacha foydalanuvchi uchun 12 oyga bepul.",
+        "discount": "12 oy bepul"
+      },
+      "p12": {
+        "description": "Brevo Business 6 oyga bepul. Email kampaniyalar, avtomatlashtirish va CRM-light.",
+        "discount": "6 oy Business"
+      }
+    }
+  },
+  "FounderLegal": {
+    "title": "Huquqiy to'plam",
+    "region": "Markaziy Osiyo",
+    "subtitle": "Yuridik shablonlar, chek-listlar va savollarga javoblar — startapni ishga tushirish va rivojlantirish uchun barchasi",
+    "stats": {
+      "templates": "Shablonlar",
+      "checklists": "Chek-listlar",
+      "jurisdictions": "Yurisdiksiyalar",
+      "faqs": "FAQ savollar"
+    },
+    "sections": {
+      "templates": "Hujjat shablonlari",
+      "all": "Barchasi",
+      "checklists": "Chek-listlar",
+      "faq": "Ko'p beriladigan savollar"
+    },
+    "popular": "Ommabop",
+    "categories": {
+      "corp": "Korporativ",
+      "invest": "Investitsion",
+      "hr": "HR / Jamoa",
+      "commercial": "Tijorat"
+    },
+    "docs": {
+      "d1": {
+        "title": "NDA (Maxfiylik kelishuvi)",
+        "description": "Hamkorlar va investorlar bilan muzokaralar uchun ikki tomonlama maxfiylik kelishuvi. Qozog'iston va O'zbekiston qonunchiligiga moslashtirilgan."
+      },
+      "d2": {
+        "title": "SAFE Agreement",
+        "description": "Seed investitsiyalarni jalb qilish uchun standart SAFE shartnomasi. Markaziy Osiyo yurisdiksiyalari uchun Y Combinator SAFE ning moslashtirilgan varianti."
+      },
+      "d3": {
+        "title": "Term Sheet (Dastlabki investitsiya shartnomasi)",
+        "description": "Asosiy shartlarga ega Term Sheet shabloni: baholash, ishtirok etish, veto huquqlari, anti-dilution va liquidation preference."
+      },
+      "d4": {
+        "title": "IT-mutaxassis uchun mehnat shartnomasi (UZ)",
+        "description": "O'zbekiston Respublikasi qonunchiligi bo'yicha texnik mutaxassis bilan mehnat shartnomasi, NDA shartlari va IP assignment bilan."
+      },
+      "d5": {
+        "title": "Co-founder Agreement (Hammuassislar kelishuvi)",
+        "description": "Ulushlarni taqsimlash, vesting, rollar va hammuassislarning chiqish tartibini tartibga soladi. Dastlabki bosqichlarda juda muhim."
+      },
+      "d6": {
+        "title": "IP Assignment Agreement",
+        "description": "Dasturchilar va xodimlardan intellektual mulk huquqlarini kompaniyaga o'tkazish."
+      },
+      "d7": {
+        "title": "SaaS Customer Agreement",
+        "description": "SaaS mahsulotidan foydalanish bo'yicha standart shartnoma: foydalanish shartlari, SLA, javobgarlik, ma'lumotlar."
+      },
+      "d8": {
+        "title": "Advisor Agreement + Vesting",
+        "description": "Maslahatchi (advisor) bilan shartnoma: roli, equity/SAFENote shaklidagi kompensatsiya + cliff + vesting jadvali."
+      },
+      "d9": {
+        "title": "Contractor Agreement (Pudrat shartnomasi)",
+        "description": "Frilanser yoki pudratchi bilan shartnoma: deliverables, to'lov, IP assignment, maxfiylik."
+      },
+      "d10": {
+        "title": "Shareholder Agreement",
+        "description": "Aksiyadorlar kelishuvi: minoritar huquqlarini himoya qilish, drag-along, tag-along, right of first refusal mexanizmlari."
+      }
+    },
+    "checklists": {
+      "c1": {
+        "title": "Qozog'istonda MChJ (TOO) ro'yxatdan o'tkazish",
+        "steps": [
+          {
+            "text": "Kompaniya nomini tanlang (egov.kz da noyobligini tekshiring)",
+            "detail": "egov.kz portali → Biznes → Yuridik shaxsni ro'yxatdan o'tkazishdan foydalaning"
+          },
+          {
+            "text": "Ta'sis hujjatlarini tayyorlang (Ustav)",
+            "detail": "TOO uchun minimal ustav kapitali — 0 tenge (2021 yildan)"
+          },
+          {
+            "text": "eGov orqali ro'yxatdan o'ting (3-5 ish kuni)"
+          },
+          {
+            "text": "Bankda hisob raqami oching",
+            "detail": "Kaspi Business, Halyk Bank yoki Jusan — startaplar uchun eng tezkorlari"
+          },
+          {
+            "text": "Davlat daromadlari qo'mitasida soliq to'lovchi sifatida ro'yxatdan o'ting"
+          },
+          {
+            "text": "Soliq rejimini tanlang (Umumiy yoki Soddalashtirilgan)",
+            "detail": "Soddalashtirilgan soliq rejimi: daromaddan 3%, har yarim yilda hisobot"
+          },
+          {
+            "text": "ERI (Elektron raqamli imzo) oling"
+          },
+          {
+            "text": "Ixtiyoriy: Astana Hub rezidentligiga ariza bering (0% soliq)"
+          }
+        ]
+      },
+      "c2": {
+        "title": "O'zbekistonda MChJ (OOO) ro'yxatdan o'tkazish",
+        "steps": [
+          {
+            "text": "Nomni mybusiness.uz saytida tekshiring"
+          },
+          {
+            "text": "Ustav va muassislar qarorini tayyorlang"
+          },
+          {
+            "text": "Davlat bojini to'lang (0.5 BHM)"
+          },
+          {
+            "text": "my.gov.uz orqali ro'yxatdan o'ting (1-3 kun)"
+          },
+          {
+            "text": "Soliq organlarida ro'yxatga turing, STIR (INN) oling"
+          },
+          {
+            "text": "Bankda hisob oching (Orient Finance, Kapitalbank — IT uchun mashhur)"
+          },
+          {
+            "text": "IT Park Uzbekistan da ro'yxatdan o'tishni ko'rib chiqing (0% soliq)"
+          },
+          {
+            "text": "Xodimlarni mehnat shartnomalari bo'yicha rasmiylashtiring"
+          }
+        ]
+      },
+      "c3": {
+        "title": "IT Park Uzbekistan rezidenti bo'lish",
+        "steps": [
+          {
+            "text": "Faoliyatingiz IT ga mos kelishiga ishonch hosil qiling (dasturiy ta'minot ishlab chiqish, IT-xizmatlar, eksport)"
+          },
+          {
+            "text": "my.gov.uz portalida ro'yxatdan o'ting va IT Park ga ariza bering"
+          },
+          {
+            "text": "Loyiha baholashidan o'ting (onlayn forma + agar grant kerak bo'lsa pitch)"
+          },
+          {
+            "text": "Rezident guvohnomasini o'ling (2-4 hafta)"
+          },
+          {
+            "text": "Imtiyozlar: 0% foyda solig'i, 0% QQS, imtiyozli sug'urta badallari",
+            "detail": "25.5% o'rniga oylik maoshdan 1%"
+          },
+          {
+            "text": "Har yili rezidentlik mezonlariga muvofiqligini tasdiqlang"
+          }
+        ]
+      },
+      "c4": {
+        "title": "Birinchi investitsiyalarni jalb qilishga tayyorgarlik",
+        "steps": [
+          {
+            "text": "Cap table ni (kapitallashuv jadvalini) tartibga keltiring"
+          },
+          {
+            "text": "Barcha hammuassislar va asosiy dasturchilardan IP assignment ni rasmiylashtiring"
+          },
+          {
+            "text": "Vesting bilan Co-founder Agreement imzolang (4-yil / 1-yil cliff)"
+          },
+          {
+            "text": "Data Room yarating (pitch deck, moliyaviy model, metrikalar, yuridik hujjatlar)"
+          },
+          {
+            "text": "Soliq qarzdorliklari yo'qligini tekshiring"
+          },
+          {
+            "text": "Investitsiya vositasini tanlang (SAFE, konvertatsiya qilinadigan qarz, ulush)",
+            "detail": "SAFE — seed uchun eng standart va tezkor vosita"
+          },
+          {
+            "text": "Markaziy Osiyo venchur huquqi bo'yicha yurist bilan maslahatlashing",
+            "detail": "UNTITLED tavsiya qiladi: Nexum Legal, Aequitas Legal (KZ)"
+          }
+        ]
+      }
+    },
+    "faq": [
+      {
+        "q": "Kompaniyani ro'yxatdan o'tkazish uchun menga yurist kerakmi?",
+        "a": "Oddiy TOO/OOO ro'yxatdan o'tkazish uchun yurist shart emas — bizning chek-listlarimiz va egov.kz / my.gov.uz portallaridan foydalaning. Yurist Co-founder Agreement yaratish, investitsiyalarni rasmiylashtirish va IP-himoya qilishda tavsiya etiladi."
+      },
+      {
+        "q": "Startap uchun qaysi yurisdiksiyani tanlash kerak (KZ, UZ yoki Delaware)?",
+        "a": "Mahalliy bozor uchun: TOO (KZ) yoki OOO (UZ). Xorijiy investorlarni jalb qilish uchun — Delaware C-Corp (AQSh) + MO da sho'ba korxona. Aksariyat xorijiy VClar Delaware yoki Cayman Islands holdingni talab qiladi."
+      },
+      {
+        "q": "SAFE nima va u qanday ishlaydi?",
+        "a": "SAFE (Simple Agreement for Future Equity) — bu investor hozir pul beradigan va uni keyingi raundda chegirma bilan aksiyalarga aylantiradigan vosita. Ulushni to'g'ridan-to'g'ri sotishdan ko'ra osonroq va tezkorroq, kompaniyani baholashni talab qilmaydi."
+      },
+      {
+        "q": "Vesting nima va nima uchun u muhim?",
+        "a": "Vesting — bu hammuassislar o'z aksiyalarini vaqt o'tishi bilan \"ishlab topadigan\" mexanizm (odatda 1 yillik cliff bilan 4 yil). Kompaniyani hammuassis 3 oydan keyin 30% ulush bilan ketib qolish holatidan himoya qiladi."
+      },
+      {
+        "q": "IP Assignment ni rasmiylashtirish kerakmi?",
+        "a": "Albatta! IP Assignment barcha intellektual mulk (kod, dizayn, brend) jismoniy shaxslarga emas, balki kompaniyaga tegishli ekanligini kafolatlaydi. Bu investor due diligence i uchun juda muhim."
+      }
+    ]
   }
 }

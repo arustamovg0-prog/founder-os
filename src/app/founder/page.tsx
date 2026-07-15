@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { ROADMAP_STAGES } from '@/lib/constants';
 import { TrendingUp, DollarSign, Users, Target, Zap, ArrowUpRight, Clock, CheckCircle, AlertCircle, Brain, Trophy, Star, Gift, Flame } from 'lucide-react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { useAuth } from '@/contexts/AuthContext';
 import { doc, onSnapshot, collection, getDocs } from 'firebase/firestore';
 import { db, isDemoConfig } from '@/lib/firebase';
@@ -16,10 +17,7 @@ function fmt(n: number) {
   return `$${n}`;
 }
 
-const STAGE_LABELS: Record<string, string> = {
-  discovery: 'Discovery', validation: 'Validation',
-  building: 'Building', scaling: 'Scaling', fundraising: 'Fundraising',
-};
+// STAGE_LABELS removed in favor of translations
 
 function ScoreRing({ score, color = '#FFFFFF' }: { score: number; color?: string }) {
   const r = 30, circ = 2 * Math.PI * r;
@@ -51,6 +49,10 @@ export default function FounderDashboard() {
   const [pitches, setPitches] = useState<any[]>([]);
   const [recentLogs, setRecentLogs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  
+  const t = useTranslations('FounderDashboard');
+  const tCommon = useTranslations('Common');
+  const tNav = useTranslations('Navigation');
 
   useEffect(() => {
     if (!profile?.linkedStartupId) {
@@ -127,8 +129,8 @@ export default function FounderDashboard() {
     return () => unsubscribe();
   }, [profile]);
 
-  if (loading) return <div className="animate-fade-in" style={{ padding: 32, color: '#64748b' }}>Загрузка дашборда...</div>;
-  if (!startup) return <div className="animate-fade-in" style={{ padding: 32, color: '#64748b' }}>Стартап не найден.</div>;
+  if (loading) return <div className="animate-fade-in" style={{ padding: 32, color: '#64748b' }}>{t('loading')}</div>;
+  if (!startup) return <div className="animate-fade-in" style={{ padding: 32, color: '#64748b' }}>{t('notFound')}</div>;
 
   const s = startup;
   const metrics = s.metrics;
@@ -140,8 +142,8 @@ export default function FounderDashboard() {
     { label: 'ARR', value: fmt(metrics.arr), icon: <TrendingUp size={18} />, color: '#FFFFFF', change: '+16.7%', positive: true },
     { label: 'MAU', value: metrics.mau.toLocaleString(), icon: <Users size={18} />, color: '#A1A1AA', change: '+9.1%', positive: true },
     { label: 'LTV/CAC', value: `${metrics.ltvCacRatio}x`, icon: <Target size={18} />, color: '#D8B4FE', change: '', positive: true },
-    { label: 'Runway', value: `${metrics.runwayMonths}mo`, icon: <Clock size={18} />, color: '#71717A', change: '', positive: true },
-    { label: 'Team', value: `${metrics.teamSize} ppl`, icon: <Users size={18} />, color: '#FFFFFF', change: '', positive: true },
+    { label: 'Runway', value: t('kpis.runway', { months: metrics.runwayMonths }), icon: <Clock size={18} />, color: '#71717A', change: '', positive: true },
+    { label: 'Team', value: t('kpis.team', { count: metrics.teamSize }), icon: <Users size={18} />, color: '#FFFFFF', change: '', positive: true },
   ];
 
   const logIcons: Record<string, string> = {
@@ -152,7 +154,7 @@ export default function FounderDashboard() {
   return (
     <div className="animate-fade-in">
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '32px' }}>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
           <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 28, fontWeight: 700, marginBottom: 6 }}>
             {s.name} <span style={{ fontSize: 14, color: '#FFFFFF', fontWeight: 500 }}>#{s.industry}</span>
@@ -172,31 +174,31 @@ export default function FounderDashboard() {
           <div style={{ flex: 1 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
               <Brain size={14} color="#D8B4FE" />
-              <span style={{ fontSize: 12, color: '#D8B4FE', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px' }}>AI Readiness Score</span>
+              <span style={{ fontSize: 12, color: '#D8B4FE', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px' }}>{t('aiReadinessScore')}</span>
             </div>
             <p style={{ fontSize: 14, color: '#94a3b8', lineHeight: 1.6, marginBottom: '12px' }}>
               {s.executiveSummaryAI}
             </p>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
               <div style={{ fontSize: 13, color: '#64748b' }}>
-                Roadmap: <strong style={{ color: '#D8B4FE' }}>{s.roadmapProgress}%</strong>
+                {t('roadmap')}: <strong style={{ color: '#D8B4FE' }}>{s.roadmapProgress}%</strong>
               </div>
               <div className="progress-bar" style={{ flex: 1 }}>
                 <div className="progress-fill" style={{ width: `${s.roadmapProgress}%` }} />
               </div>
               <span style={{ fontSize: 13, color: '#64748b', whiteSpace: 'nowrap' }}>
-                Stage {currentStageIdx + 1}/{ROADMAP_STAGES.length}
+                {t('stage', { current: currentStageIdx + 1, total: ROADMAP_STAGES.length })}
               </span>
             </div>
           </div>
           <Link href="/founder/roadmap" className="btn-primary" style={{ whiteSpace: 'nowrap' }}>
-            View Roadmap <ArrowUpRight size={14} />
+            {t('viewRoadmap')} <ArrowUpRight size={14} />
           </Link>
         </div>
       </div>
 
       {/* KPI Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '24px' }}>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
         {kpis.map((kpi, i) => (
           <div key={i} className="stat-card">
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
@@ -222,17 +224,17 @@ export default function FounderDashboard() {
       </div>
 
       {/* ── Founder Health Widget ──────────────────────────────────────────── */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px', marginBottom: '24px' }}>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
         {/* AI Score detail */}
         <div className="card" style={{ background: 'rgba(255,255,255,0.05)', borderColor: 'rgba(255,255,255,0.2)' }}>
           <div style={{ fontSize: 11, color: '#D8B4FE', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 14, display: 'flex', alignItems: 'center', gap: 6 }}>
-            <Brain size={12} /> AI Score Breakdown
+            <Brain size={12} /> {t('breakdown.title')}
           </div>
           {[
-            { label: 'Pitch Deck', val: s.aiScores.pitchDeckScore || 0, color: '#FFFFFF' },
-            { label: 'Market Fit', val: Math.round((s.aiScores.overallReadinessScore || 0) * 0.9), color: '#A1A1AA' },
-            { label: 'Traction', val: Math.round((s.aiScores.overallReadinessScore || 0) * 0.8), color: '#D4D4D8' },
-            { label: 'Team', val: Math.round((s.aiScores.overallReadinessScore || 0) * 1.05), color: '#71717A' },
+            { label: t('breakdown.pitchDeck'), val: s.aiScores.pitchDeckScore || 0, color: '#FFFFFF' },
+            { label: t('breakdown.marketFit'), val: Math.round((s.aiScores.overallReadinessScore || 0) * 0.9), color: '#A1A1AA' },
+            { label: t('breakdown.traction'), val: Math.round((s.aiScores.overallReadinessScore || 0) * 0.8), color: '#D4D4D8' },
+            { label: t('breakdown.team'), val: Math.round((s.aiScores.overallReadinessScore || 0) * 1.05), color: '#71717A' },
           ].map((item, i) => (
             <div key={i} style={{ marginBottom: 10 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, marginBottom: 4 }}>
@@ -249,7 +251,7 @@ export default function FounderDashboard() {
         {/* Next Step */}
         <div className="card" style={{ background: 'rgba(212,212,216,0.04)', borderColor: 'rgba(212,212,216,0.15)' }}>
           <div style={{ fontSize: 11, color: '#A1A1AA', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 14 }}>
-            ⚡ Следующий шаг
+            {t('nextStep.title')}
           </div>
           {currentStage && (
             <>
@@ -260,12 +262,12 @@ export default function FounderDashboard() {
                   <div key={a.key} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
                     <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#71717A', flexShrink: 0 }} />
                     <span style={{ color: '#94a3b8' }}>{a.label}</span>
-                    {a.isRequired && <span style={{ fontSize: 9, color: '#71717A', fontWeight: 700 }}>REQUIRED</span>}
+                    {a.isRequired && <span style={{ fontSize: 9, color: '#71717A', fontWeight: 700 }}>{t('nextStep.required')}</span>}
                   </div>
                 ))}
               </div>
               <Link href="/founder/roadmap" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, marginTop: 14, fontSize: 12, color: '#A1A1AA', fontWeight: 600, textDecoration: 'none' }}>
-                Открыть Roadmap <ArrowUpRight size={12} />
+                {t('nextStep.openRoadmap')} <ArrowUpRight size={12} />
               </Link>
             </>
           )}
@@ -274,7 +276,7 @@ export default function FounderDashboard() {
         {/* Ecosystem rank */}
         <div className="card" style={{ background: 'rgba(113,113,122,0.04)', borderColor: 'rgba(113,113,122,0.15)' }}>
           <div style={{ fontSize: 11, color: '#D4D4D8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 14 }}>
-            🏆 Ecosystem Rank
+            {t('ecosystemRank.title')}
           </div>
           {(() => {
             const sorted = [...allStartups].sort((a, b) => (b.aiScores.overallReadinessScore || 0) - (a.aiScores.overallReadinessScore || 0));
@@ -287,7 +289,7 @@ export default function FounderDashboard() {
                   <span style={{ fontSize: 36 }}>{rank <= 3 ? medals[rank - 1] : `#${rank}`}</span>
                   <div>
                     <div style={{ fontFamily: 'Space Grotesk', fontSize: 22, fontWeight: 800, color: '#D4D4D8' }}>#{rank}</div>
-                    <div style={{ fontSize: 11, color: '#64748b' }}>из {allStartups.length} стартапов</div>
+                    <div style={{ fontSize: 11, color: '#64748b' }}>{t('ecosystemRank.outOfTotal', { total: allStartups.length })}</div>
                   </div>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
@@ -300,7 +302,7 @@ export default function FounderDashboard() {
                   ))}
                 </div>
                 <Link href="/leaderboard" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, marginTop: 12, fontSize: 12, color: '#D4D4D8', fontWeight: 600, textDecoration: 'none' }}>
-                  Весь лидерборд <ArrowUpRight size={12} />
+                  {t('ecosystemRank.fullLeaderboard')} <ArrowUpRight size={12} />
                 </Link>
               </>
             );
@@ -308,16 +310,16 @@ export default function FounderDashboard() {
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Current Stage */}
         <div className="card">
           <div style={{ fontSize: 13, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '16px' }}>
-            Current Stage
+            {t('currentStage.title')}
           </div>
           {currentStage && (
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
-                <span className="badge badge-purple">{STAGE_LABELS[currentStage.phase]}</span>
+                <span className="badge badge-purple">{tCommon(`stages.${currentStage.phase}`)}</span>
                 <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 16, fontWeight: 700 }}>{currentStage.title}</span>
               </div>
               <p style={{ fontSize: 13, color: '#64748b', marginBottom: '16px' }}>{currentStage.description}</p>
@@ -331,7 +333,7 @@ export default function FounderDashboard() {
                         : <AlertCircle size={14} color="#71717A" />
                       }
                       <span style={{ fontSize: 13, color: done ? '#D4D4D8' : '#71717A' }}>{art.label}</span>
-                      {art.isRequired && !done && <span className="badge badge-yellow">Required</span>}
+                      {art.isRequired && !done && <span className="badge badge-yellow">{t('nextStep.required')}</span>}
                     </div>
                   );
                 })}
@@ -344,16 +346,16 @@ export default function FounderDashboard() {
         <div className="card">
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
             <div style={{ fontSize: 13, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px' }}>
-              Active Pitches
+              {t('activePitches.title')}
             </div>
             <Link href="/founder/pitches" style={{ fontSize: 12, color: '#FFFFFF', textDecoration: 'none', fontWeight: 500 }}>
-              View all →
+              {t('activePitches.viewAll')}
             </Link>
           </div>
           {pitches.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '24px', color: '#334155' }}>
               <Zap size={24} style={{ marginBottom: 8, opacity: 0.3 }} />
-              <p style={{ fontSize: 13 }}>No active pitches</p>
+              <p style={{ fontSize: 13 }}>{t('activePitches.noPitches')}</p>
             </div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -366,7 +368,7 @@ export default function FounderDashboard() {
                     </span>
                   </div>
                   <p style={{ fontSize: 12, color: '#475569' }}>
-                    Score at request: {p.request.snapshotScore}/100
+                    {t('activePitches.scoreAtRequest', { score: p.request.snapshotScore })}
                   </p>
                 </div>
               ))}
@@ -379,20 +381,29 @@ export default function FounderDashboard() {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20, flexWrap: 'wrap', gap: 12 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <Trophy size={16} color="#71717A" />
-              <span style={{ fontSize: 13, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px' }}>Достижения & Рейтинг</span>
+              <span style={{ fontSize: 13, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px' }}>{t('achievements.title')}</span>
             </div>
-            <span style={{ fontSize: 11, color: '#475569' }}>Батч Spring 2026 · Позиция <strong style={{ color: '#71717A' }}>#1</strong> из 12 стартапов</span>
+            {(() => {
+              const sorted = [...allStartups].sort((a, b) => (b.aiScores.overallReadinessScore || 0) - (a.aiScores.overallReadinessScore || 0));
+              let rank = sorted.findIndex(st => st.id === s.id) + 1;
+              if (rank === 0) rank = sorted.length + 1;
+              return (
+                <span style={{ fontSize: 11, color: '#475569' }}>
+                  <span dangerouslySetInnerHTML={{ __html: t('achievements.batchInfo', { rank: `<strong style="color: #71717A">#${rank}</strong>`, total: allStartups.length }) }} />
+                </span>
+              );
+            })()}
           </div>
 
           {/* Badges row */}
           <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 20 }}>
             {[
-              { emoji: '🚀', label: 'First Pitch', earned: true, color: '#FFFFFF' },
-              { emoji: '💡', label: 'MVP Ready', earned: true, color: '#A1A1AA' },
-              { emoji: '📊', label: '$10K MRR', earned: true, color: '#D4D4D8' },
-              { emoji: '🏆', label: 'Investment Ready', earned: true, color: '#71717A' },
-              { emoji: '🌍', label: 'First Export', earned: false, color: '#64748b' },
-              { emoji: '💼', label: 'Series A', earned: false, color: '#64748b' },
+              { emoji: '🚀', label: t('badges.firstPitch'), earned: true, color: '#FFFFFF' },
+              { emoji: '💡', label: t('badges.mvpReady'), earned: true, color: '#A1A1AA' },
+              { emoji: '📊', label: t('badges.mrr'), earned: true, color: '#D4D4D8' },
+              { emoji: '🏆', label: t('badges.investmentReady'), earned: true, color: '#71717A' },
+              { emoji: '🌍', label: t('badges.firstExport'), earned: false, color: '#64748b' },
+              { emoji: '💼', label: t('badges.seriesA'), earned: false, color: '#64748b' },
             ].map((b, i) => (
               <div key={i} title={b.label} style={{
                 display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5, padding: '10px 14px', borderRadius: 12,
@@ -410,10 +421,10 @@ export default function FounderDashboard() {
           {/* Quick links to new modules */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 10 }}>
             {[
-              { href: '/founder/perks', icon: <Gift size={14} />, label: 'Ecosystem Perks', sub: '$106K+ ценность', color: '#71717A' },
-              { href: '/founder/legal', icon: <Zap size={14} />, label: 'Legal Toolkit', sub: '10 шаблонов + чек-листы', color: '#A1A1AA' },
-              { href: '/founder/challenges', icon: <Flame size={14} />, label: 'Challenges', sub: '6 задач от корпораций', color: '#52525B' },
-              { href: '/founder/community', icon: <Users size={14} />, label: 'Co-founder Match', sub: '6 профилей доступно', color: '#D4D4D8' },
+              { href: '/founder/perks', icon: <Gift size={14} />, label: tNav('perks'), sub: t('quickLinks.perksVal'), color: '#71717A' },
+              { href: '/founder/legal', icon: <Zap size={14} />, label: tNav('legal'), sub: t('quickLinks.legalVal'), color: '#A1A1AA' },
+              { href: '/founder/challenges', icon: <Flame size={14} />, label: tNav('challenges'), sub: t('quickLinks.challengesVal'), color: '#52525B' },
+              { href: '/founder/community', icon: <Users size={14} />, label: tNav('community'), sub: t('quickLinks.communityVal'), color: '#D4D4D8' },
             ].map((link, i) => (
               <Link key={i} href={link.href} style={{ textDecoration: 'none' }}>
                 <div style={{ padding: '12px 14px', borderRadius: 10, background: `${link.color}08`, border: `1px solid ${link.color}20`, cursor: 'pointer', transition: 'var(--transition-standard)' }}
@@ -435,7 +446,7 @@ export default function FounderDashboard() {
         <div className="card" style={{ gridColumn: '1 / -1' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
             <div style={{ fontSize: 13, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px' }}>
-              Digital Footprint
+              {t('digitalFootprint.title')}
             </div>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>

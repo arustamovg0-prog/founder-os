@@ -3,9 +3,10 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
+import { useState, useEffect } from 'react';
 import { 
   LayoutDashboard, Map, FolderOpen, Presentation, Brain, 
-  Users, TrendingUp, Briefcase, BarChart3, Kanban, CheckCircle, Flame, Heart, LogOut, Command, Scale, Gift, MessageSquare
+  Users, TrendingUp, Briefcase, BarChart3, Kanban, CheckCircle, Flame, Heart, LogOut, Command, Scale, Gift, MessageSquare, Menu, X
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
@@ -60,8 +61,40 @@ export default function SideNav() {
     router.push('/');
   };
 
+  const [isOpen, setIsOpen] = useState(false);
+
+  // Close sidebar on route change
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
+
   return (
-    <aside className="sidebar">
+    <>
+      {/* Mobile Top Header */}
+      <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-[#000000] border-b border-white/10 z-40 flex items-center justify-between px-4">
+        <div className="flex items-center gap-2">
+           <Command size={16} color="white" />
+           <span className="text-[#f8fafc] font-semibold text-sm" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Founder OS</span>
+        </div>
+        <button onClick={() => setIsOpen(true)} className="p-2 text-white">
+          <Menu size={20} />
+        </button>
+      </div>
+
+      {/* Backdrop for Mobile */}
+      {isOpen && (
+        <div 
+          className="md:hidden fixed inset-0 bg-black/50 z-40" 
+          onClick={() => setIsOpen(false)}
+        />
+      )}
+
+      <aside className={`sidebar ${isOpen ? 'sidebar-open' : ''}`}>
+        <div className="md:hidden absolute top-4 right-4">
+          <button onClick={() => setIsOpen(false)} className="text-zinc-400 p-2">
+            <X size={20} />
+          </button>
+        </div>
       {/* Brand Logo */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 14px', marginBottom: '24px' }}>
         <div style={{ 
@@ -116,5 +149,6 @@ export default function SideNav() {
         </button>
       </div>
     </aside>
+    </>
   );
 }

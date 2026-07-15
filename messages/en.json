@@ -22,7 +22,73 @@
     "admin": "Admin",
     "menu": "Menu"
   },
+  "FounderDashboard": {
+    "loading": "Loading dashboard...",
+    "notFound": "Startup not found.",
+    "aiReadinessScore": "AI Readiness Score",
+    "roadmap": "Roadmap",
+    "stage": "Stage {current}/{total}",
+    "viewRoadmap": "View Roadmap",
+    "kpis": {
+      "runway": "{months}mo",
+      "team": "{count} ppl"
+    },
+    "breakdown": {
+      "title": "AI Score Breakdown",
+      "pitchDeck": "Pitch Deck",
+      "marketFit": "Market Fit",
+      "traction": "Traction",
+      "team": "Team"
+    },
+    "nextStep": {
+      "title": "⚡ Next Step",
+      "required": "REQUIRED",
+      "openRoadmap": "Open Roadmap"
+    },
+    "ecosystemRank": {
+      "title": "🏆 Ecosystem Rank",
+      "outOfTotal": "out of {total} startups",
+      "fullLeaderboard": "Full Leaderboard"
+    },
+    "currentStage": {
+      "title": "Current Stage"
+    },
+    "activePitches": {
+      "title": "Active Pitches",
+      "viewAll": "View all →",
+      "noPitches": "No active pitches",
+      "scoreAtRequest": "Score at request: {score}/100"
+    },
+    "achievements": {
+      "title": "Achievements & Rank",
+      "batchInfo": "Spring 2026 Batch · Rank #{rank} out of {total} startups"
+    },
+    "badges": {
+      "firstPitch": "First Pitch",
+      "mvpReady": "MVP Ready",
+      "mrr": "$10K MRR",
+      "investmentReady": "Investment Ready",
+      "firstExport": "First Export",
+      "seriesA": "Series A"
+    },
+    "quickLinks": {
+      "perksVal": "$106K+ value",
+      "legalVal": "10 templates + checklists",
+      "challengesVal": "6 corporate challenges",
+      "communityVal": "6 profiles available"
+    },
+    "digitalFootprint": {
+      "title": "Digital Footprint"
+    }
+  },
   "Common": {
+    "stages": {
+      "discovery": "Discovery",
+      "validation": "Validation",
+      "building": "Building",
+      "scaling": "Scaling",
+      "fundraising": "Fundraising"
+    },
     "search": "Search...",
     "searchPlaceholder": "Where do you want to go?",
     "noResults": "No results found.",
@@ -33,5 +99,508 @@
     "menu": "Menu",
     "active": "Active",
     "escToClose": "ESC to close"
+  },
+  "FounderRoadmap": {
+    "title": "Startup Roadmap",
+    "subtitle": "Your structured path from idea to investment readiness",
+    "completed": "Completed",
+    "inProgress": "In Progress",
+    "pendingReview": "Pending Review",
+    "locked": "Locked",
+    "loading": "Loading roadmap...",
+    "notFound": "Startup not found.",
+    "of": "of",
+    "stagesCompleted": "stages completed",
+    "investmentReadyTrack": "Investment Ready Track",
+    "requiredArtifacts": "Required Artifacts",
+    "uploadFailed": "Upload failed: ",
+    "uploadedSuccessfully": "uploaded successfully!",
+    "failedToSave": "Failed to save to database: ",
+    "type": "Type:",
+    "required": "Required",
+    "optional": "Optional",
+    "upload": "Upload",
+    "verificationRequired": "This stage requires {team} team verification before unlocking",
+    "gatekeeper": "Gatekeeper",
+    "stages": {
+      "stage_1_discovery": {
+        "title": "Problem Discovery",
+        "description": "Identify and validate the core problem you are solving",
+        "artifacts": {
+          "problem_statement": "Problem Statement Doc",
+          "customer_interviews": "Customer Interviews (5+)"
+        }
+      },
+      "stage_2_validation": {
+        "title": "Solution Validation",
+        "description": "Validate your solution hypothesis with real users",
+        "artifacts": {
+          "customer_dev_report": "Customer Dev Report",
+          "value_proposition": "Value Proposition Canvas"
+        }
+      },
+      "stage_3_mvp": {
+        "title": "MVP Development",
+        "description": "Build and launch your Minimum Viable Product",
+        "artifacts": {
+          "mvp_demo": "MVP Demo / Link",
+          "unit_economics": "Unit Economics Model"
+        }
+      },
+      "stage_4_traction": {
+        "title": "Traction & Growth",
+        "description": "Achieve measurable traction and prove growth potential",
+        "artifacts": {
+          "traction_metrics": "Traction Dashboard",
+          "gtm_strategy": "Go-To-Market Strategy"
+        }
+      },
+      "stage_5_fundraising": {
+        "title": "Investment Ready",
+        "description": "Prepare for investor meetings and fundraising round",
+        "artifacts": {
+          "pitch_deck": "Pitch Deck (AI Scored)",
+          "financial_model": "Financial Model (3yr)",
+          "executive_summary": "Executive Summary",
+          "legal_docs": "Legal Documents"
+        }
+      }
+    }
+  },
+  "FounderDataRoom": {
+    "title": "Data Room",
+    "subtitle": "Secure document storage for investor due diligence",
+    "documentsReady": "Documents ready",
+    "completeness": "Data Room Completeness",
+    "aiScore": "🤖 AI Score",
+    "uploadedDate": "Uploaded {date}",
+    "view": "View",
+    "uploading": "Uploading...",
+    "clickToUpload": "Click to upload",
+    "orDragDrop": "or drag & drop",
+    "failedToUpload": "Failed to upload file",
+    "analyzingPitchDeck": "🤖 AI is analyzing your Pitch Deck...",
+    "aiScoreUpdated": "AI Readiness Score updated: {score}/100!",
+    "demoAiScoreUpdated": "Demo: AI Score updated: {score}/100",
+    "documentUploaded": "Document uploaded!",
+    "documentRemoved": "Document removed",
+    "docs": {
+      "pitch_deck": {
+        "label": "Pitch Deck",
+        "description": "Company overview, market opportunity, and investment thesis"
+      },
+      "financial_model": {
+        "label": "Financial Model",
+        "description": "3-year financial projections and unit economics"
+      },
+      "executive_summary": {
+        "label": "Executive Summary",
+        "description": "2-page summary of business and investment opportunity"
+      },
+      "customer_dev_report": {
+        "label": "Customer Dev Report",
+        "description": "Customer discovery interviews and insights"
+      },
+      "legal_docs": {
+        "label": "Legal Documents",
+        "description": "Articles of incorporation, cap table, agreements"
+      }
+    }
+  },
+  "FounderPitches": {
+    "title": "My Pitches",
+    "subtitle": "Manage your investor pitch requests and meetings",
+    "requestPitch": "Request Pitch",
+    "fillAllFields": "Please fill all fields",
+    "pitchSent": "Pitch request sent!",
+    "analyticsTitle": "📊 Pitch Analytics — Conversion Funnel",
+    "funnel": {
+      "sent": "Sent",
+      "viewed": "Viewed",
+      "meeting": "Meeting",
+      "decision": "Decision"
+    },
+    "kpis": {
+      "responseRate": "Response Rate",
+      "responseRateDesc": "Investors replied",
+      "avgResponseTime": "Avg Response Time",
+      "avgResponseTimeDesc": "Average time to reply",
+      "acceptRate": "Accept Rate",
+      "acceptRateDesc": "Pitches accepted"
+    },
+    "stats": {
+      "total": "Total Pitches",
+      "accepted": "Accepted",
+      "pending": "Pending",
+      "closed": "Closed"
+    },
+    "noRequests": "No pitch requests yet",
+    "sendFirstRequest": "Send First Pitch Request",
+    "aiScoreAtRequest": "AI Score at request: ",
+    "onlineMeeting": "Online Meeting",
+    "inPerson": "In-Person",
+    "joinMeeting": "Join Meeting",
+    "modal": {
+      "title": "Request Investor Pitch",
+      "currentScore": "Your current AI Readiness Score: ",
+      "investorName": "Investor Name / Fund",
+      "investorPlaceholder": "e.g. Aibek Ventures",
+      "meetingDate": "Proposed Meeting Date",
+      "message": "Message to Investor",
+      "messagePlaceholder": "Briefly describe your startup and what you're looking for...",
+      "cancel": "Cancel",
+      "send": "Send Request"
+    },
+    "status": {
+      "pending": "Pending Reply",
+      "accepted": "Accepted",
+      "rejected": "Rejected",
+      "feedback_pending": "Awaiting Feedback",
+      "completed": "Completed",
+      "closed": "Closed"
+    }
+  },
+  "FounderPitchRoom": {
+    "leavingRoom": "Leaving room...",
+    "title": "Pitch Room",
+    "recordingActive": "Session Recording Active",
+    "investorCameraPlaceholder": "Investor Camera Feed Placeholder",
+    "investorLabel": "Investor",
+    "selfFeedPlaceholder": "Self Feed Placeholder",
+    "youFounder": "You (Founder)",
+    "tabs": {
+      "aiNotes": "AI Notes",
+      "chat": "Chat"
+    },
+    "ai": {
+      "liveSummary": "Live Summary",
+      "liveSummaryText": "Investor is asking about Customer Acquisition Cost (CAC) and LTV ratio. You mentioned LTV/CAC is 3.2, which is a strong point.",
+      "suggestion": "AI Suggestion",
+      "suggestionText": "Bring up the recent B2B partnership with local banks to support your growth claims."
+    },
+    "chat": {
+      "noMessages": "No messages yet"
+    }
+  },
+  "FounderAICopilot": {
+    "title": "AI Copilot",
+    "poweredBy": "Powered by Gemini",
+    "subtitle": "Context-aware advisor with full access to your startup data",
+    "context": {
+      "aiScore": "AI Score",
+      "stage": "Stage",
+      "pitchDeck": "Pitch Deck",
+      "uploaded": "Uploaded",
+      "missing": "Missing",
+      "idea": "Idea"
+    },
+    "assessment": {
+      "run": "Run Assessment",
+      "analyzing": "Analyzing...",
+      "complete": "**Assessment Complete!**\n\nYour new AI Score is **{score}/100**.\n\nBreakdown:\n- Pitch Deck: {deck}/100\n- Market Fit: {market}/100\n- Traction: {traction}/100\n- Team: {team}/100\n\nKeep pushing! Let me know if you need specific advice."
+    },
+    "chat": {
+      "initialMsg": "Hello! I'm your **AI Copilot** powered by Gemini. I have full context on your startup metrics, roadmap progress, pitch deck scores, and digital footprint.\n\nHow can I help you today? You can ask me to analyze your metrics, review your pitch positioning, or plan your next fundraising steps.",
+      "placeholder": "Ask AI Copilot anything about your startup...",
+      "error": "Something went wrong",
+      "connectionError": "Connection error.",
+      "analyzing": "Analyzing your startup data..."
+    },
+    "suggested": [
+      {
+        "icon": "📊",
+        "text": "Analyze my current metrics and give growth recommendations"
+      },
+      {
+        "icon": "🎯",
+        "text": "What should I focus on to reach investment readiness faster?"
+      },
+      {
+        "icon": "📋",
+        "text": "Review my pitch deck score and suggest improvements"
+      },
+      {
+        "icon": "💡",
+        "text": "What are the biggest risks investors might see in my startup?"
+      }
+    ]
+  },
+  "FounderPerks": {
+    "title": "Ecosystem Perks",
+    "exclusive": "Exclusive",
+    "subtitle": "Partner benefits and discounts — exclusively for UNTITLED residents",
+    "totalValue": "total perk value",
+    "searchPlaceholder": "🔍 Search by tools, tags, companies...",
+    "featuredTitle": "Top Perks",
+    "allTitle": "All Perks ({count})",
+    "notFound": "No perks found. Try a different search.",
+    "card": {
+      "value": "value:",
+      "usedBy": "used by {count} startups",
+      "claimed": "Claimed",
+      "claim": "Claim"
+    },
+    "categories": {
+      "all": "All Perks",
+      "saas": "SaaS Tools",
+      "cloud": "Cloud & Infra",
+      "legal": "Legal & Finance",
+      "marketing": "Marketing",
+      "hr": "HR & Talent"
+    },
+    "items": {
+      "p1": {
+        "description": "Free Notion Plus for 6 months for the whole team. Docs, databases, planning.",
+        "discount": "6 mo free"
+      },
+      "p2": {
+        "description": "Up to $100,000 AWS credits for UNTITLED residents. Covers EC2, RDS, S3, and other services.",
+        "discount": "Up to $100K credits"
+      },
+      "p3": {
+        "description": "Zero fees on first $50K transactions + priority onboarding for CA startups.",
+        "discount": "0% fee on $50K"
+      },
+      "p4": {
+        "description": "Figma Professional free for 1 year. Unlimited projects and editors.",
+        "discount": "12 mo free"
+      },
+      "p5": {
+        "description": "Vercel Pro for 12 months to deploy your Next.js and React apps.",
+        "discount": "12 mo Pro"
+      },
+      "p6": {
+        "description": "Automate contracts, NDAs, and Term Sheets. 50% discount on Business plan forever.",
+        "discount": "50% off forever"
+      },
+      "p7": {
+        "description": "HubSpot Starter CRM free for 1 year + $500 extra ad credits.",
+        "discount": "1 year free"
+      },
+      "p8": {
+        "description": "Linear Plus for 12 months. Best tool for issue tracking and sprints.",
+        "discount": "12 mo Plus"
+      },
+      "p9": {
+        "description": "3 months with no fees when hiring first 5 international employees or contractors.",
+        "discount": "3 mo fee-free"
+      },
+      "p10": {
+        "description": "$500 discount on O-1 and EB-1 visa consultations for founders planning US expansion.",
+        "discount": "$500 off"
+      },
+      "p11": {
+        "description": "Google Workspace Business Standard free for 12 months for up to 10 users.",
+        "discount": "12 mo free"
+      },
+      "p12": {
+        "description": "Brevo Business for 6 months free. Email campaigns, automation, and CRM-light.",
+        "discount": "6 mo Business"
+      }
+    }
+  },
+  "FounderLegal": {
+    "title": "Legal Toolkit",
+    "region": "Central Asia",
+    "subtitle": "Legal templates, checklists, and answers to questions — everything to launch and grow a startup",
+    "stats": {
+      "templates": "Templates",
+      "checklists": "Checklists",
+      "jurisdictions": "Jurisdictions",
+      "faqs": "FAQ questions"
+    },
+    "sections": {
+      "templates": "Document Templates",
+      "all": "All",
+      "checklists": "Checklists",
+      "faq": "Frequently Asked Questions"
+    },
+    "popular": "Popular",
+    "categories": {
+      "corp": "Corporate",
+      "invest": "Investment",
+      "hr": "HR / Team",
+      "commercial": "Commercial"
+    },
+    "docs": {
+      "d1": {
+        "title": "NDA (Non-Disclosure Agreement)",
+        "description": "Bilateral confidentiality agreement for negotiations with partners and investors. Adapted for Kazakhstan and Uzbekistan legislation."
+      },
+      "d2": {
+        "title": "SAFE Agreement",
+        "description": "Standard SAFE agreement to raise seed investments. Adapted version of Y Combinator SAFE for CA jurisdictions."
+      },
+      "d3": {
+        "title": "Term Sheet",
+        "description": "Term Sheet template with key terms: valuation, participation, veto rights, anti-dilution, and liquidation preference."
+      },
+      "d4": {
+        "title": "Employment Contract for IT Specialist (UZ)",
+        "description": "Employment contract with a technical specialist under the laws of Uzbekistan with NDA and IP assignment clauses."
+      },
+      "d5": {
+        "title": "Co-founder Agreement",
+        "description": "Regulates equity distribution, vesting, roles, and co-founder exit procedures. Critical at early stages."
+      },
+      "d6": {
+        "title": "IP Assignment Agreement",
+        "description": "Transfer of intellectual property rights from developers and employees to the company."
+      },
+      "d7": {
+        "title": "SaaS Customer Agreement",
+        "description": "Standard agreement for using a SaaS product: terms of use, SLA, liability, data."
+      },
+      "d8": {
+        "title": "Advisor Agreement + Vesting",
+        "description": "Agreement with an advisor: role, compensation via equity/SAFENote + cliff + vesting schedule."
+      },
+      "d9": {
+        "title": "Contractor Agreement",
+        "description": "Agreement with a freelancer or contractor: deliverables, payment, IP assignment, confidentiality."
+      },
+      "d10": {
+        "title": "Shareholder Agreement",
+        "description": "Shareholder agreement: protection of minority rights, drag-along, tag-along, right of first refusal mechanisms."
+      }
+    },
+    "checklists": {
+      "c1": {
+        "title": "Registration of LLP (TOO) in Kazakhstan",
+        "steps": [
+          {
+            "text": "Choose a company name (check uniqueness on egov.kz)",
+            "detail": "Use the egov.kz portal → Business → Registration of Legal Entity"
+          },
+          {
+            "text": "Prepare constituent documents (Charter)",
+            "detail": "Minimum charter capital for an LLP is 0 tenge (since 2021)"
+          },
+          {
+            "text": "Register via eGov (3-5 business days)"
+          },
+          {
+            "text": "Open a bank account",
+            "detail": "Kaspi Business, Halyk Bank, or Jusan — fastest for startups"
+          },
+          {
+            "text": "Register as a taxpayer with the State Revenue Committee"
+          },
+          {
+            "text": "Choose a tax regime (Standard or Simplified)",
+            "detail": "Simplified tax regime: 3% of income, reporting every six months"
+          },
+          {
+            "text": "Obtain an EDS (Electronic Digital Signature)"
+          },
+          {
+            "text": "Optional: apply for Astana Hub residency (0% taxes)"
+          }
+        ]
+      },
+      "c2": {
+        "title": "Registration of LLC (OOO) in Uzbekistan",
+        "steps": [
+          {
+            "text": "Check the name on the mybusiness.uz website"
+          },
+          {
+            "text": "Prepare the Charter and founders' decision"
+          },
+          {
+            "text": "Pay the state fee (0.5 minimum wage)"
+          },
+          {
+            "text": "Register via my.gov.uz (1-3 days)"
+          },
+          {
+            "text": "Register with tax authorities, obtain a TIN (INN)"
+          },
+          {
+            "text": "Open a bank account (Orient Finance, Kapitalbank — popular for IT)"
+          },
+          {
+            "text": "Consider registration in IT Park Uzbekistan (0% tax)"
+          },
+          {
+            "text": "Hire employees under employment contracts"
+          }
+        ]
+      },
+      "c3": {
+        "title": "Become an IT Park Uzbekistan Resident",
+        "steps": [
+          {
+            "text": "Ensure activities match IT (software development, IT services, export)"
+          },
+          {
+            "text": "Register on my.gov.uz and apply to IT Park"
+          },
+          {
+            "text": "Pass project evaluation (online form + pitch if a grant is needed)"
+          },
+          {
+            "text": "Receive a resident certificate (2-4 weeks)"
+          },
+          {
+            "text": "Benefits: 0% income tax, 0% VAT, reduced insurance premiums",
+            "detail": "1% of salary instead of 25.5%"
+          },
+          {
+            "text": "Annually confirm compliance with residency criteria"
+          }
+        ]
+      },
+      "c4": {
+        "title": "Preparation for Raising First Investments",
+        "steps": [
+          {
+            "text": "Clean up the cap table"
+          },
+          {
+            "text": "Execute IP assignment from all co-founders and key developers"
+          },
+          {
+            "text": "Sign a Co-founder Agreement with vesting (4-year / 1-year cliff)"
+          },
+          {
+            "text": "Create a Data Room (pitch deck, financial model, metrics, legal documents)"
+          },
+          {
+            "text": "Check for the absence of tax debts"
+          },
+          {
+            "text": "Choose an investment vehicle (SAFE, convertible note, equity)",
+            "detail": "SAFE is the most standard and fastest tool for seed"
+          },
+          {
+            "text": "Consult with a lawyer on CA venture law",
+            "detail": "UNTITLED recommends: Nexum Legal, Aequitas Legal (KZ)"
+          }
+        ]
+      }
+    },
+    "faq": [
+      {
+        "q": "Do I need a lawyer to register a company?",
+        "a": "For a simple LLP/LLC registration, a lawyer is not required — use our checklists and egov.kz / my.gov.uz portals. A lawyer is recommended for creating a Co-founder Agreement, executing investments, and IP protection."
+      },
+      {
+        "q": "Which jurisdiction should I choose for my startup (KZ, UZ, or Delaware)?",
+        "a": "For the local market: LLP (KZ) or LLC (UZ). To attract foreign investors — Delaware C-Corp (USA) + subsidiary in CA. Most foreign VCs require a Delaware or Cayman Islands holding."
+      },
+      {
+        "q": "What is a SAFE and how does it work?",
+        "a": "SAFE (Simple Agreement for Future Equity) is an instrument where an investor gives money now, and converts it into shares in the next round at a discount. It's simpler and faster than a direct sale of equity, and doesn't require company valuation."
+      },
+      {
+        "q": "What is vesting and why is it important?",
+        "a": "Vesting is a mechanism where co-founders 'earn' their shares over time (usually 4 years with a 1-year cliff). It protects the company from a situation where a co-founder leaves after 3 months with a 30% stake."
+      },
+      {
+        "q": "Do I need to sign an IP Assignment?",
+        "a": "Absolutely! IP Assignment ensures that all intellectual property (code, design, brand) belongs to the company, not individuals. This is critical for investor due diligence."
+      }
+    ]
   }
 }

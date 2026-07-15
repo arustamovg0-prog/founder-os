@@ -4,20 +4,22 @@ import { useState, useEffect } from 'react';
 import { PitchEvent } from '@/types';
 import { Calendar, MapPin, Video, CheckCircle, Clock, XCircle, Send, ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
+import { useTranslations } from 'next-intl';
 import { collection, query, where, onSnapshot, addDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { useAuth } from '@/contexts/AuthContext';
 
-const STATUS_CONFIG: Record<string, { label: string; badge: string; icon: React.ReactNode }> = {
-  pending: { label: 'Ожидает ответа', badge: 'badge-yellow', icon: <Clock size={14} /> },
-  accepted: { label: 'Принят', badge: 'badge-green', icon: <CheckCircle size={14} /> },
-  rejected: { label: 'Отклонён', badge: 'badge-red', icon: <XCircle size={14} /> },
-  feedback_pending: { label: 'Ожидает фидбек', badge: 'badge-blue', icon: <Clock size={14} /> },
-  completed: { label: 'Завершён', badge: 'badge-gray', icon: <CheckCircle size={14} /> },
-  closed: { label: 'Закрыт', badge: 'badge-gray', icon: <CheckCircle size={14} /> },
+const STATUS_CONFIG: Record<string, { badge: string; icon: React.ReactNode }> = {
+  pending: { badge: 'badge-yellow', icon: <Clock size={14} /> },
+  accepted: { badge: 'badge-green', icon: <CheckCircle size={14} /> },
+  rejected: { badge: 'badge-red', icon: <XCircle size={14} /> },
+  feedback_pending: { badge: 'badge-blue', icon: <Clock size={14} /> },
+  completed: { badge: 'badge-gray', icon: <CheckCircle size={14} /> },
+  closed: { badge: 'badge-gray', icon: <CheckCircle size={14} /> },
 };
 
 export default function FounderPitchesPage() {
+  const t = useTranslations('FounderPitches');
   const { profile } = useAuth();
   const [pitches, setPitches] = useState<PitchEvent[]>([]);
   const [showModal, setShowModal] = useState(false);
@@ -40,7 +42,7 @@ export default function FounderPitchesPage() {
 
   const handleSend = async () => {
     if (!form.investorName || !form.proposedDate || !form.message) {
-      toast.error('Заполните все поля');
+      toast.error(t('fillAllFields'));
       return;
     }
     
@@ -67,7 +69,7 @@ export default function FounderPitchesPage() {
       await addDoc(collection(db, 'pitches'), newPitch);
     }
     
-    toast.success('Запрос на питч отправлен!', { icon: '🚀' });
+    toast.success(t('pitchSent'), { icon: '🚀' });
     setShowModal(false);
     setForm({ investorName: '', proposedDate: '', message: '' });
   };
@@ -76,25 +78,25 @@ export default function FounderPitchesPage() {
     <div className="animate-fade-in">
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '32px' }}>
         <div>
-          <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 28, fontWeight: 700, marginBottom: 6 }}>My Pitches</h1>
-          <p style={{ color: '#64748b', fontSize: 14 }}>Manage your investor pitch requests and meetings</p>
+          <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 28, fontWeight: 700, marginBottom: 6 }}>{t('title')}</h1>
+          <p style={{ color: '#64748b', fontSize: 14 }}>{t('subtitle')}</p>
         </div>
         <button className="btn-primary" onClick={() => setShowModal(true)}>
-          <Send size={14} /> Request Pitch
+          <Send size={14} /> {t('requestPitch')}
         </button>
       </div>
 
       {/* Analytics Funnel */}
       <div className="card" style={{ marginBottom: '24px', background: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.15)' }}>
         <div style={{ fontSize: 12, color: '#D8B4FE', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '20px' }}>
-          📊 Pitch Analytics — Conversion Funnel
+          {t('analyticsTitle')}
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0', position: 'relative' }}>
           {[
-            { label: 'Sent', val: pitches.length, color: '#FFFFFF', pct: 100 },
-            { label: 'Viewed', val: pitches.filter(p => p.status !== 'pending').length, color: '#A1A1AA', pct: Math.round((pitches.filter(p => p.status !== 'pending').length / pitches.length) * 100) },
-            { label: 'Meeting', val: pitches.filter(p => p.meeting.confirmedDate).length, color: '#71717A', pct: Math.round((pitches.filter(p => p.meeting.confirmedDate).length / pitches.length) * 100) },
-            { label: 'Decision', val: pitches.filter(p => p.status === 'accepted' || p.status === 'rejected' || p.status === 'closed').length, color: '#D4D4D8', pct: Math.round((pitches.filter(p => p.status === 'accepted' || p.status === 'rejected' || p.status === 'closed').length / pitches.length) * 100) },
+            { label: t('funnel.sent'), val: pitches.length, color: '#FFFFFF', pct: 100 },
+            { label: t('funnel.viewed'), val: pitches.filter(p => p.status !== 'pending').length, color: '#A1A1AA', pct: Math.round((pitches.filter(p => p.status !== 'pending').length / pitches.length) * 100) || 0 },
+            { label: t('funnel.meeting'), val: pitches.filter(p => p.meeting.confirmedDate).length, color: '#71717A', pct: Math.round((pitches.filter(p => p.meeting.confirmedDate).length / pitches.length) * 100) || 0 },
+            { label: t('funnel.decision'), val: pitches.filter(p => p.status === 'accepted' || p.status === 'rejected' || p.status === 'closed').length, color: '#D4D4D8', pct: Math.round((pitches.filter(p => p.status === 'accepted' || p.status === 'rejected' || p.status === 'closed').length / pitches.length) * 100) || 0 },
           ].map((step, i) => (
             <div key={i} style={{ textAlign: 'center', padding: '0 12px', position: 'relative' }}>
               {i > 0 && <div style={{ position: 'absolute', left: -1, top: '50%', transform: 'translateY(-80%)', fontSize: 20, color: '#334155' }}>→</div>}
@@ -111,9 +113,9 @@ export default function FounderPitchesPage() {
         {/* Response time + rate */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px', marginTop: '24px', paddingTop: '20px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
           {[
-            { label: 'Response Rate', value: `${Math.round((pitches.filter(p => p.status !== 'pending').length / pitches.length) * 100)}%`, color: '#A1A1AA', desc: 'Инвесторов ответили' },
-            { label: 'Avg Response Time', value: '4.2 дня', color: '#71717A', desc: 'Среднее время ответа' },
-            { label: 'Accept Rate', value: `${Math.round((pitches.filter(p => p.status === 'accepted' || p.status === 'feedback_pending').length / pitches.length) * 100)}%`, color: '#D4D4D8', desc: 'Питчей приняты' },
+            { label: t('kpis.responseRate'), value: `${Math.round((pitches.filter(p => p.status !== 'pending').length / pitches.length) * 100) || 0}%`, color: '#A1A1AA', desc: t('kpis.responseRateDesc') },
+            { label: t('kpis.avgResponseTime'), value: '4.2', color: '#71717A', desc: t('kpis.avgResponseTimeDesc') },
+            { label: t('kpis.acceptRate'), value: `${Math.round((pitches.filter(p => p.status === 'accepted' || p.status === 'feedback_pending').length / pitches.length) * 100) || 0}%`, color: '#D4D4D8', desc: t('kpis.acceptRateDesc') },
           ].map((kpi, i) => (
             <div key={i} style={{ textAlign: 'center', padding: '14px', borderRadius: '12px', background: `${kpi.color}08`, border: `1px solid ${kpi.color}20` }}>
               <div style={{ fontFamily: 'Space Grotesk', fontSize: 22, fontWeight: 800, color: kpi.color, marginBottom: 4 }}>{kpi.value}</div>
@@ -127,10 +129,10 @@ export default function FounderPitchesPage() {
       {/* Stats */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '28px' }}>
         {[
-          { label: 'Total Pitches', value: pitches.length, color: '#FFFFFF' },
-          { label: 'Accepted', value: pitches.filter(p => p.status === 'accepted' || p.status === 'feedback_pending').length, color: '#D4D4D8' },
-          { label: 'Pending', value: pitches.filter(p => p.status === 'pending').length, color: '#71717A' },
-          { label: 'Closed', value: pitches.filter(p => p.status === 'closed').length, color: '#64748b' },
+          { label: t('stats.total'), value: pitches.length, color: '#FFFFFF' },
+          { label: t('stats.accepted'), value: pitches.filter(p => p.status === 'accepted' || p.status === 'feedback_pending').length, color: '#D4D4D8' },
+          { label: t('stats.pending'), value: pitches.filter(p => p.status === 'pending').length, color: '#71717A' },
+          { label: t('stats.closed'), value: pitches.filter(p => p.status === 'closed').length, color: '#64748b' },
         ].map((stat, i) => (
           <div key={i} className="stat-card" style={{ textAlign: 'center' }}>
             <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 32, fontWeight: 800, color: stat.color }}>{stat.value}</div>
@@ -144,8 +146,8 @@ export default function FounderPitchesPage() {
         {pitches.length === 0 ? (
           <div className="card" style={{ textAlign: 'center', padding: '60px' }}>
             <Send size={40} style={{ marginBottom: 16, opacity: 0.2, display: 'block', margin: '0 auto 16px' }} />
-            <p style={{ color: '#475569', marginBottom: 20 }}>No pitch requests yet</p>
-            <button className="btn-primary" onClick={() => setShowModal(true)}>Send First Pitch Request</button>
+            <p style={{ color: '#475569', marginBottom: 20 }}>{t('noRequests')}</p>
+            <button className="btn-primary" onClick={() => setShowModal(true)}>{t('sendFirstRequest')}</button>
           </div>
         ) : (
           pitches.map((pitch) => {
@@ -156,10 +158,10 @@ export default function FounderPitchesPage() {
                   <div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '4px' }}>
                       <h3 style={{ fontSize: 16, fontWeight: 700 }}>{pitch.investorName}</h3>
-                      <span className={`badge ${cfg.badge}`}>{cfg.icon}&nbsp;{cfg.label}</span>
+                      <span className={`badge ${cfg.badge}`}>{cfg.icon}&nbsp;{t(`status.${pitch.status}` as any)}</span>
                     </div>
                     <p style={{ fontSize: 13, color: '#475569' }}>
-                      AI Score at request: <strong style={{ color: '#D8B4FE' }}>{pitch.request.snapshotScore}/100</strong>
+                      {t('aiScoreAtRequest')} <strong style={{ color: '#D8B4FE' }}>{pitch.request.snapshotScore}/100</strong>
                     </p>
                   </div>
                   <div style={{ fontSize: 12, color: '#334155' }}>
@@ -179,12 +181,12 @@ export default function FounderPitchesPage() {
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: 13, color: '#94a3b8' }}>
                       {pitch.meeting.location === 'online' ? <Video size={13} color="#A1A1AA" /> : <MapPin size={13} color="#D4D4D8" />}
-                      {pitch.meeting.location === 'online' ? 'Online Meeting' : 'In-Person'}
+                      {pitch.meeting.location === 'online' ? t('onlineMeeting') : t('inPerson')}
                     </div>
                     {pitch.meeting.meetingUrl && (
                       <a href={pitch.meeting.meetingUrl} target="_blank" rel="noopener noreferrer"
                         style={{ fontSize: 13, color: '#FFFFFF', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                        Join Meeting <ArrowRight size={12} />
+                        {t('joinMeeting')} <ArrowRight size={12} />
                       </a>
                     )}
                   </div>
@@ -200,26 +202,26 @@ export default function FounderPitchesPage() {
         <div className="modal-overlay" onClick={() => setShowModal(false)}>
           <div className="modal-box" onClick={e => e.stopPropagation()}>
             <h2 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 20, fontWeight: 700, marginBottom: '8px' }}>
-              Request Investor Pitch
+              {t('modal.title')}
             </h2>
             <p style={{ color: '#64748b', fontSize: 13, marginBottom: '24px' }}>
-              Your current AI Readiness Score: <strong style={{ color: '#D8B4FE' }}>85/100</strong>
+              {t('modal.currentScore')} <strong style={{ color: '#D8B4FE' }}>85/100</strong>
             </p>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
               <div>
-                <label style={{ fontSize: 12, color: '#64748b', fontWeight: 600, display: 'block', marginBottom: 6 }}>Investor Name / Fund</label>
-                <input className="input-field" placeholder="e.g. Aibek Ventures" value={form.investorName} onChange={e => setForm(p => ({ ...p, investorName: e.target.value }))} />
+                <label style={{ fontSize: 12, color: '#64748b', fontWeight: 600, display: 'block', marginBottom: 6 }}>{t('modal.investorName')}</label>
+                <input className="input-field" placeholder={t('modal.investorPlaceholder')} value={form.investorName} onChange={e => setForm(p => ({ ...p, investorName: e.target.value }))} />
               </div>
               <div>
-                <label style={{ fontSize: 12, color: '#64748b', fontWeight: 600, display: 'block', marginBottom: 6 }}>Proposed Meeting Date</label>
+                <label style={{ fontSize: 12, color: '#64748b', fontWeight: 600, display: 'block', marginBottom: 6 }}>{t('modal.meetingDate')}</label>
                 <input className="input-field" type="date" value={form.proposedDate} onChange={e => setForm(p => ({ ...p, proposedDate: e.target.value }))} />
               </div>
               <div>
-                <label style={{ fontSize: 12, color: '#64748b', fontWeight: 600, display: 'block', marginBottom: 6 }}>Message to Investor</label>
+                <label style={{ fontSize: 12, color: '#64748b', fontWeight: 600, display: 'block', marginBottom: 6 }}>{t('modal.message')}</label>
                 <textarea
                   className="input-field"
-                  placeholder="Briefly describe your startup and what you're looking for..."
+                  placeholder={t('modal.messagePlaceholder')}
                   value={form.message}
                   onChange={e => setForm(p => ({ ...p, message: e.target.value }))}
                   rows={4}
@@ -227,9 +229,9 @@ export default function FounderPitchesPage() {
                 />
               </div>
               <div style={{ display: 'flex', gap: '10px', marginTop: '8px' }}>
-                <button className="btn-secondary" onClick={() => setShowModal(false)} style={{ flex: 1 }}>Cancel</button>
+                <button className="btn-secondary" onClick={() => setShowModal(false)} style={{ flex: 1 }}>{t('modal.cancel')}</button>
                 <button className="btn-primary" onClick={handleSend} style={{ flex: 2 }}>
-                  <Send size={14} /> Send Request
+                  <Send size={14} /> {t('modal.send')}
                 </button>
               </div>
             </div>

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Upload, FileText, BarChart2, Users, Shield, CheckCircle, Eye, Trash2, Plus } from 'lucide-react';
 import { toast } from 'sonner';
+import { useTranslations } from 'next-intl';
 import { useAuth } from '@/contexts/AuthContext';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
@@ -22,6 +23,7 @@ interface DocItem {
 }
 
 export default function DataRoomPage() {
+  const t = useTranslations('FounderDataRoom');
   const { profile } = useAuth();
   const [startup, setStartup] = useState<Startup | null>(null);
   
@@ -99,7 +101,7 @@ export default function DataRoomPage() {
       }
     } catch (err) {
       console.error('Upload failed', err);
-      toast.error('Failed to upload file');
+      toast.error(t('failedToUpload'));
       setUploading(null);
       return;
     }
@@ -107,7 +109,7 @@ export default function DataRoomPage() {
     let newScore = null;
     
     if (key === 'pitch_deck' && startup) {
-      toast('🤖 ИИ анализирует ваш Pitch Deck...', { icon: '🧠' });
+      toast(t('analyzingPitchDeck'), { icon: '🧠' });
       try {
         const token = await auth.currentUser?.getIdToken();
         const res = await fetch('/api/ai/analyze', {
@@ -128,16 +130,16 @@ export default function DataRoomPage() {
               'aiScores.overallReadinessScore': newScore
             });
           }
-          toast.success(`AI Readiness Score обновлен: ${newScore}/100!`, { icon: '🎉' });
+          toast.success(t('aiScoreUpdated', { score: newScore }), { icon: '🎉' });
         }
       } catch (err) {
         console.error('AI Analysis failed', err);
         // Fallback for demo
         newScore = 85;
-        toast.success(`Демо: AI Score обновлен: ${newScore}/100`, { icon: '🤖' });
+        toast.success(t('demoAiScoreUpdated', { score: newScore }), { icon: '🤖' });
       }
     } else {
-      toast.success('Document uploaded!', { icon: '📎' });
+      toast.success(t('documentUploaded'), { icon: '📎' });
     }
 
     setDocs(prev => prev.map(d => d.key === key ? {
@@ -152,7 +154,7 @@ export default function DataRoomPage() {
 
   const handleDelete = (key: string) => {
     setDocs(prev => prev.map(d => d.key === key ? { ...d, url: null, uploadedAt: undefined, aiScore: null } : d));
-    toast.error('Document removed', { icon: '🗑️' });
+    toast.error(t('documentRemoved'), { icon: '🗑️' });
   };
 
   const uploaded = docs.filter(d => d.url).length;
@@ -162,19 +164,19 @@ export default function DataRoomPage() {
     <div className="animate-fade-in">
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '32px' }}>
         <div>
-          <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 28, fontWeight: 700, marginBottom: 6 }}>Data Room</h1>
-          <p style={{ color: '#64748b', fontSize: 14 }}>Secure document storage for investor due diligence</p>
+          <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 28, fontWeight: 700, marginBottom: 6 }}>{t('title')}</h1>
+          <p style={{ color: '#64748b', fontSize: 14 }}>{t('subtitle')}</p>
         </div>
         <div style={{ textAlign: 'right' }}>
           <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 24, fontWeight: 700, color: '#a78bfa' }}>{uploaded}/{total}</div>
-          <div style={{ fontSize: 12, color: '#475569' }}>Documents ready</div>
+          <div style={{ fontSize: 12, color: '#475569' }}>{t('documentsReady')}</div>
         </div>
       </div>
 
       {/* Progress */}
       <div className="card" style={{ marginBottom: '24px', background: 'rgba(124,58,237,0.05)', borderColor: 'rgba(124,58,237,0.15)' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
-          <span style={{ fontSize: 13, color: '#94a3b8' }}>Data Room Completeness</span>
+          <span style={{ fontSize: 13, color: '#94a3b8' }}>{t('completeness')}</span>
           <span style={{ fontSize: 13, fontWeight: 600, color: '#a78bfa' }}>{Math.round((uploaded / total) * 100)}%</span>
         </div>
         <div className="progress-bar">
@@ -206,10 +208,10 @@ export default function DataRoomPage() {
               </div>
               <div style={{ flex: 1 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                  <span style={{ fontSize: 14, fontWeight: 600 }}>{doc.label}</span>
+                  <span style={{ fontSize: 14, fontWeight: 600 }}>{t(`docs.${doc.key}.label` as any)}</span>
                   {doc.url && <CheckCircle size={13} color="#10b981" />}
                 </div>
-                <p style={{ fontSize: 12, color: '#475569' }}>{doc.description}</p>
+                <p style={{ fontSize: 12, color: '#475569' }}>{t(`docs.${doc.key}.description` as any)}</p>
               </div>
             </div>
 
@@ -223,7 +225,7 @@ export default function DataRoomPage() {
                     background: 'rgba(124,58,237,0.1)', border: '1px solid rgba(124,58,237,0.2)',
                     marginBottom: '12px',
                   }}>
-                    <span style={{ fontSize: 11, color: '#a78bfa', fontWeight: 600 }}>🤖 AI Score</span>
+                    <span style={{ fontSize: 11, color: '#a78bfa', fontWeight: 600 }}>{t('aiScore')}</span>
                     <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 16, fontWeight: 700, color: '#a78bfa', marginLeft: 'auto' }}>
                       {doc.aiScore}/100
                     </span>
@@ -231,10 +233,10 @@ export default function DataRoomPage() {
                 )}
 
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <span style={{ fontSize: 11, color: '#334155' }}>Uploaded {doc.uploadedAt}</span>
+                  <span style={{ fontSize: 11, color: '#334155' }}>{t('uploadedDate', { date: doc.uploadedAt })}</span>
                   <div style={{ display: 'flex', gap: '6px' }}>
                     <button className="btn-secondary" style={{ fontSize: 11, padding: '5px 12px', gap: '4px' }}>
-                      <Eye size={11} /> View
+                      <Eye size={11} /> {t('view')}
                     </button>
                     <button
                       onClick={() => handleDelete(doc.key)}
@@ -263,13 +265,13 @@ export default function DataRoomPage() {
                 {uploading === doc.key ? (
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', color: '#64748b' }}>
                     <span style={{ width: 14, height: 14, border: '2px solid rgba(255,255,255,0.2)', borderTopColor: '#7c3aed', borderRadius: '50%', animation: 'spin 0.8s linear infinite', display: 'inline-block' }} />
-                    Uploading...
+                    {t('uploading')}
                   </div>
                 ) : (
                   <>
                     <Upload size={18} style={{ marginBottom: 6, color: '#334155' }} />
                     <div style={{ fontSize: 12, color: '#475569' }}>
-                      <span style={{ color: doc.color, fontWeight: 600 }}>Click to upload</span> or drag & drop
+                      <span style={{ color: doc.color, fontWeight: 600 }}>{t('clickToUpload')}</span> {t('orDragDrop')}
                     </div>
                   </>
                 )}

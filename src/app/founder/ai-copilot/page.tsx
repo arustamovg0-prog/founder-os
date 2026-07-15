@@ -6,6 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { doc, getDoc } from 'firebase/firestore';
 import { db, isDemoConfig, auth } from '@/lib/firebase';
 import { Startup } from '@/types';
+import { useTranslations } from 'next-intl';
 
 
 interface Message {
@@ -14,12 +15,7 @@ interface Message {
   timestamp: Date;
 }
 
-const SUGGESTED = [
-  { icon: '📊', text: 'Analyze my current metrics and give growth recommendations' },
-  { icon: '🎯', text: 'What should I focus on to reach investment readiness faster?' },
-  { icon: '📋', text: 'Review my pitch deck score and suggest improvements' },
-  { icon: '💡', text: 'What are the biggest risks investors might see in my startup?' },
-];
+// Removing hardcoded SUGGESTED, moved to translations
 
 const DEMO_RESPONSES: Record<string, string> = {
   default: `Based on your startup profile, here's my analysis:
@@ -121,15 +117,15 @@ function formatInline(text: string): React.ReactNode {
 }
 
 export default function AICopilotPage() {
+  const t = useTranslations('FounderAICopilot');
+  const suggested = (t.raw('suggested') as { icon: string; text: string }[]) || [];
   const { profile } = useAuth();
   const [startup, setStartup] = useState<Startup | null>(null);
   
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'assistant',
-      content: `Hello! I'm your **AI Copilot** powered by Gemini. I have full context on your startup metrics, roadmap progress, pitch deck scores, and digital footprint.
-
-How can I help you today? You can ask me to analyze your metrics, review your pitch positioning, or plan your next fundraising steps.`,
+      content: t('chat.initialMsg'),
       timestamp: new Date(),
     },
   ]);
@@ -184,13 +180,13 @@ How can I help you today? You can ask me to analyze your metrics, review your pi
       
       const reply: Message = {
         role: 'assistant',
-        content: data.reply || data.error || 'Something went wrong',
+        content: data.reply || data.error || t('chat.error'),
         timestamp: new Date(),
       };
       setMessages(prev => [...prev, reply]);
     } catch (err) {
       console.error(err);
-      setMessages(prev => [...prev, { role: 'assistant', content: 'Connection error.', timestamp: new Date() }]);
+      setMessages(prev => [...prev, { role: 'assistant', content: t('chat.connectionError'), timestamp: new Date() }]);
     }
     setLoading(false);
   };
@@ -204,18 +200,18 @@ How can I help you today? You can ask me to analyze your metrics, review your pi
             <div style={{ width: 32, height: 32, borderRadius: 8, background: 'linear-gradient(135deg,#FFFFFF,#71717A)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Brain size={16} color="white" />
             </div>
-            <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 24, fontWeight: 700 }}>AI Copilot</h1>
-            <span className="badge badge-purple"><Sparkles size={10} /> Powered by Gemini</span>
+            <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 24, fontWeight: 700 }}>{t('title')}</h1>
+            <span className="badge badge-purple"><Sparkles size={10} /> {t('poweredBy')}</span>
           </div>
-          <p style={{ color: '#64748b', fontSize: 13 }}>Context-aware advisor with full access to your startup data</p>
+          <p style={{ color: '#64748b', fontSize: 13 }}>{t('subtitle')}</p>
         </div>
 
         {/* Context cards */}
         <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
           {[
-            { icon: <TrendingUp size={12} />, label: 'AI Score', value: `${startup?.aiScores?.overallReadinessScore || 0}/100`, color: '#FFFFFF' },
-            { icon: <Target size={12} />, label: 'Stage', value: startup?.stage || 'Idea', color: '#D4D4D8' },
-            { icon: <FileText size={12} />, label: 'Pitch Deck', value: startup?.dataRoom?.pitchDeckUrl ? 'Uploaded' : 'Missing', color: '#A1A1AA' },
+            { icon: <TrendingUp size={12} />, label: t('context.aiScore'), value: `${startup?.aiScores?.overallReadinessScore || 0}/100`, color: '#FFFFFF' },
+            { icon: <Target size={12} />, label: t('context.stage'), value: startup?.stage || t('context.idea'), color: '#D4D4D8' },
+            { icon: <FileText size={12} />, label: t('context.pitchDeck'), value: startup?.dataRoom?.pitchDeckUrl ? t('context.uploaded') : t('context.missing'), color: '#A1A1AA' },
           ].map((c, i) => (
             <div key={i} style={{
               padding: '8px 14px', borderRadius: '10px',
@@ -249,7 +245,13 @@ How can I help you today? You can ask me to analyze your metrics, review your pi
                   setStartup({ ...startup, aiScores: data.scores });
                   setMessages(prev => [...prev, {
                     role: 'assistant',
-                    content: `**Assessment Complete!**\n\nYour new AI Score is **${data.scores.overallReadinessScore}/100**.\n\nBreakdown:\n- Pitch Deck: ${data.scores.pitchDeck}/100\n- Market Fit: ${data.scores.marketFit}/100\n- Traction: ${data.scores.traction}/100\n- Team: ${data.scores.team}/100\n\nKeep pushing! Let me know if you need specific advice.`,
+                    content: t('assessment.complete', { 
+                      score: data.scores.overallReadinessScore, 
+                      deck: data.scores.pitchDeck, 
+                      market: data.scores.marketFit, 
+                      traction: data.scores.traction, 
+                      team: data.scores.team 
+                    }),
                     timestamp: new Date()
                   }]);
                 }
@@ -269,7 +271,7 @@ How can I help you today? You can ask me to analyze your metrics, review your pi
             }}
           >
             <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
-            {loading ? 'Analyzing...' : 'Run Assessment'}
+            {loading ? t('assessment.analyzing') : t('assessment.run')}
           </button>
         </div>
       </div>
@@ -334,7 +336,7 @@ How can I help you today? You can ask me to analyze your metrics, review your pi
                     animation: `bounce 1s ${delay}s infinite`,
                   }} />
                 ))}
-                <span style={{ fontSize: 12, color: '#475569', marginLeft: 8 }}>Analyzing your startup data...</span>
+                <span style={{ fontSize: 12, color: '#475569', marginLeft: 8 }}>{t('chat.analyzing')}</span>
               </div>
             </div>
           </div>
@@ -346,7 +348,7 @@ How can I help you today? You can ask me to analyze your metrics, review your pi
       {/* Suggested prompts */}
       {messages.length <= 1 && (
         <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '12px', flexShrink: 0 }}>
-          {SUGGESTED.map((s, i) => (
+          {suggested.map((s, i) => (
             <button
               key={i}
               onClick={() => send(s.text)}
@@ -367,7 +369,7 @@ How can I help you today? You can ask me to analyze your metrics, review your pi
       <div style={{ display: 'flex', gap: '10px', flexShrink: 0 }}>
         <input
           className="input-field"
-          placeholder="Ask AI Copilot anything about your startup..."
+          placeholder={t('chat.placeholder')}
           value={input}
           onChange={e => setInput(e.target.value)}
           onKeyDown={e => e.key === 'Enter' && !e.shiftKey && send()}

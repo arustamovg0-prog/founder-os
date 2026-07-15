@@ -5,15 +5,17 @@ import { useState } from 'react';
 import { Video, Mic, MicOff, Camera, CameraOff, MonitorUp, PhoneOff, Users, MessageSquare, Brain } from 'lucide-react';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 export default function VideoPitchRoomPage({ params }: { params: { id: string } }) {
+  const t = useTranslations('FounderPitchRoom');
   const router = useRouter();
   const [micOn, setMicOn] = useState(true);
   const [camOn, setCamOn] = useState(true);
   const [activeTab, setActiveTab] = useState<'chat' | 'ai'>('ai');
 
   const handleLeave = () => {
-    toast('Оставление комнаты...', { icon: '👋' });
+    toast(t('leavingRoom'), { icon: '👋' });
     router.push('/founder/pitches');
   };
 
@@ -22,10 +24,10 @@ export default function VideoPitchRoomPage({ params }: { params: { id: string } 
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
         <div>
-          <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 24, fontWeight: 700 }}>Pitch Room</h1>
+          <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 24, fontWeight: 700 }}>{t('title')}</h1>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#D4D4D8' }}>
             <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#D4D4D8', boxShadow: '0 0 6px #D4D4D8' }} />
-            Session Recording Active
+            {t('recordingActive')}
           </div>
         </div>
       </div>
@@ -38,14 +40,14 @@ export default function VideoPitchRoomPage({ params }: { params: { id: string } 
             {camOn ? (
               <div style={{ textAlign: 'center', color: '#64748b' }}>
                 <Video size={48} style={{ opacity: 0.2, margin: '0 auto 16px' }} />
-                <div>Investor Camera Feed Placeholder</div>
+                <div>{t('investorCameraPlaceholder')}</div>
               </div>
             ) : (
               <div style={{ width: 80, height: 80, borderRadius: '50%', background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, color: '#fff' }}>I</div>
             )}
             
             <div style={{ position: 'absolute', bottom: 16, left: 16, padding: '6px 12px', background: 'rgba(0,0,0,0.6)', borderRadius: '8px', fontSize: 13, color: '#f8fafc', backdropFilter: 'blur(4px)' }}>
-              Aibek Ventures (Investor)
+              Aibek Ventures ({t('investorLabel')})
             </div>
           </div>
 
@@ -53,12 +55,12 @@ export default function VideoPitchRoomPage({ params }: { params: { id: string } 
           <div style={{ display: 'flex', gap: '16px', height: '180px' }}>
             <div style={{ width: '300px', background: '#0f111a', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)', position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                {camOn ? (
-                <div style={{ textAlign: 'center', color: '#64748b', fontSize: 12 }}>Self Feed Placeholder</div>
+                <div style={{ textAlign: 'center', color: '#64748b', fontSize: 12 }}>{t('selfFeedPlaceholder')}</div>
               ) : (
                 <div style={{ width: 60, height: 60, borderRadius: '50%', background: 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, color: '#D8B4FE' }}>Me</div>
               )}
               <div style={{ position: 'absolute', bottom: 12, left: 12, padding: '4px 8px', background: 'rgba(0,0,0,0.6)', borderRadius: '6px', fontSize: 11, color: '#f8fafc', backdropFilter: 'blur(4px)' }}>
-                You (Founder)
+                {t('youFounder')}
               </div>
             </div>
 
@@ -85,10 +87,10 @@ export default function VideoPitchRoomPage({ params }: { params: { id: string } 
           {/* Tabs */}
           <div style={{ display: 'flex', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
             <button onClick={() => setActiveTab('ai')} style={{ flex: 1, padding: '16px', background: activeTab === 'ai' ? 'rgba(255,255,255,0.1)' : 'transparent', border: 'none', color: activeTab === 'ai' ? '#D8B4FE' : '#64748b', fontSize: 13, fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, cursor: 'pointer' }}>
-              <Brain size={14} /> AI Notes
+              <Brain size={14} /> {t('tabs.aiNotes')}
             </button>
             <button onClick={() => setActiveTab('chat')} style={{ flex: 1, padding: '16px', background: activeTab === 'chat' ? 'rgba(255,255,255,0.05)' : 'transparent', border: 'none', color: activeTab === 'chat' ? '#f8fafc' : '#64748b', fontSize: 13, fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, cursor: 'pointer' }}>
-              <MessageSquare size={14} /> Chat
+              <MessageSquare size={14} /> {t('tabs.chat')}
             </button>
           </div>
 
@@ -96,21 +98,21 @@ export default function VideoPitchRoomPage({ params }: { params: { id: string } 
             {activeTab === 'ai' ? (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 <div style={{ padding: '12px', borderRadius: '10px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)' }}>
-                  <div style={{ fontSize: 11, color: '#D8B4FE', fontWeight: 700, marginBottom: 4, textTransform: 'uppercase' }}>Live Summary</div>
+                  <div style={{ fontSize: 11, color: '#D8B4FE', fontWeight: 700, marginBottom: 4, textTransform: 'uppercase' }}>{t('ai.liveSummary')}</div>
                   <div style={{ fontSize: 13, color: '#e2e8f0', lineHeight: 1.5 }}>
-                    Investor is asking about Customer Acquisition Cost (CAC) and LTV ratio. You mentioned LTV/CAC is 3.2, which is a strong point.
+                    {t('ai.liveSummaryText')}
                   </div>
                 </div>
                 <div style={{ padding: '12px', borderRadius: '10px', background: 'rgba(161,161,170,0.1)', border: '1px solid rgba(161,161,170,0.2)' }}>
-                  <div style={{ fontSize: 11, color: '#60a5fa', fontWeight: 700, marginBottom: 4, textTransform: 'uppercase' }}>AI Suggestion</div>
+                  <div style={{ fontSize: 11, color: '#60a5fa', fontWeight: 700, marginBottom: 4, textTransform: 'uppercase' }}>{t('ai.suggestion')}</div>
                   <div style={{ fontSize: 13, color: '#e2e8f0', lineHeight: 1.5 }}>
-                    Bring up the recent B2B partnership with local banks to support your growth claims.
+                    {t('ai.suggestionText')}
                   </div>
                 </div>
               </div>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                 <div style={{ fontSize: 13, color: '#94a3b8', textAlign: 'center', marginTop: 20 }}>No messages yet</div>
+                 <div style={{ fontSize: 13, color: '#94a3b8', textAlign: 'center', marginTop: 20 }}>{t('chat.noMessages')}</div>
               </div>
             )}
           </div>

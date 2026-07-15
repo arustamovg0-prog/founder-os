@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, ChangeEvent } from 'react';
 import { ROADMAP_STAGES } from '@/lib/constants';
 import { CheckCircle, Lock, Clock, AlertCircle, Upload, ChevronDown, ChevronUp, Zap } from 'lucide-react';
 import { toast } from 'sonner';
+import { useTranslations } from 'next-intl';
 import { useAuth } from '@/contexts/AuthContext';
 import { doc, onSnapshot, updateDoc } from 'firebase/firestore';
 import { db, storage } from '@/lib/firebase';
@@ -33,6 +34,7 @@ const STATE_CONFIG: Record<StageState, { icon: React.ReactNode; label: string; c
 };
 
 export default function RoadmapPage() {
+  const t = useTranslations('FounderRoadmap');
   const { profile } = useAuth();
   const [startup, setStartup] = useState<Startup | null>(null);
   const [loading, setLoading] = useState(true);
@@ -88,7 +90,7 @@ export default function RoadmapPage() {
         setUploadProgress(progress);
       },
       (error) => {
-        toast.error('Upload failed: ' + error.message);
+        toast.error(t('uploadFailed') + error.message);
         setUploading(null);
       },
       async () => {
@@ -107,10 +109,10 @@ export default function RoadmapPage() {
             await updateDoc(doc(db, 'startups', startup.id), {
               [urlField]: downloadURL
             });
-            toast.success(`${file.name} uploaded successfully!`, { icon: '📎' });
+            toast.success(`${file.name} ${t('uploadedSuccessfully')}`, { icon: '📎' });
             setUploadedArtifacts(prev => [...prev, uploading]);
           } catch (err: any) {
-            toast.error('Failed to save to database: ' + err.message);
+            toast.error(t('failedToSave') + err.message);
           }
         }
         setUploading(null);
@@ -122,8 +124,8 @@ export default function RoadmapPage() {
   const completedCount = Object.values(STAGE_STATES).filter(s => s === 'completed').length;
   const totalCount = ROADMAP_STAGES.length;
 
-  if (loading) return <div className="animate-fade-in" style={{ padding: 32, color: '#64748b' }}>Загрузка roadmap...</div>;
-  if (!startup) return <div className="animate-fade-in" style={{ padding: 32, color: '#64748b' }}>Стартап не найден.</div>;
+  if (loading) return <div className="animate-fade-in" style={{ padding: 32, color: '#64748b' }}>{t('loading')}</div>;
+  if (!startup) return <div className="animate-fade-in" style={{ padding: 32, color: '#64748b' }}>{t('notFound')}</div>;
 
   return (
     <div className="animate-fade-in">
@@ -138,10 +140,10 @@ export default function RoadmapPage() {
       {/* Header */}
       <div style={{ marginBottom: '32px' }}>
         <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 28, fontWeight: 700, marginBottom: 6 }}>
-          Startup Roadmap
+          {t('title')}
         </h1>
         <p style={{ color: '#64748b', fontSize: 14 }}>
-          Your structured path from idea to investment readiness
+          {t('subtitle')}
         </p>
       </div>
 
@@ -153,10 +155,10 @@ export default function RoadmapPage() {
               {startup.roadmapProgress || 0}%
             </div>
             <div style={{ fontSize: 13, color: '#64748b' }}>
-              {completedCount} of {totalCount} stages completed
+              {completedCount} {t('of')} {totalCount} {t('stagesCompleted')}
             </div>
           </div>
-          <span className="badge badge-purple">Investment Ready Track</span>
+          <span className="badge badge-purple">{t('investmentReadyTrack')}</span>
         </div>
         <div className="progress-bar" style={{ height: '8px' }}>
           <div className="progress-fill" style={{ width: `${startup.roadmapProgress || 0}%` }} />
@@ -206,7 +208,7 @@ export default function RoadmapPage() {
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '4px' }}>
                     <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 15, fontWeight: 700, color: state === 'locked' ? '#334155' : '#f8fafc' }}>
-                      {stage.title}
+                      {t(`stages.${stage.id}.title`)}
                     </span>
                     <span style={{
                       padding: '2px 8px', borderRadius: '99px', fontSize: 10, fontWeight: 600,
@@ -217,16 +219,18 @@ export default function RoadmapPage() {
                       {stage.phase}
                     </span>
                     {stage.isGatekeeper && (
-                      <span className="badge badge-yellow">Gatekeeper</span>
+                      <span className="badge badge-yellow">{t('gatekeeper')}</span>
                     )}
                   </div>
-                  <p style={{ fontSize: 13, color: '#475569' }}>{stage.description}</p>
+                  <p style={{ fontSize: 13, color: '#475569' }}>{t(`stages.${stage.id}.description`)}</p>
                 </div>
-
+                
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: cfg.color }}>
                     {cfg.icon}
-                    <span style={{ fontSize: 12, fontWeight: 600 }}>{cfg.label}</span>
+                    <span style={{ fontSize: 12, fontWeight: 600 }}>
+                      {state === 'in_progress' ? t('inProgress') : state === 'pending_review' ? t('pendingReview') : t(state as any)}
+                    </span>
                   </div>
                   {state !== 'locked' && (
                     isExpanded ? <ChevronUp size={16} color="#475569" /> : <ChevronDown size={16} color="#475569" />
@@ -239,7 +243,7 @@ export default function RoadmapPage() {
                 <div style={{ padding: '0 24px 24px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
                   <div style={{ paddingTop: '20px' }}>
                     <div style={{ fontSize: 12, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>
-                      Required Artifacts
+                      {t('requiredArtifacts')}
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                       {stage.requiredArtifacts.map((art) => {
@@ -257,8 +261,10 @@ export default function RoadmapPage() {
                                 : <Upload size={14} color="#64748b" />
                               }
                               <div>
-                                <div style={{ fontSize: 13, fontWeight: 500, color: isDone ? '#A1A1AA' : '#94a3b8' }}>{art.label}</div>
-                                <div style={{ fontSize: 11, color: '#334155' }}>Type: {art.type} • {art.isRequired ? 'Required' : 'Optional'}</div>
+                                <div style={{ fontSize: 13, fontWeight: 500, color: isDone ? '#A1A1AA' : '#94a3b8' }}>
+                                  {t(`stages.${stage.id}.artifacts.${art.key}`)}
+                                </div>
+                                <div style={{ fontSize: 11, color: '#334155' }}>{t('type')} {art.type} • {art.isRequired ? t('required') : t('optional')}</div>
                               </div>
                             </div>
                             {!isDone && (
@@ -274,7 +280,7 @@ export default function RoadmapPage() {
                                     {Math.round(uploadProgress)}%
                                   </span>
                                 ) : (
-                                  <><Upload size={12} /> Upload</>
+                                  <><Upload size={12} /> {t('upload')}</>
                                 )}
                               </button>
                             )}
@@ -288,7 +294,7 @@ export default function RoadmapPage() {
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                           <Zap size={14} color="#60a5fa" />
                           <span style={{ fontSize: 13, color: '#60a5fa' }}>
-                            This stage requires UNTITLED team verification before unlocking
+                            {t('verificationRequired', { team: 'UNTITLED' })}
                           </span>
                         </div>
                       </div>
