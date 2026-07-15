@@ -48,5 +48,11 @@ service cloud.firestore {
                    (isAdmin() || 
                    (request.auth.uid == get(/databases/$(database)/documents/startups/$(request.resource.data.startupId)).data.founderIds[0])); // Simple check for now, ideally check if they own the startup
     }
+
+    // Журнал доказательств (Append-Only Evidence Record)
+    // Доступ с клиента полностью закрыт. Чтение и запись только через Admin SDK (Server Actions).
+    match /audit_evidence/{recordId} {
+      allow read, write: if false;
+    }
   }
 }

@@ -1,0 +1,67 @@
+[debug] [2026-07-15T18:37:38.451Z] ----------------------------------------------------------------------
+[debug] [2026-07-15T18:37:38.452Z] Command:       /Users/akmalrustamov/.nvm/versions/node/v24.14.0/bin/node /Users/akmalrustamov/.npm/_npx/ba4f1959e38407b5/node_modules/.bin/firebase deploy --only firestore:rules
+[debug] [2026-07-15T18:37:38.452Z] CLI Version:   15.23.0
+[debug] [2026-07-15T18:37:38.452Z] Platform:      darwin
+[debug] [2026-07-15T18:37:38.452Z] Node Version:  v24.14.0
+[debug] [2026-07-15T18:37:38.452Z] Detected Agent: antigravity
+[debug] [2026-07-15T18:37:38.452Z] Time:          Wed Jul 15 2026 23:37:38 GMT+0500 (Uzbekistan Standard Time)
+[debug] [2026-07-15T18:37:38.452Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-07-15T18:37:39.136Z] Object "/apphosting" in "firebase.json" is missing required property: {"missingProperty":"backendId"}
+[debug] [2026-07-15T18:37:39.136Z] Field "/apphosting" in "firebase.json" is possibly invalid: must be array
+[debug] [2026-07-15T18:37:39.136Z] Field "/apphosting" in "firebase.json" is possibly invalid: must match a schema in anyOf
+[debug] [2026-07-15T18:37:39.137Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-07-15T18:37:39.137Z] > authorizing via signed-in user (a.rustamov.g0@gmail.com)
+[debug] [2026-07-15T18:37:39.138Z] [iam] checking project founder-os-78cfc for permissions ["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get"]
+[debug] [2026-07-15T18:37:39.142Z] Checked if tokens are valid: true, expires at: 1784142454437
+[debug] [2026-07-15T18:37:39.143Z] Checked if tokens are valid: true, expires at: 1784142454437
+[debug] [2026-07-15T18:37:39.143Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/founder-os-78cfc:testIamPermissions [none]
+[debug] [2026-07-15T18:37:39.143Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/founder-os-78cfc:testIamPermissions  x-goog-user-project=founder-os-78cfc
+[debug] [2026-07-15T18:37:39.143Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/founder-os-78cfc:testIamPermissions {"permissions":["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get"]}
+[debug] [2026-07-15T18:37:39.889Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/founder-os-78cfc:testIamPermissions 200
+[debug] [2026-07-15T18:37:39.889Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/founder-os-78cfc:testIamPermissions {"permissions":["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get"]}
+[info] 
+[info] === Deploying to 'founder-os-78cfc'...
+[info] 
+[info] i  deploying firestore 
+[info] i  firestore: ensuring required API firestore.googleapis.com is enabled... 
+[info] i  firestore: ensuring required API firestore.googleapis.com is enabled... 
+[debug] [2026-07-15T18:37:39.892Z] Checked if tokens are valid: true, expires at: 1784142454437
+[debug] [2026-07-15T18:37:39.893Z] Checked if tokens are valid: true, expires at: 1784142454437
+[debug] [2026-07-15T18:37:39.893Z] >>> [apiv2][query] GET https://firestore.googleapis.com/v1/projects/founder-os-78cfc/databases/(default) [none]
+[debug] [2026-07-15T18:37:42.431Z] <<< [apiv2][status] GET https://firestore.googleapis.com/v1/projects/founder-os-78cfc/databases/(default) 200
+[debug] [2026-07-15T18:37:42.431Z] <<< [apiv2][body] GET https://firestore.googleapis.com/v1/projects/founder-os-78cfc/databases/(default) {"name":"projects/founder-os-78cfc/databases/(default)","uid":"bdccfdb6-a75b-4e8d-8267-3096fc4bee0f","createTime":"2026-07-14T14:35:35.391703Z","updateTime":"2026-07-14T14:35:35.391703Z","locationId":"asia-southeast1","type":"FIRESTORE_NATIVE","concurrencyMode":"PESSIMISTIC","versionRetentionPeriod":"3600s","earliestVersionTime":"2026-07-15T17:37:43.116853Z","appEngineIntegrationMode":"DISABLED","keyPrefix":"zas","pointInTimeRecoveryEnablement":"POINT_IN_TIME_RECOVERY_DISABLED","deleteProtectionState":"DELETE_PROTECTION_DISABLED","databaseEdition":"STANDARD","freeTier":true,"realtimeUpdatesMode":"REALTIME_UPDATES_MODE_ENABLED","etag":"IPCk0fOp1ZUDMLq594ay0pUD"}
+[info] i  firestore: reading indexes from firestore.indexes.json... 
+[info] i  cloud.firestore: checking firestore.rules for compilation errors... 
+[debug] [2026-07-15T18:37:42.434Z] Checked if tokens are valid: true, expires at: 1784142454437
+[debug] [2026-07-15T18:37:42.434Z] Checked if tokens are valid: true, expires at: 1784142454437
+[debug] [2026-07-15T18:37:42.434Z] >>> [apiv2][query] POST https://firebaserules.googleapis.com/v1/projects/founder-os-78cfc:test [none]
+[debug] [2026-07-15T18:37:42.434Z] >>> [apiv2][body] POST https://firebaserules.googleapis.com/v1/projects/founder-os-78cfc:test [omitted]
+[debug] [2026-07-15T18:37:44.135Z] <<< [apiv2][status] POST https://firebaserules.googleapis.com/v1/projects/founder-os-78cfc:test 200
+[debug] [2026-07-15T18:37:44.135Z] <<< [apiv2][body] POST https://firebaserules.googleapis.com/v1/projects/founder-os-78cfc:test {"issues":[{"sourcePosition":{"fileName":"firestore.rules","line":19,"column":14,"currentOffset":434,"endOffset":443},"description":"Unused function: isInvestor.","severity":"WARNING"},{"sourcePosition":{"fileName":"firestore.rules","line":23,"column":14,"currentOffset":537,"endOffset":545},"description":"Unused function: isFounder.","severity":"WARNING"}]}
+[warn] ⚠  [W] 19:14 - Unused function: isInvestor. 
+[warn] ⚠  [W] 23:14 - Unused function: isFounder. 
+[info] ✔  cloud.firestore: rules file firestore.rules compiled successfully 
+[debug] [2026-07-15T18:37:44.137Z] Checked if tokens are valid: true, expires at: 1784142454437
+[debug] [2026-07-15T18:37:44.137Z] Checked if tokens are valid: true, expires at: 1784142454437
+[debug] [2026-07-15T18:37:44.137Z] >>> [apiv2][query] GET https://firebaserules.googleapis.com/v1/projects/founder-os-78cfc/releases pageSize=10&pageToken=
+[debug] [2026-07-15T18:37:44.551Z] <<< [apiv2][status] GET https://firebaserules.googleapis.com/v1/projects/founder-os-78cfc/releases 200
+[debug] [2026-07-15T18:37:44.551Z] <<< [apiv2][body] GET https://firebaserules.googleapis.com/v1/projects/founder-os-78cfc/releases {"releases":[{"name":"projects/founder-os-78cfc/releases/cloud.firestore","rulesetName":"projects/founder-os-78cfc/rulesets/f0ff7047-ff57-424e-844b-5256e23bfbbb","createTime":"2026-07-14T14:35:39.477637Z","updateTime":"2026-07-14T14:44:17.088647Z"},{"name":"projects/founder-os-78cfc/releases/firebase.storage/founder-os-78cfc.firebasestorage.app","rulesetName":"projects/founder-os-78cfc/rulesets/d066de79-6339-4808-9268-140fe4c26771","createTime":"2026-07-15T18:15:02.336957Z","updateTime":"2026-07-15T18:15:02.336957Z"}]}
+[debug] [2026-07-15T18:37:44.564Z] Checked if tokens are valid: true, expires at: 1784142454437
+[debug] [2026-07-15T18:37:44.565Z] Checked if tokens are valid: true, expires at: 1784142454437
+[debug] [2026-07-15T18:37:44.565Z] >>> [apiv2][query] GET https://firebaserules.googleapis.com/v1/projects/founder-os-78cfc/rulesets/f0ff7047-ff57-424e-844b-5256e23bfbbb [none]
+[debug] [2026-07-15T18:37:45.351Z] <<< [apiv2][status] GET https://firebaserules.googleapis.com/v1/projects/founder-os-78cfc/rulesets/f0ff7047-ff57-424e-844b-5256e23bfbbb 200
+[debug] [2026-07-15T18:37:45.352Z] <<< [apiv2][body] GET https://firebaserules.googleapis.com/v1/projects/founder-os-78cfc/rulesets/f0ff7047-ff57-424e-844b-5256e23bfbbb [omitted]
+[info] i  firestore: uploading rules firestore.rules... 
+[debug] [2026-07-15T18:37:45.353Z] Checked if tokens are valid: true, expires at: 1784142454437
+[debug] [2026-07-15T18:37:45.353Z] Checked if tokens are valid: true, expires at: 1784142454437
+[debug] [2026-07-15T18:37:45.353Z] >>> [apiv2][query] POST https://firebaserules.googleapis.com/v1/projects/founder-os-78cfc/rulesets [none]
+[debug] [2026-07-15T18:37:45.353Z] >>> [apiv2][body] POST https://firebaserules.googleapis.com/v1/projects/founder-os-78cfc/rulesets [omitted]
+[debug] [2026-07-15T18:37:45.818Z] <<< [apiv2][status] POST https://firebaserules.googleapis.com/v1/projects/founder-os-78cfc/rulesets 200
+[debug] [2026-07-15T18:37:45.819Z] <<< [apiv2][body] POST https://firebaserules.googleapis.com/v1/projects/founder-os-78cfc/rulesets {"name":"projects/founder-os-78cfc/rulesets/3d14db3e-3ce9-4cce-b107-7f8ccfc9dab6","source":{"files":[{"content":"rules_version = '2';\n\nservice cloud.firestore {\n  match /databases/{database}/documents {\n\n    // Вспомогательные функции\n    function isAuthenticated() {\n      return request.auth != null;\n    }\n    \n    function getUserData() {\n      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;\n    }\n    \n    function isAdmin() {\n      return isAuthenticated() && getUserData().role == 'admin';\n    }\n\n    function isInvestor() {\n      return isAuthenticated() && getUserData().role == 'investor';\n    }\n\n    function isFounder() {\n      return isAuthenticated() && getUserData().role == 'founder';\n    }\n\n    // Правила для коллекции users\n    match /users/{userId} {\n      allow read: if isAuthenticated(); \n      allow write: if isAuthenticated() && request.auth.uid == userId;\n    }\n\n    // Правила для коллекции startups\n    match /startups/{startupId} {\n      allow read: if isAuthenticated();\n      // Разрешить создавать стартап любому авторизованному пользователю\n      allow create: if isAuthenticated();\n      // Обновлять может только если uid есть в founderIds\n      allow update: if isAuthenticated() && \n                    (isAdmin() || (request.auth.uid in resource.data.founderIds));\n      allow delete: if isAdmin();\n    }\n    \n    // Правила для питчей\n    match /pitches/{pitchId} {\n      allow read: if isAuthenticated();\n      allow write: if isAuthenticated() && \n                   (isAdmin() || \n                   (request.auth.uid == get(/databases/$(database)/documents/startups/$(request.resource.data.startupId)).data.founderIds[0])); // Simple check for now, ideally check if they own the startup\n    }\n\n    // Журнал доказательств (Append-Only Evidence Record)\n    // Доступ с клиента полностью закрыт. Чтение и запись только через Admin SDK (Server Actions).\n    match /audit_evidence/{recordId} {\n      allow read, write: if false;\n    }\n  }\n}\n","name":"firestore.rules"}]},"createTime":"2026-07-15T18:37:46.657407Z","metadata":{"services":["cloud.firestore"]}}
+[debug] [2026-07-15T18:37:45.819Z] [rules] created ruleset projects/founder-os-78cfc/rulesets/3d14db3e-3ce9-4cce-b107-7f8ccfc9dab6
+[debug] [2026-07-15T18:37:45.819Z] [rules] releasing cloud.firestore with ruleset projects/founder-os-78cfc/rulesets/3d14db3e-3ce9-4cce-b107-7f8ccfc9dab6
+[debug] [2026-07-15T18:37:45.820Z] Checked if tokens are valid: true, expires at: 1784142454437
+[debug] [2026-07-15T18:37:45.820Z] Checked if tokens are valid: true, expires at: 1784142454437
+[debug] [2026-07-15T18:37:45.820Z] >>> [apiv2][query] PATCH https://firebaserules.googleapis.com/v1/projects/founder-os-78cfc/releases/cloud.firestore [none]
+[debug] [2026-07-15T18:37:45.820Z] >>> [apiv2][body] PATCH https://firebaserules.googleapis.com/v1/projects/founder-os-78cfc/releases/cloud.firestore {"release":{"name":"projects/founder-os-78cfc/releases/cloud.firestore","rulesetName":"projects/founder-os-78cfc/rulesets/3d14db3e-3ce9-4cce-b107-7f8ccfc9dab6"}}

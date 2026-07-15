@@ -4,9 +4,10 @@ import { useState } from 'react';
 import { collection, getDocs, limit, query } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { Startup } from '@/types';
-import { Eye, X, AlertTriangle, Shield, UserCheck } from 'lucide-react';
+import { Eye, X, AlertTriangle, Shield, UserCheck, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
+import { logImpersonationAction } from '@/app/actions/audit';
 
 interface ImpersonationBannerProps {
   targetName: string;
@@ -75,20 +76,30 @@ export function ImpersonationPanel() {
     }, []);
   });
 
+  const [isLogging, setIsLogging] = useState(false);
   const [impersonateTarget, setImpersonateTarget] = useState<{ name: string; role: string } | null>(null);
 
-  const startImpersonation = (startupId: string) => {
+  const startImpersonation = async (startupId: string) => {
     const startup = startups.find(s => s.id === startupId);
     if (!startup) return;
 
-    // Логируем в digital_footprint (в реальном Firebase — через Server Action)
-    console.info(`[AUDIT] Admin impersonating founder of ${startup.name} at ${new Date().toISOString()}`);
+    setSelectedId(startupId);
+    setIsLogging(true);
+    // Логируем в неизменяемый журнал доказательств (Evidence Record)
+    const auditRes = await logImpersonationAction(startup.id!, startup.name);
+    setIsLogging(false);
+
+    if (!auditRes.success) {
+      toast.error('Ошибка безопасности: не удалось создать запись в журнале аудита.');
+      setSelectedId(null);
+      return;
+    }
 
     setImpersonateTarget({ name: startup.founderName || startup.name, role: 'founder' });
     setImpersonating(true);
     setSelectedId(null);
 
-    toast.success(`Переключились на вид: ${startup.founderName}`, { icon: '👁️' });
+    toast.success(`Режим: ${startup.founderName}. Audit Hash: ${auditRes.hash?.substring(0, 8)}...`, { icon: '👁️' });
 
     // В реальном сценарии: redirect на /founder с impersonation token в headers
     // Здесь — показываем баннер
@@ -133,10 +144,12 @@ export function ImpersonationPanel() {
                 display: 'flex', alignItems: 'center', gap: '8px',
                 padding: '8px 16px', borderRadius: '10px', fontSize: 13,
                 background: 'rgba(113,113,122,0.08)', border: '1px solid rgba(113,113,122,0.2)',
-                color: '#D4D4D8', cursor: 'pointer', fontFamily: 'Inter', fontWeight: 500,
+                color: '#D4D4D8', cursor: isLogging ? 'not-allowed' : 'pointer', fontFamily: 'Inter', fontWeight: 500,
+                opacity: isLogging ? 0.7 : 1
               }}
+              disabled={isLogging}
             >
-              <Eye size={13} />
+              {isLogging && selectedId === s.id ? <Loader2 size={13} className="animate-spin" /> : <Eye size={13} />}
               {s.founderName?.split(' ')[0] || s.name}
             </button>
           ))}
