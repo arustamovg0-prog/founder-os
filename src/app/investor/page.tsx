@@ -5,7 +5,12 @@ import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { Startup, PitchEvent } from '@/types';
 import { TrendingUp, Users, Briefcase, DollarSign, ArrowUpRight, Star, Clock } from 'lucide-react';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
+import { Startup, PitchEvent } from '@/types';
+import { TrendingUp, Users, Briefcase, DollarSign, ArrowUpRight, Star, Clock } from 'lucide-react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 function fmt(n: number) {
   if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(1)}M`;
@@ -30,6 +35,7 @@ function ScoreBar({ score, color = '#7c3aed' }: { score: number; color?: string 
 }
 
 export default function InvestorDashboard() {
+  const t = useTranslations('investorDashboard');
   const [startups, setStartups] = useState<Startup[]>([]);
   const [pitches, setPitches] = useState<PitchEvent[]>([]);
   const [loading, setLoading] = useState(true);
@@ -81,7 +87,7 @@ export default function InvestorDashboard() {
     loadData();
   }, []);
 
-  if (loading) return <div className="animate-fade-in" style={{ padding: 32, color: '#64748b' }}>Загрузка дашборда...</div>;
+  if (loading) return <div className="animate-fade-in" style={{ padding: 32, color: '#64748b' }}>{t('loading')}</div>;
 
   const readyStartups = startups.filter(s => s.aiScores?.overallReadinessScore && s.aiScores.overallReadinessScore >= 60);
   const pendingPitches = pitches.filter(p => p.status === 'pending').length;
@@ -91,18 +97,18 @@ export default function InvestorDashboard() {
     <div className="animate-fade-in">
       <div style={{ marginBottom: '32px' }}>
         <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 28, fontWeight: 700, marginBottom: 6 }}>
-          Investor Dashboard
+          {t('title')}
         </h1>
-        <p style={{ color: '#64748b', fontSize: 14 }}>Welcome back, Aibek Ventures</p>
+        <p style={{ color: '#64748b', fontSize: 14 }}>{t('subtitle')}</p>
       </div>
 
       {/* KPIs */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '28px' }}>
         {[
-          { label: 'Investment-Ready Startups', value: startups.filter(s => (s.aiScores.overallReadinessScore || 0) >= 75).length, icon: <Star size={18} />, color: '#f59e0b' },
-          { label: 'Active Pipeline', value: startups.length, icon: <TrendingUp size={18} />, color: '#7c3aed' },
-          { label: 'Pending Pitches', value: pendingPitches, icon: <Clock size={18} />, color: '#3b82f6' },
-          { label: 'Active Pitches', value: activePitches, icon: <Briefcase size={18} />, color: '#10b981' },
+          { label: t('kpis.ready'), value: startups.filter(s => (s.aiScores.overallReadinessScore || 0) >= 75).length, icon: <Star size={18} />, color: '#f59e0b' },
+          { label: t('kpis.active'), value: startups.length, icon: <TrendingUp size={18} />, color: '#7c3aed' },
+          { label: t('kpis.pending'), value: pendingPitches, icon: <Clock size={18} />, color: '#3b82f6' },
+          { label: t('kpis.pitches'), value: activePitches, icon: <Briefcase size={18} />, color: '#10b981' },
         ].map((kpi, i) => (
           <div key={i} className="stat-card">
             <div style={{
@@ -123,10 +129,10 @@ export default function InvestorDashboard() {
         <div className="card">
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
             <div style={{ fontSize: 13, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px' }}>
-              Top Opportunities
+              {t('topStartups')}
             </div>
             <Link href="/investor/deal-flow" style={{ fontSize: 12, color: '#7c3aed', textDecoration: 'none', fontWeight: 500 }}>
-              View all →
+              {t('viewAll')} →
             </Link>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -153,15 +159,15 @@ export default function InvestorDashboard() {
                     <p style={{ fontSize: 12, color: '#64748b' }}>{s.tagline}</p>
                   </div>
                   <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                    <div style={{ fontSize: 11, color: '#475569', marginBottom: 2 }}>MRR</div>
+                    <div style={{ fontSize: 11, color: '#475569', marginBottom: 2 }}>{t('mrr')}</div>
                     <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 16, fontWeight: 700, color: '#10b981' }}>{fmt(s.metrics.mrr)}</div>
                   </div>
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px', marginBottom: '12px' }}>
                   {[
-                    { label: 'LTV/CAC', value: `${s.metrics.ltvCacRatio}x` },
-                    { label: 'MAU', value: s.metrics.mau.toLocaleString() },
-                    { label: 'Runway', value: `${s.metrics.runwayMonths}mo` },
+                    { label: t('metrics.ltv'), value: `${s.metrics.ltvCacRatio}x` },
+                    { label: t('metrics.mau'), value: s.metrics.mau.toLocaleString() },
+                    { label: t('metrics.runway'), value: `${s.metrics.runwayMonths}mo` },
                   ].map((m, j) => (
                     <div key={j} style={{ textAlign: 'center', padding: '8px', borderRadius: '8px', background: 'rgba(255,255,255,0.02)' }}>
                       <div style={{ fontSize: 13, fontWeight: 700, color: '#f8fafc' }}>{m.value}</div>
@@ -170,12 +176,12 @@ export default function InvestorDashboard() {
                   ))}
                 </div>
                 <div style={{ marginBottom: '12px' }}>
-                  <div style={{ fontSize: 11, color: '#475569', marginBottom: 6 }}>AI Readiness Score</div>
+                  <div style={{ fontSize: 11, color: '#475569', marginBottom: 6 }}>{t('score')}</div>
                   <ScoreBar score={s.aiScores.overallReadinessScore || 0} color={i === 0 ? '#10b981' : i === 1 ? '#7c3aed' : '#f59e0b'} />
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                   <Link href={`/investor/deal-flow`} className="btn-secondary" style={{ fontSize: 12, padding: '6px 14px' }}>
-                    View Profile <ArrowUpRight size={12} />
+                    {t('viewProfile')} <ArrowUpRight size={12} />
                   </Link>
                 </div>
               </div>
@@ -186,7 +192,7 @@ export default function InvestorDashboard() {
         {/* Pending Pitch Requests */}
         <div className="card">
           <div style={{ fontSize: 13, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '20px' }}>
-            Pending Pitch Requests
+            {t('pendingRequests')}
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {pitches.filter(p => p.status === 'pending').map((p) => {
@@ -195,20 +201,20 @@ export default function InvestorDashboard() {
                 <div key={p.id} style={{ padding: '14px', borderRadius: '12px', background: 'rgba(245,158,11,0.05)', border: '1px solid rgba(245,158,11,0.15)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
                     <span style={{ fontSize: 14, fontWeight: 700 }}>{p.startupName}</span>
-                    <span className="badge badge-yellow"><Clock size={10} /> Pending</span>
+                    <span className="badge badge-yellow"><Clock size={10} /> {t('pending')}</span>
                   </div>
                   <p style={{ fontSize: 12, color: '#64748b', marginBottom: '10px', lineHeight: 1.5 }}>
                     {p.request.message.slice(0, 100)}...
                   </p>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <span style={{ fontSize: 11, color: '#475569' }}>Score: {p.request.snapshotScore}/100</span>
+                    <span style={{ fontSize: 11, color: '#475569' }}>{t('pitchScore', { score: p.request.snapshotScore })}</span>
                     <span style={{ fontSize: 11, color: '#475569' }}>
                       {p.request.proposedDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}
                     </span>
                   </div>
                   <div style={{ display: 'flex', gap: '8px', marginTop: '12px' }}>
-                    <button className="btn-primary" style={{ flex: 1, fontSize: 12, padding: '7px' }}>Accept</button>
-                    <button className="btn-secondary" style={{ flex: 1, fontSize: 12, padding: '7px' }}>Decline</button>
+                    <button className="btn-primary" style={{ flex: 1, fontSize: 12, padding: '7px' }}>{t('accept')}</button>
+                    <button className="btn-secondary" style={{ flex: 1, fontSize: 12, padding: '7px' }}>{t('decline')}</button>
                   </div>
                 </div>
               );
@@ -216,7 +222,7 @@ export default function InvestorDashboard() {
             {pitches.filter(p => p.status === 'pending').length === 0 && (
               <div style={{ textAlign: 'center', padding: '40px 20px', color: '#334155' }}>
                 <Clock size={32} style={{ margin: '0 auto 12px', opacity: 0.3, display: 'block' }} />
-                <p style={{ fontSize: 13 }}>No pending requests</p>
+                <p style={{ fontSize: 13 }}>{t('noRequests')}</p>
               </div>
             )}
           </div>

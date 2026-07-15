@@ -7,6 +7,7 @@ import { db } from '@/lib/firebase';
 import { Startup } from '@/types';
 import { Search, Brain, MapPin, Eye, MessageSquare, ChevronDown, ChevronUp, CheckCircle, AlertTriangle } from 'lucide-react';
 import { ImpersonationPanel } from '@/components/ImpersonationPanel';
+import { useTranslations } from 'next-intl';
 
 function fmt(n: number) {
   if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(1)}M`;
@@ -19,6 +20,7 @@ const STAGE_COLORS: Record<string, string> = {
 };
 
 function StartupDetailRow({ s }: { s: Startup }) {
+  const t = useTranslations('adminStartups');
   const [open, setOpen] = useState(false);
   const score = s.aiScores.overallReadinessScore || 0;
   const scoreColor = score >= 75 ? '#D4D4D8' : score >= 50 ? '#71717A' : '#52525B';
@@ -54,9 +56,9 @@ function StartupDetailRow({ s }: { s: Startup }) {
 
         <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '16px' }}>
           {[
-            { l: 'MRR', v: fmt(s.metrics.mrr), c: '#D4D4D8' },
-            { l: 'MAU', v: s.metrics.mau > 0 ? s.metrics.mau.toLocaleString() : '—', c: '#A1A1AA' },
-            { l: 'Runway', v: s.metrics.runwayMonths > 0 ? `${s.metrics.runwayMonths}mo` : '—', c: s.metrics.runwayMonths <= 6 && s.metrics.runwayMonths > 0 ? '#52525B' : '#94a3b8' },
+            { l: t('metrics.mrr'), v: fmt(s.metrics.mrr), c: '#D4D4D8' },
+            { l: t('metrics.mau'), v: s.metrics.mau > 0 ? s.metrics.mau.toLocaleString() : '—', c: '#A1A1AA' },
+            { l: t('metrics.runway'), v: s.metrics.runwayMonths > 0 ? `${s.metrics.runwayMonths}mo` : '—', c: s.metrics.runwayMonths <= 6 && s.metrics.runwayMonths > 0 ? '#52525B' : '#94a3b8' },
           ].map((m, i) => (
             <div key={i}>
               <div style={{ fontSize: 11, color: '#334155', fontWeight: 600 }}>{m.l}</div>
@@ -67,14 +69,14 @@ function StartupDetailRow({ s }: { s: Startup }) {
 
         <div style={{ flex: '0 0 80px', textAlign: 'center' }}>
           <div style={{ fontFamily: 'Space Grotesk', fontSize: 22, fontWeight: 800, color: scoreColor }}>{score}</div>
-          <div style={{ fontSize: 10, color: '#334155' }}>AI Score</div>
+          <div style={{ fontSize: 10, color: '#334155' }}>{t('aiScore')}</div>
         </div>
 
         <div style={{ flex: '0 0 100px' }}>
           <div className="progress-bar">
             <div style={{ height: '100%', borderRadius: 99, width: `${s.roadmapProgress}%`, background: '#FFFFFF', boxShadow: '0 0 6px rgba(255,255,255,0.5)' }} />
           </div>
-          <div style={{ fontSize: 11, color: '#475569', marginTop: 4, textAlign: 'center' }}>{s.roadmapProgress}% done</div>
+          <div style={{ fontSize: 11, color: '#475569', marginTop: 4, textAlign: 'center' }}>{t('progress', { pct: s.roadmapProgress })}</div>
         </div>
 
         {open ? <ChevronUp size={16} color="#475569" /> : <ChevronDown size={16} color="#475569" />}
@@ -88,7 +90,7 @@ function StartupDetailRow({ s }: { s: Startup }) {
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '10px' }}>
                 <Brain size={13} color="#D8B4FE" />
-                <span style={{ fontSize: 11, color: '#D8B4FE', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>AI Copilot Analysis</span>
+                <span style={{ fontSize: 11, color: '#D8B4FE', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>{t('aiAnalysis')}</span>
               </div>
               {s.executiveSummaryAI ? (
                 <p style={{ fontSize: 13, color: '#94a3b8', lineHeight: 1.7, padding: '12px', background: 'rgba(255,255,255,0.07)', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.15)' }}>
@@ -96,7 +98,7 @@ function StartupDetailRow({ s }: { s: Startup }) {
                 </p>
               ) : (
                 <div style={{ padding: '12px', background: 'rgba(255,255,255,0.02)', borderRadius: '10px', color: '#334155', fontSize: 13 }}>
-                  AI analysis not yet generated — upload pitch deck to trigger scoring
+                  {t('aiNotGenerated')}
                 </div>
               )}
             </div>
@@ -104,16 +106,16 @@ function StartupDetailRow({ s }: { s: Startup }) {
             {/* Metrics & Current Stage */}
             <div>
               <div style={{ fontSize: 11, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '10px' }}>
-                Full Metrics
+                {t('fullMetrics')}
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
                 {[
-                  { l: 'ARR', v: fmt(s.metrics.arr) },
-                  { l: 'Churn', v: s.metrics.churnRate > 0 ? `${s.metrics.churnRate}%` : '—' },
-                  { l: 'LTV', v: fmt(s.metrics.ltv) },
-                  { l: 'CAC', v: fmt(s.metrics.cac) },
-                  { l: 'LTV/CAC', v: s.metrics.ltvCacRatio > 0 ? `${s.metrics.ltvCacRatio}x` : '—' },
-                  { l: 'Team', v: `${s.metrics.teamSize} ppl` },
+                  { l: t('metrics.arr'), v: fmt(s.metrics.arr) },
+                  { l: t('metrics.churn'), v: s.metrics.churnRate > 0 ? `${s.metrics.churnRate}%` : '—' },
+                  { l: t('metrics.ltv'), v: fmt(s.metrics.ltv) },
+                  { l: t('metrics.cac'), v: fmt(s.metrics.cac) },
+                  { l: t('metrics.ltvCac'), v: s.metrics.ltvCacRatio > 0 ? `${s.metrics.ltvCacRatio}x` : '—' },
+                  { l: t('metrics.team'), v: s.metrics.teamSize },
                 ].map((m, i) => (
                   <div key={i} style={{ padding: '8px 12px', borderRadius: '8px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.04)' }}>
                     <div style={{ fontSize: 10, color: '#334155', fontWeight: 600 }}>{m.l}</div>
@@ -124,7 +126,7 @@ function StartupDetailRow({ s }: { s: Startup }) {
 
               {currentStage && (
                 <div style={{ marginTop: '12px', padding: '10px 14px', borderRadius: '10px', background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)' }}>
-                  <div style={{ fontSize: 11, color: '#475569', marginBottom: 4 }}>Current Roadmap Stage</div>
+                  <div style={{ fontSize: 11, color: '#475569', marginBottom: 4 }}>{t('currentStage')}</div>
                   <div style={{ fontSize: 14, fontWeight: 600, color: '#D8B4FE' }}>{currentStage.title}</div>
                 </div>
               )}
@@ -134,19 +136,19 @@ function StartupDetailRow({ s }: { s: Startup }) {
           {/* Action Buttons */}
           <div style={{ display: 'flex', gap: '10px', marginTop: '16px', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '16px' }}>
             <button className="btn-secondary" style={{ fontSize: 12, padding: '7px 16px' }}>
-              <Eye size={13} /> View Full Profile
+              <Eye size={13} /> {t('btnView')}
             </button>
             <button className="btn-secondary" style={{ fontSize: 12, padding: '7px 16px' }}>
-              <MessageSquare size={13} /> Send AI Hint
+              <MessageSquare size={13} /> {t('btnHint')}
             </button>
             {score >= 75 && s.stage !== 'investment_ready' && (
               <button className="btn-primary" style={{ fontSize: 12, padding: '7px 16px' }}>
-                <CheckCircle size={13} /> Approve Stage
+                <CheckCircle size={13} /> {t('btnApprove')}
               </button>
             )}
             {s.metrics.runwayMonths <= 6 && s.metrics.runwayMonths > 0 && (
               <button style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: 12, padding: '7px 16px', borderRadius: '8px', background: 'rgba(113,113,122,0.1)', border: '1px solid rgba(113,113,122,0.3)', color: '#D4D4D8', cursor: 'pointer', fontFamily: 'Inter' }}>
-                <AlertTriangle size={13} /> Flag Critical
+                <AlertTriangle size={13} /> {t('btnFlag')}
               </button>
             )}
           </div>
@@ -157,6 +159,7 @@ function StartupDetailRow({ s }: { s: Startup }) {
 }
 
 export default function AdminStartupsPage() {
+  const t = useTranslations('adminStartups');
   const [startups, setStartups] = useState<Startup[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -207,8 +210,8 @@ export default function AdminStartupsPage() {
   return (
     <div className="animate-fade-in">
       <div style={{ marginBottom: '28px' }}>
-        <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 28, fontWeight: 700, marginBottom: 6 }}>Startup Management</h1>
-        <p style={{ color: '#64748b', fontSize: 14 }}>Review, monitor and manage all startups in the ecosystem</p>
+        <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 28, fontWeight: 700, marginBottom: 6 }}>{t('title')}</h1>
+        <p style={{ color: '#64748b', fontSize: 14 }}>{t('subtitle')}</p>
       </div>
 
       {/* Admin Impersonation */}
@@ -218,14 +221,14 @@ export default function AdminStartupsPage() {
       <div style={{ display: 'flex', gap: '12px', marginBottom: '24px', flexWrap: 'wrap', alignItems: 'center' }}>
         <div style={{ position: 'relative', flex: 1, minWidth: '220px' }}>
           <Search size={14} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: '#475569' }} />
-          <input className="input-field" placeholder="Search startup or founder..." value={search} onChange={e => setSearch(e.target.value)} style={{ paddingLeft: 36 }} />
+          <input className="input-field" placeholder={t('search')} value={search} onChange={e => setSearch(e.target.value)} style={{ paddingLeft: 36 }} />
         </div>
         <div style={{ display: 'flex', gap: '4px', background: 'rgba(255,255,255,0.04)', borderRadius: '10px', padding: '4px' }}>
           {[
-            { key: 'all', label: `All (${startups.length})` },
-            { key: 'ready', label: `🟢 Ready (${startups.filter(s => (s.aiScores?.overallReadinessScore || 0) >= 75).length})` },
-            { key: 'critical', label: `🔴 Critical (${startups.filter(s => (s.metrics?.runwayMonths || 0) <= 6 && (s.metrics?.runwayMonths || 0) > 0).length})` },
-            { key: 'early', label: `🌱 Early Stage` },
+            { key: 'all', label: t('filterAll', { count: startups.length }) },
+            { key: 'ready', label: t('filterReady', { count: startups.filter(s => (s.aiScores?.overallReadinessScore || 0) >= 75).length }) },
+            { key: 'critical', label: t('filterCritical', { count: startups.filter(s => (s.metrics?.runwayMonths || 0) <= 6 && (s.metrics?.runwayMonths || 0) > 0).length }) },
+            { key: 'early', label: t('filterEarly') },
           ].map(f => (
             <button key={f.key} onClick={() => setFilter(f.key)} style={{
               padding: '7px 14px', borderRadius: '7px', border: 'none',
@@ -240,7 +243,7 @@ export default function AdminStartupsPage() {
       </div>
 
       {/* Count */}
-      <div style={{ fontSize: 13, color: '#475569', marginBottom: '16px' }}>{filtered.length} startups</div>
+      <div style={{ fontSize: 13, color: '#475569', marginBottom: '16px' }}>{t('countLabel', { count: filtered.length })}</div>
 
       {/* List */}
       <div className="stagger-container" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>

@@ -20,6 +20,7 @@
     "settings": "Настройки",
     "impersonate": "Имперсонация",
     "admin": "Админ",
+    "audit": "Журнал доказательств",
     "menu": "Меню"
   },
   "FounderDashboard": {
@@ -96,6 +97,7 @@
     "save": "Сохранить",
     "cancel": "Отмена",
     "loading": "Загрузка...",
+    "loadingProtocol": "Инициализация защищенного протокола...",
     "menu": "Меню",
     "active": "Активен",
     "escToClose": "ESC для закрытия"
@@ -602,5 +604,108 @@
         "a": "Обязательно! IP Assignment гарантирует, что вся интеллектуальная собственность (код, дизайн, брэнд) принадлежит компании, а не физическим лицам. Это критически важно для due diligence инвесторов."
       }
     ]
+  },
+  "impersonation": {
+    "adminMode": "РЕЖИМ АДМИНА — Просмотр от лица:",
+    "actionsLogged": "Действия логируются в Digital Footprint",
+    "exitMode": "Выйти из режима",
+    "triggerTitle": "Имперсонация Админа",
+    "auditLogged": "Аудит логгирован",
+    "triggerDesc": "Просматривай платформу от лица любого фаундера. Все действия фиксируются в Digital Footprint.",
+    "activeMode": "Активный режим — баннер отображается в интерфейсе",
+    "end": "Завершить",
+    "errorLog": "Ошибка безопасности: не удалось создать запись в журнале аудита.",
+    "successMode": "Режим: {name}. Audit Hash: {hash}...",
+    "exitSuccess": "Вернулись в Admin режим"
+  },
+  "adminStartups": {
+    "title": "Управление стартапами",
+    "subtitle": "Просматривайте, мониторьте и управляйте всеми стартапами в экосистеме",
+    "search": "Поиск стартапа или основателя...",
+    "filterAll": "Все ({count})",
+    "filterReady": "🟢 Готовы ({count})",
+    "filterCritical": "🔴 Критичные ({count})",
+    "filterEarly": "🌱 Ранняя стадия",
+    "countLabel": "стартапов: {count}",
+    "metrics": {
+      "mrr": "MRR",
+      "mau": "MAU",
+      "runway": "Runway",
+      "arr": "ARR",
+      "churn": "Отток",
+      "ltv": "LTV",
+      "cac": "CAC",
+      "ltvCac": "LTV/CAC",
+      "team": "Команда"
+    },
+    "aiScore": "Оценка ИИ",
+    "progress": "Сделано: {pct}%",
+    "aiAnalysis": "Анализ AI Copilot",
+    "aiNotGenerated": "ИИ анализ еще не сгенерирован — загрузите питч-дек для оценки",
+    "fullMetrics": "Полные Метрики",
+    "currentStage": "Текущий этап Roadmap",
+    "btnView": "Смотреть профиль",
+    "btnHint": "Отправить подсказку ИИ",
+    "btnApprove": "Одобрить этап",
+    "btnFlag": "Отметить как критичный"
+  },
+  "adminDashboard": {
+    "loading": "Загрузка дашборда...",
+    "untitledAdmin": "UNTITLED АДМИН",
+    "title": "Здоровье экосистемы",
+    "subtitle": "Сводные метрики в реальном времени для {count} портфельных компаний",
+    "kpis": {
+      "startups": "Всего стартапов",
+      "startupsSub": "в экосистеме",
+      "mrr": "Общий MRR",
+      "mrrSub": "суммарный портфель",
+      "avgScore": "Средний ИИ Score",
+      "avgScoreSub": "здоровье экосистемы",
+      "ready": "Готовы к инвестициям",
+      "readySub": "оценка ≥ 75"
+    },
+    "systemAlerts": "🔔 Системные оповещения",
+    "alerts": {
+      "runway": "{name} — осталось всего {months} мес. runway",
+      "ready": "{name} — AI Score 80+, готов к следующему этапу",
+      "pitches": "{count} ожидающих питч-запросов требуют внимания"
+    },
+    "charts": {
+      "stage": "Стартапы по этапам",
+      "scores": "Оценки ИИ готовности",
+      "startupName": "Стартапы",
+      "scoreName": "Оценка ИИ"
+    },
+    "table": {
+      "title": "Все стартапы — Краткий обзор",
+      "cols": ["Стартап", "Этап", "MRR", "Команда", "Runway", "Оценка", "Статус"]
+    }
+  },
+  "investorDashboard": {
+    "loading": "Загрузка дашборда...",
+    "title": "Дашборд инвестора",
+    "subtitle": "С возвращением, {name}",
+    "kpis": {
+      "ready": "Инвестиционно готовые стартапы",
+      "active": "Активная воронка",
+      "pending": "В ожидании питчей",
+      "activeP": "Активные питчи"
+    },
+    "topOpps": "Топ возможности",
+    "viewAll": "Смотреть все →",
+    "metrics": {
+      "mrr": "MRR",
+      "ltvCac": "LTV/CAC",
+      "mau": "MAU",
+      "runway": "Runway",
+      "aiScore": "Индекс AI-готовности"
+    },
+    "btnProfile": "Профиль",
+    "pendingRequests": "Ожидающие запросы на питч",
+    "pendingBadge": "Ожидание",
+    "scoreLabel": "Оценка: {score}/100",
+    "btnAccept": "Принять",
+    "btnDecline": "Отклонить",
+    "noRequests": "Нет ожидающих запросов"
   }
 }

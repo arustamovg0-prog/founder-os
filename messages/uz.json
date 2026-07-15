@@ -20,6 +20,7 @@
     "settings": "Sozlamalar",
     "impersonate": "Kirib ko'rish",
     "admin": "Admin",
+    "audit": "Dalillar jurnali",
     "menu": "Menyu"
   },
   "FounderDashboard": {
@@ -96,6 +97,7 @@
     "save": "Saqlash",
     "cancel": "Bekor qilish",
     "loading": "Yuklanmoqda...",
+    "loadingProtocol": "Himoyalangan protokol ishga tushirilmoqda...",
     "menu": "Menyu",
     "active": "Faol",
     "escToClose": "Yopish uchun ESC"
@@ -602,5 +604,108 @@
         "a": "Albatta! IP Assignment barcha intellektual mulk (kod, dizayn, brend) jismoniy shaxslarga emas, balki kompaniyaga tegishli ekanligini kafolatlaydi. Bu investor due diligence i uchun juda muhim."
       }
     ]
+  },
+  "impersonation": {
+    "adminMode": "ADMIN REJIMI — Ko'rish shaxsidan:",
+    "actionsLogged": "Harakatlar Digital Footprintda qayd etilmoqda",
+    "exitMode": "Rejimdan chiqish",
+    "triggerTitle": "Admin Impersonatsiyasi",
+    "auditLogged": "Audit qayd etildi",
+    "triggerDesc": "Platformani istalgan asoschi nomidan ko'ring. Barcha harakatlar Digital Footprintda yoziladi.",
+    "activeMode": "Faol rejim — banner interfeysda ko'rinadi",
+    "end": "Yakunlash",
+    "errorLog": "Xavfsizlik xatosi: Audit jurnalida yozuv yaratib bo'lmadi.",
+    "successMode": "Rejim: {name}. Audit Hash: {hash}...",
+    "exitSuccess": "Admin rejimiga qaytildi"
+  },
+  "adminStartups": {
+    "title": "Startaplarni boshqarish",
+    "subtitle": "Ekosistemadagi barcha startaplarni ko'rish, kuzatish va boshqarish",
+    "search": "Startap yoki asoschini qidirish...",
+    "filterAll": "Barchasi ({count})",
+    "filterReady": "🟢 Tayyor ({count})",
+    "filterCritical": "🔴 Kritik ({count})",
+    "filterEarly": "🌱 Dastlabki bosqich",
+    "countLabel": "startaplar: {count}",
+    "metrics": {
+      "mrr": "MRR",
+      "mau": "MAU",
+      "runway": "Runway",
+      "arr": "ARR",
+      "churn": "Kechish",
+      "ltv": "LTV",
+      "cac": "CAC",
+      "ltvCac": "LTV/CAC",
+      "team": "Jamoa"
+    },
+    "aiScore": "AI Bahosi",
+    "progress": "Bajarildi: {pct}%",
+    "aiAnalysis": "AI Copilot tahlili",
+    "aiNotGenerated": "AI tahlil hali yaratilmagan — baholash uchun pich-dekni yuklang",
+    "fullMetrics": "To'liq metrikalar",
+    "currentStage": "Roadmapdagi joriy bosqich",
+    "btnView": "Profilni ko'rish",
+    "btnHint": "AI maslahatini yuborish",
+    "btnApprove": "Bosqichni tasdiqlash",
+    "btnFlag": "Kritik deb belgilash"
+  },
+  "adminDashboard": {
+    "loading": "Asosiy oyna yuklanmoqda...",
+    "untitledAdmin": "UNTITLED ADMIN",
+    "title": "Ekosistema holati",
+    "subtitle": "{count} ta portfel kompaniyasi uchun real vaqtda metrikalar",
+    "kpis": {
+      "startups": "Jami startaplar",
+      "startupsSub": "ekosistemada",
+      "mrr": "Umumiy MRR",
+      "mrrSub": "barcha portfel",
+      "avgScore": "O'rtacha AI Score",
+      "avgScoreSub": "ekosistema holati",
+      "ready": "Investitsiyaga tayyor",
+      "readySub": "baho ≥ 75"
+    },
+    "systemAlerts": "🔔 Tizim xabarnomalari",
+    "alerts": {
+      "runway": "{name} — atigi {months} oy runway qoldi",
+      "ready": "{name} — AI Score 80+, keyingi bosqichga tayyor",
+      "pitches": "{count} ta pich so'rovlari e'tibor talab qiladi"
+    },
+    "charts": {
+      "stage": "Startaplar bosqichlari bo'yicha",
+      "scores": "AI Tayyorgarlik Baholari",
+      "startupName": "Startaplar",
+      "scoreName": "AI Bahosi"
+    },
+    "table": {
+      "title": "Barcha startaplar — Qisqacha sharh",
+      "cols": ["Startap", "Bosqich", "MRR", "Jamoa", "Runway", "Baho", "Status"]
+    }
+  },
+  "investorDashboard": {
+    "loading": "Asosiy oyna yuklanmoqda...",
+    "title": "Investor paneli",
+    "subtitle": "Xush kelibsiz, {name}",
+    "kpis": {
+      "ready": "Investitsiyaga tayyor",
+      "active": "Faol voronka",
+      "pending": "Pich kutayotganlar",
+      "activeP": "Faol pichlar"
+    },
+    "topOpps": "Top imkoniyatlar",
+    "viewAll": "Barchasini ko'rish →",
+    "metrics": {
+      "mrr": "MRR",
+      "ltvCac": "LTV/CAC",
+      "mau": "MAU",
+      "runway": "Runway",
+      "aiScore": "AI Tayyorgarlik Indeksi"
+    },
+    "btnProfile": "Profil",
+    "pendingRequests": "Kutilayotgan pich so'rovlari",
+    "pendingBadge": "Kutilmoqda",
+    "scoreLabel": "Baho: {score}/100",
+    "btnAccept": "Qabul qilish",
+    "btnDecline": "Rad etish",
+    "noRequests": "Kutilayotgan so'rovlar yo'q"
   }
 }

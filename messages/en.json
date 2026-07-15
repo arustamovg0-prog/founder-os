@@ -20,6 +20,7 @@
     "settings": "Settings",
     "impersonate": "Impersonate",
     "admin": "Admin",
+    "audit": "Journal of Evidence",
     "menu": "Menu"
   },
   "FounderDashboard": {
@@ -96,6 +97,7 @@
     "save": "Save",
     "cancel": "Cancel",
     "loading": "Loading...",
+    "loadingProtocol": "Initializing Secure Protocol...",
     "menu": "Menu",
     "active": "Active",
     "escToClose": "ESC to close"
@@ -602,5 +604,108 @@
         "a": "Absolutely! IP Assignment ensures that all intellectual property (code, design, brand) belongs to the company, not individuals. This is critical for investor due diligence."
       }
     ]
+  },
+  "impersonation": {
+    "adminMode": "ADMIN MODE — Viewing as:",
+    "actionsLogged": "Actions are logged in Digital Footprint",
+    "exitMode": "Exit Mode",
+    "triggerTitle": "Admin Impersonation",
+    "auditLogged": "Audit Logged",
+    "triggerDesc": "Browse the platform as any founder. All actions are recorded in the Digital Footprint.",
+    "activeMode": "Active mode — banner is displayed in the interface",
+    "end": "End",
+    "errorLog": "Security error: failed to create audit log entry.",
+    "successMode": "Mode: {name}. Audit Hash: {hash}...",
+    "exitSuccess": "Returned to Admin mode"
+  },
+  "adminStartups": {
+    "title": "Startup Management",
+    "subtitle": "Review, monitor and manage all startups in the ecosystem",
+    "search": "Search startup or founder...",
+    "filterAll": "All ({count})",
+    "filterReady": "🟢 Ready ({count})",
+    "filterCritical": "🔴 Critical ({count})",
+    "filterEarly": "🌱 Early Stage",
+    "countLabel": "{count} startups",
+    "metrics": {
+      "mrr": "MRR",
+      "mau": "MAU",
+      "runway": "Runway",
+      "arr": "ARR",
+      "churn": "Churn",
+      "ltv": "LTV",
+      "cac": "CAC",
+      "ltvCac": "LTV/CAC",
+      "team": "Team"
+    },
+    "aiScore": "AI Score",
+    "progress": "{pct}% done",
+    "aiAnalysis": "AI Copilot Analysis",
+    "aiNotGenerated": "AI analysis not yet generated — upload pitch deck to trigger scoring",
+    "fullMetrics": "Full Metrics",
+    "currentStage": "Current Roadmap Stage",
+    "btnView": "View Full Profile",
+    "btnHint": "Send AI Hint",
+    "btnApprove": "Approve Stage",
+    "btnFlag": "Flag Critical"
+  },
+  "adminDashboard": {
+    "loading": "Loading dashboard...",
+    "untitledAdmin": "UNTITLED ADMIN",
+    "title": "Ecosystem Health",
+    "subtitle": "Real-time aggregated metrics for {count} portfolio companies",
+    "kpis": {
+      "startups": "Total Startups",
+      "startupsSub": "in ecosystem",
+      "mrr": "Total MRR",
+      "mrrSub": "combined portfolio",
+      "avgScore": "Avg AI Score",
+      "avgScoreSub": "ecosystem health",
+      "ready": "Investment Ready",
+      "readySub": "score ≥ 75"
+    },
+    "systemAlerts": "🔔 System Alerts",
+    "alerts": {
+      "runway": "{name} — only {months}mo runway left",
+      "ready": "{name} — AI Score 80+, ready for next stage",
+      "pitches": "{count} pending pitch requests need attention"
+    },
+    "charts": {
+      "stage": "Startups by Stage",
+      "scores": "AI Readiness Scores",
+      "startupName": "Startups",
+      "scoreName": "AI Score"
+    },
+    "table": {
+      "title": "All Startups — Quick View",
+      "cols": ["Startup", "Stage", "MRR", "Team", "Runway", "Score", "Status"]
+    }
+  },
+  "investorDashboard": {
+    "loading": "Loading dashboard...",
+    "title": "Investor Dashboard",
+    "subtitle": "Welcome back, {name}",
+    "kpis": {
+      "ready": "Investment-Ready Startups",
+      "active": "Active Pipeline",
+      "pending": "Pending Pitches",
+      "activeP": "Active Pitches"
+    },
+    "topOpps": "Top Opportunities",
+    "viewAll": "View all →",
+    "metrics": {
+      "mrr": "MRR",
+      "ltvCac": "LTV/CAC",
+      "mau": "MAU",
+      "runway": "Runway",
+      "aiScore": "AI Readiness Score"
+    },
+    "btnProfile": "View Profile",
+    "pendingRequests": "Pending Pitch Requests",
+    "pendingBadge": "Pending",
+    "scoreLabel": "Score: {score}/100",
+    "btnAccept": "Accept",
+    "btnDecline": "Decline",
+    "noRequests": "No pending requests"
   }
 }

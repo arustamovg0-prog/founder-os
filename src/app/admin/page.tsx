@@ -8,6 +8,7 @@ import { Users, TrendingUp, Brain, AlertTriangle, CheckCircle, Clock, Zap } from
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { Startup, PitchEvent } from '@/types';
+import { useTranslations } from 'next-intl';
 
 function fmt(n: number) {
   if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(1)}M`;
@@ -34,6 +35,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 };
 
 export default function AdminDashboard() {
+  const t = useTranslations('adminDashboard');
   const [startups, setStartups] = useState<Startup[]>([]);
   const [pitches, setPitches] = useState<PitchEvent[]>([]);
   const [loading, setLoading] = useState(true);
@@ -78,7 +80,7 @@ export default function AdminDashboard() {
     loadData();
   }, []);
 
-  if (loading) return <div className="animate-fade-in" style={{ padding: 32, color: '#64748b' }}>Загрузка дашборда...</div>;
+  if (loading) return <div className="animate-fade-in" style={{ padding: 32, color: '#64748b' }}>{t('loading')}</div>;
 
   const totalMRR = startups.reduce((s, st) => s + (st.metrics?.mrr || 0), 0);
   const avgScore = startups.length ? Math.round(startups.reduce((s, st) => s + (st.aiScores?.overallReadinessScore || 0), 0) / startups.length) : 0;
@@ -94,12 +96,12 @@ export default function AdminDashboard() {
 
   const alerts = [
     ...startups.filter(s => (s.metrics?.runwayMonths || 0) <= 6 && (s.metrics?.runwayMonths || 0) > 0).map(s => ({
-      type: 'danger', msg: `${s.name} — only ${s.metrics?.runwayMonths}mo runway left`, icon: <AlertTriangle size={13} />,
+      type: 'danger', msg: t('alerts.runway', { name: s.name, months: s.metrics?.runwayMonths }), icon: <AlertTriangle size={13} />,
     })),
     ...startups.filter(s => (s.aiScores?.overallReadinessScore || 0) >= 80 && s.stage !== 'investment_ready').map(s => ({
-      type: 'success', msg: `${s.name} — AI Score 80+, ready for next stage`, icon: <CheckCircle size={13} />,
+      type: 'success', msg: t('alerts.ready', { name: s.name }), icon: <CheckCircle size={13} />,
     })),
-    { type: 'info', msg: `${pitches.length} pending pitch requests need attention`, icon: <Clock size={13} /> },
+    { type: 'info', msg: t('alerts.pitches', { count: pitches.length }), icon: <Clock size={13} /> },
   ];
 
   return (
@@ -107,19 +109,19 @@ export default function AdminDashboard() {
       <div style={{ marginBottom: '32px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: 6 }}>
           <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#D4D4D8', boxShadow: '0 0 8px #D4D4D8' }} />
-          <span style={{ fontSize: 12, color: '#D4D4D8', fontWeight: 600 }}>UNTITLED ADMIN</span>
+          <span style={{ fontSize: 12, color: '#D4D4D8', fontWeight: 600 }}>{t('untitledAdmin')}</span>
         </div>
-        <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 28, fontWeight: 700 }}>Ecosystem Health</h1>
-        <p style={{ color: '#64748b', fontSize: 14 }}>Real-time aggregated metrics for {startups.length} portfolio companies</p>
+        <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 28, fontWeight: 700 }}>{t('title')}</h1>
+        <p style={{ color: '#64748b', fontSize: 14 }}>{t('subtitle', { count: startups.length })}</p>
       </div>
 
       {/* KPIs */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '28px' }}>
         {[
-          { label: 'Total Startups', value: startups.length, icon: <Users size={18} />, color: '#FFFFFF', sub: 'in ecosystem' },
-          { label: 'Total MRR', value: fmt(totalMRR), icon: <TrendingUp size={18} />, color: '#D4D4D8', sub: 'combined portfolio' },
-          { label: 'Avg AI Score', value: `${avgScore}/100`, icon: <Brain size={18} />, color: '#A1A1AA', sub: 'ecosystem health' },
-          { label: 'Investment Ready', value: readyCount, icon: <Zap size={18} />, color: '#71717A', sub: 'score ≥ 75' },
+          { label: t('kpis.startups'), value: startups.length, icon: <Users size={18} />, color: '#FFFFFF', sub: t('kpis.startupsSub') },
+          { label: t('kpis.mrr'), value: fmt(totalMRR), icon: <TrendingUp size={18} />, color: '#D4D4D8', sub: t('kpis.mrrSub') },
+          { label: t('kpis.avgScore'), value: `${avgScore}/100`, icon: <Brain size={18} />, color: '#A1A1AA', sub: t('kpis.avgScoreSub') },
+          { label: t('kpis.ready'), value: readyCount, icon: <Zap size={18} />, color: '#71717A', sub: t('kpis.readySub') },
         ].map((kpi, i) => (
           <div key={i} className="stat-card">
             <div style={{ width: 36, height: 36, borderRadius: 8, background: `${kpi.color}20`, border: `1px solid ${kpi.color}30`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: kpi.color, marginBottom: 12 }}>
@@ -135,7 +137,7 @@ export default function AdminDashboard() {
       {/* Alerts */}
       <div className="card" style={{ marginBottom: '24px', background: 'rgba(0,0,0,0.3)' }}>
         <div style={{ fontSize: 13, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '14px' }}>
-          🔔 System Alerts
+          {t('systemAlerts')}
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
           {alerts.map((a, i) => (
@@ -156,7 +158,7 @@ export default function AdminDashboard() {
         {/* Stage Distribution */}
         <div className="card">
           <div style={{ fontSize: 13, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '20px' }}>
-            Startups by Stage
+            {t('charts.stage')}
           </div>
           <ResponsiveContainer width="100%" height={200}>
             <BarChart data={stageDistrib} barSize={32}>
@@ -164,7 +166,7 @@ export default function AdminDashboard() {
               <XAxis dataKey="stage" tick={{ fontSize: 11, fill: '#475569' }} axisLine={false} tickLine={false} />
               <YAxis tick={{ fontSize: 11, fill: '#475569' }} axisLine={false} tickLine={false} allowDecimals={false} />
               <Tooltip content={<CustomTooltip />} />
-              <Bar dataKey="count" name="Startups" radius={[6, 6, 0, 0]}>
+              <Bar dataKey="count" name={t('charts.startupName')} radius={[6, 6, 0, 0]}>
                 {stageDistrib.map((d, i) => (
                   <Cell key={i} fill={d.color} />
                 ))}
@@ -176,7 +178,7 @@ export default function AdminDashboard() {
         {/* AI Score by Startup */}
         <div className="card">
           <div style={{ fontSize: 13, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '20px' }}>
-            AI Readiness Scores
+            {t('charts.scores')}
           </div>
           <ResponsiveContainer width="100%" height={200}>
             <BarChart data={scoreData} barSize={32}>
@@ -184,7 +186,7 @@ export default function AdminDashboard() {
               <XAxis dataKey="name" tick={{ fontSize: 11, fill: '#475569' }} axisLine={false} tickLine={false} />
               <YAxis domain={[0, 100]} tick={{ fontSize: 11, fill: '#475569' }} axisLine={false} tickLine={false} />
               <Tooltip content={<CustomTooltip />} />
-              <Bar dataKey="score" name="AI Score" radius={[6, 6, 0, 0]}>
+              <Bar dataKey="score" name={t('charts.scoreName')} radius={[6, 6, 0, 0]}>
                 {scoreData.map((d, i) => (
                   <Cell key={i} fill={d.score >= 75 ? '#D4D4D8' : d.score >= 50 ? '#71717A' : '#52525B'} />
                 ))}
@@ -197,14 +199,16 @@ export default function AdminDashboard() {
       {/* Quick Startup Table */}
       <div className="card">
         <div style={{ fontSize: 13, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '20px' }}>
-          All Startups — Quick View
+          {t('table.title')}
         </div>
         <div style={{ overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
               <tr>
-                {['Startup', 'Stage', 'MRR', 'Team', 'Runway', 'Score', 'Status'].map(h => (
-                  <th key={h} style={{ textAlign: 'left', padding: '8px 12px', fontSize: 11, color: '#475569', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>{h}</th>
+                {[0, 1, 2, 3, 4, 5, 6].map(i => (
+                  <th key={i} style={{ textAlign: 'left', padding: '8px 12px', fontSize: 11, color: '#475569', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                    {t(`table.cols.${i}`)}
+                  </th>
                 ))}
               </tr>
             </thead>

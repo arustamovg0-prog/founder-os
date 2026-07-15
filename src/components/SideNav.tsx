@@ -6,7 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useState, useEffect } from 'react';
 import { 
   LayoutDashboard, Map, FolderOpen, Presentation, Brain, 
-  Users, TrendingUp, Briefcase, BarChart3, Kanban, CheckCircle, Flame, Heart, LogOut, Command, Scale, Gift, MessageSquare, Menu, X
+  Users, TrendingUp, Briefcase, BarChart3, Kanban, CheckCircle, Flame, Heart, LogOut, Command, Scale, Gift, MessageSquare, Menu, X, Shield
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
@@ -39,6 +39,7 @@ const NAV = {
     { href: '/admin/challenges', icon: <Flame size={18} />, i18nKey: 'challenges' },
     { href: '/admin/analytics', icon: <BarChart3 size={18} />, i18nKey: 'analytics' },
     { href: '/admin/health', icon: <Heart size={18} />, i18nKey: 'health' },
+    { href: '/admin/audit', icon: <Shield size={18} />, i18nKey: 'audit' },
   ]
 };
 
