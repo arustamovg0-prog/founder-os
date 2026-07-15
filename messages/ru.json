@@ -1,0 +1,37 @@
+{
+  "Navigation": {
+    "dashboard": "Дашборд",
+    "roadmap": "Роадмап",
+    "dataRoom": "Data Room",
+    "pitches": "Питчи",
+    "aiCopilot": "AI Ассистент",
+    "perks": "Бонусы Экосистемы",
+    "legal": "Юридические Документы",
+    "challenges": "Челленджи",
+    "community": "Поиск Кофаундера",
+    "chat": "Поддержка",
+    "dealFlow": "Воронка Сделок",
+    "portfolio": "Портфолио",
+    "crm": "CRM Pipeline",
+    "startups": "Стартапы",
+    "stages": "Оценка Стадий",
+    "analytics": "Аналитика",
+    "health": "Здоровье Экосистемы",
+    "settings": "Настройки",
+    "impersonate": "Имперсонация",
+    "admin": "Админ",
+    "menu": "Меню"
+  },
+  "Common": {
+    "search": "Поиск...",
+    "searchPlaceholder": "Куда вы хотите перейти?",
+    "noResults": "Ничего не найдено.",
+    "logout": "Выйти",
+    "save": "Сохранить",
+    "cancel": "Отмена",
+    "loading": "Загрузка...",
+    "menu": "Меню",
+    "active": "Активен",
+    "escToClose": "ESC для закрытия"
+  }
+}

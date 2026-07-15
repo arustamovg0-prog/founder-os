@@ -1,0 +1,37 @@
+{
+  "Navigation": {
+    "dashboard": "Dashboard",
+    "roadmap": "Roadmap",
+    "dataRoom": "Data Room",
+    "pitches": "Pitches",
+    "aiCopilot": "AI Copilot",
+    "perks": "Ecosystem Perks",
+    "legal": "Legal Toolkit",
+    "challenges": "Challenges",
+    "community": "Co-founder Match",
+    "chat": "Support Chat",
+    "dealFlow": "Deal Flow",
+    "portfolio": "Portfolio",
+    "crm": "CRM Pipeline",
+    "startups": "Startups",
+    "stages": "Stage Review",
+    "analytics": "Analytics",
+    "health": "Ecosystem Health",
+    "settings": "Settings",
+    "impersonate": "Impersonate",
+    "admin": "Admin",
+    "menu": "Menu"
+  },
+  "Common": {
+    "search": "Search...",
+    "searchPlaceholder": "Where do you want to go?",
+    "noResults": "No results found.",
+    "logout": "Log Out",
+    "save": "Save",
+    "cancel": "Cancel",
+    "loading": "Loading...",
+    "menu": "Menu",
+    "active": "Active",
+    "escToClose": "ESC to close"
+  }
+}

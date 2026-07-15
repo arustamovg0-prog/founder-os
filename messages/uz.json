@@ -1,0 +1,37 @@
+{
+  "Navigation": {
+    "dashboard": "Asosiy oyna",
+    "roadmap": "Yo'l xaritasi",
+    "dataRoom": "Data Room",
+    "pitches": "Pitslar (Taqdimotlar)",
+    "aiCopilot": "AI Yordamchi",
+    "perks": "Ekosistema Bonuslari",
+    "legal": "Huquqiy Hujjatlar",
+    "challenges": "Chellenjlar",
+    "community": "Hamkor (Co-founder) Qidirish",
+    "chat": "Qo'llab-quvvatlash",
+    "dealFlow": "Kelishuvlar Oqimi",
+    "portfolio": "Portfel",
+    "crm": "CRM Pipeline",
+    "startups": "Startaplar",
+    "stages": "Bosqichlarni Baholash",
+    "analytics": "Analitika",
+    "health": "Ekosistema Holati",
+    "settings": "Sozlamalar",
+    "impersonate": "Kirib ko'rish",
+    "admin": "Admin",
+    "menu": "Menyu"
+  },
+  "Common": {
+    "search": "Qidiruv...",
+    "searchPlaceholder": "Qayerga o'tishni xohlaysiz?",
+    "noResults": "Hech narsa topilmadi.",
+    "logout": "Chiqish",
+    "save": "Saqlash",
+    "cancel": "Bekor qilish",
+    "loading": "Yuklanmoqda...",
+    "menu": "Menyu",
+    "active": "Faol",
+    "escToClose": "Yopish uchun ESC"
+  }
+}

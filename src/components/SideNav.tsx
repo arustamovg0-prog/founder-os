@@ -8,34 +8,36 @@ import {
   Users, TrendingUp, Briefcase, BarChart3, Kanban, CheckCircle, Flame, Heart, LogOut, Command, Scale, Gift, MessageSquare
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { useTranslations } from 'next-intl';
+import LanguageSwitcher from './LanguageSwitcher';
 
 const NAV = {
   founder: [
-    { href: '/founder', icon: <LayoutDashboard size={18} />, label: 'Dashboard' },
-    { href: '/founder/roadmap', icon: <Map size={18} />, label: 'Roadmap' },
-    { href: '/founder/data-room', icon: <FolderOpen size={18} />, label: 'Data Room' },
-    { href: '/founder/pitches', icon: <Presentation size={18} />, label: 'Pitches' },
-    { href: '/founder/ai-copilot', icon: <Brain size={18} />, label: 'AI Copilot' },
-    { href: '/founder/perks', icon: <Gift size={18} />, label: 'Ecosystem Perks' },
-    { href: '/founder/legal', icon: <Scale size={18} />, label: 'Legal Toolkit' },
-    { href: '/founder/challenges', icon: <Flame size={18} />, label: 'Challenges' },
-    { href: '/founder/community', icon: <Users size={18} />, label: 'Co-founder Match' },
-    { href: '/founder/chat', icon: <MessageSquare size={18} />, label: 'Support Chat' },
+    { href: '/founder', icon: <LayoutDashboard size={18} />, i18nKey: 'dashboard' },
+    { href: '/founder/roadmap', icon: <Map size={18} />, i18nKey: 'roadmap' },
+    { href: '/founder/data-room', icon: <FolderOpen size={18} />, i18nKey: 'dataRoom' },
+    { href: '/founder/pitches', icon: <Presentation size={18} />, i18nKey: 'pitches' },
+    { href: '/founder/ai-copilot', icon: <Brain size={18} />, i18nKey: 'aiCopilot' },
+    { href: '/founder/perks', icon: <Gift size={18} />, i18nKey: 'perks' },
+    { href: '/founder/legal', icon: <Scale size={18} />, i18nKey: 'legal' },
+    { href: '/founder/challenges', icon: <Flame size={18} />, i18nKey: 'challenges' },
+    { href: '/founder/community', icon: <Users size={18} />, i18nKey: 'community' },
+    { href: '/founder/chat', icon: <MessageSquare size={18} />, i18nKey: 'chat' },
   ],
   investor: [
-    { href: '/investor', icon: <LayoutDashboard size={18} />, label: 'Dashboard' },
-    { href: '/investor/deal-flow', icon: <TrendingUp size={18} />, label: 'Deal Flow' },
-    { href: '/investor/pitches', icon: <Briefcase size={18} />, label: 'Pitches' },
-    { href: '/investor/portfolio', icon: <BarChart3 size={18} />, label: 'Portfolio' },
-    { href: '/investor/crm', icon: <Kanban size={18} />, label: 'CRM Pipeline' },
+    { href: '/investor', icon: <LayoutDashboard size={18} />, i18nKey: 'dashboard' },
+    { href: '/investor/deal-flow', icon: <TrendingUp size={18} />, i18nKey: 'dealFlow' },
+    { href: '/investor/pitches', icon: <Briefcase size={18} />, i18nKey: 'pitches' },
+    { href: '/investor/portfolio', icon: <BarChart3 size={18} />, i18nKey: 'portfolio' },
+    { href: '/investor/crm', icon: <Kanban size={18} />, i18nKey: 'crm' },
   ],
   admin: [
-    { href: '/admin', icon: <LayoutDashboard size={18} />, label: 'Dashboard' },
-    { href: '/admin/startups', icon: <Users size={18} />, label: 'Startups' },
-    { href: '/admin/stages', icon: <CheckCircle size={18} />, label: 'Stage Review' },
-    { href: '/admin/challenges', icon: <Flame size={18} />, label: 'Challenges' },
-    { href: '/admin/analytics', icon: <BarChart3 size={18} />, label: 'Analytics' },
-    { href: '/admin/health', icon: <Heart size={18} />, label: 'Ecosystem Health' },
+    { href: '/admin', icon: <LayoutDashboard size={18} />, i18nKey: 'dashboard' },
+    { href: '/admin/startups', icon: <Users size={18} />, i18nKey: 'startups' },
+    { href: '/admin/stages', icon: <CheckCircle size={18} />, i18nKey: 'stages' },
+    { href: '/admin/challenges', icon: <Flame size={18} />, i18nKey: 'challenges' },
+    { href: '/admin/analytics', icon: <BarChart3 size={18} />, i18nKey: 'analytics' },
+    { href: '/admin/health', icon: <Heart size={18} />, i18nKey: 'health' },
   ]
 };
 
@@ -43,6 +45,8 @@ export default function SideNav() {
   const pathname = usePathname();
   const router = useRouter();
   const { profile, logout } = useAuth();
+  const t = useTranslations('Navigation');
+  const tCommon = useTranslations('Common');
   
   if (!profile) return null;
 
@@ -52,7 +56,7 @@ export default function SideNav() {
   const handleLogout = async () => {
     try { await fetch('/api/auth/session', { method: 'DELETE' }); } catch {}
     await logout();
-    toast.success('Выход выполнен');
+    toast.success(tCommon('logout'));
     router.push('/');
   };
 
@@ -77,7 +81,7 @@ export default function SideNav() {
       {/* Navigation Links */}
       <nav style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: 1 }}>
         <div style={{ fontSize: '11px', fontWeight: 600, color: '#52525B', textTransform: 'uppercase', padding: '0 14px 8px 14px', letterSpacing: '1px' }}>
-          Menu
+          {t('menu')}
         </div>
         
         {navItems.map((item) => {
@@ -87,7 +91,7 @@ export default function SideNav() {
               <div className="nav-icon" style={{ color: isActive ? 'var(--text-primary)' : '#52525B' }}>
                 {item.icon}
               </div>
-              <span style={{ flex: 1 }}>{item.label}</span>
+              <span style={{ flex: 1 }}>{t(item.i18nKey as any)}</span>
               {isActive && (
                 <div style={{ width: 4, height: 16, background: 'var(--text-primary)', borderRadius: 4, position: 'absolute', right: 12 }} />
               )}
@@ -96,8 +100,11 @@ export default function SideNav() {
         })}
       </nav>
 
-      {/* Logout Button */}
+      {/* Language and Logout */}
       <div style={{ marginTop: 'auto', borderTop: '1px solid rgba(255,255,255,0.04)', paddingTop: '16px' }}>
+        <div style={{ padding: '0 14px 16px 14px' }}>
+          <LanguageSwitcher />
+        </div>
         <div className="user-profile-mini" style={{ padding: '0 14px 16px 14px', display: 'flex', flexDirection: 'column', gap: 2 }}>
           <span style={{ fontSize: 13, fontWeight: 500, color: '#D4D4D8' }}>{profile.displayName}</span>
           <span style={{ fontSize: 11, color: '#52525B' }}>{profile.email}</span>
@@ -105,7 +112,7 @@ export default function SideNav() {
         
         <button onClick={handleLogout} className="nav-item logout-btn" style={{ width: '100%', background: 'transparent', border: 'none', textAlign: 'left', fontFamily: 'inherit' }}>
           <LogOut size={18} style={{ color: '#FCA5A5' }} />
-          <span style={{ color: '#FCA5A5' }}>Log Out</span>
+          <span style={{ color: '#FCA5A5' }}>{tCommon('logout')}</span>
         </button>
       </div>
     </aside>

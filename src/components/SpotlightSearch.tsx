@@ -9,34 +9,35 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 
 const NAV = {
   founder: [
-    { href: '/founder', icon: <LayoutDashboard size={18} />, label: 'Dashboard' },
-    { href: '/founder/roadmap', icon: <Map size={18} />, label: 'Roadmap' },
-    { href: '/founder/data-room', icon: <FolderOpen size={18} />, label: 'Data Room' },
-    { href: '/founder/pitches', icon: <Presentation size={18} />, label: 'Pitches' },
-    { href: '/founder/ai-copilot', icon: <Brain size={18} />, label: 'AI Copilot' },
-    { href: '/founder/perks', icon: <Gift size={18} />, label: 'Ecosystem Perks' },
-    { href: '/founder/legal', icon: <Scale size={18} />, label: 'Legal Toolkit' },
-    { href: '/founder/challenges', icon: <Flame size={18} />, label: 'Challenges' },
-    { href: '/founder/community', icon: <Users size={18} />, label: 'Co-founder Match' },
-    { href: '/founder/chat', icon: <MessageSquare size={18} />, label: 'Support Chat' },
+    { href: '/founder', icon: <LayoutDashboard size={18} />, i18nKey: 'dashboard' },
+    { href: '/founder/roadmap', icon: <Map size={18} />, i18nKey: 'roadmap' },
+    { href: '/founder/data-room', icon: <FolderOpen size={18} />, i18nKey: 'dataRoom' },
+    { href: '/founder/pitches', icon: <Presentation size={18} />, i18nKey: 'pitches' },
+    { href: '/founder/ai-copilot', icon: <Brain size={18} />, i18nKey: 'aiCopilot' },
+    { href: '/founder/perks', icon: <Gift size={18} />, i18nKey: 'perks' },
+    { href: '/founder/legal', icon: <Scale size={18} />, i18nKey: 'legal' },
+    { href: '/founder/challenges', icon: <Flame size={18} />, i18nKey: 'challenges' },
+    { href: '/founder/community', icon: <Users size={18} />, i18nKey: 'community' },
+    { href: '/founder/chat', icon: <MessageSquare size={18} />, i18nKey: 'chat' },
   ],
   investor: [
-    { href: '/investor', icon: <LayoutDashboard size={18} />, label: 'Dashboard' },
-    { href: '/investor/deal-flow', icon: <TrendingUp size={18} />, label: 'Deal Flow' },
-    { href: '/investor/pitches', icon: <Briefcase size={18} />, label: 'Pitches' },
-    { href: '/investor/portfolio', icon: <BarChart3 size={18} />, label: 'Portfolio' },
-    { href: '/investor/crm', icon: <Kanban size={18} />, label: 'CRM Pipeline' },
+    { href: '/investor', icon: <LayoutDashboard size={18} />, i18nKey: 'dashboard' },
+    { href: '/investor/deal-flow', icon: <TrendingUp size={18} />, i18nKey: 'dealFlow' },
+    { href: '/investor/pitches', icon: <Briefcase size={18} />, i18nKey: 'pitches' },
+    { href: '/investor/portfolio', icon: <BarChart3 size={18} />, i18nKey: 'portfolio' },
+    { href: '/investor/crm', icon: <Kanban size={18} />, i18nKey: 'crm' },
   ],
   admin: [
-    { href: '/admin', icon: <LayoutDashboard size={18} />, label: 'Dashboard' },
-    { href: '/admin/startups', icon: <Users size={18} />, label: 'Startups' },
-    { href: '/admin/stages', icon: <CheckCircle size={18} />, label: 'Stage Review' },
-    { href: '/admin/challenges', icon: <Flame size={18} />, label: 'Challenges' },
-    { href: '/admin/analytics', icon: <BarChart3 size={18} />, label: 'Analytics' },
-    { href: '/admin/health', icon: <Heart size={18} />, label: 'Ecosystem Health' },
+    { href: '/admin', icon: <LayoutDashboard size={18} />, i18nKey: 'dashboard' },
+    { href: '/admin/startups', icon: <Users size={18} />, i18nKey: 'startups' },
+    { href: '/admin/stages', icon: <CheckCircle size={18} />, i18nKey: 'stages' },
+    { href: '/admin/challenges', icon: <Flame size={18} />, i18nKey: 'challenges' },
+    { href: '/admin/analytics', icon: <BarChart3 size={18} />, i18nKey: 'analytics' },
+    { href: '/admin/health', icon: <Heart size={18} />, i18nKey: 'health' },
   ]
 };
 
@@ -49,12 +50,14 @@ export default function SpotlightSearch() {
   const { profile, logout } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
+  const t = useTranslations('Navigation');
+  const tCommon = useTranslations('Common');
 
   const role = profile?.role || 'founder';
   const navItems = NAV[role as keyof typeof NAV] || [];
   
   const filteredItems = navItems.filter(item => 
-    item.label.toLowerCase().includes(search.toLowerCase())
+    t(item.i18nKey as any).toLowerCase().includes(search.toLowerCase())
   );
 
   // Keyboard shortcut listener (Cmd+K / Ctrl+K)
@@ -112,7 +115,7 @@ export default function SpotlightSearch() {
   const handleLogout = async () => {
     try { await fetch('/api/auth/session', { method: 'DELETE' }); } catch {}
     await logout();
-    toast.success('Выход выполнен');
+    toast.success(tCommon('logout'));
     router.push('/');
     setIsOpen(false);
   };
@@ -157,7 +160,7 @@ export default function SpotlightSearch() {
           }}
         >
           <Search size={14} />
-          <span>Menu</span>
+          <span>{tCommon('menu')}</span>
           <div style={{ display: 'flex', alignItems: 'center', gap: '2px', background: 'rgba(255,255,255,0.1)', padding: '2px 6px', borderRadius: '4px', marginLeft: '4px', fontSize: '10px' }}>
             <Command size={10} /> K
           </div>
@@ -196,7 +199,7 @@ export default function SpotlightSearch() {
                 value={search}
                 onChange={e => { setSearch(e.target.value); setSelectedIndex(0); }}
                 onKeyDown={handleNavKeyDown}
-                placeholder="Where do you want to go?"
+                placeholder={tCommon('searchPlaceholder')}
                 style={{
                   width: '100%',
                   background: 'transparent',
@@ -208,13 +211,13 @@ export default function SpotlightSearch() {
                   fontWeight: 500
                 }}
               />
-              <div style={{ fontSize: '10px', color: '#52525B', background: 'rgba(255,255,255,0.05)', padding: '4px 8px', borderRadius: '6px' }}>ESC to close</div>
+              <div style={{ fontSize: '10px', color: '#52525B', background: 'rgba(255,255,255,0.05)', padding: '4px 8px', borderRadius: '6px' }}>{tCommon('escToClose')}</div>
             </div>
 
             {/* Results List */}
             <div style={{ padding: '12px', maxHeight: '60vh', overflowY: 'auto' }}>
               <div style={{ fontSize: '11px', fontWeight: 600, color: '#52525B', textTransform: 'uppercase', padding: '8px 12px', letterSpacing: '1px' }}>
-                Navigation
+                {t('menu')}
               </div>
               
               {filteredItems.map((item, index) => {
@@ -243,16 +246,16 @@ export default function SpotlightSearch() {
                       {item.icon}
                     </div>
                     <span style={{ flex: 1, fontSize: '15px', fontWeight: isSelected ? 600 : 500 }}>
-                      {item.label}
+                      {t(item.i18nKey as any)}
                     </span>
-                    {isActive && <span style={{ fontSize: '11px', color: '#FFFFFF', background: 'rgba(255,255,255,0.1)', padding: '2px 8px', borderRadius: '99px' }}>Active</span>}
+                    {isActive && <span style={{ fontSize: '11px', color: '#FFFFFF', background: 'rgba(255,255,255,0.1)', padding: '2px 8px', borderRadius: '99px' }}>{tCommon('active')}</span>}
                   </div>
                 );
               })}
 
               {filteredItems.length === 0 && (
                 <div style={{ padding: '24px', textAlign: 'center', color: '#52525B', fontSize: '14px' }}>
-                  No results found.
+                  {tCommon('noResults')}
                 </div>
               )}
 
@@ -276,7 +279,7 @@ export default function SpotlightSearch() {
                 }}
               >
                 <LogOut size={18} />
-                <span style={{ fontSize: '15px', fontWeight: 500 }}>Log Out</span>
+                <span style={{ fontSize: '15px', fontWeight: 500 }}>{tCommon('logout')}</span>
               </div>
             </div>
             
