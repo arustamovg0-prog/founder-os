@@ -116,7 +116,7 @@ export default function AdminDashboard() {
       </div>
 
       {/* KPIs */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '28px' }}>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-7">
         {[
           { label: t('kpis.startups'), value: startups.length, icon: <Users size={18} />, color: '#FFFFFF', sub: t('kpis.startupsSub') },
           { label: t('kpis.mrr'), value: fmt(totalMRR), icon: <TrendingUp size={18} />, color: '#D4D4D8', sub: t('kpis.mrrSub') },
@@ -154,7 +154,7 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginBottom: '24px' }}>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         {/* Stage Distribution */}
         <div className="card">
           <div style={{ fontSize: 13, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '20px' }}>

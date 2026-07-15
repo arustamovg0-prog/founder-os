@@ -128,7 +128,7 @@ export default function AuditEvidencePage() {
                 {/* Expanded Details */}
                 {isSelected && (
                   <div style={{ padding: '20px', borderTop: '1px solid rgba(255,255,255,0.06)', background: 'rgba(0,0,0,0.2)' }}>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
                         <div style={{ fontSize: 11, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>Metadata</div>
                         <div style={{ background: 'rgba(255,255,255,0.03)', borderRadius: 8, padding: '12px', fontSize: 12, fontFamily: 'monospace', color: '#cbd5e1' }}>

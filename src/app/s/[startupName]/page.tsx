@@ -96,7 +96,7 @@ export default function PublicStartupProfile({ params }: { params: { startupName
             </div>
           )}
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '32px' }}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
             <div style={{ padding: '20px', borderRadius: '16px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}>
               <div style={{ fontSize: 12, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', marginBottom: 8 }}>Traction (MRR)</div>
               <div style={{ fontFamily: 'Space Grotesk', fontSize: 28, fontWeight: 800, color: '#D4D4D8' }}>${startup.metrics?.mrr || 0}</div>

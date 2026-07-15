@@ -82,7 +82,7 @@ export default function PortfolioPage() {
       </div>
 
       {/* Stats */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '28px' }}>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-7">
         {[
           { label: 'Total MRR (Watchlist)', value: fmt(totalMRR), icon: <DollarSign size={18} />, color: '#D4D4D8' },
           { label: 'Total MAU', value: totalMAU.toLocaleString(), icon: <TrendingUp size={18} />, color: '#FFFFFF' },
@@ -96,9 +96,9 @@ export default function PortfolioPage() {
         ))}
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '24px', marginBottom: '24px' }}>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
         {/* MRR Chart */}
-        <div className="card">
+        <div className="md:col-span-2 card">
           <div style={{ fontSize: 13, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '20px' }}>
             MRR / ARR by Startup
           </div>

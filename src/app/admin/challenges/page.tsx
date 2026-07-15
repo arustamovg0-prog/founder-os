@@ -115,7 +115,7 @@ export default function AdminChallengesPage() {
       </div>
 
       {/* Stats */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginBottom: 28 }}>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-7">
         {[
           { label: 'Всего задач', value: stats.total, color: '#FFFFFF' },
           { label: 'Открытых', value: stats.open, color: '#D4D4D8' },
@@ -190,7 +190,7 @@ export default function AdminChallengesPage() {
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div>
                   <label style={{ fontSize: 11, fontWeight: 600, color: '#94a3b8', display: 'block', marginBottom: 5 }}>Компания</label>
                   <input className="input-field" style={{ width: '100%' }} value={form.company} onChange={e => setForm(p => ({ ...p, company: e.target.value }))} placeholder="Uzum Bank" />
@@ -216,7 +216,7 @@ export default function AdminChallengesPage() {
                 <label style={{ fontSize: 11, fontWeight: 600, color: '#94a3b8', display: 'block', marginBottom: 5 }}>Вознаграждение</label>
                 <input className="input-field" style={{ width: '100%' }} value={form.reward} onChange={e => setForm(p => ({ ...p, reward: e.target.value }))} placeholder="Pilot-контракт $50,000" />
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12 }}>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 <div>
                   <label style={{ fontSize: 11, fontWeight: 600, color: '#94a3b8', display: 'block', marginBottom: 5 }}>Тип награды</label>
                   <select className="input-field" style={{ width: '100%' }} value={form.rewardType} onChange={e => setForm(p => ({ ...p, rewardType: e.target.value as typeof form.rewardType }))}>

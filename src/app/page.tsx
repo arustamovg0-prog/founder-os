@@ -117,32 +117,27 @@ export default function LoginPage() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
-      <div style={{ width: '100%', maxWidth: '1100px', display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '80px', alignItems: 'center' }}>
+    <div className="min-h-screen flex items-center justify-center p-4 md:p-8">
+      <div className="w-full max-w-[1100px] grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-10 lg:gap-20 items-center">
 
         {/* Left — Branding */}
-        <motion.div variants={containerVariants} initial="hidden" animate="visible" style={{ paddingRight: '40px' }}>
-          <motion.div variants={itemVariants} style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '48px' }}>
-            <div style={{
-              width: 48, height: 48, borderRadius: 12,
-              background: 'rgba(255,255,255,0.03)',
-              border: '1px solid rgba(255,255,255,0.1)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}>
+        <motion.div variants={containerVariants} initial="hidden" animate="visible" className="pr-0 lg:pr-10">
+          <motion.div variants={itemVariants} className="flex items-center gap-3 mb-8 lg:mb-12">
+            <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
               <Command size={22} color="white" />
             </div>
             <div>
-              <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 20, fontWeight: 600 }}>Founder OS</div>
-              <div style={{ fontSize: 11, color: 'var(--text-secondary)', fontWeight: 500, letterSpacing: '2px', textTransform: 'uppercase' }}>by UNTITLED</div>
+              <div className="font-space font-semibold text-lg lg:text-xl">Founder OS</div>
+              <div className="text-[10px] lg:text-[11px] text-[#a1a1aa] font-medium tracking-widest uppercase">by UNTITLED</div>
             </div>
           </motion.div>
 
-          <motion.h1 variants={itemVariants} style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 56, fontWeight: 700, lineHeight: 1.05, marginBottom: 24, letterSpacing: '-0.03em' }}>
+          <motion.h1 variants={itemVariants} className="font-space font-bold leading-tight tracking-tight mb-6 text-4xl sm:text-5xl lg:text-[56px]">
             Turn Chaos<br />
-            <span style={{ color: 'var(--text-secondary)' }}>Into System.</span>
+            <span className="text-[#a1a1aa]">Into System.</span>
           </motion.h1>
 
-          <motion.p variants={itemVariants} style={{ color: 'var(--text-muted)', fontSize: 17, lineHeight: 1.6, marginBottom: 48, maxWidth: 440 }}>
+          <motion.p variants={itemVariants} className="text-[#52525b] text-base lg:text-[17px] leading-relaxed mb-8 lg:mb-12 max-w-[440px]">
             The definitive operating system for startups. From inception to investment, meticulously engineered for founders and investors.
           </motion.p>
 
@@ -173,7 +168,7 @@ export default function LoginPage() {
 
         {/* Right — Auth Form */}
         <motion.div initial={{ opacity: 0, scale: 0.98, filter: 'blur(8px)' }} animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }} transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1], delay: 0.2 }}>
-          <div className="card" style={{ padding: '40px', background: 'rgba(9, 9, 11, 0.8)', backdropFilter: 'blur(40px)' }}>
+          <div className="card bg-black/80 backdrop-blur-3xl p-6 lg:p-10">
             
             {/* Mode tabs */}
             <div style={{ display: 'flex', gap: '4px', marginBottom: '32px', background: 'rgba(255,255,255,0.03)', borderRadius: '12px', padding: '4px' }}>

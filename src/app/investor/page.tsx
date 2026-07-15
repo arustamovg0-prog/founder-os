@@ -5,10 +5,7 @@ import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { Startup, PitchEvent } from '@/types';
 import { TrendingUp, Users, Briefcase, DollarSign, ArrowUpRight, Star, Clock } from 'lucide-react';
-import { collection, getDocs, query, where } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
-import { Startup, PitchEvent } from '@/types';
-import { TrendingUp, Users, Briefcase, DollarSign, ArrowUpRight, Star, Clock } from 'lucide-react';
+
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
@@ -103,7 +100,7 @@ export default function InvestorDashboard() {
       </div>
 
       {/* KPIs */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '28px' }}>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-7">
         {[
           { label: t('kpis.ready'), value: startups.filter(s => (s.aiScores.overallReadinessScore || 0) >= 75).length, icon: <Star size={18} />, color: '#f59e0b' },
           { label: t('kpis.active'), value: startups.length, icon: <TrendingUp size={18} />, color: '#7c3aed' },
@@ -124,7 +121,7 @@ export default function InvestorDashboard() {
         ))}
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: '24px' }}>
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-6">
         {/* Top Startups */}
         <div className="card">
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
@@ -163,7 +160,7 @@ export default function InvestorDashboard() {
                     <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 16, fontWeight: 700, color: '#10b981' }}>{fmt(s.metrics.mrr)}</div>
                   </div>
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px', marginBottom: '12px' }}>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
                   {[
                     { label: t('metrics.ltv'), value: `${s.metrics.ltvCacRatio}x` },
                     { label: t('metrics.mau'), value: s.metrics.mau.toLocaleString() },

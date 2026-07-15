@@ -166,7 +166,7 @@ export default function InvestorCRMPage() {
       </div>
 
       {/* Pipeline Summary */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '12px', marginBottom: '24px' }}>
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-3 mb-6">
         {STAGES.map(stage => {
           const count = deals.filter(d => d.stage === stage.key).length;
           return (
@@ -182,7 +182,7 @@ export default function InvestorCRMPage() {
       </div>
 
       {/* Kanban Board */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '16px', overflowX: 'auto', minHeight: '500px' }}>
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 overflow-x-auto min-h-[500px]">
         {STAGES.map(stage => {
           const stageDeals = deals.filter(d => d.stage === stage.key);
           return (
@@ -303,7 +303,7 @@ export default function InvestorCRMPage() {
         const s = getStartup(selectedDeal.startupId)!;
         return (
           <Modal isOpen={true} onClose={() => setSelectedDeal(null)} maxWidth="480px" title={s?.name}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '16px' }}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 mb-4">
               {[
                 { l: 'MRR', v: fmt(s.metrics.mrr) },
                 { l: 'MAU', v: s.metrics.mau.toLocaleString() },

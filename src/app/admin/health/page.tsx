@@ -179,7 +179,7 @@ export default function EcosystemHealthPage() {
       </div>
 
       {/* KPI Row */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '28px' }}>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-7">
         {[
           { label: 'Total Ecosystem MRR', value: fmt(totalMRR), sub: `ARR ${fmt(totalARR)}`, icon: <DollarSign size={18} />, color: '#D4D4D8', trend: 12 },
           { label: 'Total MAU', value: totalMAU.toLocaleString(), sub: `${S.length} стартапов`, icon: <Users size={18} />, color: '#FFFFFF', trend: 8 },
@@ -199,9 +199,9 @@ export default function EcosystemHealthPage() {
       </div>
 
       {/* Row 1: MRR Trend + Radar */}
-      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '24px', marginBottom: '24px' }}>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
         {/* MRR Trend */}
-        <div className="card">
+        <div className="md:col-span-2 card">
           <div style={{ fontSize: 13, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: 8 }}>
             <TrendingUp size={14} color="#FFFFFF" /> Ecosystem MRR Growth (6 мес)
           </div>
@@ -241,7 +241,7 @@ export default function EcosystemHealthPage() {
       </div>
 
       {/* Row 2: Funnel + MRR by Stage + Industry */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '24px', marginBottom: '24px' }}>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
         {/* Conversion Funnel */}
         <div className="card">
           <div style={{ fontSize: 13, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '16px' }}>
@@ -321,7 +321,7 @@ export default function EcosystemHealthPage() {
       </div>
 
       {/* Industry + Top performers */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Industry breakdown */}
         <div className="card">
           <div style={{ fontSize: 13, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: 8 }}>

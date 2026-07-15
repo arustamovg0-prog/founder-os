@@ -41,7 +41,7 @@ export default function StageReviewPage() {
       </div>
 
       {/* Stats */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '28px' }}>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-7">
         {[
           { label: 'Pending Review', value: pending.length, color: '#71717A', icon: <Clock size={18} /> },
           { label: 'Approved Today', value: done.filter(d => verifiedMap[d.startupId] === 'approved').length, color: '#D4D4D8', icon: <CheckCircle size={18} /> },

@@ -91,7 +91,7 @@ export default function FounderPitchesPage() {
         <div style={{ fontSize: 12, color: '#D8B4FE', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '20px' }}>
           {t('analyticsTitle')}
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0', position: 'relative' }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 relative">
           {[
             { label: t('funnel.sent'), val: pitches.length, color: '#FFFFFF', pct: 100 },
             { label: t('funnel.viewed'), val: pitches.filter(p => p.status !== 'pending').length, color: '#A1A1AA', pct: Math.round((pitches.filter(p => p.status !== 'pending').length / pitches.length) * 100) || 0 },
@@ -127,7 +127,7 @@ export default function FounderPitchesPage() {
       </div>
 
       {/* Stats */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '28px' }}>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-7">
         {[
           { label: t('stats.total'), value: pitches.length, color: '#FFFFFF' },
           { label: t('stats.accepted'), value: pitches.filter(p => p.status === 'accepted' || p.status === 'feedback_pending').length, color: '#D4D4D8' },

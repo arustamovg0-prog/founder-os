@@ -226,7 +226,7 @@ export default function OnboardingPage() {
                 </div>
                 <div>
                   <label style={{ fontSize: 12, color: '#64748b', fontWeight: 600, display: 'block', marginBottom: 10 }}>Текущая стадия *</label>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                     {STAGES.map(s => (
                       <button key={s.id} onClick={() => set('stage', s.id)} style={{
                         padding: '12px 16px', borderRadius: '12px', textAlign: 'left',
@@ -251,7 +251,7 @@ export default function OnboardingPage() {
                 Рынок и команда
               </h2>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div>
                     <label style={{ fontSize: 12, color: '#64748b', fontWeight: 600, display: 'block', marginBottom: 6 }}><MapPin size={11} style={{ display: 'inline' }} /> Город / Страна *</label>
                     <input className="input-field" placeholder="Tashkent, UZ" value={data.location} onChange={e => set('location', e.target.value)} />

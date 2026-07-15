@@ -122,7 +122,7 @@ export default function AdminAnalyticsPage() {
       </div>
 
       {/* Top KPIs */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '28px' }}>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-7">
         {[
           { label: 'Total Portfolio MRR', value: fmt(totalMRR), change: '+24%', icon: <DollarSign size={18} />, color: '#D4D4D8' },
           { label: 'Combined MAU', value: totalMAU.toLocaleString(), change: '+18%', icon: <Users size={18} />, color: '#FFFFFF' },
@@ -143,9 +143,9 @@ export default function AdminAnalyticsPage() {
       </div>
 
       {/* Charts Row 1 */}
-      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '24px', marginBottom: '24px' }}>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
         {/* MRR Trend */}
-        <div className="card">
+        <div className="md:col-span-2 card">
           <div style={{ fontSize: 13, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '20px' }}>
             Portfolio MRR Growth (6 months)
           </div>
@@ -183,7 +183,7 @@ export default function AdminAnalyticsPage() {
       </div>
 
       {/* Charts Row 2 */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginBottom: '24px' }}>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         {/* Industry Distribution */}
         <div className="card">
           <div style={{ fontSize: 13, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '20px' }}>

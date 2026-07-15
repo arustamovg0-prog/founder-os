@@ -31,10 +31,10 @@ export default function InvestorLayout({ children }: { children: React.ReactNode
     return (
       <div className="dashboard-layout">
         <SideNav />
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', width: '100%', flexDirection: 'column', gap: '16px' }}>
-          <div style={{ width: 36, height: 36, border: '3px solid rgba(161,161,170,0.2)', borderTopColor: '#A1A1AA', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+        <main className="dashboard-main flex items-center justify-center flex-col gap-4 min-h-screen">
+          <div style={{ width: 36, height: 36, border: '3px solid rgba(212,212,216,0.2)', borderTopColor: '#D4D4D8', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
           <p style={{ color: '#52525B', fontSize: 14 }}>{t('loadingProtocol')}</p>
-        </div>
+        </main>
         <style jsx global>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>
     );

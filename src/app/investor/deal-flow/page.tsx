@@ -74,7 +74,7 @@ function StartupCard({ s }: { s: Startup }) {
         <ScoreRing score={score} />
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '8px' }}>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
         {[
           { label: 'MRR', value: fmt(s.metrics.mrr), color: '#D4D4D8' },
           { label: 'MAU', value: s.metrics.mau.toLocaleString(), color: '#A1A1AA' },
@@ -237,7 +237,7 @@ export default function DealFlowPage() {
 
       {/* Grid view */}
       {viewMode === 'grid' && (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px' }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {filtered.map(s => <StartupCard key={s.id} s={s} />)}
           {filtered.length === 0 && (
             <div style={{ gridColumn: '1/-1', textAlign: 'center', padding: '80px', color: '#334155' }}>
@@ -252,7 +252,7 @@ export default function DealFlowPage() {
       {viewMode === 'kanban' && (
         <div>
           <p style={{ fontSize: 12, color: '#475569', marginBottom: 16 }}>Перетащите стартапы между колонками · Нажмите кнопку для перемещения</p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, alignItems: 'start' }}>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-start">
             {KANBAN_COLUMNS.map(col => {
               const colStartups = startups.filter(s => kanbanPlacements[s.id] === col.id);
               return (

@@ -185,7 +185,7 @@ export default function DataRoomPage() {
       </div>
 
       {/* Documents Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {docs.map((doc) => (
           <div
             key={doc.key}

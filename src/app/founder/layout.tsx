@@ -61,10 +61,10 @@ export default function FounderLayout({ children }: { children: React.ReactNode 
     return (
       <div className="dashboard-layout">
         <SideNav />
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', width: '100%', flexDirection: 'column', gap: '16px' }}>
-          <div style={{ width: 36, height: 36, border: '3px solid rgba(255,255,255,0.2)', borderTopColor: '#FFFFFF', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
-          <p style={{ color: '#52525B', fontSize: 14 }}>Initializing Secure Protocol...</p>
-        </div>
+        <main className="dashboard-main flex items-center justify-center flex-col gap-4 min-h-screen">
+          <div style={{ width: 36, height: 36, border: '3px solid rgba(212,212,216,0.2)', borderTopColor: '#D4D4D8', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+          <p style={{ color: '#52525B', fontSize: 14 }}>Loading protocol...</p>
+        </main>
         <style jsx global>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>
     );

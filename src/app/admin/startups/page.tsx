@@ -54,7 +54,7 @@ function StartupDetailRow({ s }: { s: Startup }) {
           </span>
         </div>
 
-        <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '16px' }}>
+        <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-4">
           {[
             { l: t('metrics.mrr'), v: fmt(s.metrics.mrr), c: '#D4D4D8' },
             { l: t('metrics.mau'), v: s.metrics.mau > 0 ? s.metrics.mau.toLocaleString() : '—', c: '#A1A1AA' },
@@ -85,7 +85,7 @@ function StartupDetailRow({ s }: { s: Startup }) {
       {/* Expanded Detail */}
       {open && (
         <div style={{ padding: '20px 20px 20px', borderTop: '1px solid rgba(255,255,255,0.06)', background: 'rgba(5,5,16,0.5)' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {/* AI Summary */}
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '10px' }}>
@@ -108,7 +108,7 @@ function StartupDetailRow({ s }: { s: Startup }) {
               <div style={{ fontSize: 11, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '10px' }}>
                 {t('fullMetrics')}
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 {[
                   { l: t('metrics.arr'), v: fmt(s.metrics.arr) },
                   { l: t('metrics.churn'), v: s.metrics.churnRate > 0 ? `${s.metrics.churnRate}%` : '—' },
