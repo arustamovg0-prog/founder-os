@@ -117,7 +117,7 @@ export default function AdminAnalyticsPage() {
   return (
     <div className="animate-fade-in">
       <div style={{ marginBottom: '28px' }}>
-        <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 28, fontWeight: 700, marginBottom: 6 }}>Ecosystem Analytics</h1>
+        <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, marginBottom: 6 }}>Ecosystem Analytics</h1>
         <p style={{ color: '#64748b', fontSize: 14 }}>Portfolio-level performance metrics and trends</p>
       </div>
 

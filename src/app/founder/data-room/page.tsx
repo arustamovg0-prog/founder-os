@@ -162,9 +162,9 @@ export default function DataRoomPage() {
 
   return (
     <div className="animate-fade-in">
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '32px' }}>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 28, fontWeight: 700, marginBottom: 6 }}>{t('title')}</h1>
+          <h1 style={{ fontFamily: "Space Grotesk, sans-serif", fontWeight: 700 }}>{t('title')}</h1>
           <p style={{ color: '#64748b', fontSize: 14 }}>{t('subtitle')}</p>
         </div>
         <div style={{ textAlign: 'right' }}>

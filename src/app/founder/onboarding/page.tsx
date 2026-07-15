@@ -77,7 +77,7 @@ export default function OnboardingPage() {
           </div>
         </div>
         
-        <h1 style={{ fontFamily: 'Space Grotesk', fontSize: 24, fontWeight: 700, textAlign: 'center', marginBottom: 8 }}>
+        <h1 style={{ fontFamily: 'Space Grotesk', fontWeight: 700, textAlign: 'center', marginBottom: 8 }}>
           Создайте свой Стартап
         </h1>
         <p style={{ color: '#94a3b8', textAlign: 'center', fontSize: 14, marginBottom: 32 }}>

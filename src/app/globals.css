@@ -292,21 +292,93 @@ button:active:not(:disabled) {
   }
 }
 
-/* Mobile Responsiveness Overrides */
+/* ─── Mobile Responsiveness ──────────────────────────────────── */
+
+/* Touch targets */
+@media (hover: none) {
+  button, a, .nav-item {
+    min-height: 44px;
+  }
+}
+
+/* Card padding reduction on small screens */
+@media (max-width: 640px) {
+  .card {
+    padding: 16px;
+    border-radius: 10px;
+  }
+  .modal-box {
+    padding: 20px;
+    border-radius: 12px;
+    max-height: 95vh;
+  }
+}
+
 @media (max-width: 768px) {
+  /* Sidebar off-canvas */
   .sidebar {
     transform: translateX(-100%);
     transition: transform 300ms var(--ease-out);
     box-shadow: 4px 0 24px rgba(0,0,0,0.5);
+    z-index: 50;
   }
-  
   .sidebar.sidebar-open {
     transform: translateX(0);
   }
-  
+
+  /* Main content fill */
   .dashboard-main {
     width: 100%;
     margin-left: 0;
-    padding: 80px 16px 80px 16px; /* Top padding for mobile header */
+    padding: 76px 16px 32px;
+  }
+
+  /* Ensure max-width doesn't clip */
+  .dashboard-main > * {
+    max-width: 100%;
+  }
+
+  /* Typography scale */
+  h1 { font-size: clamp(22px, 5vw, 32px) !important; }
+  h2 { font-size: clamp(18px, 4vw, 24px) !important; }
+
+  /* Tables scroll horizontally */
+  table {
+    min-width: 520px;
+  }
+  .table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Button full width on mobile */
+  .btn-mobile-full {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Safe area support for notch devices */
+  .dashboard-main {
+    padding-bottom: max(32px, env(safe-area-inset-bottom));
+  }
+  .sidebar {
+    padding-bottom: max(24px, env(safe-area-inset-bottom));
+  }
+}
+
+/* Tablet */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .dashboard-main {
+    padding: 32px 20px;
+  }
+}
+
+/* Stat card responsive font */
+.stat-card {
+  container-type: inline-size;
+}
+@container (max-width: 200px) {
+  .stat-card-value {
+    font-size: 20px !important;
   }
 }

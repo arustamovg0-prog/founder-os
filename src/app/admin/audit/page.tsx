@@ -42,7 +42,7 @@ export default function AuditEvidencePage() {
             <Shield size={16} color="#D8B4FE" />
             <span style={{ fontSize: 13, color: '#D8B4FE', fontWeight: 600, letterSpacing: '1px', textTransform: 'uppercase' }}>Security & Trust</span>
           </div>
-          <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 28, fontWeight: 700, marginBottom: 6 }}>Journal of Evidence</h1>
+          <h1 style={{ fontFamily: "Space Grotesk, sans-serif", fontWeight: 700 }}>Journal of Evidence</h1>
           <p style={{ color: '#64748b', fontSize: 14 }}>Immutable audit log of all critical agent and admin actions</p>
         </div>
       </div>

@@ -124,7 +124,7 @@ export default function CommunityPage() {
           <div style={{ width: 32, height: 32, borderRadius: 8, background: 'linear-gradient(135deg,#D4D4D8,#A1A1AA)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Users size={16} color="white" />
           </div>
-          <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 24, fontWeight: 700 }}>Co-founder Match</h1>
+          <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700 }}>Co-founder Match</h1>
           <span className="badge badge-green">Community</span>
         </div>
         <p style={{ color: '#64748b', fontSize: 13 }}>Найди ко-фаундера или ключевого члена команды внутри экосистемы UNTITLED</p>

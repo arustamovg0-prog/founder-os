@@ -133,7 +133,7 @@ export default function LegalToolkitPage() {
           <div style={{ width: 32, height: 32, borderRadius: 8, background: 'linear-gradient(135deg,#A1A1AA,#6366f1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Scale size={16} color="white" />
           </div>
-          <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 24, fontWeight: 700 }}>Legal Toolkit</h1>
+          <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700 }}>Legal Toolkit</h1>
           <span className="badge badge-blue">Центральная Азия</span>
         </div>
         <p style={{ color: '#64748b', fontSize: 13 }}>Юридические шаблоны, чек-листы и ответы на вопросы — всё для запуска и роста стартапа</p>

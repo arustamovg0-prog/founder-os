@@ -166,7 +166,7 @@ export default function EcosystemHealthPage() {
     <div className="animate-fade-in">
       <div style={{ marginBottom: '28px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: 6 }}>
-          <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 28, fontWeight: 700 }}>Ecosystem Health</h1>
+          <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700 }}>Ecosystem Health</h1>
           <div style={{
             padding: '4px 14px', borderRadius: 99,
             background: `${scoreColor}20`, border: `1px solid ${scoreColor}40`,

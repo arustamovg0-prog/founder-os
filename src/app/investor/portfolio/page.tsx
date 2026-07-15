@@ -77,7 +77,7 @@ export default function PortfolioPage() {
   return (
     <div className="animate-fade-in">
       <div style={{ marginBottom: '28px' }}>
-        <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 28, fontWeight: 700, marginBottom: 6 }}>Portfolio</h1>
+        <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, marginBottom: 6 }}>Portfolio</h1>
         <p style={{ color: '#64748b', fontSize: 14 }}>Watchlist and tracked startups performance</p>
       </div>
 

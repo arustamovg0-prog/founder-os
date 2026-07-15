@@ -139,7 +139,7 @@ export default function RoadmapPage() {
 
       {/* Header */}
       <div style={{ marginBottom: '32px' }}>
-        <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 28, fontWeight: 700, marginBottom: 6 }}>
+        <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, marginBottom: 6 }}>
           {t('title')}
         </h1>
         <p style={{ color: '#64748b', fontSize: 14 }}>

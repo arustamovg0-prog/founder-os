@@ -24,7 +24,7 @@ export default function VideoPitchRoomPage({ params }: { params: { id: string } 
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
         <div>
-          <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 24, fontWeight: 700 }}>{t('title')}</h1>
+          <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700 }}>{t('title')}</h1>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#D4D4D8' }}>
             <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#D4D4D8', boxShadow: '0 0 6px #D4D4D8' }} />
             {t('recordingActive')}

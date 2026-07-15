@@ -146,7 +146,7 @@ export default function PerksPage() {
               <div style={{ width: 32, height: 32, borderRadius: 8, background: 'linear-gradient(135deg,#71717A,#52525B)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Gift size={16} color="white" />
               </div>
-              <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 24, fontWeight: 700 }}>{t('title')}</h1>
+              <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700 }}>{t('title')}</h1>
               <span className="badge badge-green">{t('exclusive')}</span>
             </div>
             <p style={{ color: '#64748b', fontSize: 13 }}>{t('subtitle')}</p>

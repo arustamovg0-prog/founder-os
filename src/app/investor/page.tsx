@@ -93,7 +93,7 @@ export default function InvestorDashboard() {
   return (
     <div className="animate-fade-in">
       <div style={{ marginBottom: '32px' }}>
-        <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 28, fontWeight: 700, marginBottom: 6 }}>
+        <h1 style={{ fontFamily: "Space Grotesk, sans-serif", fontWeight: 700 }}>
           {t('title')}
         </h1>
         <p style={{ color: '#64748b', fontSize: 14 }}>{t('subtitle')}</p>
@@ -139,7 +139,7 @@ export default function InvestorDashboard() {
                 background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)',
                 transition: 'all 0.15s',
               }}>
-                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '12px' }}>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
                   <div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
                       <div style={{

@@ -76,12 +76,12 @@ export default function FounderPitchesPage() {
 
   return (
     <div className="animate-fade-in">
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '32px' }}>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 28, fontWeight: 700, marginBottom: 6 }}>{t('title')}</h1>
+          <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, marginBottom: 6 }}>{t('title')}</h1>
           <p style={{ color: '#64748b', fontSize: 14 }}>{t('subtitle')}</p>
         </div>
-        <button className="btn-primary" onClick={() => setShowModal(true)}>
+        <button className="btn-primary btn-mobile-full" onClick={() => setShowModal(true)}>
           <Send size={14} /> {t('requestPitch')}
         </button>
       </div>
@@ -111,7 +111,7 @@ export default function FounderPitchesPage() {
         </div>
 
         {/* Response time + rate */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px', marginTop: '24px', paddingTop: '20px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6 pt-5 border-t border-white/5">
           {[
             { label: t('kpis.responseRate'), value: `${Math.round((pitches.filter(p => p.status !== 'pending').length / pitches.length) * 100) || 0}%`, color: '#A1A1AA', desc: t('kpis.responseRateDesc') },
             { label: t('kpis.avgResponseTime'), value: '4.2', color: '#71717A', desc: t('kpis.avgResponseTimeDesc') },

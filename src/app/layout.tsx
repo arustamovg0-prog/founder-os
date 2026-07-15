@@ -9,10 +9,11 @@ import { getLocale, getMessages } from 'next-intl/server';
 const inter = Inter({ subsets: ['latin'] });
 
 export const viewport = {
-  themeColor: '#FFFFFF',
+  themeColor: '#000000',
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 1,
+  maximumScale: 5,
+  userScalable: true,
 };
 
 export const metadata: Metadata = {

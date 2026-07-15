@@ -106,13 +106,15 @@ export default function AdminDashboard() {
 
   return (
     <div className="animate-fade-in">
-      <div style={{ marginBottom: '32px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: 6 }}>
-          <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#D4D4D8', boxShadow: '0 0 8px #D4D4D8' }} />
-          <span style={{ fontSize: 12, color: '#D4D4D8', fontWeight: 600 }}>{t('untitledAdmin')}</span>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+        <div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: 6 }}>
+            <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#D4D4D8', boxShadow: '0 0 8px #D4D4D8' }} />
+            <span style={{ fontSize: 12, color: '#D4D4D8', fontWeight: 600 }}>{t('untitledAdmin')}</span>
+          </div>
+          <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700 }}>{t('title')}</h1>
+          <p style={{ color: '#64748b', fontSize: 14 }}>{t('subtitle', { count: startups.length })}</p>
         </div>
-        <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 28, fontWeight: 700 }}>{t('title')}</h1>
-        <p style={{ color: '#64748b', fontSize: 14 }}>{t('subtitle', { count: startups.length })}</p>
       </div>
 
       {/* KPIs */}
@@ -201,8 +203,8 @@ export default function AdminDashboard() {
         <div style={{ fontSize: 13, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '20px' }}>
           {t('table.title')}
         </div>
-        <div style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+        <div className="table-wrapper" style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 600 }}>
             <thead>
               <tr>
                 {[0, 1, 2, 3, 4, 5, 6].map(i => (

@@ -120,8 +120,8 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center p-4 md:p-8">
       <div className="w-full max-w-[1100px] grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-10 lg:gap-20 items-center">
 
-        {/* Left — Branding */}
-        <motion.div variants={containerVariants} initial="hidden" animate="visible" className="pr-0 lg:pr-10">
+        {/* Left — Branding (hidden on mobile) */}
+        <motion.div variants={containerVariants} initial="hidden" animate="visible" className="hidden lg:block pr-0 lg:pr-10">
           <motion.div variants={itemVariants} className="flex items-center gap-3 mb-8 lg:mb-12">
             <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
               <Command size={22} color="white" />
@@ -168,6 +168,16 @@ export default function LoginPage() {
 
         {/* Right — Auth Form */}
         <motion.div initial={{ opacity: 0, scale: 0.98, filter: 'blur(8px)' }} animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }} transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1], delay: 0.2 }}>
+          {/* Mobile-only branding */}
+          <div className="flex lg:hidden items-center gap-3 mb-6">
+            <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
+              <Command size={18} color="white" />
+            </div>
+            <div>
+              <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, fontSize: 16 }}>Founder OS</div>
+              <div style={{ fontSize: 10, color: '#a1a1aa', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px' }}>by UNTITLED</div>
+            </div>
+          </div>
           <div className="card bg-black/80 backdrop-blur-3xl p-6 lg:p-10">
             
             {/* Mode tabs */}

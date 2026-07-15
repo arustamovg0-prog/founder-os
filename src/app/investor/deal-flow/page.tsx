@@ -197,12 +197,12 @@ export default function DealFlowPage() {
 
   return (
     <div className="animate-fade-in">
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '28px', flexWrap: 'wrap', gap: 12 }}>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-7">
         <div>
-          <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 28, fontWeight: 700, marginBottom: 6 }}>Deal Flow</h1>
+          <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, marginBottom: 6 }}>Deal Flow</h1>
           <p style={{ color: '#64748b', fontSize: 14 }}>Browse AI-scored startups in the UNTITLED ecosystem</p>
         </div>
-        <div style={{ display: 'flex', gap: 4, padding: 4, background: 'rgba(255,255,255,0.04)', borderRadius: 10, border: '1px solid rgba(255,255,255,0.06)' }}>
+        <div style={{ display: 'flex', gap: 4, padding: 4, background: 'rgba(255,255,255,0.04)', borderRadius: 10, border: '1px solid rgba(255,255,255,0.06)', flexShrink: 0 }}>
           <button onClick={() => setViewMode('grid')} style={{ padding: '7px 12px', borderRadius: 7, fontSize: 12, fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, fontFamily: 'Inter', transition: 'var(--transition-standard)', background: viewMode === 'grid' ? 'rgba(255,255,255,0.15)' : 'transparent', border: viewMode === 'grid' ? '1px solid rgba(255,255,255,0.3)' : '1px solid transparent', color: viewMode === 'grid' ? '#D8B4FE' : '#64748b' }}>
             <List size={13} />Grid
           </button>
@@ -213,26 +213,26 @@ export default function DealFlowPage() {
       </div>
 
       {/* Filters */}
-      <div className="card" style={{ marginBottom: '24px', padding: '16px 20px' }}>
-        <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
-          <div style={{ position: 'relative', flex: 1, minWidth: '200px' }}>
+      <div className="card" style={{ marginBottom: '24px', padding: '14px 16px' }}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <div style={{ position: 'relative' }}>
             <Search size={14} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: '#475569' }} />
             <input className="input-field" placeholder="Search startups..." value={search} onChange={e => setSearch(e.target.value)} style={{ paddingLeft: '36px' }} />
           </div>
-          <select className="input-field" value={industry} onChange={e => setIndustry(e.target.value)} style={{ width: '140px', appearance: 'none' }}>
+          <select className="input-field" value={industry} onChange={e => setIndustry(e.target.value)} style={{ appearance: 'none' }}>
             {INDUSTRIES.map(i => <option key={i}>{i}</option>)}
           </select>
-          <select className="input-field" value={stage} onChange={e => setStage(e.target.value)} style={{ width: '160px', appearance: 'none' }}>
+          <select className="input-field" value={stage} onChange={e => setStage(e.target.value)} style={{ appearance: 'none' }}>
             {STAGES.map(s => <option key={s}>{s.replace('_', ' ')}</option>)}
           </select>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <Star size={13} color="#71717A" />
-            <span style={{ fontSize: 12, color: '#64748b', whiteSpace: 'nowrap' }}>Min score:</span>
-            <input type="range" min={0} max={100} step={10} value={minScore} onChange={e => setMinScore(Number(e.target.value))} style={{ width: '80px', accentColor: '#FFFFFF' }} />
+            <span style={{ fontSize: 12, color: '#64748b', whiteSpace: 'nowrap' }}>Min:</span>
+            <input type="range" min={0} max={100} step={10} value={minScore} onChange={e => setMinScore(Number(e.target.value))} style={{ flex: 1, accentColor: '#FFFFFF' }} />
             <span style={{ fontSize: 13, fontWeight: 700, color: '#D8B4FE', minWidth: 24 }}>{minScore}</span>
           </div>
-          <span style={{ fontSize: 13, color: '#475569', flexShrink: 0 }}>{filtered.length} results</span>
         </div>
+        <div style={{ fontSize: 12, color: '#475569', marginTop: 8 }}>{filtered.length} results</div>
       </div>
 
       {/* Grid view */}
@@ -251,42 +251,44 @@ export default function DealFlowPage() {
       {/* Kanban view */}
       {viewMode === 'kanban' && (
         <div>
-          <p style={{ fontSize: 12, color: '#475569', marginBottom: 16 }}>Перетащите стартапы между колонками · Нажмите кнопку для перемещения</p>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-start">
-            {KANBAN_COLUMNS.map(col => {
-              const colStartups = startups.filter(s => kanbanPlacements[s.id] === col.id);
-              return (
-                <div key={col.id} style={{ borderRadius: 14, background: 'rgba(13,13,32,0.5)', border: `1px solid ${col.color}20`, overflow: 'hidden' }}>
-                  <div style={{ padding: '12px 14px', borderBottom: `1px solid ${col.color}20`, background: `${col.color}08` }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 2 }}>
-                      <span style={{ fontSize: 16 }}>{col.emoji}</span>
-                      <span style={{ fontWeight: 700, fontSize: 13, color: col.color }}>{col.label}</span>
-                      <span style={{ marginLeft: 'auto', fontSize: 10, fontWeight: 700, padding: '1px 7px', borderRadius: 99, background: `${col.color}20`, color: col.color }}>
-                        {colStartups.length}
-                      </span>
-                    </div>
-                    <div style={{ fontSize: 10, color: '#475569' }}>{col.description}</div>
-                  </div>
-                  <div style={{ padding: 10, display: 'flex', flexDirection: 'column', gap: 8, minHeight: 160 }}>
-                    {colStartups.map(s => (
-                      <div key={s.id}>
-                        <KanbanCard s={s} columnColor={col.color} />
-                        <div style={{ display: 'flex', gap: 4, marginTop: 6, flexWrap: 'wrap' }}>
-                          {KANBAN_COLUMNS.filter(c => c.id !== col.id).map(targetCol => (
-                            <button key={targetCol.id} onClick={() => moveToColumn(s.id, targetCol.id)} style={{ padding: '3px 8px', borderRadius: 99, fontSize: 9, fontWeight: 700, cursor: 'pointer', background: `${targetCol.color}10`, border: `1px solid ${targetCol.color}25`, color: targetCol.color, fontFamily: 'Inter' }}>
-                              → {targetCol.label}
-                            </button>
-                          ))}
-                        </div>
+          <p style={{ fontSize: 12, color: '#475569', marginBottom: 16 }}>Нажмите кнопку для перемещения стартапа</p>
+          <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(220px, 1fr))', gap: 16, minWidth: 600 }}>
+              {KANBAN_COLUMNS.map(col => {
+                const colStartups = startups.filter(s => kanbanPlacements[s.id] === col.id);
+                return (
+                  <div key={col.id} style={{ borderRadius: 14, background: 'rgba(13,13,32,0.5)', border: `1px solid ${col.color}20`, overflow: 'hidden' }}>
+                    <div style={{ padding: '12px 14px', borderBottom: `1px solid ${col.color}20`, background: `${col.color}08` }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 2 }}>
+                        <span style={{ fontSize: 16 }}>{col.emoji}</span>
+                        <span style={{ fontWeight: 700, fontSize: 13, color: col.color }}>{col.label}</span>
+                        <span style={{ marginLeft: 'auto', fontSize: 10, fontWeight: 700, padding: '1px 7px', borderRadius: 99, background: `${col.color}20`, color: col.color }}>
+                          {colStartups.length}
+                        </span>
                       </div>
-                    ))}
-                    {colStartups.length === 0 && (
-                      <div style={{ padding: '20px', textAlign: 'center', color: '#334155', fontSize: 12 }}>Нет стартапов</div>
-                    )}
+                      <div style={{ fontSize: 10, color: '#475569' }}>{col.description}</div>
+                    </div>
+                    <div style={{ padding: 10, display: 'flex', flexDirection: 'column', gap: 8, minHeight: 160 }}>
+                      {colStartups.map(s => (
+                        <div key={s.id}>
+                          <KanbanCard s={s} columnColor={col.color} />
+                          <div style={{ display: 'flex', gap: 4, marginTop: 6, flexWrap: 'wrap' }}>
+                            {KANBAN_COLUMNS.filter(c => c.id !== col.id).map(targetCol => (
+                              <button key={targetCol.id} onClick={() => moveToColumn(s.id, targetCol.id)} style={{ padding: '3px 8px', borderRadius: 99, fontSize: 9, fontWeight: 700, cursor: 'pointer', background: `${targetCol.color}10`, border: `1px solid ${targetCol.color}25`, color: targetCol.color, fontFamily: 'Inter' }}>
+                                → {targetCol.label}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                      {colStartups.length === 0 && (
+                        <div style={{ padding: '20px', textAlign: 'center', color: '#334155', fontSize: 12 }}>Нет стартапов</div>
+                      )}
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
         </div>
       )}

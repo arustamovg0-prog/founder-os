@@ -150,9 +150,9 @@ export default function InvestorCRMPage() {
   return (
     <div className="animate-fade-in">
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '24px' }}>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 28, fontWeight: 700, marginBottom: 6 }}>Investor CRM</h1>
+          <h1 style={{ fontFamily: "Space Grotesk, sans-serif", fontWeight: 700 }}>Investor CRM</h1>
           <p style={{ color: '#64748b', fontSize: 14 }}>Deal pipeline — drag cards between stages</p>
         </div>
         <div style={{ display: 'flex', gap: '8px' }}>
@@ -181,8 +181,9 @@ export default function InvestorCRMPage() {
         })}
       </div>
 
-      {/* Kanban Board */}
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 overflow-x-auto min-h-[500px]">
+      {/* Kanban Board - horizontal scroll on mobile */}
+      <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, minmax(200px, 1fr))', gap: 16, minWidth: 700 }} className="min-h-[500px]">
         {STAGES.map(stage => {
           const stageDeals = deals.filter(d => d.stage === stage.key);
           return (
@@ -273,6 +274,7 @@ export default function InvestorCRMPage() {
             </div>
           );
         })}
+      </div>
       </div>
 
       {/* Add deal modal */}
