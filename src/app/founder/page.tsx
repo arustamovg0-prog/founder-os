@@ -53,6 +53,7 @@ export default function FounderDashboard() {
   const t = useTranslations('FounderDashboard');
   const tCommon = useTranslations('Common');
   const tNav = useTranslations('Navigation');
+  const tRoadmap = useTranslations('FounderRoadmap');
 
   useEffect(() => {
     if (!profile?.linkedStartupId) {
@@ -320,9 +321,9 @@ export default function FounderDashboard() {
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
                 <span className="badge badge-purple">{tCommon(`stages.${currentStage.phase}`)}</span>
-                <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 16, fontWeight: 700 }}>{currentStage.title}</span>
+                <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 16, fontWeight: 700 }}>{tRoadmap(`stages.${currentStage.id}.title`)}</span>
               </div>
-              <p style={{ fontSize: 13, color: '#64748b', marginBottom: '16px' }}>{currentStage.description}</p>
+              <p style={{ fontSize: 13, color: '#64748b', marginBottom: '16px' }}>{tRoadmap(`stages.${currentStage.id}.description`)}</p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 {currentStage.requiredArtifacts.map((art) => {
                   const done = s.dataRoom?.pitchDeckUrl && art.key.includes('pitch');
@@ -368,7 +369,7 @@ export default function FounderDashboard() {
                     </span>
                   </div>
                   <p style={{ fontSize: 12, color: '#475569' }}>
-                    {t('activePitches.scoreAtRequest', { score: p.request.snapshotScore })}
+                    {t('activePitches.scoreAtRequest', { score: p.request?.snapshotScore || 0 })}
                   </p>
                 </div>
               ))}
@@ -471,7 +472,7 @@ export default function FounderDashboard() {
                     <span style={{ fontSize: 11, color: '#334155' }}>
                       {log.timestamp.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' })}
                     </span>
-                    <span style={{ fontSize: 11, color: '#334155', textTransform: 'capitalize' }}>{log.actorRole.replace('_', ' ')}</span>
+                    <span style={{ fontSize: 11, color: '#334155', textTransform: 'capitalize' }}>{(log.actorRole || '').replace('_', ' ')}</span>
                   </div>
                 </div>
               </div>
