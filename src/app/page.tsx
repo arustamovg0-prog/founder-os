@@ -118,10 +118,10 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 md:p-8">
-      <div className="w-full max-w-[1100px] grid grid-cols-1 md:grid-cols-[1.2fr_1fr] gap-10 lg:gap-20 items-center">
+      <div className="w-full max-w-[1100px] grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-20 items-center">
 
         {/* Left — Branding (hidden on small mobile only) */}
-        <motion.div variants={containerVariants} initial="hidden" animate="visible" className="hidden md:block pr-0 lg:pr-10">
+        <motion.div variants={containerVariants} initial="hidden" animate="visible" className="hidden lg:block lg:col-span-7 pr-0 lg:pr-10">
           <motion.div variants={itemVariants} className="flex items-center gap-3 mb-8 lg:mb-12">
             <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
               <Command size={22} color="white" />
@@ -167,9 +167,9 @@ export default function LoginPage() {
         </motion.div>
 
         {/* Right — Auth Form */}
-        <motion.div initial={{ opacity: 0, scale: 0.98, filter: 'blur(8px)' }} animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }} transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1], delay: 0.2 }}>
-          {/* Mobile-only branding (shown only on phones < 768px) */}
-          <div className="flex md:hidden items-center gap-3 mb-6">
+        <motion.div initial={{ opacity: 0, scale: 0.98, filter: 'blur(8px)' }} animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }} transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1], delay: 0.2 }} className="lg:col-span-5">
+          {/* Mobile-only branding (shown only on phones < 1024px) */}
+          <div className="flex lg:hidden items-center gap-3 mb-6">
             <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
               <Command size={18} color="white" />
             </div>
