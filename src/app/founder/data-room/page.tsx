@@ -191,8 +191,8 @@ export default function DataRoomPage() {
             key={doc.key}
             className={`card glass-hover ${dragging === doc.key ? 'glow-purple' : ''}`}
             style={{
-              borderColor: dragging === doc.key ? 'rgba(124,58,237,0.4)' : doc.url ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.04)',
-              background: doc.url ? 'rgba(13,13,32,0.8)' : 'rgba(255,255,255,0.01)',
+              borderColor: dragging === doc.key ? 'rgba(124,58,237,0.4)' : doc.url ? 'rgba(0,0,0,0.08)' : 'rgba(0,0,0,0.04)',
+              background: doc.url ? 'rgba(13,13,32,0.8)' : 'rgba(0,0,0,0.01)',
             }}
             onDragOver={(e) => { e.preventDefault(); setDragging(doc.key); }}
             onDragLeave={() => setDragging(null)}
@@ -250,7 +250,7 @@ export default function DataRoomPage() {
             ) : (
               <label
                 style={{
-                  border: `2px dashed ${dragging === doc.key ? doc.color : 'rgba(255,255,255,0.08)'}`,
+                  border: `2px dashed ${dragging === doc.key ? doc.color : 'rgba(0,0,0,0.08)'}`,
                   borderRadius: '10px', padding: '20px', textAlign: 'center',
                   cursor: 'pointer', transition: 'all 0.2s', display: 'block',
                   background: dragging === doc.key ? `${doc.color}08` : 'transparent',
@@ -264,7 +264,7 @@ export default function DataRoomPage() {
                 />
                 {uploading === doc.key ? (
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', color: '#64748b' }}>
-                    <span style={{ width: 14, height: 14, border: '2px solid rgba(255,255,255,0.2)', borderTopColor: '#7c3aed', borderRadius: '50%', animation: 'spin 0.8s linear infinite', display: 'inline-block' }} />
+                    <span style={{ width: 14, height: 14, border: '2px solid rgba(0,0,0,0.2)', borderTopColor: '#7c3aed', borderRadius: '50%', animation: 'spin 0.8s linear infinite', display: 'inline-block' }} />
                     {t('uploading')}
                   </div>
                 ) : (

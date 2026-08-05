@@ -110,7 +110,7 @@ export default function InvestorDashboard() {
           <div key={i} className="card stat-card animate-fade-in" style={{ animationDelay: `${i * 50}ms` }}>
             <div style={{
               width: 36, height: 36, borderRadius: 8, marginBottom: 12,
-              background: `rgba(255,255,255,0.03)`, border: `1px solid rgba(255,255,255,0.1)`,
+              background: `rgba(0,0,0,0.03)`, border: `1px solid rgba(0,0,0,0.1)`,
               display: 'flex', alignItems: 'center', justifyContent: 'center', color: kpi.color,
             }}>
               {kpi.icon}
@@ -164,7 +164,7 @@ export default function InvestorDashboard() {
                     { label: t('metrics.mau'), value: s.metrics.mau.toLocaleString() },
                     { label: t('metrics.runway'), value: `${s.metrics.runwayMonths}mo` },
                   ].map((m, j) => (
-                    <div key={j} style={{ textAlign: 'center', padding: '8px', borderRadius: '8px', background: 'rgba(255,255,255,0.02)' }}>
+                    <div key={j} style={{ textAlign: 'center', padding: '8px', borderRadius: '8px', background: 'rgba(0,0,0,0.02)' }}>
                       <div style={{ fontSize: 13, fontWeight: 700, color: '#f8fafc' }}>{m.value}</div>
                       <div style={{ fontSize: 10, color: '#334155' }}>{m.label}</div>
                     </div>

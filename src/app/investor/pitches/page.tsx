@@ -54,8 +54,8 @@ function FeedbackModal({ pitch, onClose }: { pitch: PitchEvent; onClose: () => v
             {IMPRESSIONS.map(imp => (
               <button key={imp.value} onClick={() => setImpression(imp.value)} style={{
                 padding: '8px 14px', borderRadius: '10px', fontSize: 13, fontWeight: 500,
-                background: impression === imp.value ? `${imp.color}20` : 'rgba(255,255,255,0.04)',
-                border: `1px solid ${impression === imp.value ? imp.color : 'rgba(255,255,255,0.08)'}`,
+                background: impression === imp.value ? `${imp.color}20` : 'rgba(0,0,0,0.04)',
+                border: `1px solid ${impression === imp.value ? imp.color : 'rgba(0,0,0,0.08)'}`,
                 color: impression === imp.value ? imp.color : '#64748b',
                 cursor: 'pointer', fontFamily: 'Inter', transition: 'var(--transition-standard)',
               }}>
@@ -106,13 +106,13 @@ function FeedbackModal({ pitch, onClose }: { pitch: PitchEvent; onClose: () => v
               { value: 'deal', label: '🤝 Deal', color: '#D4D4D8' },
               { value: 'follow_up', label: '📅 Follow Up', color: '#A1A1AA' },
               { value: 'traction', label: 'Improve Traction', color: '#71717A' },
-              { value: 'pivot', label: '🔄 Pivot', color: '#FFFFFF' },
+              { value: 'pivot', label: '🔄 Pivot', color: 'var(--text-primary)' },
               { value: 'reject', label: '✖ Pass', color: '#52525B' },
             ].map(ns => (
               <button key={ns.value} onClick={() => setNextStep(ns.value)} style={{
                 padding: '7px 14px', borderRadius: '10px', fontSize: 12, fontWeight: 500,
-                background: nextStep === ns.value ? `${ns.color}20` : 'rgba(255,255,255,0.04)',
-                border: `1px solid ${nextStep === ns.value ? ns.color : 'rgba(255,255,255,0.08)'}`,
+                background: nextStep === ns.value ? `${ns.color}20` : 'rgba(0,0,0,0.04)',
+                border: `1px solid ${nextStep === ns.value ? ns.color : 'rgba(0,0,0,0.08)'}`,
                 color: nextStep === ns.value ? ns.color : '#64748b',
                 cursor: 'pointer', fontFamily: 'Inter',
               }}>
@@ -194,11 +194,11 @@ export default function InvestorPitchesPage() {
       </div>
 
       {/* Tabs */}
-      <div style={{ display: 'flex', gap: '4px', marginBottom: '24px', background: 'rgba(255,255,255,0.04)', borderRadius: '12px', padding: '4px', width: 'fit-content' }}>
+      <div style={{ display: 'flex', gap: '4px', marginBottom: '24px', background: 'rgba(0,0,0,0.04)', borderRadius: '12px', padding: '4px', width: 'fit-content' }}>
         {(['all', 'pending', 'active', 'closed'] as const).map(tab => (
           <button key={tab} onClick={() => setActiveTab(tab)} style={{
             padding: '8px 20px', borderRadius: '9px', border: 'none',
-            background: activeTab === tab ? 'rgba(255,255,255,0.3)' : 'transparent',
+            background: activeTab === tab ? 'rgba(0,0,0,0.3)' : 'transparent',
             color: activeTab === tab ? '#D8B4FE' : '#64748b',
             fontSize: '13px', fontWeight: 600, cursor: 'pointer',
             transition: 'var(--transition-standard)', fontFamily: 'Inter', textTransform: 'capitalize',
@@ -218,7 +218,7 @@ export default function InvestorPitchesPage() {
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '20px' }}>
                 <div style={{
                   width: 52, height: 52, borderRadius: '14px', flexShrink: 0,
-                  background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.25)',
+                  background: 'rgba(0,0,0,0.15)', border: '1px solid rgba(0,0,0,0.25)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontFamily: 'Space Grotesk', fontSize: 22, fontWeight: 800, color: '#D8B4FE',
                 }}>
@@ -238,7 +238,7 @@ export default function InvestorPitchesPage() {
                     </span>
                   </div>
 
-                  <p style={{ fontSize: 13, color: '#64748b', lineHeight: 1.5, marginBottom: '16px', background: 'rgba(255,255,255,0.02)', padding: '12px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                  <p style={{ fontSize: 13, color: '#64748b', lineHeight: 1.5, marginBottom: '16px', background: 'rgba(0,0,0,0.02)', padding: '12px', borderRadius: '8px', border: '1px solid rgba(0,0,0,0.05)' }}>
                     &ldquo;{pitch.request.message}&rdquo;
                   </p>
 

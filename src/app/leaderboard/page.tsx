@@ -100,7 +100,7 @@ export default function LeaderboardPage() {
 
         {/* Filters */}
         <div style={{ display: 'flex', gap: '12px', marginBottom: '32px', flexWrap: 'wrap', justifyContent: 'center' }}>
-          <div style={{ display: 'flex', gap: '4px', background: 'rgba(255,255,255,0.04)', borderRadius: '10px', padding: '4px' }}>
+          <div style={{ display: 'flex', gap: '4px', background: 'rgba(0,0,0,0.04)', borderRadius: '10px', padding: '4px' }}>
             {FILTERS.map(f => (
               <button key={f.key} onClick={() => setSortBy(f.key)} style={{
                 padding: '8px 16px', borderRadius: '7px', border: 'none', fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: 'Inter',
@@ -109,11 +109,11 @@ export default function LeaderboardPage() {
               }}>{f.label}</button>
             ))}
           </div>
-          <div style={{ display: 'flex', gap: '4px', background: 'rgba(255,255,255,0.04)', borderRadius: '10px', padding: '4px', overflowX: 'auto' }}>
+          <div style={{ display: 'flex', gap: '4px', background: 'rgba(0,0,0,0.04)', borderRadius: '10px', padding: '4px', overflowX: 'auto' }}>
             {INDUSTRY_FILTERS.map(ind => (
               <button key={ind} onClick={() => setIndustryFilter(ind)} style={{
                 padding: '8px 12px', borderRadius: '7px', border: 'none', fontSize: 12, cursor: 'pointer', fontFamily: 'Inter', fontWeight: 500, whiteSpace: 'nowrap',
-                background: industryFilter === ind ? 'rgba(255,255,255,0.2)' : 'transparent',
+                background: industryFilter === ind ? 'rgba(0,0,0,0.2)' : 'transparent',
                 color: industryFilter === ind ? '#D8B4FE' : '#64748b',
               }}>{ind}</button>
             ))}
@@ -176,7 +176,7 @@ export default function LeaderboardPage() {
             return (
               <div key={s.id} style={{
                 display: 'flex', alignItems: 'center', gap: '16px', padding: '16px 20px',
-                borderRadius: '14px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)',
+                borderRadius: '14px', background: 'rgba(0,0,0,0.02)', border: '1px solid rgba(0,0,0,0.06)',
                 transition: 'var(--transition-standard)',
               }}>
                 <div style={{ width: 32, fontSize: 16, fontFamily: 'Space Grotesk', fontWeight: 700, color: '#334155', textAlign: 'center', flexShrink: 0 }}>#{i + 4}</div>
@@ -208,7 +208,7 @@ export default function LeaderboardPage() {
         {/* Footer */}
         <div style={{ textAlign: 'center' }}>
           <p style={{ fontSize: 12, color: '#334155' }}>
-            Рейтинг обновляется в реальном времени · <Link href="/" style={{ color: '#FFFFFF', textDecoration: 'none' }}>Founder OS</Link> · UNTITLED Ecosystem
+            Рейтинг обновляется в реальном времени · <Link href="/" style={{ color: 'var(--text-primary)', textDecoration: 'none' }}>Founder OS</Link> · UNTITLED Ecosystem
           </p>
         </div>
       </div>

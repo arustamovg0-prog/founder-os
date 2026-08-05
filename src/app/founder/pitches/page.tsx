@@ -87,13 +87,13 @@ export default function FounderPitchesPage() {
       </div>
 
       {/* Analytics Funnel */}
-      <div className="card" style={{ marginBottom: '24px', background: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.15)' }}>
+      <div className="card" style={{ marginBottom: '24px', background: 'rgba(0,0,0,0.04)', borderColor: 'rgba(0,0,0,0.15)' }}>
         <div style={{ fontSize: 12, color: '#D8B4FE', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '20px' }}>
           {t('analyticsTitle')}
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 relative">
           {[
-            { label: t('funnel.sent'), val: pitches.length, color: '#FFFFFF', pct: 100 },
+            { label: t('funnel.sent'), val: pitches.length, color: 'var(--text-primary)', pct: 100 },
             { label: t('funnel.viewed'), val: pitches.filter(p => p.status !== 'pending').length, color: '#A1A1AA', pct: Math.round((pitches.filter(p => p.status !== 'pending').length / pitches.length) * 100) || 0 },
             { label: t('funnel.meeting'), val: pitches.filter(p => p.meeting.confirmedDate).length, color: '#71717A', pct: Math.round((pitches.filter(p => p.meeting.confirmedDate).length / pitches.length) * 100) || 0 },
             { label: t('funnel.decision'), val: pitches.filter(p => p.status === 'accepted' || p.status === 'rejected' || p.status === 'closed').length, color: '#D4D4D8', pct: Math.round((pitches.filter(p => p.status === 'accepted' || p.status === 'rejected' || p.status === 'closed').length / pitches.length) * 100) || 0 },
@@ -129,7 +129,7 @@ export default function FounderPitchesPage() {
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-7">
         {[
-          { label: t('stats.total'), value: pitches.length, color: '#FFFFFF' },
+          { label: t('stats.total'), value: pitches.length, color: 'var(--text-primary)' },
           { label: t('stats.accepted'), value: pitches.filter(p => p.status === 'accepted' || p.status === 'feedback_pending').length, color: '#D4D4D8' },
           { label: t('stats.pending'), value: pitches.filter(p => p.status === 'pending').length, color: '#71717A' },
           { label: t('stats.closed'), value: pitches.filter(p => p.status === 'closed').length, color: '#64748b' },
@@ -169,7 +169,7 @@ export default function FounderPitchesPage() {
                   </div>
                 </div>
 
-                <p style={{ fontSize: 13, color: '#64748b', lineHeight: 1.6, marginBottom: '16px', padding: '12px', background: 'rgba(255,255,255,0.02)', borderRadius: '8px', borderLeft: '3px solid rgba(255,255,255,0.3)' }}>
+                <p style={{ fontSize: 13, color: '#64748b', lineHeight: 1.6, marginBottom: '16px', padding: '12px', background: 'rgba(0,0,0,0.02)', borderRadius: '8px', borderLeft: '3px solid rgba(0,0,0,0.3)' }}>
                   &ldquo;{pitch.request.message}&rdquo;
                 </p>
 
@@ -185,7 +185,7 @@ export default function FounderPitchesPage() {
                     </div>
                     {pitch.meeting.meetingUrl && (
                       <a href={pitch.meeting.meetingUrl} target="_blank" rel="noopener noreferrer"
-                        style={{ fontSize: 13, color: '#FFFFFF', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        style={{ fontSize: 13, color: 'var(--text-primary)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px' }}>
                         {t('joinMeeting')} <ArrowRight size={12} />
                       </a>
                     )}

@@ -182,7 +182,7 @@ export default function EcosystemHealthPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-7">
         {[
           { label: 'Total Ecosystem MRR', value: fmt(totalMRR), sub: `ARR ${fmt(totalARR)}`, icon: <DollarSign size={18} />, color: '#D4D4D8', trend: 12 },
-          { label: 'Total MAU', value: totalMAU.toLocaleString(), sub: `${S.length} стартапов`, icon: <Users size={18} />, color: '#FFFFFF', trend: 8 },
+          { label: 'Total MAU', value: totalMAU.toLocaleString(), sub: `${S.length} стартапов`, icon: <Users size={18} />, color: 'var(--text-primary)', trend: 8 },
           { label: 'Investment Ready', value: `${investReady}/${S.length}`, sub: `${Math.round(investReady / S.length * 100)}% conversion`, icon: <Target size={18} />, color: '#A1A1AA', trend: 1 },
           { label: 'Critical Runway', value: criticalRunway > 0 ? `${criticalRunway}` : '0', sub: `Avg ${avgRunway} мес runway`, icon: <AlertTriangle size={18} />, color: criticalRunway > 0 ? '#52525B' : '#D4D4D8', trend: -criticalRunway },
         ].map((stat, i) => (
@@ -213,7 +213,7 @@ export default function EcosystemHealthPage() {
                   <stop offset="95%" stopColor="#FFFFFF" stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <CartesianGrid vertical={false} stroke="rgba(255,255,255,0.04)" />
+              <CartesianGrid vertical={false} stroke="rgba(0,0,0,0.04)" />
               <XAxis dataKey="month" tick={{ fontSize: 11, fill: '#475569' }} axisLine={false} tickLine={false} />
               <YAxis tickFormatter={v => `$${v / 1000}K`} tick={{ fontSize: 11, fill: '#475569' }} axisLine={false} tickLine={false} />
               <Tooltip content={<CT />} />
@@ -230,7 +230,7 @@ export default function EcosystemHealthPage() {
           </div>
           <ResponsiveContainer width="100%" height={220}>
             <RadarChart data={radarData} cx="50%" cy="50%" outerRadius="70%">
-              <PolarGrid stroke="rgba(255,255,255,0.06)" />
+              <PolarGrid stroke="rgba(0,0,0,0.06)" />
               <PolarAngleAxis dataKey="metric" tick={{ fontSize: 9, fill: '#475569' }} />
               <PolarRadiusAxis angle={30} domain={[0, 100]} tick={{ fontSize: 9, fill: '#334155' }} />
               <Radar name="Ecosystem" dataKey="value" stroke="#D4D4D8" fill="#D4D4D8" fillOpacity={0.2} strokeWidth={2} />
@@ -275,7 +275,7 @@ export default function EcosystemHealthPage() {
           </div>
           <ResponsiveContainer width="100%" height={200}>
             <BarChart data={mrrByStage} barGap={4}>
-              <CartesianGrid vertical={false} stroke="rgba(255,255,255,0.04)" />
+              <CartesianGrid vertical={false} stroke="rgba(0,0,0,0.04)" />
               <XAxis dataKey="stage" tick={{ fontSize: 9, fill: '#475569' }} axisLine={false} tickLine={false} />
               <YAxis tickFormatter={v => `$${v / 1000}K`} tick={{ fontSize: 9, fill: '#475569' }} axisLine={false} tickLine={false} />
               <Tooltip content={<CT />} />
@@ -364,7 +364,7 @@ export default function EcosystemHealthPage() {
                 const sc = score >= 75 ? '#D4D4D8' : score >= 50 ? '#71717A' : '#52525B';
                 const medals = ['1', '2', '3', '4', '5'];
                 return (
-                  <div key={s.id} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 14px', borderRadius: '10px', background: i === 0 ? 'rgba(212,212,216,0.06)' : 'rgba(255,255,255,0.02)', border: `1px solid ${i === 0 ? 'rgba(212,212,216,0.15)' : 'rgba(255,255,255,0.04)'}` }}>
+                  <div key={s.id} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 14px', borderRadius: '10px', background: i === 0 ? 'rgba(212,212,216,0.06)' : 'rgba(0,0,0,0.02)', border: `1px solid ${i === 0 ? 'rgba(212,212,216,0.15)' : 'rgba(0,0,0,0.04)'}` }}>
                     <span style={{ fontSize: 16 }}>{medals[i]}</span>
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ fontWeight: 600, fontSize: 13, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{s.name}</div>

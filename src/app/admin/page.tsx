@@ -120,13 +120,13 @@ export default function AdminDashboard() {
       {/* KPIs */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-7">
         {[
-          { label: t('kpis.startups'), value: startups.length, icon: <Users size={18} />, color: '#FFFFFF', sub: t('kpis.startupsSub') },
+          { label: t('kpis.startups'), value: startups.length, icon: <Users size={18} />, color: 'var(--text-primary)', sub: t('kpis.startupsSub') },
           { label: t('kpis.mrr'), value: fmt(totalMRR), icon: <TrendingUp size={18} />, color: '#D4D4D8', sub: t('kpis.mrrSub') },
           { label: t('kpis.avgScore'), value: `${avgScore}/100`, icon: <Brain size={18} />, color: '#A1A1AA', sub: t('kpis.avgScoreSub') },
           { label: t('kpis.ready'), value: readyCount, icon: <Zap size={18} />, color: '#71717A', sub: t('kpis.readySub') },
         ].map((kpi, i) => (
           <div key={i} className="card stat-card animate-fade-in" style={{ animationDelay: `${i * 50}ms` }}>
-            <div style={{ width: 36, height: 36, borderRadius: 8, background: `rgba(255,255,255,0.03)`, border: `1px solid rgba(255,255,255,0.1)`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: kpi.color, marginBottom: 12 }}>
+            <div style={{ width: 36, height: 36, borderRadius: 8, background: `rgba(0,0,0,0.03)`, border: `1px solid rgba(0,0,0,0.1)`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: kpi.color, marginBottom: 12 }}>
               {kpi.icon}
             </div>
             <div style={{ fontFamily: 'Space Grotesk', fontSize: 28, fontWeight: 800, color: kpi.color }}>{kpi.value}</div>
@@ -164,7 +164,7 @@ export default function AdminDashboard() {
           </div>
           <ResponsiveContainer width="100%" height={200}>
             <BarChart data={stageDistrib} barSize={32}>
-              <CartesianGrid vertical={false} stroke="rgba(255,255,255,0.04)" />
+              <CartesianGrid vertical={false} stroke="rgba(0,0,0,0.04)" />
               <XAxis dataKey="stage" tick={{ fontSize: 11, fill: '#475569' }} axisLine={false} tickLine={false} />
               <YAxis tick={{ fontSize: 11, fill: '#475569' }} axisLine={false} tickLine={false} allowDecimals={false} />
               <Tooltip content={<CustomTooltip />} />
@@ -184,7 +184,7 @@ export default function AdminDashboard() {
           </div>
           <ResponsiveContainer width="100%" height={200}>
             <BarChart data={scoreData} barSize={32}>
-              <CartesianGrid vertical={false} stroke="rgba(255,255,255,0.04)" />
+              <CartesianGrid vertical={false} stroke="rgba(0,0,0,0.04)" />
               <XAxis dataKey="name" tick={{ fontSize: 11, fill: '#475569' }} axisLine={false} tickLine={false} />
               <YAxis domain={[0, 100]} tick={{ fontSize: 11, fill: '#475569' }} axisLine={false} tickLine={false} />
               <Tooltip content={<CustomTooltip />} />
@@ -208,7 +208,7 @@ export default function AdminDashboard() {
             <thead>
               <tr>
                 {[0, 1, 2, 3, 4, 5, 6].map(i => (
-                  <th key={i} style={{ textAlign: 'left', padding: '8px 12px', fontSize: 11, color: '#475569', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                  <th key={i} style={{ textAlign: 'left', padding: '8px 12px', fontSize: 11, color: '#475569', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px', borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
                     {t(`table.cols.${i}`)}
                   </th>
                 ))}
@@ -219,8 +219,8 @@ export default function AdminDashboard() {
                 const score = s.aiScores.overallReadinessScore || 0;
                 const scoreColor = score >= 75 ? '#D4D4D8' : score >= 50 ? '#71717A' : '#52525B';
                 return (
-                  <tr key={s.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)', transition: 'background-color 150ms var(--ease-out)' }}
-                    onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.03)')}
+                  <tr key={s.id} style={{ borderBottom: '1px solid rgba(0,0,0,0.04)', transition: 'background-color 150ms var(--ease-out)' }}
+                    onMouseEnter={e => (e.currentTarget.style.background = 'rgba(0,0,0,0.03)')}
                     onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
                     <td style={{ padding: '12px 12px' }}>
                       <div style={{ fontWeight: 600, fontSize: 14 }}>{s.name}</div>

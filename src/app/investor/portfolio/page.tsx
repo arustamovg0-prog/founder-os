@@ -85,7 +85,7 @@ export default function PortfolioPage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-7">
         {[
           { label: 'Total MRR (Watchlist)', value: fmt(totalMRR), icon: <DollarSign size={18} />, color: '#D4D4D8' },
-          { label: 'Total MAU', value: totalMAU.toLocaleString(), icon: <TrendingUp size={18} />, color: '#FFFFFF' },
+          { label: 'Total MAU', value: totalMAU.toLocaleString(), icon: <TrendingUp size={18} />, color: 'var(--text-primary)' },
           { label: 'Avg AI Score', value: `${avgScore}/100`, icon: <Briefcase size={18} />, color: '#A1A1AA' },
         ].map((stat, i) => (
           <div key={i} className="stat-card">
@@ -104,7 +104,7 @@ export default function PortfolioPage() {
           </div>
           <ResponsiveContainer width="100%" height={220}>
             <BarChart data={mrrData} barGap={4}>
-              <CartesianGrid vertical={false} stroke="rgba(255,255,255,0.04)" />
+              <CartesianGrid vertical={false} stroke="rgba(0,0,0,0.04)" />
               <XAxis dataKey="name" tick={{ fontSize: 11, fill: '#475569' }} axisLine={false} tickLine={false} />
               <YAxis tickFormatter={v => `$${v / 1000}K`} tick={{ fontSize: 11, fill: '#475569' }} axisLine={false} tickLine={false} />
               <Tooltip content={<CustomTooltip />} />
@@ -127,7 +127,7 @@ export default function PortfolioPage() {
                 ))}
               </Pie>
               <Legend formatter={v => <span style={{ fontSize: 12, color: '#94a3b8' }}>{v}</span>} />
-              <Tooltip formatter={(v) => [`${v} startup${(v as number) > 1 ? 's' : ''}`, 'Count']} contentStyle={{ background: '#0d0d20', border: '1px solid rgba(255,255,255,0.3)', borderRadius: '12px' }} />
+              <Tooltip formatter={(v) => [`${v} startup${(v as number) > 1 ? 's' : ''}`, 'Count']} contentStyle={{ background: '#0d0d20', border: '1px solid rgba(0,0,0,0.3)', borderRadius: '12px' }} />
             </PieChart>
           </ResponsiveContainer>
         </div>
@@ -143,7 +143,7 @@ export default function PortfolioPage() {
             <thead>
               <tr>
                 {['Company', 'Stage', 'MRR', 'MAU', 'LTV/CAC', 'Runway', 'AI Score'].map(h => (
-                  <th key={h} style={{ textAlign: 'left', padding: '8px 12px', fontSize: 11, color: '#475569', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                  <th key={h} style={{ textAlign: 'left', padding: '8px 12px', fontSize: 11, color: '#475569', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px', borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
                     {h}
                   </th>
                 ))}
@@ -154,8 +154,8 @@ export default function PortfolioPage() {
                 const score = s.aiScores.overallReadinessScore || 0;
                 const scoreColor = score >= 75 ? '#D4D4D8' : score >= 50 ? '#71717A' : '#52525B';
                 return (
-                  <tr key={s.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)', transition: 'background 160ms var(--ease-out)' }}
-                    onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.02)')}
+                  <tr key={s.id} style={{ borderBottom: '1px solid rgba(0,0,0,0.04)', transition: 'background 160ms var(--ease-out)' }}
+                    onMouseEnter={e => (e.currentTarget.style.background = 'rgba(0,0,0,0.02)')}
                     onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
                     <td style={{ padding: '14px 12px' }}>
                       <div style={{ fontWeight: 600, fontSize: 14 }}>{s.name}</div>

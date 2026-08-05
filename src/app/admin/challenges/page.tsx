@@ -117,7 +117,7 @@ export default function AdminChallengesPage() {
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-7">
         {[
-          { label: 'Всего задач', value: stats.total, color: '#FFFFFF' },
+          { label: 'Всего задач', value: stats.total, color: 'var(--text-primary)' },
           { label: 'Открытых', value: stats.open, color: '#D4D4D8' },
           { label: 'Всего заявок', value: stats.applications, color: '#71717A' },
         ].map((s, i) => (
@@ -129,9 +129,9 @@ export default function AdminChallengesPage() {
       </div>
 
       {/* Table */}
-      <div style={{ borderRadius: 14, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.06)' }}>
+      <div style={{ borderRadius: 14, overflow: 'hidden', border: '1px solid rgba(0,0,0,0.06)' }}>
         {/* Table header */}
-        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 80px 80px 120px', gap: 0, padding: '10px 16px', background: 'rgba(255,255,255,0.03)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 80px 80px 120px', gap: 0, padding: '10px 16px', background: 'rgba(0,0,0,0.03)', borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
           {['Задача', 'Компания', 'Вознаграждение', 'Заявки', 'Дней', 'Статус / Действия'].map(h => (
             <div key={h} style={{ fontSize: 11, fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{h}</div>
           ))}
@@ -139,8 +139,8 @@ export default function AdminChallengesPage() {
 
         {/* Rows */}
         {challenges.map((ch, i) => (
-          <div key={ch.id} style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 80px 80px 120px', gap: 0, padding: '14px 16px', borderBottom: i < challenges.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none', alignItems: 'center', transition: 'background 160ms var(--ease-out)' }}
-            onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.background = 'rgba(255,255,255,0.02)'; }}
+          <div key={ch.id} style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 80px 80px 120px', gap: 0, padding: '14px 16px', borderBottom: i < challenges.length - 1 ? '1px solid rgba(0,0,0,0.04)' : 'none', alignItems: 'center', transition: 'background 160ms var(--ease-out)' }}
+            onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.background = 'rgba(0,0,0,0.02)'; }}
             onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.background = 'transparent'; }}
           >
             <div>
@@ -166,7 +166,7 @@ export default function AdminChallengesPage() {
               <button onClick={() => toggleStatus(ch.id)} style={{ padding: '3px 8px', borderRadius: 99, fontSize: 10, fontWeight: 700, cursor: 'pointer', background: `${STATUS_COLORS[ch.status]}15`, border: `1px solid ${STATUS_COLORS[ch.status]}30`, color: STATUS_COLORS[ch.status], fontFamily: 'Inter' }}>
                 {STATUS_LABELS[ch.status]}
               </button>
-              <button onClick={() => setViewingId(ch.id)} style={{ width: 26, height: 26, borderRadius: 6, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b' }}>
+              <button onClick={() => setViewingId(ch.id)} style={{ width: 26, height: 26, borderRadius: 6, background: 'rgba(0,0,0,0.04)', border: '1px solid rgba(0,0,0,0.08)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b' }}>
                 <Eye size={12} />
               </button>
               <button onClick={() => openEdit(ch)} style={{ width: 26, height: 26, borderRadius: 6, background: 'rgba(161,161,170,0.1)', border: '1px solid rgba(161,161,170,0.2)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#A1A1AA' }}>
@@ -183,7 +183,7 @@ export default function AdminChallengesPage() {
       {/* Create/Edit Modal */}
       {showForm && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)', zIndex: 999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
-          <div style={{ width: '100%', maxWidth: 560, borderRadius: 20, background: 'rgba(10,10,28,0.98)', border: '1px solid rgba(255,255,255,0.1)', padding: 28, maxHeight: '90vh', overflowY: 'auto' }}>
+          <div style={{ width: '100%', maxWidth: 560, borderRadius: 20, background: 'rgba(10,10,28,0.98)', border: '1px solid rgba(0,0,0,0.1)', padding: 28, maxHeight: '90vh', overflowY: 'auto' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
               <h2 style={{ fontFamily: 'Space Grotesk', fontSize: 18, fontWeight: 700 }}>{editId ? 'Редактировать задачу' : 'Создать задачу'}</h2>
               <button onClick={() => setShowForm(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748b' }}><X size={18} /></button>
@@ -245,7 +245,7 @@ export default function AdminChallengesPage() {
             </div>
 
             <div style={{ display: 'flex', gap: 10, marginTop: 20 }}>
-              <button onClick={() => setShowForm(false)} style={{ flex: 1, padding: '10px', borderRadius: 10, fontSize: 13, background: 'none', border: '1px solid rgba(255,255,255,0.1)', color: '#64748b', cursor: 'pointer', fontFamily: 'Inter' }}>
+              <button onClick={() => setShowForm(false)} style={{ flex: 1, padding: '10px', borderRadius: 10, fontSize: 13, background: 'none', border: '1px solid rgba(0,0,0,0.1)', color: '#64748b', cursor: 'pointer', fontFamily: 'Inter' }}>
                 Отмена
               </button>
               <button onClick={save} disabled={!form.title || !form.company} style={{ flex: 2, padding: '10px', borderRadius: 10, fontSize: 13, fontWeight: 700, cursor: 'pointer', background: 'linear-gradient(135deg, rgba(82,82,91,0.2), rgba(113,113,122,0.2))', border: '1px solid rgba(82,82,91,0.3)', color: '#52525B', fontFamily: 'Space Grotesk', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
@@ -264,7 +264,7 @@ export default function AdminChallengesPage() {
             <h3 style={{ fontFamily: 'Space Grotesk', fontSize: 16, fontWeight: 700, textAlign: 'center', marginBottom: 8 }}>Удалить задачу?</h3>
             <p style={{ fontSize: 13, color: '#64748b', textAlign: 'center', marginBottom: 20 }}>Это действие нельзя отменить. Все заявки будут удалены.</p>
             <div style={{ display: 'flex', gap: 10 }}>
-              <button onClick={() => setDeletingId(null)} style={{ flex: 1, padding: '9px', borderRadius: 8, border: '1px solid rgba(255,255,255,0.1)', background: 'none', color: '#64748b', cursor: 'pointer', fontFamily: 'Inter', fontSize: 13 }}>Отмена</button>
+              <button onClick={() => setDeletingId(null)} style={{ flex: 1, padding: '9px', borderRadius: 8, border: '1px solid rgba(0,0,0,0.1)', background: 'none', color: '#64748b', cursor: 'pointer', fontFamily: 'Inter', fontSize: 13 }}>Отмена</button>
               <button onClick={() => deleteChallenge(deletingId)} style={{ flex: 1, padding: '9px', borderRadius: 8, border: '1px solid rgba(82,82,91,0.4)', background: 'rgba(82,82,91,0.15)', color: '#52525B', cursor: 'pointer', fontFamily: 'Inter', fontSize: 13, fontWeight: 700 }}>Удалить</button>
             </div>
           </div>
@@ -274,7 +274,7 @@ export default function AdminChallengesPage() {
       {/* View modal */}
       {viewing && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)', zIndex: 999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
-          <div style={{ width: '100%', maxWidth: 520, borderRadius: 20, background: 'rgba(10,10,28,0.98)', border: '1px solid rgba(255,255,255,0.1)', padding: 28 }}>
+          <div style={{ width: '100%', maxWidth: 520, borderRadius: 20, background: 'rgba(10,10,28,0.98)', border: '1px solid rgba(0,0,0,0.1)', padding: 28 }}>
             <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 16 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                 <span style={{ fontSize: 32 }}>{viewing.companyLogo}</span>

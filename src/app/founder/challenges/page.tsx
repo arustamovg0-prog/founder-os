@@ -139,7 +139,7 @@ export default function ChallengesPage() {
           <div style={{ display: 'flex', gap: 12 }}>
             {[
               { label: 'Задач открыто', value: CHALLENGES.filter(c => c.status === 'open').length, color: '#D4D4D8' },
-              { label: 'Всего заявок', value: CHALLENGES.reduce((s, c) => s + c.applicants, 0), color: '#FFFFFF' },
+              { label: 'Всего заявок', value: CHALLENGES.reduce((s, c) => s + c.applicants, 0), color: 'var(--text-primary)' },
             ].map((s, i) => (
               <div key={i} style={{ padding: '10px 16px', borderRadius: 10, background: `${s.color}10`, border: `1px solid ${s.color}25`, textAlign: 'center' }}>
                 <div style={{ fontSize: 18, fontWeight: 800, color: s.color, fontFamily: 'Space Grotesk' }}>{s.value}</div>
@@ -156,8 +156,8 @@ export default function ChallengesPage() {
         {(['all', 'pilot', 'grant', 'investment'] as const).map(f => (
           <button key={f} onClick={() => setFilter(f)} style={{
             padding: '6px 14px', borderRadius: 99, fontSize: 12, fontWeight: 600, cursor: 'pointer',
-            background: filter === f ? (f === 'all' ? 'rgba(255,255,255,0.15)' : `${REWARD_COLORS[f]}15`) : 'rgba(255,255,255,0.04)',
-            border: filter === f ? `1px solid ${f === 'all' ? 'rgba(255,255,255,0.4)' : `${REWARD_COLORS[f]}40`}` : '1px solid rgba(255,255,255,0.08)',
+            background: filter === f ? (f === 'all' ? 'rgba(0,0,0,0.15)' : `${REWARD_COLORS[f]}15`) : 'rgba(0,0,0,0.04)',
+            border: filter === f ? `1px solid ${f === 'all' ? 'rgba(0,0,0,0.4)' : `${REWARD_COLORS[f]}40`}` : '1px solid rgba(0,0,0,0.08)',
             color: filter === f ? (f === 'all' ? '#D8B4FE' : REWARD_COLORS[f]) : '#64748b', fontFamily: 'Inter',
           }}>
             {f === 'all' ? 'Все задачи' : REWARD_LABELS[f]}
@@ -170,11 +170,11 @@ export default function ChallengesPage() {
         {filtered.map(ch => (
           <div key={ch.id} style={{
             borderRadius: 16, overflow: 'hidden',
-            background: 'rgba(13,13,32,0.8)', border: `1px solid ${ch.applied ? 'rgba(212,212,216,0.25)' : 'rgba(255,255,255,0.06)'}`,
+            background: 'rgba(13,13,32,0.8)', border: `1px solid ${ch.applied ? 'rgba(212,212,216,0.25)' : 'rgba(0,0,0,0.06)'}`,
             transition: 'var(--transition-standard)',
           }}
-            onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.borderColor = ch.applied ? 'rgba(212,212,216,0.4)' : 'rgba(255,255,255,0.12)'; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor = ch.applied ? 'rgba(212,212,216,0.25)' : 'rgba(255,255,255,0.06)'; }}
+            onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.borderColor = ch.applied ? 'rgba(212,212,216,0.4)' : 'rgba(0,0,0,0.12)'; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor = ch.applied ? 'rgba(212,212,216,0.25)' : 'rgba(0,0,0,0.06)'; }}
           >
             {/* Top bar */}
             <div style={{ height: 3, background: `linear-gradient(90deg, ${REWARD_COLORS[ch.rewardType]}, transparent)` }} />
@@ -182,7 +182,7 @@ export default function ChallengesPage() {
             <div style={{ padding: 20 }}>
               {/* Header */}
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, marginBottom: 14 }}>
-                <div style={{ width: 44, height: 44, borderRadius: 10, flexShrink: 0, background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22 }}>
+                <div style={{ width: 44, height: 44, borderRadius: 10, flexShrink: 0, background: 'rgba(0,0,0,0.06)', border: '1px solid rgba(0,0,0,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22 }}>
                   {ch.companyLogo}
                 </div>
                 <div style={{ flex: 1 }}>
@@ -208,7 +208,7 @@ export default function ChallengesPage() {
               {/* Tags */}
               <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 14 }}>
                 {ch.tags.map(tag => (
-                  <span key={tag} style={{ padding: '2px 8px', borderRadius: 99, fontSize: 10, fontWeight: 600, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', color: '#475569' }}>
+                  <span key={tag} style={{ padding: '2px 8px', borderRadius: 99, fontSize: 10, fontWeight: 600, background: 'rgba(0,0,0,0.04)', border: '1px solid rgba(0,0,0,0.08)', color: '#475569' }}>
                     <Tag size={8} style={{ display: 'inline', marginRight: 3 }} />{tag}
                   </span>
                 ))}
@@ -247,7 +247,7 @@ export default function ChallengesPage() {
                 ) : (
                   <button onClick={() => setApplyingTo(ch.id)} style={{
                     padding: '7px 14px', borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: 'pointer',
-                    background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.3)', color: '#D8B4FE',
+                    background: 'rgba(0,0,0,0.15)', border: '1px solid rgba(0,0,0,0.3)', color: '#D8B4FE',
                     display: 'flex', alignItems: 'center', gap: 6, fontFamily: 'Inter', transition: 'var(--transition-standard)',
                   }}>
                     <ChevronRight size={12} />Подать заявку
@@ -258,7 +258,7 @@ export default function ChallengesPage() {
 
             {/* Apply form */}
             {applyingTo === ch.id && (
-              <div style={{ padding: '16px 20px', borderTop: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.04)' }}>
+              <div style={{ padding: '16px 20px', borderTop: '1px solid rgba(0,0,0,0.06)', background: 'rgba(0,0,0,0.04)' }}>
                 <p style={{ fontSize: 12, color: '#64748b', marginBottom: 10 }}>Опишите ваш подход к решению задачи и почему именно ваша команда:</p>
                 <textarea
                   value={applicationText}
@@ -266,18 +266,18 @@ export default function ChallengesPage() {
                   placeholder="Мы планируем решить эту задачу с помощью..."
                   style={{
                     width: '100%', minHeight: 100, padding: '10px 12px', borderRadius: 8, resize: 'vertical',
-                    background: 'rgba(5,5,16,0.6)', border: '1px solid rgba(255,255,255,0.1)', color: '#f8fafc',
+                    background: 'rgba(5,5,16,0.6)', border: '1px solid rgba(0,0,0,0.1)', color: '#f8fafc',
                     fontSize: 13, fontFamily: 'Inter', outline: 'none',
                   }}
                 />
                 <div style={{ display: 'flex', gap: 8, marginTop: 10, justifyContent: 'flex-end' }}>
-                  <button onClick={() => setApplyingTo(null)} style={{ padding: '7px 14px', borderRadius: 8, fontSize: 12, background: 'none', border: '1px solid rgba(255,255,255,0.1)', color: '#64748b', cursor: 'pointer', fontFamily: 'Inter' }}>
+                  <button onClick={() => setApplyingTo(null)} style={{ padding: '7px 14px', borderRadius: 8, fontSize: 12, background: 'none', border: '1px solid rgba(0,0,0,0.1)', color: '#64748b', cursor: 'pointer', fontFamily: 'Inter' }}>
                     Отмена
                   </button>
                   <button onClick={() => submitApplication(ch.id)} disabled={!applicationText.trim()} style={{
                     padding: '7px 14px', borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: applicationText.trim() ? 'pointer' : 'not-allowed',
-                    background: applicationText.trim() ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.04)',
-                    border: `1px solid ${applicationText.trim() ? 'rgba(255,255,255,0.5)' : 'rgba(255,255,255,0.08)'}`,
+                    background: applicationText.trim() ? 'rgba(0,0,0,0.3)' : 'rgba(0,0,0,0.04)',
+                    border: `1px solid ${applicationText.trim() ? 'rgba(0,0,0,0.5)' : 'rgba(0,0,0,0.08)'}`,
                     color: applicationText.trim() ? '#D8B4FE' : '#334155', fontFamily: 'Inter',
                   }}>
                     <Send size={12} style={{ display: 'inline', marginRight: 6 }} />Отправить

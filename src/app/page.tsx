@@ -124,21 +124,21 @@ export default function LoginPage() {
         {/* Left — Branding (hidden on small mobile only) */}
         <motion.div variants={containerVariants} initial="hidden" animate="visible" className="hidden lg:block lg:col-span-7 pr-0 lg:pr-10">
           <motion.div variants={itemVariants} className="flex items-center gap-3 mb-8 lg:mb-12">
-            <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
-              <Command size={22} color="white" />
+            <div className="w-12 h-12 rounded-xl bg-black/5 border border-black/10 flex items-center justify-center">
+              <Command size={22} color="currentColor" />
             </div>
             <div>
               <div className="font-space font-semibold text-lg lg:text-xl">Founder OS</div>
-              <div className="text-[10px] lg:text-[11px] text-[#a1a1aa] font-medium tracking-widest uppercase">by UNTITLED</div>
+              <div className="text-[10px] lg:text-[11px] text-[var(--text-secondary)] font-medium tracking-widest uppercase">by UNTITLED</div>
             </div>
           </motion.div>
 
           <motion.h1 variants={itemVariants} className="font-space font-bold leading-tight tracking-tight mb-6 text-4xl sm:text-5xl lg:text-[56px]">
             Turn Chaos<br />
-            <span className="text-[#a1a1aa]">Into System.</span>
+            <span className="text-[var(--text-secondary)]">Into System.</span>
           </motion.h1>
 
-          <motion.p variants={itemVariants} className="text-[#52525b] text-base lg:text-[17px] leading-relaxed mb-8 lg:mb-12 max-w-[440px]">
+          <motion.p variants={itemVariants} className="text-[var(--text-muted)] text-base lg:text-[17px] leading-relaxed mb-8 lg:mb-12 max-w-[440px]">
             The definitive operating system for startups. From inception to investment, meticulously engineered for founders and investors.
           </motion.p>
 
@@ -151,7 +151,7 @@ export default function LoginPage() {
               <motion.div key={i} variants={itemVariants} style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
                 <div style={{
                   width: 36, height: 36, borderRadius: 8, flexShrink: 0,
-                  background: 'rgba(255,255,255,0.03)',
+                  background: 'rgba(0,0,0,0.03)',
                   border: '1px solid var(--border)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   color: 'var(--text-primary)',
@@ -171,18 +171,18 @@ export default function LoginPage() {
         <motion.div initial={{ opacity: 0, scale: 0.98, filter: 'blur(8px)' }} animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }} transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1], delay: 0.2 }} className="lg:col-span-5">
           {/* Mobile-only branding (shown only on phones < 1024px) */}
           <div className="flex lg:hidden items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
-              <Command size={18} color="white" />
+            <div className="w-10 h-10 rounded-xl bg-black/5 border border-black/10 flex items-center justify-center">
+              <Command size={18} color="currentColor" />
             </div>
             <div>
               <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, fontSize: 16 }}>Founder OS</div>
-              <div style={{ fontSize: 10, color: '#a1a1aa', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px' }}>by UNTITLED</div>
+              <div style={{ fontSize: 10, color: 'var(--text-secondary)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px' }}>by UNTITLED</div>
             </div>
           </div>
-          <div className="card bg-black/80 backdrop-blur-3xl p-6 lg:p-10">
+          <div className="card bg-white/80 backdrop-blur-3xl p-6 lg:p-10">
             
             {/* Mode tabs */}
-            <div style={{ display: 'flex', gap: '4px', marginBottom: '32px', background: 'rgba(255,255,255,0.03)', borderRadius: '12px', padding: '4px' }}>
+            <div style={{ display: 'flex', gap: '4px', marginBottom: '32px', background: 'rgba(0,0,0,0.04)', borderRadius: '12px', padding: '4px' }}>
               {(['login', 'register', 'magic'] as const).map((m) => (
                 <button
                   key={m}
@@ -199,8 +199,9 @@ export default function LoginPage() {
                     <motion.div
                       layoutId="activeTab"
                       style={{
-                        position: 'absolute', inset: 0, background: 'rgba(255,255,255,0.1)',
-                        borderRadius: '8px', zIndex: -1, border: '1px solid rgba(255,255,255,0.05)'
+                        position: 'absolute', inset: 0, background: '#ffffff',
+                        borderRadius: '8px', zIndex: -1, border: '1px solid rgba(0,0,0,0.05)',
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
                       }}
                       transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
                     />
@@ -228,7 +229,7 @@ export default function LoginPage() {
                         aria-label="Role"
                         value={role}
                         onChange={e => setRole(e.target.value as UserRole)}
-                        style={{ appearance: 'none', backgroundColor: '#000' }}
+                        style={{ appearance: 'none', backgroundColor: 'var(--bg-card)' }}
                       >
                         <option value="founder">Founder</option>
                         <option value="investor">Investor</option>

@@ -45,7 +45,7 @@ export default function StageReviewPage() {
         {[
           { label: 'Pending Review', value: pending.length, color: '#71717A', icon: <Clock size={18} /> },
           { label: 'Approved Today', value: done.filter(d => verifiedMap[d.startupId] === 'approved').length, color: '#D4D4D8', icon: <CheckCircle size={18} /> },
-          { label: 'Total Gatekeeper Stages', value: ROADMAP_STAGES.filter(s => s.isGatekeeper).length, color: '#FFFFFF', icon: <Shield size={18} /> },
+          { label: 'Total Gatekeeper Stages', value: ROADMAP_STAGES.filter(s => s.isGatekeeper).length, color: 'var(--text-primary)', icon: <Shield size={18} /> },
         ].map((stat, i) => (
           <div key={i} className="stat-card">
             <div style={{ width: 36, height: 36, borderRadius: 8, background: `${stat.color}20`, border: `1px solid ${stat.color}30`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: stat.color, marginBottom: 12 }}>{stat.icon}</div>

@@ -40,17 +40,17 @@ export function ImpersonationBanner({ targetName, targetRole, onExit }: Imperson
         <span style={{ fontSize: 13, fontWeight: 700, color: 'white' }}>
           {t('adminMode')}
         </span>
-        <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.9)', background: 'rgba(0,0,0,0.2)', padding: '2px 10px', borderRadius: '99px' }}>
+        <span style={{ fontSize: 13, color: 'rgba(0,0,0,0.9)', background: 'rgba(0,0,0,0.2)', padding: '2px 10px', borderRadius: '99px' }}>
           {targetName} ({targetRole})
         </span>
-        <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.7)' }}>{t('actionsLogged')}</span>
+        <span style={{ fontSize: 11, color: 'rgba(0,0,0,0.7)' }}>{t('actionsLogged')}</span>
       </div>
       <button
         onClick={onExit}
         style={{
           display: 'flex', alignItems: 'center', gap: '6px',
           padding: '6px 16px', borderRadius: '8px',
-          background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.3)',
+          background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(0,0,0,0.3)',
           color: 'white', cursor: 'pointer', fontSize: 12, fontWeight: 600, fontFamily: 'Inter',
         }}
       >

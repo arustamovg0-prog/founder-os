@@ -148,7 +148,7 @@ export default function RoadmapPage() {
       </div>
 
       {/* Overall Progress */}
-      <div className="card" style={{ marginBottom: '28px', background: 'rgba(255,255,255,0.06)', borderColor: 'rgba(255,255,255,0.2)' }}>
+      <div className="card" style={{ marginBottom: '28px', background: 'rgba(0,0,0,0.06)', borderColor: 'rgba(0,0,0,0.2)' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
           <div>
             <div style={{ fontSize: 24, fontWeight: 800, fontFamily: 'Space Grotesk, sans-serif', color: '#D8B4FE' }}>
@@ -177,8 +177,8 @@ export default function RoadmapPage() {
           return (
             <div key={stage.id} className="stagger-item" style={{
               borderRadius: '16px',
-              border: `1px solid ${isActive ? 'rgba(255,255,255,0.3)' : state === 'completed' ? 'rgba(212,212,216,0.2)' : 'rgba(255,255,255,0.06)'}`,
-              background: isActive ? 'rgba(255,255,255,0.05)' : state === 'locked' ? 'rgba(255,255,255,0.01)' : 'rgba(13,13,32,0.8)',
+              border: `1px solid ${isActive ? 'rgba(0,0,0,0.3)' : state === 'completed' ? 'rgba(212,212,216,0.2)' : 'rgba(0,0,0,0.06)'}`,
+              background: isActive ? 'rgba(0,0,0,0.05)' : state === 'locked' ? 'rgba(0,0,0,0.01)' : 'rgba(13,13,32,0.8)',
               overflow: 'hidden',
               transition: 'var(--transition-standard)',
             }}>
@@ -196,8 +196,8 @@ export default function RoadmapPage() {
                 {/* Step number */}
                 <div style={{
                   width: 40, height: 40, borderRadius: '50%', flexShrink: 0,
-                  background: state === 'completed' ? 'rgba(212,212,216,0.2)' : state === 'locked' ? 'rgba(255,255,255,0.03)' : `${phaseColor}20`,
-                  border: `2px solid ${state === 'completed' ? '#D4D4D8' : state === 'locked' ? 'rgba(255,255,255,0.08)' : phaseColor}`,
+                  background: state === 'completed' ? 'rgba(212,212,216,0.2)' : state === 'locked' ? 'rgba(0,0,0,0.03)' : `${phaseColor}20`,
+                  border: `2px solid ${state === 'completed' ? '#D4D4D8' : state === 'locked' ? 'rgba(0,0,0,0.08)' : phaseColor}`,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, fontSize: 15,
                   color: state === 'completed' ? '#D4D4D8' : state === 'locked' ? '#334155' : phaseColor,
@@ -240,7 +240,7 @@ export default function RoadmapPage() {
 
               {/* Expanded Content */}
               {isExpanded && state !== 'locked' && (
-                <div style={{ padding: '0 24px 24px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+                <div style={{ padding: '0 24px 24px', borderTop: '1px solid rgba(0,0,0,0.06)' }}>
                   <div style={{ paddingTop: '20px' }}>
                     <div style={{ fontSize: 12, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>
                       {t('requiredArtifacts')}
@@ -252,8 +252,8 @@ export default function RoadmapPage() {
                           <div key={art.key} style={{
                             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                             padding: '12px 16px', borderRadius: '10px',
-                            background: isDone ? 'rgba(212,212,216,0.07)' : 'rgba(255,255,255,0.03)',
-                            border: `1px solid ${isDone ? 'rgba(212,212,216,0.2)' : 'rgba(255,255,255,0.06)'}`,
+                            background: isDone ? 'rgba(212,212,216,0.07)' : 'rgba(0,0,0,0.03)',
+                            border: `1px solid ${isDone ? 'rgba(212,212,216,0.2)' : 'rgba(0,0,0,0.06)'}`,
                           }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                               {isDone
@@ -276,7 +276,7 @@ export default function RoadmapPage() {
                               >
                                 {uploading === art.key ? (
                                   <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                    <span style={{ width: 12, height: 12, border: '2px solid rgba(255,255,255,0.3)', borderTopColor: 'white', borderRadius: '50%', animation: 'spin 0.8s linear infinite', display: 'inline-block' }} />
+                                    <span style={{ width: 12, height: 12, border: '2px solid rgba(0,0,0,0.3)', borderTopColor: 'white', borderRadius: '50%', animation: 'spin 0.8s linear infinite', display: 'inline-block' }} />
                                     {Math.round(uploadProgress)}%
                                   </span>
                                 ) : (

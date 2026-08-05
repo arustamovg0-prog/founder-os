@@ -142,7 +142,7 @@ export default function LegalToolkitPage() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 12, marginBottom: 32 }}>
         {[
           { label: 'Шаблонов', value: DOCUMENTS.length, color: '#A1A1AA' },
-          { label: 'Чек-листы', value: CHECKLISTS.length, color: '#FFFFFF' },
+          { label: 'Чек-листы', value: CHECKLISTS.length, color: 'var(--text-primary)' },
           { label: 'Юрисдикций', value: 3, color: '#D4D4D8' },
           { label: 'FAQ вопросов', value: FAQ_ITEMS.length, color: '#71717A' },
         ].map((s, i) => (
@@ -166,8 +166,8 @@ export default function LegalToolkitPage() {
               <button key={cat.id} onClick={() => setActiveCategory(cat.id)}
                 style={{
                   padding: '4px 10px', borderRadius: 99, fontSize: 11, fontWeight: 600, cursor: 'pointer',
-                  background: activeCategory === cat.id ? 'rgba(161,161,170,0.15)' : 'rgba(255,255,255,0.04)',
-                  border: activeCategory === cat.id ? '1px solid rgba(161,161,170,0.4)' : '1px solid rgba(255,255,255,0.08)',
+                  background: activeCategory === cat.id ? 'rgba(161,161,170,0.15)' : 'rgba(0,0,0,0.04)',
+                  border: activeCategory === cat.id ? '1px solid rgba(161,161,170,0.4)' : '1px solid rgba(0,0,0,0.08)',
                   color: activeCategory === cat.id ? '#A1A1AA' : '#64748b', fontFamily: 'Inter',
                 }}>
                 {cat.label}
@@ -177,9 +177,9 @@ export default function LegalToolkitPage() {
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {filteredDocs.map(doc => (
-              <div key={doc.id} style={{ padding: '14px 16px', borderRadius: 12, background: 'rgba(13,13,32,0.8)', border: '1px solid rgba(255,255,255,0.06)', transition: 'var(--transition-standard)' }}
+              <div key={doc.id} style={{ padding: '14px 16px', borderRadius: 12, background: 'rgba(13,13,32,0.8)', border: '1px solid rgba(0,0,0,0.06)', transition: 'var(--transition-standard)' }}
                 onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(161,161,170,0.2)'; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(255,255,255,0.06)'; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(0,0,0,0.06)'; }}
               >
                 <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
                   <div style={{ flex: 1 }}>
@@ -194,7 +194,7 @@ export default function LegalToolkitPage() {
                     </div>
                   </div>
                   <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
-                    <button onClick={() => handleCopy(doc.id)} style={{ width: 28, height: 28, borderRadius: 6, background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: copiedId === doc.id ? '#D4D4D8' : '#64748b' }}>
+                    <button onClick={() => handleCopy(doc.id)} style={{ width: 28, height: 28, borderRadius: 6, background: 'rgba(0,0,0,0.06)', border: '1px solid rgba(0,0,0,0.08)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: copiedId === doc.id ? '#D4D4D8' : '#64748b' }}>
                       {copiedId === doc.id ? <CheckCircle size={12} /> : <Copy size={12} />}
                     </button>
                     <button style={{ width: 28, height: 28, borderRadius: 6, background: 'rgba(161,161,170,0.1)', border: '1px solid rgba(161,161,170,0.2)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#A1A1AA' }}>
@@ -222,7 +222,7 @@ export default function LegalToolkitPage() {
                 const isExpanded = expandedChecklist === cl.id;
 
                 return (
-                  <div key={cl.id} style={{ borderRadius: 12, background: 'rgba(13,13,32,0.8)', border: '1px solid rgba(255,255,255,0.06)', overflow: 'hidden' }}>
+                  <div key={cl.id} style={{ borderRadius: 12, background: 'rgba(13,13,32,0.8)', border: '1px solid rgba(0,0,0,0.06)', overflow: 'hidden' }}>
                     <button onClick={() => setExpandedChecklist(isExpanded ? null : cl.id)}
                       style={{ width: '100%', padding: '12px 16px', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 10, fontFamily: 'Inter' }}>
                       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', flex: 1 }}>
@@ -233,7 +233,7 @@ export default function LegalToolkitPage() {
                     </button>
 
                     {/* Progress bar */}
-                    <div style={{ height: 2, background: 'rgba(255,255,255,0.06)', margin: '0 16px' }}>
+                    <div style={{ height: 2, background: 'rgba(0,0,0,0.06)', margin: '0 16px' }}>
                       <div style={{ height: '100%', background: progress === 100 ? '#D4D4D8' : '#FFFFFF', width: `${progress}%`, transition: 'width 0.3s', borderRadius: 99 }} />
                     </div>
 
@@ -244,7 +244,7 @@ export default function LegalToolkitPage() {
                             style={{ display: 'flex', gap: 10, cursor: 'pointer', padding: '6px 0', alignItems: 'flex-start' }}>
                             <div style={{
                               width: 16, height: 16, borderRadius: 4, flexShrink: 0, marginTop: 1,
-                              border: `2px solid ${steps.has(i) ? '#D4D4D8' : 'rgba(255,255,255,0.2)'}`,
+                              border: `2px solid ${steps.has(i) ? '#D4D4D8' : 'rgba(0,0,0,0.2)'}`,
                               background: steps.has(i) ? '#D4D4D8' : 'transparent',
                               display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'var(--transition-standard)',
                             }}>
@@ -272,7 +272,7 @@ export default function LegalToolkitPage() {
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
               {FAQ_ITEMS.map((item, i) => (
-                <div key={i} style={{ borderRadius: 10, background: 'rgba(13,13,32,0.8)', border: '1px solid rgba(255,255,255,0.06)', overflow: 'hidden' }}>
+                <div key={i} style={{ borderRadius: 10, background: 'rgba(13,13,32,0.8)', border: '1px solid rgba(0,0,0,0.06)', overflow: 'hidden' }}>
                   <button onClick={() => setOpenFaq(openFaq === i ? null : i)}
                     style={{ width: '100%', padding: '12px 14px', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8, fontFamily: 'Inter' }}>
                     <AlertCircle size={12} color="#71717A" style={{ flexShrink: 0 }} />

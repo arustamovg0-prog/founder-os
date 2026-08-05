@@ -125,7 +125,7 @@ export default function AdminAnalyticsPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-7">
         {[
           { label: 'Total Portfolio MRR', value: fmt(totalMRR), change: '+24%', icon: <DollarSign size={18} />, color: '#D4D4D8' },
-          { label: 'Combined MAU', value: totalMAU.toLocaleString(), change: '+18%', icon: <Users size={18} />, color: '#FFFFFF' },
+          { label: 'Combined MAU', value: totalMAU.toLocaleString(), change: '+18%', icon: <Users size={18} />, color: 'var(--text-primary)' },
           { label: 'Avg AI Score', value: `${avgScore}/100`, change: '+5pts', icon: <Brain size={18} />, color: '#A1A1AA' },
           { label: 'Avg Roadmap Progress', value: `${avgProgress}%`, change: '+12%', icon: <Target size={18} />, color: '#71717A' },
         ].map((kpi, i) => (
@@ -157,7 +157,7 @@ export default function AdminAnalyticsPage() {
                   <stop offset="95%" stopColor="#FFFFFF" stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <CartesianGrid stroke="rgba(255,255,255,0.04)" vertical={false} />
+              <CartesianGrid stroke="rgba(0,0,0,0.04)" vertical={false} />
               <XAxis dataKey="month" tick={{ fontSize: 11, fill: '#475569' }} axisLine={false} tickLine={false} />
               <YAxis tickFormatter={v => `$${v / 1000}K`} tick={{ fontSize: 11, fill: '#475569' }} axisLine={false} tickLine={false} />
               <Tooltip content={<CustomTooltip />} />
@@ -173,7 +173,7 @@ export default function AdminAnalyticsPage() {
           </div>
           <ResponsiveContainer width="100%" height={220}>
             <RadarChart data={radarData}>
-              <PolarGrid stroke="rgba(255,255,255,0.06)" />
+              <PolarGrid stroke="rgba(0,0,0,0.06)" />
               <PolarAngleAxis dataKey="metric" tick={{ fontSize: 11, fill: '#475569' }} />
               <Radar name="Score" dataKey="value" stroke="#FFFFFF" fill="#FFFFFF" fillOpacity={0.2} />
               <Tooltip content={<CustomTooltip />} />
@@ -195,7 +195,7 @@ export default function AdminAnalyticsPage() {
               <Pie data={industryData} cx="50%" cy="50%" outerRadius={80} dataKey="value" label={((p: any) => `${p.name} ${((p.percent ?? 0) * 100).toFixed(0)}%`) as any} labelLine={false}>
                 {industryData.map((_, i) => <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />)}
               </Pie>
-              <Tooltip formatter={(v) => [`${v} startup(s)`, 'Count']} contentStyle={{ background: '#0d0d20', border: '1px solid rgba(255,255,255,0.3)', borderRadius: 12 }} />
+              <Tooltip formatter={(v) => [`${v} startup(s)`, 'Count']} contentStyle={{ background: '#0d0d20', border: '1px solid rgba(0,0,0,0.3)', borderRadius: 12 }} />
             </PieChart>
           </ResponsiveContainer>
         </div>
@@ -207,7 +207,7 @@ export default function AdminAnalyticsPage() {
           </div>
           <ResponsiveContainer width="100%" height={200}>
             <BarChart data={stageData} barSize={36}>
-              <CartesianGrid vertical={false} stroke="rgba(255,255,255,0.04)" />
+              <CartesianGrid vertical={false} stroke="rgba(0,0,0,0.04)" />
               <XAxis dataKey="stage" tick={{ fontSize: 10, fill: '#475569' }} axisLine={false} tickLine={false} />
               <YAxis tick={{ fontSize: 11, fill: '#475569' }} axisLine={false} tickLine={false} allowDecimals={false} />
               <Tooltip content={<CustomTooltip />} />
@@ -227,8 +227,8 @@ export default function AdminAnalyticsPage() {
             const score = s.aiScores?.overallReadinessScore || 0;
             const scoreColor = score >= 75 ? '#D4D4D8' : score >= 50 ? '#71717A' : '#52525B';
             return (
-              <div key={s.id} style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '12px 16px', borderRadius: '12px', background: i === 0 ? 'rgba(212,212,216,0.05)' : 'rgba(255,255,255,0.02)', border: `1px solid ${i === 0 ? 'rgba(212,212,216,0.15)' : 'rgba(255,255,255,0.05)'}` }}>
-                <div style={{ width: 28, height: 28, borderRadius: '50%', background: i === 0 ? '#71717A' : i === 1 ? '#94a3b8' : i === 2 ? '#cd7c32' : 'rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Space Grotesk', fontWeight: 800, fontSize: 13, color: i <= 2 ? '#050510' : '#64748b', flexShrink: 0 }}>
+              <div key={s.id} style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '12px 16px', borderRadius: '12px', background: i === 0 ? 'rgba(212,212,216,0.05)' : 'rgba(0,0,0,0.02)', border: `1px solid ${i === 0 ? 'rgba(212,212,216,0.15)' : 'rgba(0,0,0,0.05)'}` }}>
+                <div style={{ width: 28, height: 28, borderRadius: '50%', background: i === 0 ? '#71717A' : i === 1 ? '#94a3b8' : i === 2 ? '#cd7c32' : 'rgba(0,0,0,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Space Grotesk', fontWeight: 800, fontSize: 13, color: i <= 2 ? '#050510' : '#64748b', flexShrink: 0 }}>
                   {i + 1}
                 </div>
                 <div style={{ flex: 1 }}>

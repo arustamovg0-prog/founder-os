@@ -90,8 +90,8 @@ export default function MagicLinkCallbackPage() {
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', marginBottom: '40px' }}>
           <div style={{ 
             width: 44, height: 44, borderRadius: 10, 
-            background: 'rgba(255,255,255,0.03)', 
-            border: '1px solid rgba(255,255,255,0.1)',
+            background: 'rgba(0,0,0,0.03)', 
+            border: '1px solid rgba(0,0,0,0.1)',
             display: 'flex', alignItems: 'center', justifyContent: 'center' 
           }}>
             <Command size={22} color="white" />
@@ -105,7 +105,7 @@ export default function MagicLinkCallbackPage() {
             <div>
               <div style={{
                 width: 64, height: 64, margin: '0 auto 20px',
-                border: '3px solid rgba(255,255,255,0.2)',
+                border: '3px solid rgba(0,0,0,0.2)',
                 borderTopColor: '#FFFFFF',
                 borderRadius: '50%',
                 animation: 'spin 1s linear infinite',

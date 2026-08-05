@@ -209,7 +209,7 @@ export default function AICopilotPage() {
         {/* Context cards */}
         <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
           {[
-            { icon: <TrendingUp size={12} />, label: t('context.aiScore'), value: `${startup?.aiScores?.overallReadinessScore || 0}/100`, color: '#FFFFFF' },
+            { icon: <TrendingUp size={12} />, label: t('context.aiScore'), value: `${startup?.aiScores?.overallReadinessScore || 0}/100`, color: 'var(--text-primary)' },
             { icon: <Target size={12} />, label: t('context.stage'), value: startup?.stage || t('context.idea'), color: '#D4D4D8' },
             { icon: <FileText size={12} />, label: t('context.pitchDeck'), value: startup?.dataRoom?.pitchDeckUrl ? t('context.uploaded') : t('context.missing'), color: '#A1A1AA' },
           ].map((c, i) => (
@@ -263,8 +263,8 @@ export default function AICopilotPage() {
             disabled={loading || !startup}
             style={{
               padding: '8px 16px', borderRadius: '10px', height: '100%',
-              background: 'linear-gradient(135deg, rgba(255,255,255,0.2), rgba(99,102,241,0.15))',
-              border: '1px solid rgba(255,255,255,0.3)',
+              background: 'linear-gradient(135deg, rgba(0,0,0,0.2), rgba(99,102,241,0.15))',
+              border: '1px solid rgba(0,0,0,0.3)',
               color: '#D8B4FE', fontWeight: 600, fontSize: 13, cursor: loading ? 'wait' : 'pointer',
               display: 'flex', alignItems: 'center', gap: '8px',
               fontFamily: 'Inter'
@@ -280,7 +280,7 @@ export default function AICopilotPage() {
       <div style={{
         flex: 1, overflow: 'auto', display: 'flex', flexDirection: 'column', gap: '16px',
         padding: '20px', borderRadius: '16px',
-        background: 'rgba(5,5,16,0.6)', border: '1px solid rgba(255,255,255,0.06)',
+        background: 'rgba(5,5,16,0.6)', border: '1px solid rgba(0,0,0,0.06)',
         marginBottom: '16px',
       }}>
         {messages.map((msg, i) => (
@@ -298,9 +298,9 @@ export default function AICopilotPage() {
               maxWidth: '75%',
               padding: '14px 18px', borderRadius: msg.role === 'user' ? '16px 16px 4px 16px' : '4px 16px 16px 16px',
               background: msg.role === 'user'
-                ? 'linear-gradient(135deg, rgba(255,255,255,0.3), rgba(99,102,241,0.2))'
+                ? 'linear-gradient(135deg, rgba(0,0,0,0.3), rgba(99,102,241,0.2))'
                 : 'rgba(13,13,32,0.9)',
-              border: `1px solid ${msg.role === 'user' ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.06)'}`,
+              border: `1px solid ${msg.role === 'user' ? 'rgba(0,0,0,0.3)' : 'rgba(0,0,0,0.06)'}`,
             }}>
               {msg.role === 'assistant' ? <MarkdownText text={msg.content} /> : (
                 <p style={{ fontSize: 14, color: '#f8fafc', lineHeight: 1.6 }}>{msg.content}</p>
@@ -312,7 +312,7 @@ export default function AICopilotPage() {
             {msg.role === 'user' && (
               <div style={{
                 width: 32, height: 32, borderRadius: '50%', flexShrink: 0,
-                background: 'rgba(255,255,255,0.3)',
+                background: 'rgba(0,0,0,0.3)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 fontSize: 13, fontWeight: 700, color: '#D8B4FE',
               }}>
@@ -327,7 +327,7 @@ export default function AICopilotPage() {
             <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'linear-gradient(135deg,#FFFFFF,#71717A)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Brain size={15} color="white" />
             </div>
-            <div style={{ padding: '16px', borderRadius: '4px 16px 16px 16px', background: 'rgba(13,13,32,0.9)', border: '1px solid rgba(255,255,255,0.06)' }}>
+            <div style={{ padding: '16px', borderRadius: '4px 16px 16px 16px', background: 'rgba(13,13,32,0.9)', border: '1px solid rgba(0,0,0,0.06)' }}>
               <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
                 {[0, 0.2, 0.4].map((delay, i) => (
                   <div key={i} style={{
@@ -354,7 +354,7 @@ export default function AICopilotPage() {
               onClick={() => send(s.text)}
               style={{
                 padding: '8px 14px', borderRadius: '99px', fontSize: 12, fontWeight: 500,
-                background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)',
+                background: 'rgba(0,0,0,0.1)', border: '1px solid rgba(0,0,0,0.2)',
                 color: '#D8B4FE', cursor: 'pointer', transition: 'var(--transition-standard)',
                 fontFamily: 'Inter, sans-serif', display: 'flex', alignItems: 'center', gap: '6px',
               }}

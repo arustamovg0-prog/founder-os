@@ -100,8 +100,8 @@ export default function SideNav() {
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 14px', marginBottom: '24px' }}>
         <div style={{ 
           width: 32, height: 32, borderRadius: 8, 
-          background: 'rgba(255,255,255,0.03)', 
-          border: '1px solid rgba(255,255,255,0.1)',
+          background: 'rgba(0,0,0,0.03)', 
+          border: '1px solid rgba(0,0,0,0.1)',
           display: 'flex', alignItems: 'center', justifyContent: 'center' 
         }}>
           <Command size={16} color="white" />
@@ -132,7 +132,7 @@ export default function SideNav() {
       </nav>
 
       {/* Language and Logout */}
-      <div style={{ marginTop: 'auto', borderTop: '1px solid rgba(255,255,255,0.04)', paddingTop: '16px' }}>
+      <div style={{ marginTop: 'auto', borderTop: '1px solid rgba(0,0,0,0.04)', paddingTop: '16px' }}>
         <div style={{ padding: '0 14px 16px 14px' }}>
           <LanguageSwitcher />
         </div>

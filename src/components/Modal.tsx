@@ -43,17 +43,17 @@ export function Modal({ isOpen, onClose, children, maxWidth = '600px', title }: 
             onClick={e => e.stopPropagation()}
             style={{
               background: '#09090b',
-              border: '1px solid rgba(255,255,255,0.1)',
+              border: '1px solid rgba(0,0,0,0.1)',
               borderRadius: '16px',
               width: '100%',
               maxWidth: maxWidth,
               overflow: 'hidden',
-              boxShadow: '0 20px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05)',
+              boxShadow: '0 20px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,0,0,0.05)',
               position: 'relative'
             }}
           >
             {title && (
-              <div style={{ padding: '20px 24px', borderBottom: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ padding: '20px 24px', borderBottom: '1px solid rgba(0,0,0,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <h3 style={{ fontSize: '18px', fontWeight: 600, color: 'white', margin: 0 }}>{title}</h3>
                 <button onClick={onClose} style={{ background: 'none', border: 'none', color: '#a1a1aa', cursor: 'pointer' }}>
                   <X size={20} />

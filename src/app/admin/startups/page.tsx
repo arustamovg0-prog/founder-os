@@ -28,11 +28,11 @@ function StartupDetailRow({ s }: { s: Startup }) {
   const currentStage = ROADMAP_STAGES.find(r => r.id === s.currentRoadmapStageId);
 
   return (
-    <div style={{ borderRadius: '14px', border: `1px solid ${open ? 'rgba(255,255,255,0.25)' : 'rgba(255,255,255,0.06)'}`, marginBottom: '10px', overflow: 'hidden', transition: 'var(--transition-standard)' }}>
+    <div style={{ borderRadius: '14px', border: `1px solid ${open ? 'rgba(0,0,0,0.25)' : 'rgba(0,0,0,0.06)'}`, marginBottom: '10px', overflow: 'hidden', transition: 'var(--transition-standard)' }}>
       {/* Row */}
       <div
         onClick={() => setOpen(!open)}
-        style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '16px 20px', cursor: 'pointer', background: open ? 'rgba(255,255,255,0.05)' : 'transparent', transition: 'background 160ms var(--ease-out)' }}
+        style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '16px 20px', cursor: 'pointer', background: open ? 'rgba(0,0,0,0.05)' : 'transparent', transition: 'background 160ms var(--ease-out)' }}
       >
         <div style={{
           width: 44, height: 44, borderRadius: '12px', flexShrink: 0,
@@ -74,7 +74,7 @@ function StartupDetailRow({ s }: { s: Startup }) {
 
         <div style={{ flex: '0 0 100px' }}>
           <div className="progress-bar">
-            <div style={{ height: '100%', borderRadius: 99, width: `${s.roadmapProgress}%`, background: '#FFFFFF', boxShadow: '0 0 6px rgba(255,255,255,0.5)' }} />
+            <div style={{ height: '100%', borderRadius: 99, width: `${s.roadmapProgress}%`, background: '#FFFFFF', boxShadow: '0 0 6px rgba(0,0,0,0.5)' }} />
           </div>
           <div style={{ fontSize: 11, color: '#475569', marginTop: 4, textAlign: 'center' }}>{t('progress', { pct: s.roadmapProgress })}</div>
         </div>
@@ -84,7 +84,7 @@ function StartupDetailRow({ s }: { s: Startup }) {
 
       {/* Expanded Detail */}
       {open && (
-        <div style={{ padding: '20px 20px 20px', borderTop: '1px solid rgba(255,255,255,0.06)', background: 'rgba(5,5,16,0.5)' }}>
+        <div style={{ padding: '20px 20px 20px', borderTop: '1px solid rgba(0,0,0,0.06)', background: 'rgba(5,5,16,0.5)' }}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {/* AI Summary */}
             <div>
@@ -93,11 +93,11 @@ function StartupDetailRow({ s }: { s: Startup }) {
                 <span style={{ fontSize: 11, color: '#D8B4FE', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>{t('aiAnalysis')}</span>
               </div>
               {s.executiveSummaryAI ? (
-                <p style={{ fontSize: 13, color: '#94a3b8', lineHeight: 1.7, padding: '12px', background: 'rgba(255,255,255,0.07)', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.15)' }}>
+                <p style={{ fontSize: 13, color: '#94a3b8', lineHeight: 1.7, padding: '12px', background: 'rgba(0,0,0,0.07)', borderRadius: '10px', border: '1px solid rgba(0,0,0,0.15)' }}>
                   {s.executiveSummaryAI}
                 </p>
               ) : (
-                <div style={{ padding: '12px', background: 'rgba(255,255,255,0.02)', borderRadius: '10px', color: '#334155', fontSize: 13 }}>
+                <div style={{ padding: '12px', background: 'rgba(0,0,0,0.02)', borderRadius: '10px', color: '#334155', fontSize: 13 }}>
                   {t('aiNotGenerated')}
                 </div>
               )}
@@ -117,7 +117,7 @@ function StartupDetailRow({ s }: { s: Startup }) {
                   { l: t('metrics.ltvCac'), v: s.metrics.ltvCacRatio > 0 ? `${s.metrics.ltvCacRatio}x` : '—' },
                   { l: t('metrics.team'), v: s.metrics.teamSize },
                 ].map((m, i) => (
-                  <div key={i} style={{ padding: '8px 12px', borderRadius: '8px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.04)' }}>
+                  <div key={i} style={{ padding: '8px 12px', borderRadius: '8px', background: 'rgba(0,0,0,0.02)', border: '1px solid rgba(0,0,0,0.04)' }}>
                     <div style={{ fontSize: 10, color: '#334155', fontWeight: 600 }}>{m.l}</div>
                     <div style={{ fontSize: 13, fontWeight: 700, color: '#f8fafc' }}>{m.v}</div>
                   </div>
@@ -125,7 +125,7 @@ function StartupDetailRow({ s }: { s: Startup }) {
               </div>
 
               {currentStage && (
-                <div style={{ marginTop: '12px', padding: '10px 14px', borderRadius: '10px', background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)' }}>
+                <div style={{ marginTop: '12px', padding: '10px 14px', borderRadius: '10px', background: 'rgba(0,0,0,0.08)', border: '1px solid rgba(0,0,0,0.15)' }}>
                   <div style={{ fontSize: 11, color: '#475569', marginBottom: 4 }}>{t('currentStage')}</div>
                   <div style={{ fontSize: 14, fontWeight: 600, color: '#D8B4FE' }}>{currentStage.title}</div>
                 </div>
@@ -134,7 +134,7 @@ function StartupDetailRow({ s }: { s: Startup }) {
           </div>
 
           {/* Action Buttons */}
-          <div style={{ display: 'flex', gap: '10px', marginTop: '16px', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '16px' }}>
+          <div style={{ display: 'flex', gap: '10px', marginTop: '16px', borderTop: '1px solid rgba(0,0,0,0.05)', paddingTop: '16px' }}>
             <button className="btn-secondary" style={{ fontSize: 12, padding: '7px 16px' }}>
               <Eye size={13} /> {t('btnView')}
             </button>
@@ -223,7 +223,7 @@ export default function AdminStartupsPage() {
           <Search size={14} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: '#475569' }} />
           <input className="input-field" placeholder={t('search')} value={search} onChange={e => setSearch(e.target.value)} style={{ paddingLeft: 36 }} />
         </div>
-        <div style={{ display: 'flex', gap: '4px', background: 'rgba(255,255,255,0.04)', borderRadius: '10px', padding: '4px' }}>
+        <div style={{ display: 'flex', gap: '4px', background: 'rgba(0,0,0,0.04)', borderRadius: '10px', padding: '4px' }}>
           {[
             { key: 'all', label: t('filterAll', { count: startups.length }) },
             { key: 'ready', label: t('filterReady', { count: startups.filter(s => (s.aiScores?.overallReadinessScore || 0) >= 75).length }) },
@@ -232,7 +232,7 @@ export default function AdminStartupsPage() {
           ].map(f => (
             <button key={f.key} onClick={() => setFilter(f.key)} style={{
               padding: '7px 14px', borderRadius: '7px', border: 'none',
-              background: filter === f.key ? 'rgba(255,255,255,0.3)' : 'transparent',
+              background: filter === f.key ? 'rgba(0,0,0,0.3)' : 'transparent',
               color: filter === f.key ? '#D8B4FE' : '#64748b',
               fontSize: '12px', fontWeight: 600, cursor: 'pointer', fontFamily: 'Inter', whiteSpace: 'nowrap',
             }}>

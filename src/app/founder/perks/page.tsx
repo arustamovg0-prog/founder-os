@@ -180,8 +180,8 @@ export default function PerksPage() {
             style={{
               padding: '7px 14px', borderRadius: 99, fontSize: 12, fontWeight: 600,
               cursor: 'pointer', transition: 'var(--transition-standard)', fontFamily: 'Inter',
-              background: activeCategory === cat.id ? 'rgba(113,113,122,0.15)' : 'rgba(255,255,255,0.04)',
-              border: activeCategory === cat.id ? '1px solid rgba(113,113,122,0.4)' : '1px solid rgba(255,255,255,0.08)',
+              background: activeCategory === cat.id ? 'rgba(113,113,122,0.15)' : 'rgba(0,0,0,0.04)',
+              border: activeCategory === cat.id ? '1px solid rgba(113,113,122,0.4)' : '1px solid rgba(0,0,0,0.08)',
               color: activeCategory === cat.id ? '#71717A' : '#64748b',
             }}
           >
@@ -240,12 +240,12 @@ function PerkCard({ perk, claimed, onClaim, featured }: { perk: Perk; claimed: b
       style={{
         padding: 20, borderRadius: 16,
         background: featured ? 'rgba(113,113,122,0.06)' : 'rgba(13,13,32,0.8)',
-        border: `1px solid ${featured ? 'rgba(113,113,122,0.2)' : 'rgba(255,255,255,0.06)'}`,
+        border: `1px solid ${featured ? 'rgba(113,113,122,0.2)' : 'rgba(0,0,0,0.06)'}`,
         transition: 'var(--transition-standard)', cursor: 'default',
         position: 'relative', overflow: 'hidden',
       }}
-      onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.borderColor = featured ? 'rgba(113,113,122,0.4)' : 'rgba(255,255,255,0.12)'; }}
-      onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor = featured ? 'rgba(113,113,122,0.2)' : 'rgba(255,255,255,0.06)'; }}
+      onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.borderColor = featured ? 'rgba(113,113,122,0.4)' : 'rgba(0,0,0,0.12)'; }}
+      onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor = featured ? 'rgba(113,113,122,0.2)' : 'rgba(0,0,0,0.06)'; }}
     >
       {featured && (
         <div style={{ position: 'absolute', top: 12, right: 12 }}>
@@ -269,7 +269,7 @@ function PerkCard({ perk, claimed, onClaim, featured }: { perk: Perk; claimed: b
         {perk.tags.slice(0, 3).map(tag => (
           <span key={tag} style={{
             padding: '2px 8px', borderRadius: 99, fontSize: 10, fontWeight: 600,
-            background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', color: '#475569',
+            background: 'rgba(0,0,0,0.04)', border: '1px solid rgba(0,0,0,0.08)', color: '#475569',
           }}>
             {tag}
           </span>

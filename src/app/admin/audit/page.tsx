@@ -84,7 +84,7 @@ export default function AuditEvidencePage() {
                 style={{ 
                   borderRadius: 14, 
                   background: 'rgba(13,13,32,0.5)', 
-                  border: `1px solid ${isSelected ? 'rgba(216,180,254,0.3)' : 'rgba(255,255,255,0.06)'}`, 
+                  border: `1px solid ${isSelected ? 'rgba(216,180,254,0.3)' : 'rgba(0,0,0,0.06)'}`, 
                   overflow: 'hidden',
                   cursor: 'pointer',
                   transition: 'var(--transition-standard)'
@@ -127,11 +127,11 @@ export default function AuditEvidencePage() {
 
                 {/* Expanded Details */}
                 {isSelected && (
-                  <div style={{ padding: '20px', borderTop: '1px solid rgba(255,255,255,0.06)', background: 'rgba(0,0,0,0.2)' }}>
+                  <div style={{ padding: '20px', borderTop: '1px solid rgba(0,0,0,0.06)', background: 'rgba(0,0,0,0.2)' }}>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
                         <div style={{ fontSize: 11, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>Metadata</div>
-                        <div style={{ background: 'rgba(255,255,255,0.03)', borderRadius: 8, padding: '12px', fontSize: 12, fontFamily: 'monospace', color: '#cbd5e1' }}>
+                        <div style={{ background: 'rgba(0,0,0,0.03)', borderRadius: 8, padding: '12px', fontSize: 12, fontFamily: 'monospace', color: '#cbd5e1' }}>
                           <div style={{ marginBottom: 4 }}><span style={{ color: '#64748b' }}>Agent ID:</span> {record.agent_id}</div>
                           <div style={{ marginBottom: 4 }}><span style={{ color: '#64748b' }}>Prev Hash:</span> {record.prev_record_hash}</div>
                           <div style={{ marginBottom: 4 }}><span style={{ color: '#64748b' }}>Signature:</span> {record.signature}</div>
@@ -140,7 +140,7 @@ export default function AuditEvidencePage() {
                       
                       <div>
                         <div style={{ fontSize: 11, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>Intent Payload</div>
-                        <pre style={{ background: 'rgba(255,255,255,0.03)', borderRadius: 8, padding: '12px', fontSize: 12, margin: 0, overflowX: 'auto', color: '#cbd5e1' }}>
+                        <pre style={{ background: 'rgba(0,0,0,0.03)', borderRadius: 8, padding: '12px', fontSize: 12, margin: 0, overflowX: 'auto', color: '#cbd5e1' }}>
                           {JSON.stringify(record.intent, null, 2)}
                         </pre>
                       </div>

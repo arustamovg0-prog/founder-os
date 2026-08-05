@@ -35,7 +35,7 @@ function ScoreRing({ score, size = 56 }: { score: number; size?: number }) {
   return (
     <div style={{ position: 'relative', width: size, height: size, flexShrink: 0 }}>
       <svg width={size} height={size} style={{ transform: 'rotate(-90deg)' }}>
-        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="4" />
+        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="rgba(0,0,0,0.06)" strokeWidth="4" />
         <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={color} strokeWidth="4"
           strokeDasharray={`${fill} ${circ - fill}`} strokeLinecap="round"
           style={{ filter: `drop-shadow(0 0 4px ${color})` }} />
@@ -80,7 +80,7 @@ function StartupCard({ s }: { s: Startup }) {
           { label: 'MAU', value: s.metrics.mau.toLocaleString(), color: '#A1A1AA' },
           { label: 'LTV/CAC', value: s.metrics.ltvCacRatio > 0 ? `${s.metrics.ltvCacRatio}x` : '—', color: '#71717A' },
         ].map((m, i) => (
-          <div key={i} style={{ padding: '10px', borderRadius: '10px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.04)', textAlign: 'center' }}>
+          <div key={i} style={{ padding: '10px', borderRadius: '10px', background: 'rgba(0,0,0,0.02)', border: '1px solid rgba(0,0,0,0.04)', textAlign: 'center' }}>
             <div style={{ fontFamily: 'Space Grotesk', fontSize: 15, fontWeight: 700, color: m.color }}>{m.value}</div>
             <div style={{ fontSize: 10, color: '#334155', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>{m.label}</div>
           </div>
@@ -88,7 +88,7 @@ function StartupCard({ s }: { s: Startup }) {
       </div>
 
       {s.executiveSummaryAI && (
-        <div style={{ padding: '10px 14px', borderRadius: '10px', background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)' }}>
+        <div style={{ padding: '10px 14px', borderRadius: '10px', background: 'rgba(0,0,0,0.08)', border: '1px solid rgba(0,0,0,0.15)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
             <Brain size={12} color="#D8B4FE" />
             <span style={{ fontSize: 10, color: '#D8B4FE', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>AI Summary</span>
@@ -97,10 +97,10 @@ function StartupCard({ s }: { s: Startup }) {
         </div>
       )}
 
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: '4px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: '4px', borderTop: '1px solid rgba(0,0,0,0.05)' }}>
         <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
           {s.tags.slice(0, 3).map(tag => (
-            <span key={tag} style={{ padding: '2px 8px', borderRadius: '99px', fontSize: 10, color: '#475569', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)' }}>{tag}</span>
+            <span key={tag} style={{ padding: '2px 8px', borderRadius: '99px', fontSize: 10, color: '#475569', background: 'rgba(0,0,0,0.04)', border: '1px solid rgba(0,0,0,0.06)' }}>{tag}</span>
           ))}
         </div>
         <Link href="/investor/deal-flow" className="btn-primary" style={{ fontSize: 12, padding: '6px 14px' }}>
@@ -115,9 +115,9 @@ function KanbanCard({ s, columnColor }: { s: Startup; columnColor: string }) {
   const score = s.aiScores.overallReadinessScore || 0;
   const scoreColor = score >= 75 ? '#D4D4D8' : score >= 50 ? '#71717A' : '#52525B';
   return (
-    <div style={{ padding: '12px 14px', borderRadius: 10, background: 'rgba(13,13,32,0.9)', border: '1px solid rgba(255,255,255,0.06)', cursor: 'grab', transition: 'var(--transition-standard)' }}
+    <div style={{ padding: '12px 14px', borderRadius: 10, background: 'rgba(13,13,32,0.9)', border: '1px solid rgba(0,0,0,0.06)', cursor: 'grab', transition: 'var(--transition-standard)' }}
       onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.borderColor = `${columnColor}35`; }}
-      onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(255,255,255,0.06)'; }}
+      onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(0,0,0,0.06)'; }}
     >
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
         <span style={{ fontWeight: 700, fontSize: 13 }}>{s.name}</span>
@@ -202,11 +202,11 @@ export default function DealFlowPage() {
           <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, marginBottom: 6 }}>Deal Flow</h1>
           <p style={{ color: '#64748b', fontSize: 14 }}>Browse AI-scored startups in the UNTITLED ecosystem</p>
         </div>
-        <div style={{ display: 'flex', gap: 4, padding: 4, background: 'rgba(255,255,255,0.04)', borderRadius: 10, border: '1px solid rgba(255,255,255,0.06)', flexShrink: 0 }}>
-          <button onClick={() => setViewMode('grid')} style={{ padding: '7px 12px', borderRadius: 7, fontSize: 12, fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, fontFamily: 'Inter', transition: 'var(--transition-standard)', background: viewMode === 'grid' ? 'rgba(255,255,255,0.15)' : 'transparent', border: viewMode === 'grid' ? '1px solid rgba(255,255,255,0.3)' : '1px solid transparent', color: viewMode === 'grid' ? '#D8B4FE' : '#64748b' }}>
+        <div style={{ display: 'flex', gap: 4, padding: 4, background: 'rgba(0,0,0,0.04)', borderRadius: 10, border: '1px solid rgba(0,0,0,0.06)', flexShrink: 0 }}>
+          <button onClick={() => setViewMode('grid')} style={{ padding: '7px 12px', borderRadius: 7, fontSize: 12, fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, fontFamily: 'Inter', transition: 'var(--transition-standard)', background: viewMode === 'grid' ? 'rgba(0,0,0,0.15)' : 'transparent', border: viewMode === 'grid' ? '1px solid rgba(0,0,0,0.3)' : '1px solid transparent', color: viewMode === 'grid' ? '#D8B4FE' : '#64748b' }}>
             <List size={13} />Grid
           </button>
-          <button onClick={() => setViewMode('kanban')} style={{ padding: '7px 12px', borderRadius: 7, fontSize: 12, fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, fontFamily: 'Inter', transition: 'var(--transition-standard)', background: viewMode === 'kanban' ? 'rgba(255,255,255,0.15)' : 'transparent', border: viewMode === 'kanban' ? '1px solid rgba(255,255,255,0.3)' : '1px solid transparent', color: viewMode === 'kanban' ? '#D8B4FE' : '#64748b' }}>
+          <button onClick={() => setViewMode('kanban')} style={{ padding: '7px 12px', borderRadius: 7, fontSize: 12, fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, fontFamily: 'Inter', transition: 'var(--transition-standard)', background: viewMode === 'kanban' ? 'rgba(0,0,0,0.15)' : 'transparent', border: viewMode === 'kanban' ? '1px solid rgba(0,0,0,0.3)' : '1px solid transparent', color: viewMode === 'kanban' ? '#D8B4FE' : '#64748b' }}>
             <LayoutGrid size={13} />Kanban
           </button>
         </div>

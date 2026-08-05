@@ -131,7 +131,7 @@ export default function CommunityPage() {
       </div>
 
       {/* Tabs */}
-      <div style={{ display: 'flex', gap: 4, marginBottom: 24, padding: 4, background: 'rgba(255,255,255,0.04)', borderRadius: 10, width: 'fit-content', border: '1px solid rgba(255,255,255,0.06)' }}>
+      <div style={{ display: 'flex', gap: 4, marginBottom: 24, padding: 4, background: 'rgba(0,0,0,0.04)', borderRadius: 10, width: 'fit-content', border: '1px solid rgba(0,0,0,0.06)' }}>
         {([['browse', 'Найти'], ['post', 'Разместить объявление']] as const).map(([tab, label]) => (
           <button key={tab} onClick={() => setActiveTab(tab)} style={{
             padding: '8px 16px', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer',
@@ -153,8 +153,8 @@ export default function CommunityPage() {
               return (
                 <button key={role} onClick={() => setActiveRole(role)} style={{
                   padding: '6px 14px', borderRadius: 99, fontSize: 12, fontWeight: 600, cursor: 'pointer',
-                  background: activeRole === role ? `${color}15` : 'rgba(255,255,255,0.04)',
-                  border: activeRole === role ? `1px solid ${color}40` : '1px solid rgba(255,255,255,0.08)',
+                  background: activeRole === role ? `${color}15` : 'rgba(0,0,0,0.04)',
+                  border: activeRole === role ? `1px solid ${color}40` : '1px solid rgba(0,0,0,0.08)',
                   color: activeRole === role ? color : '#64748b', fontFamily: 'Inter', transition: 'var(--transition-standard)',
                 }}>
                   {role !== 'Все' && ROLE_ICONS[role] && <span style={{ display: 'inline-flex', verticalAlign: 'middle', marginRight: 4 }}>{ROLE_ICONS[role]}</span>}
@@ -173,11 +173,11 @@ export default function CommunityPage() {
               return (
                 <div key={profile.id} style={{
                   padding: 20, borderRadius: 16, background: 'rgba(13,13,32,0.8)',
-                  border: `1px solid ${isConnected ? 'rgba(212,212,216,0.25)' : 'rgba(255,255,255,0.06)'}`,
+                  border: `1px solid ${isConnected ? 'rgba(212,212,216,0.25)' : 'rgba(0,0,0,0.06)'}`,
                   transition: 'var(--transition-standard)', position: 'relative',
                 }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.borderColor = isConnected ? 'rgba(212,212,216,0.4)' : 'rgba(255,255,255,0.12)'; }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor = isConnected ? 'rgba(212,212,216,0.25)' : 'rgba(255,255,255,0.06)'; }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.borderColor = isConnected ? 'rgba(212,212,216,0.4)' : 'rgba(0,0,0,0.12)'; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor = isConnected ? 'rgba(212,212,216,0.25)' : 'rgba(0,0,0,0.06)'; }}
                 >
                   {/* Commitment badge */}
                   <div style={{ position: 'absolute', top: 14, right: 14 }}>
@@ -202,7 +202,7 @@ export default function CommunityPage() {
                   </div>
 
                   {/* Startup info */}
-                  <div style={{ padding: '10px 12px', borderRadius: 10, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', marginBottom: 12 }}>
+                  <div style={{ padding: '10px 12px', borderRadius: 10, background: 'rgba(0,0,0,0.03)', border: '1px solid rgba(0,0,0,0.06)', marginBottom: 12 }}>
                     <div style={{ fontSize: 11, color: '#475569', marginBottom: 4, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                       {profile.startupIndustry} · {profile.startupStage}
                     </div>
@@ -216,7 +216,7 @@ export default function CommunityPage() {
                   {/* Skills */}
                   <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap', marginBottom: 14 }}>
                     {profile.skills.slice(0, 4).map(skill => (
-                      <span key={skill} style={{ fontSize: 10, padding: '2px 8px', borderRadius: 99, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', color: '#64748b', fontWeight: 600 }}>
+                      <span key={skill} style={{ fontSize: 10, padding: '2px 8px', borderRadius: 99, background: 'rgba(0,0,0,0.04)', border: '1px solid rgba(0,0,0,0.08)', color: '#64748b', fontWeight: 600 }}>
                         {skill}
                       </span>
                     ))}
@@ -254,7 +254,7 @@ export default function CommunityPage() {
                       </div>
                       <textarea
                         placeholder={`Привет, ${profile.name.split(' ')[0]}! Меня зовут [имя]. Мы строим [стартап] и ищем ${profile.role}...`}
-                        style={{ flex: 1, padding: '10px 12px', borderRadius: 8, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: '#f8fafc', fontSize: 13, fontFamily: 'Inter', outline: 'none', resize: 'none', minHeight: 100 }}
+                        style={{ flex: 1, padding: '10px 12px', borderRadius: 8, background: 'rgba(0,0,0,0.04)', border: '1px solid rgba(0,0,0,0.1)', color: '#f8fafc', fontSize: 13, fontFamily: 'Inter', outline: 'none', resize: 'none', minHeight: 100 }}
                       />
                       <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
                         <button onClick={() => connect(profile.id)} style={{ flex: 1, padding: '9px', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer', background: `${roleColor}20`, border: `1px solid ${roleColor}40`, color: roleColor, fontFamily: 'Inter' }}>
@@ -271,7 +271,7 @@ export default function CommunityPage() {
       ) : (
         /* Post form */
         <div style={{ maxWidth: 600 }}>
-          <div style={{ padding: 24, borderRadius: 16, background: 'rgba(13,13,32,0.8)', border: '1px solid rgba(255,255,255,0.06)' }}>
+          <div style={{ padding: 24, borderRadius: 16, background: 'rgba(13,13,32,0.8)', border: '1px solid rgba(0,0,0,0.06)' }}>
             <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 6, fontFamily: 'Space Grotesk' }}>Разместить объявление</h2>
             <p style={{ fontSize: 13, color: '#64748b', marginBottom: 24 }}>Расскажи о себе и о том, кого ты ищешь</p>
 

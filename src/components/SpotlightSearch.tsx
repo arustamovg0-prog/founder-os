@@ -161,7 +161,7 @@ export default function SpotlightSearch() {
         >
           <Search size={14} />
           <span>{tCommon('menu')}</span>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '2px', background: 'rgba(255,255,255,0.1)', padding: '2px 6px', borderRadius: '4px', marginLeft: '4px', fontSize: '10px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '2px', background: 'rgba(0,0,0,0.1)', padding: '2px 6px', borderRadius: '4px', marginLeft: '4px', fontSize: '10px' }}>
             <Command size={10} /> K
           </div>
         </button>
@@ -186,12 +186,12 @@ export default function SpotlightSearch() {
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
               className="spotlight-menu" 
               onClick={e => e.stopPropagation()}
-              style={{ background: '#050510', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '16px', width: '100%', maxWidth: '600px', overflow: 'hidden', boxShadow: '0 20px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05)' }}
+              style={{ background: '#050510', border: '1px solid rgba(0,0,0,0.1)', borderRadius: '16px', width: '100%', maxWidth: '600px', overflow: 'hidden', boxShadow: '0 20px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,0,0,0.05)' }}
             >
             {/* Search Input Header */}
             <div style={{ 
               display: 'flex', alignItems: 'center', padding: '20px 24px', 
-              borderBottom: '1px solid rgba(255,255,255,0.06)' 
+              borderBottom: '1px solid rgba(0,0,0,0.06)' 
             }}>
               <Search size={20} color="#A1A1AA" style={{ marginRight: '16px' }} />
               <input
@@ -205,13 +205,13 @@ export default function SpotlightSearch() {
                   background: 'transparent',
                   border: 'none',
                   outline: 'none',
-                  color: '#FFFFFF',
+                  color: 'var(--text-primary)',
                   fontSize: '18px',
                   fontFamily: 'Inter Tight',
                   fontWeight: 500
                 }}
               />
-              <div style={{ fontSize: '10px', color: '#52525B', background: 'rgba(255,255,255,0.05)', padding: '4px 8px', borderRadius: '6px' }}>{tCommon('escToClose')}</div>
+              <div style={{ fontSize: '10px', color: '#52525B', background: 'rgba(0,0,0,0.05)', padding: '4px 8px', borderRadius: '6px' }}>{tCommon('escToClose')}</div>
             </div>
 
             {/* Results List */}
@@ -248,7 +248,7 @@ export default function SpotlightSearch() {
                     <span style={{ flex: 1, fontSize: '15px', fontWeight: isSelected ? 600 : 500 }}>
                       {t(item.i18nKey as any)}
                     </span>
-                    {isActive && <span style={{ fontSize: '11px', color: '#FFFFFF', background: 'rgba(255,255,255,0.1)', padding: '2px 8px', borderRadius: '99px' }}>{tCommon('active')}</span>}
+                    {isActive && <span style={{ fontSize: '11px', color: 'var(--text-primary)', background: 'rgba(0,0,0,0.1)', padding: '2px 8px', borderRadius: '99px' }}>{tCommon('active')}</span>}
                   </div>
                 );
               })}
@@ -259,7 +259,7 @@ export default function SpotlightSearch() {
                 </div>
               )}
 
-              <div style={{ borderTop: '1px solid rgba(255,255,255,0.04)', margin: '12px 0', padding: '0 12px' }} />
+              <div style={{ borderTop: '1px solid rgba(0,0,0,0.04)', margin: '12px 0', padding: '0 12px' }} />
 
               <div
                 className="spotlight-item"
@@ -283,9 +283,9 @@ export default function SpotlightSearch() {
               </div>
             </div>
             
-            <div style={{ padding: '12px 24px', background: 'rgba(0,0,0,0.2)', borderTop: '1px solid rgba(255,255,255,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ padding: '12px 24px', background: 'rgba(0,0,0,0.2)', borderTop: '1px solid rgba(0,0,0,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div style={{ width: 24, height: 24, borderRadius: 6, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ width: 24, height: 24, borderRadius: 6, background: 'rgba(0,0,0,0.05)', border: '1px solid rgba(0,0,0,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <Command size={12} color="white" />
                 </div>
                 <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: '13px', fontWeight: 700, color: '#A1A1AA' }}>Founder OS</span>

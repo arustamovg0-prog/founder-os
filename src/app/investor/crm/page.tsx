@@ -29,7 +29,7 @@ const STAGES: { key: PipelineStage; label: string; color: string; icon: React.Re
   { key: 'watching', label: 'Watching', color: '#64748b', icon: <Eye size={14} />, desc: 'На радаре' },
   { key: 'contacted', label: 'Contacted', color: '#A1A1AA', icon: <Mail size={14} />, desc: 'Связались' },
   { key: 'due_diligence', label: 'Due Diligence', color: '#71717A', icon: <FileSearch size={14} />, desc: 'Проверка' },
-  { key: 'term_sheet', label: 'Term Sheet', color: '#FFFFFF', icon: <FileText size={14} />, desc: 'Условия' },
+  { key: 'term_sheet', label: 'Term Sheet', color: 'var(--text-primary)', icon: <FileText size={14} />, desc: 'Условия' },
   { key: 'closed', label: 'Closed', color: '#D4D4D8', icon: <CheckCircle size={14} />, desc: 'Сделка' },
 ];
 
@@ -194,7 +194,7 @@ export default function InvestorCRMPage() {
                 e.preventDefault();
                 if (dragId) { move(dragId, stage.key); setDragId(null); }
               }}
-              style={{ display: 'flex', flexDirection: 'column', gap: '10px', minHeight: '400px', padding: '12px', borderRadius: '14px', background: 'rgba(255,255,255,0.02)', border: `1px dashed ${dragId ? stage.color + '40' : 'rgba(255,255,255,0.05)'}`, transition: 'border 0.15s' }}
+              style={{ display: 'flex', flexDirection: 'column', gap: '10px', minHeight: '400px', padding: '12px', borderRadius: '14px', background: 'rgba(0,0,0,0.02)', border: `1px dashed ${dragId ? stage.color + '40' : 'rgba(0,0,0,0.05)'}`, transition: 'border 0.15s' }}
             >
               {/* Column header */}
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
@@ -226,8 +226,8 @@ export default function InvestorCRMPage() {
                     onClick={() => { setSelectedDeal(deal); setNoteEdit(deal.notes); setDealAmountEdit(deal.dealAmount || ''); }}
                     style={{
                       padding: '14px', borderRadius: '12px', cursor: 'grab',
-                      background: dragId === deal.id ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.04)',
-                      border: `1px solid ${dragId === deal.id ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.07)'}`,
+                      background: dragId === deal.id ? 'rgba(0,0,0,0.15)' : 'rgba(0,0,0,0.04)',
+                      border: `1px solid ${dragId === deal.id ? 'rgba(0,0,0,0.4)' : 'rgba(0,0,0,0.07)'}`,
                       transition: 'border 0.2s, background 0.2s', userSelect: 'none',
                     }}
                   >
@@ -286,8 +286,8 @@ export default function InvestorCRMPage() {
               const score = s.aiScores.overallReadinessScore || 0;
               const sc = score >= 75 ? '#D4D4D8' : score >= 50 ? '#71717A' : '#52525B';
               return (
-                <button key={s.id} onClick={() => addDeal(s.id, addModal!)} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 16px', borderRadius: '12px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', cursor: 'pointer', textAlign: 'left', width: '100%', fontFamily: 'Inter', transition: 'var(--transition-standard)' }}>
-                  <div style={{ width: 36, height: 36, borderRadius: 8, background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Space Grotesk', fontWeight: 800, color: '#D8B4FE', flexShrink: 0 }}>{s.name.charAt(0)}</div>
+                <button key={s.id} onClick={() => addDeal(s.id, addModal!)} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 16px', borderRadius: '12px', background: 'rgba(0,0,0,0.04)', border: '1px solid rgba(0,0,0,0.08)', cursor: 'pointer', textAlign: 'left', width: '100%', fontFamily: 'Inter', transition: 'var(--transition-standard)' }}>
+                  <div style={{ width: 36, height: 36, borderRadius: 8, background: 'rgba(0,0,0,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Space Grotesk', fontWeight: 800, color: '#D8B4FE', flexShrink: 0 }}>{s.name.charAt(0)}</div>
                   <div style={{ flex: 1 }}>
                     <div style={{ fontWeight: 700, fontSize: 14, color: '#f8fafc' }}>{s.name}</div>
                     <div style={{ fontSize: 11, color: '#475569' }}>{s.industry} · {fmt(s.metrics.mrr)} MRR</div>
@@ -312,7 +312,7 @@ export default function InvestorCRMPage() {
                 { l: 'AI Score', v: `${s.aiScores.overallReadinessScore}/100` },
                 { l: 'Runway', v: `${s.metrics.runwayMonths} мес.` },
               ].map((kv, i) => (
-                <div key={i} style={{ padding: '10px 14px', borderRadius: 10, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>
+                <div key={i} style={{ padding: '10px 14px', borderRadius: 10, background: 'rgba(0,0,0,0.04)', border: '1px solid rgba(0,0,0,0.08)' }}>
                   <div style={{ fontSize: 10, color: '#475569', marginBottom: 4 }}>{kv.l}</div>
                   <div style={{ fontFamily: 'Space Grotesk', fontSize: 16, fontWeight: 700 }}>{kv.v}</div>
                 </div>
@@ -324,31 +324,31 @@ export default function InvestorCRMPage() {
               <label style={{ fontSize: 12, color: '#64748b', fontWeight: 600, display: 'block', marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Data Room</label>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                 {s.dataRoom?.pitchDeckUrl ? (
-                  <a href={s.dataRoom.pitchDeckUrl} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 14px', borderRadius: '8px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: '#D8B4FE', textDecoration: 'none', fontSize: 13, fontWeight: 500, transition: 'var(--transition-standard)' }}>
+                  <a href={s.dataRoom.pitchDeckUrl} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 14px', borderRadius: '8px', background: 'rgba(0,0,0,0.1)', border: '1px solid rgba(0,0,0,0.2)', color: '#D8B4FE', textDecoration: 'none', fontSize: 13, fontWeight: 500, transition: 'var(--transition-standard)' }}>
                     <FileText size={14} /> Pitch Deck (PDF)
                   </a>
                 ) : (
-                  <div style={{ padding: '10px 14px', borderRadius: '8px', background: 'rgba(255,255,255,0.02)', border: '1px dashed rgba(255,255,255,0.1)', color: '#475569', fontSize: 13 }}>Pitch Deck не загружен</div>
+                  <div style={{ padding: '10px 14px', borderRadius: '8px', background: 'rgba(0,0,0,0.02)', border: '1px dashed rgba(0,0,0,0.1)', color: '#475569', fontSize: 13 }}>Pitch Deck не загружен</div>
                 )}
                 {s.dataRoom?.financialModelUrl ? (
-                  <a href={s.dataRoom.financialModelUrl} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 14px', borderRadius: '8px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: '#D8B4FE', textDecoration: 'none', fontSize: 13, fontWeight: 500, transition: 'var(--transition-standard)' }}>
+                  <a href={s.dataRoom.financialModelUrl} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 14px', borderRadius: '8px', background: 'rgba(0,0,0,0.1)', border: '1px solid rgba(0,0,0,0.2)', color: '#D8B4FE', textDecoration: 'none', fontSize: 13, fontWeight: 500, transition: 'var(--transition-standard)' }}>
                     <FileSearch size={14} /> Financial Model
                   </a>
                 ) : (
-                  <div style={{ padding: '10px 14px', borderRadius: '8px', background: 'rgba(255,255,255,0.02)', border: '1px dashed rgba(255,255,255,0.1)', color: '#475569', fontSize: 13 }}>Financial Model не загружена</div>
+                  <div style={{ padding: '10px 14px', borderRadius: '8px', background: 'rgba(0,0,0,0.02)', border: '1px dashed rgba(0,0,0,0.1)', color: '#475569', fontSize: 13 }}>Financial Model не загружена</div>
                 )}
                 {s.dataRoom?.executiveSummaryUrl ? (
-                  <a href={s.dataRoom.executiveSummaryUrl} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 14px', borderRadius: '8px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: '#D8B4FE', textDecoration: 'none', fontSize: 13, fontWeight: 500, transition: 'var(--transition-standard)' }}>
+                  <a href={s.dataRoom.executiveSummaryUrl} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 14px', borderRadius: '8px', background: 'rgba(0,0,0,0.1)', border: '1px solid rgba(0,0,0,0.2)', color: '#D8B4FE', textDecoration: 'none', fontSize: 13, fontWeight: 500, transition: 'var(--transition-standard)' }}>
                     <FileText size={14} /> Executive Summary
                   </a>
                 ) : null}
                 {s.dataRoom?.customerDevReportUrl ? (
-                  <a href={s.dataRoom.customerDevReportUrl} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 14px', borderRadius: '8px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: '#D8B4FE', textDecoration: 'none', fontSize: 13, fontWeight: 500, transition: 'var(--transition-standard)' }}>
+                  <a href={s.dataRoom.customerDevReportUrl} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 14px', borderRadius: '8px', background: 'rgba(0,0,0,0.1)', border: '1px solid rgba(0,0,0,0.2)', color: '#D8B4FE', textDecoration: 'none', fontSize: 13, fontWeight: 500, transition: 'var(--transition-standard)' }}>
                     <FileText size={14} /> Customer Dev Report
                   </a>
                 ) : null}
                 {s.dataRoom?.legalDocsUrl ? (
-                  <a href={s.dataRoom.legalDocsUrl} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 14px', borderRadius: '8px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: '#D8B4FE', textDecoration: 'none', fontSize: 13, fontWeight: 500, transition: 'var(--transition-standard)' }}>
+                  <a href={s.dataRoom.legalDocsUrl} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 14px', borderRadius: '8px', background: 'rgba(0,0,0,0.1)', border: '1px solid rgba(0,0,0,0.2)', color: '#D8B4FE', textDecoration: 'none', fontSize: 13, fontWeight: 500, transition: 'var(--transition-standard)' }}>
                     <FileText size={14} /> Legal Documents
                   </a>
                 ) : null}
