@@ -158,7 +158,7 @@ export default function OnboardingPage() {
             <Sparkles size={13} color="#D8B4FE" />
             <span style={{ fontSize: 12, color: '#D8B4FE', fontWeight: 600 }}>Добро пожаловать, {profile?.displayName?.split(' ')[0] || 'Founder'}</span>
           </div>
-          <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 32, fontWeight: 800, marginBottom: 8 }}>
+          <h1 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 32, fontWeight: 800, marginBottom: 8 }}>
             Настроим твой стартап
           </h1>
           <p style={{ color: '#64748b', fontSize: 15 }}>3 шага — и ты в системе</p>
@@ -198,7 +198,7 @@ export default function OnboardingPage() {
           {/* Step 1 */}
           {step === 1 && (
             <div className="animate-fade-in">
-              <h2 style={{ fontFamily: 'Space Grotesk', fontSize: 22, fontWeight: 700, marginBottom: 24 }}>
+              <h2 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 22, fontWeight: 700, marginBottom: 24 }}>
                 Расскажи о своём стартапе
               </h2>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -247,7 +247,7 @@ export default function OnboardingPage() {
           {/* Step 2 */}
           {step === 2 && (
             <div className="animate-fade-in">
-              <h2 style={{ fontFamily: 'Space Grotesk', fontSize: 22, fontWeight: 700, marginBottom: 24 }}>
+              <h2 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 22, fontWeight: 700, marginBottom: 24 }}>
                 Рынок и команда
               </h2>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -315,7 +315,7 @@ export default function OnboardingPage() {
           {/* Step 3 */}
           {step === 3 && (
             <div className="animate-fade-in">
-              <h2 style={{ fontFamily: 'Space Grotesk', fontSize: 22, fontWeight: 700, marginBottom: 8 }}>
+              <h2 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 22, fontWeight: 700, marginBottom: 8 }}>
                 Загрузи Pitch Deck
               </h2>
               <p style={{ color: '#64748b', fontSize: 14, marginBottom: 24 }}>

@@ -146,7 +146,7 @@ export default function SpotlightSearch() {
             borderRadius: '99px',
             color: '#A1A1AA',
             fontSize: '13px',
-            fontFamily: 'Space Grotesk',
+            fontFamily: 'var(--font-space-grotesk), sans-serif',
             cursor: 'pointer',
             transition: 'var(--transition-standard)',
           }}
@@ -288,7 +288,7 @@ export default function SpotlightSearch() {
                 <div style={{ width: 24, height: 24, borderRadius: 6, background: 'var(--bg-card)', border: '1px solid rgba(0,0,0,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <Command size={12} color="currentColor" />
                 </div>
-                <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: '13px', fontWeight: 700, color: '#A1A1AA' }}>Founder OS</span>
+                <span style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: '13px', fontWeight: 700, color: '#A1A1AA' }}>Founder OS</span>
               </div>
               <div style={{ fontSize: '11px', color: '#52525B' }}>
                 {profile.email}

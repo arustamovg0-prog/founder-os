@@ -152,7 +152,7 @@ export default function FounderChatPage() {
           <Bot size={20} color="#D8B4FE" />
         </div>
         <div>
-          <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 20, fontWeight: 700, marginBottom: 2 }}>UNTITLED AI Support</h1>
+          <h1 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 20, fontWeight: 700, marginBottom: 2 }}>UNTITLED AI Support</h1>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: '#D4D4D8' }}>
             <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#D4D4D8', boxShadow: '0 0 4px #D4D4D8' }} />
             AI ассистент онлайн

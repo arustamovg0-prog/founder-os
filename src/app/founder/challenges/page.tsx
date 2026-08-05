@@ -131,7 +131,7 @@ export default function ChallengesPage() {
               <div style={{ width: 32, height: 32, borderRadius: 8, background: 'linear-gradient(135deg,#52525B,#71717A)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Flame size={16} color="currentColor" />
               </div>
-              <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700 }}>Corporate Challenges</h1>
+              <h1 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontWeight: 700 }}>Corporate Challenges</h1>
               <span className="badge badge-red">{CHALLENGES.filter(c => c.status === 'open').length} активных</span>
             </div>
             <p style={{ color: '#64748b', fontSize: 13 }}>Реальные задачи от корпораций — решай и получай первых enterprise-клиентов</p>
@@ -142,7 +142,7 @@ export default function ChallengesPage() {
               { label: 'Всего заявок', value: CHALLENGES.reduce((s, c) => s + c.applicants, 0), color: 'var(--text-primary)' },
             ].map((s, i) => (
               <div key={i} style={{ padding: '10px 16px', borderRadius: 10, background: `${s.color}10`, border: `1px solid ${s.color}25`, textAlign: 'center' }}>
-                <div style={{ fontSize: 18, fontWeight: 800, color: s.color, fontFamily: 'Space Grotesk' }}>{s.value}</div>
+                <div style={{ fontSize: 18, fontWeight: 800, color: s.color, fontFamily: 'var(--font-space-grotesk), sans-serif' }}>{s.value}</div>
                 <div style={{ fontSize: 10, color: '#64748b', fontWeight: 600 }}>{s.label}</div>
               </div>
             ))}
@@ -202,7 +202,7 @@ export default function ChallengesPage() {
                 </div>
               </div>
 
-              <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 10, fontFamily: 'Space Grotesk', lineHeight: 1.4 }}>{ch.title}</h3>
+              <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 10, fontFamily: 'var(--font-space-grotesk), sans-serif', lineHeight: 1.4 }}>{ch.title}</h3>
               <p style={{ fontSize: 13, color: '#94a3b8', lineHeight: 1.7, marginBottom: 14 }}>{ch.problem}</p>
 
               {/* Tags */}

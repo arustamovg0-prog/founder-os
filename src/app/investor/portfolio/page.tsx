@@ -77,7 +77,7 @@ export default function PortfolioPage() {
   return (
     <div className="animate-fade-in">
       <div style={{ marginBottom: '28px' }}>
-        <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, marginBottom: 6 }}>Portfolio</h1>
+        <h1 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontWeight: 700, marginBottom: 6 }}>Portfolio</h1>
         <p style={{ color: '#64748b', fontSize: 14 }}>Watchlist and tracked startups performance</p>
       </div>
 
@@ -90,7 +90,7 @@ export default function PortfolioPage() {
         ].map((stat, i) => (
           <div key={i} className="stat-card">
             <div style={{ width: 36, height: 36, borderRadius: 8, background: `${stat.color}20`, border: `1px solid ${stat.color}30`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: stat.color, marginBottom: 12 }}>{stat.icon}</div>
-            <div style={{ fontFamily: 'Space Grotesk', fontSize: 28, fontWeight: 800, color: stat.color }}>{stat.value}</div>
+            <div style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 28, fontWeight: 800, color: stat.color }}>{stat.value}</div>
             <div style={{ fontSize: 12, color: '#475569', fontWeight: 500 }}>{stat.label}</div>
           </div>
         ))}
@@ -166,7 +166,7 @@ export default function PortfolioPage() {
                         {s.stage.replace('_', ' ')}
                       </span>
                     </td>
-                    <td style={{ padding: '14px 12px', fontFamily: 'Space Grotesk', fontWeight: 700, color: '#D4D4D8' }}>{fmt(s.metrics.mrr)}</td>
+                    <td style={{ padding: '14px 12px', fontFamily: 'var(--font-space-grotesk), sans-serif', fontWeight: 700, color: '#D4D4D8' }}>{fmt(s.metrics.mrr)}</td>
                     <td style={{ padding: '14px 12px', color: '#94a3b8' }}>{s.metrics.mau.toLocaleString()}</td>
                     <td style={{ padding: '14px 12px', color: s.metrics.ltvCacRatio >= 5 ? '#D4D4D8' : '#71717A' }}>
                       {s.metrics.ltvCacRatio > 0 ? `${s.metrics.ltvCacRatio}x` : '—'}
@@ -175,7 +175,7 @@ export default function PortfolioPage() {
                       {s.metrics.runwayMonths > 0 ? `${s.metrics.runwayMonths}mo` : '—'}
                     </td>
                     <td style={{ padding: '14px 12px' }}>
-                      <span style={{ fontFamily: 'Space Grotesk', fontWeight: 800, fontSize: 16, color: scoreColor }}>{score}</span>
+                      <span style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontWeight: 800, fontSize: 16, color: scoreColor }}>{score}</span>
                     </td>
                   </tr>
                 );

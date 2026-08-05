@@ -146,13 +146,13 @@ export default function PerksPage() {
               <div style={{ width: 32, height: 32, borderRadius: 8, background: 'linear-gradient(135deg,#71717A,#52525B)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Gift size={16} color="currentColor" />
               </div>
-              <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700 }}>{t('title')}</h1>
+              <h1 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontWeight: 700 }}>{t('title')}</h1>
               <span className="badge badge-green">{t('exclusive')}</span>
             </div>
             <p style={{ color: '#64748b', fontSize: 13 }}>{t('subtitle')}</p>
           </div>
           <div style={{ padding: '10px 18px', borderRadius: 12, background: 'rgba(0,0,0,0.05)', border: '1px solid rgba(113,113,122,0.2)', textAlign: 'center' }}>
-            <div style={{ fontSize: 20, fontWeight: 800, color: '#71717A', fontFamily: 'Space Grotesk' }}>
+            <div style={{ fontSize: 20, fontWeight: 800, color: '#71717A', fontFamily: 'var(--font-space-grotesk), sans-serif' }}>
               ${(totalValue).toLocaleString()}+
             </div>
             <div style={{ fontSize: 11, color: '#64748b', fontWeight: 600 }}>{t('totalValue')}</div>
@@ -256,7 +256,7 @@ function PerkCard({ perk, claimed, onClaim, featured }: { perk: Perk; claimed: b
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, marginBottom: 12 }}>
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontWeight: 700, fontSize: 15, fontFamily: 'Space Grotesk', marginBottom: 2 }}>{perk.company}</div>
+          <div style={{ fontWeight: 700, fontSize: 15, fontFamily: 'var(--font-space-grotesk), sans-serif', marginBottom: 2 }}>{perk.company}</div>
           <div style={{ fontSize: 12, color: '#64748b' }}>{perk.tagline}</div>
         </div>
       </div>

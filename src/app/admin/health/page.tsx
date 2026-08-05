@@ -166,11 +166,11 @@ export default function EcosystemHealthPage() {
     <div className="animate-fade-in">
       <div style={{ marginBottom: '28px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: 6 }}>
-          <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700 }}>Ecosystem Health</h1>
+          <h1 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontWeight: 700 }}>Ecosystem Health</h1>
           <div style={{
             padding: '4px 14px', borderRadius: 99,
             background: `${scoreColor}20`, border: `1px solid ${scoreColor}40`,
-            fontFamily: 'Space Grotesk', fontSize: 16, fontWeight: 800, color: scoreColor,
+            fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 16, fontWeight: 800, color: scoreColor,
           }}>
             {ecosystemScore}/100
           </div>
@@ -191,7 +191,7 @@ export default function EcosystemHealthPage() {
               <div style={{ width: 36, height: 36, borderRadius: 8, background: `${stat.color}20`, border: `1px solid ${stat.color}30`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: stat.color }}>{stat.icon}</div>
               <Trend val={stat.trend} suffix={i === 0 ? '%' : ''} />
             </div>
-            <div style={{ fontFamily: 'Space Grotesk', fontSize: 26, fontWeight: 800, color: stat.color, marginBottom: 2 }}>{stat.value}</div>
+            <div style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 26, fontWeight: 800, color: stat.color, marginBottom: 2 }}>{stat.value}</div>
             <div style={{ fontSize: 11, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 2 }}>{stat.label}</div>
             <div style={{ fontSize: 11, color: '#334155' }}>{stat.sub}</div>
           </div>
@@ -305,7 +305,7 @@ export default function EcosystemHealthPage() {
                       <div style={{ height: '100%', width: `${pct}%`, borderRadius: 99, background: b.color }} />
                     </div>
                   </div>
-                  <div style={{ fontSize: 12, fontFamily: 'Space Grotesk', fontWeight: 700, color: b.color, width: '20px', textAlign: 'right' }}>{b.count}</div>
+                  <div style={{ fontSize: 12, fontFamily: 'var(--font-space-grotesk), sans-serif', fontWeight: 700, color: b.color, width: '20px', textAlign: 'right' }}>{b.count}</div>
                 </div>
               );
             })}
@@ -370,7 +370,7 @@ export default function EcosystemHealthPage() {
                       <div style={{ fontWeight: 600, fontSize: 13, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{s.name}</div>
                       <div style={{ fontSize: 11, color: '#475569' }}>{s.industry} · {fmt(s.metrics.mrr)} MRR</div>
                     </div>
-                    <div style={{ fontFamily: 'Space Grotesk', fontSize: 18, fontWeight: 800, color: sc }}>{score}</div>
+                    <div style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 18, fontWeight: 800, color: sc }}>{score}</div>
                   </div>
                 );
               })}

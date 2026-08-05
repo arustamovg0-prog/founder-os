@@ -175,7 +175,7 @@ export default function LoginPage() {
               <Command size={18} color="currentColor" />
             </div>
             <div>
-              <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, fontSize: 16 }}>Founder OS</div>
+              <div style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontWeight: 600, fontSize: 16 }}>Founder OS</div>
               <div style={{ fontSize: 10, color: 'var(--text-secondary)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px' }}>by UNTITLED</div>
             </div>
           </div>
@@ -278,7 +278,7 @@ export default function LoginPage() {
                     {magicLinkSent ? (
                       <div style={{ textAlign: 'center', padding: '24px 0' }}>
                         <Mail size={32} color="var(--text-primary)" style={{ margin: '0 auto 16px', display: 'block' }} />
-                        <div style={{ fontFamily: 'Space Grotesk', fontSize: 18, fontWeight: 600, marginBottom: 8 }}>Check your inbox</div>
+                        <div style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 18, fontWeight: 600, marginBottom: 8 }}>Check your inbox</div>
                         <p style={{ color: 'var(--text-muted)', fontSize: 14, lineHeight: 1.6 }}>
                           We sent a magic link to <strong style={{ color: 'var(--text-primary)', fontWeight: 500 }}>{magicEmail}</strong>.
                         </p>

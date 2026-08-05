@@ -35,7 +35,7 @@ function ScoreRing({ score, color = '#FFFFFF' }: { score: number; color?: string
         position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column',
         alignItems: 'center', justifyContent: 'center',
       }}>
-        <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 18, fontWeight: 800, color }}>{score}</span>
+        <span style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 18, fontWeight: 800, color }}>{score}</span>
         <span style={{ fontSize: 9, color: '#475569', fontWeight: 600, letterSpacing: '0.5px' }}>/ 100</span>
       </div>
     </div>
@@ -157,7 +157,7 @@ export default function FounderDashboard() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, marginBottom: 6 }}>
+          <h1 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontWeight: 700, marginBottom: 6 }}>
             {s.name} <span style={{ fontSize: 14, color: 'var(--text-primary)', fontWeight: 500 }}>#{s.industry}</span>
           </h1>
           <p style={{ color: '#64748b', fontSize: 14 }}>{s.tagline}</p>
@@ -216,7 +216,7 @@ export default function FounderDashboard() {
                 </span>
               )}
             </div>
-            <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 28, fontWeight: 700, marginBottom: '4px', color: 'var(--text-primary)' }}>
+            <div style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 28, fontWeight: 700, marginBottom: '4px', color: 'var(--text-primary)' }}>
               {kpi.value}
             </div>
             <div style={{ fontSize: 13, color: '#94a3b8', fontWeight: 500 }}>{kpi.label}</div>
@@ -256,7 +256,7 @@ export default function FounderDashboard() {
           </div>
           {currentStage && (
             <>
-              <div style={{ fontFamily: 'Space Grotesk', fontSize: 15, fontWeight: 700, marginBottom: 8 }}>{currentStage.title}</div>
+              <div style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 15, fontWeight: 700, marginBottom: 8 }}>{currentStage.title}</div>
               <p style={{ fontSize: 12, color: '#64748b', lineHeight: 1.6, marginBottom: 14 }}>{currentStage.description}</p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                 {currentStage.requiredArtifacts.slice(0, 2).map(a => (
@@ -289,7 +289,7 @@ export default function FounderDashboard() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 }}>
                   <span style={{ fontSize: 36 }}>{rank <= 3 ? medals[rank - 1] : `#${rank}`}</span>
                   <div>
-                    <div style={{ fontFamily: 'Space Grotesk', fontSize: 22, fontWeight: 800, color: '#D4D4D8' }}>#{rank}</div>
+                    <div style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 22, fontWeight: 800, color: '#D4D4D8' }}>#{rank}</div>
                     <div style={{ fontSize: 11, color: '#64748b' }}>{t('ecosystemRank.outOfTotal', { total: allStartups.length })}</div>
                   </div>
                 </div>
@@ -321,7 +321,7 @@ export default function FounderDashboard() {
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
                 <span className="badge badge-purple">{tCommon(`stages.${currentStage.phase}`)}</span>
-                <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 16, fontWeight: 700 }}>{tRoadmap(`stages.${currentStage.id}.title`)}</span>
+                <span style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 16, fontWeight: 700 }}>{tRoadmap(`stages.${currentStage.id}.title`)}</span>
               </div>
               <p style={{ fontSize: 13, color: '#64748b', marginBottom: '16px' }}>{tRoadmap(`stages.${currentStage.id}.description`)}</p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>

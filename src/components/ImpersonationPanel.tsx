@@ -131,7 +131,7 @@ export function ImpersonationPanel() {
       <div className="card" style={{ marginBottom: '24px', background: 'var(--bg-card)', borderColor: 'rgba(113,113,122,0.15)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
           <UserCheck size={18} color="#71717A" />
-          <span style={{ fontFamily: 'Space Grotesk', fontSize: 15, fontWeight: 700 }}>{t('triggerTitle')}</span>
+          <span style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 15, fontWeight: 700 }}>{t('triggerTitle')}</span>
           <span className="badge badge-yellow">{t('auditLogged')}</span>
         </div>
         <p style={{ fontSize: 13, color: '#64748b', marginBottom: '16px' }}>

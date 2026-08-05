@@ -152,14 +152,14 @@ export default function InvestorCRMPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 style={{ fontFamily: "Space Grotesk, sans-serif", fontWeight: 700 }}>Investor CRM</h1>
+          <h1 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontWeight: 700 }}>Investor CRM</h1>
           <p style={{ color: '#64748b', fontSize: 14 }}>Deal pipeline — drag cards between stages</p>
         </div>
         <div style={{ display: 'flex', gap: '8px' }}>
           <button onClick={exportCsv} className="btn-secondary" style={{ fontSize: 13, padding: '8px 16px' }}>
             Export CSV
           </button>
-          <div style={{ padding: '8px 16px', borderRadius: 10, background: 'rgba(212,212,216,0.1)', border: '1px solid rgba(212,212,216,0.2)', fontSize: 13, color: '#A1A1AA', fontFamily: 'Space Grotesk', fontWeight: 700 }}>
+          <div style={{ padding: '8px 16px', borderRadius: 10, background: 'rgba(212,212,216,0.1)', border: '1px solid rgba(212,212,216,0.2)', fontSize: 13, color: '#A1A1AA', fontFamily: 'var(--font-space-grotesk), sans-serif', fontWeight: 700 }}>
             Portfolio est. {fmt(totalValue)}
           </div>
         </div>
@@ -175,7 +175,7 @@ export default function InvestorCRMPage() {
                 {stage.icon}
                 <span style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>{stage.label}</span>
               </div>
-              <div style={{ fontFamily: 'Space Grotesk', fontSize: 24, fontWeight: 800, color: stage.color }}>{count}</div>
+              <div style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 24, fontWeight: 800, color: stage.color }}>{count}</div>
             </div>
           );
         })}
@@ -243,8 +243,8 @@ export default function InvestorCRMPage() {
                     </div>
 
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ fontFamily: 'Space Grotesk', fontSize: 12, fontWeight: 700, color: '#D4D4D8' }}>{fmt(s.metrics.mrr)} MRR</span>
-                      <span style={{ fontFamily: 'Space Grotesk', fontSize: 13, fontWeight: 800, color: sc }}>{score}</span>
+                      <span style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 12, fontWeight: 700, color: '#D4D4D8' }}>{fmt(s.metrics.mrr)} MRR</span>
+                      <span style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 13, fontWeight: 800, color: sc }}>{score}</span>
                     </div>
 
                     {deal.notes && (
@@ -287,12 +287,12 @@ export default function InvestorCRMPage() {
               const sc = score >= 75 ? '#D4D4D8' : score >= 50 ? '#71717A' : '#52525B';
               return (
                 <button key={s.id} onClick={() => addDeal(s.id, addModal!)} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 16px', borderRadius: '12px', background: 'rgba(0,0,0,0.04)', border: '1px solid rgba(0,0,0,0.08)', cursor: 'pointer', textAlign: 'left', width: '100%', fontFamily: 'Inter', transition: 'var(--transition-standard)' }}>
-                  <div style={{ width: 36, height: 36, borderRadius: 8, background: 'rgba(0,0,0,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Space Grotesk', fontWeight: 800, color: '#D8B4FE', flexShrink: 0 }}>{s.name.charAt(0)}</div>
+                  <div style={{ width: 36, height: 36, borderRadius: 8, background: 'rgba(0,0,0,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-space-grotesk), sans-serif', fontWeight: 800, color: '#D8B4FE', flexShrink: 0 }}>{s.name.charAt(0)}</div>
                   <div style={{ flex: 1 }}>
                     <div style={{ fontWeight: 700, fontSize: 14, color: 'var(--text-primary)' }}>{s.name}</div>
                     <div style={{ fontSize: 11, color: '#475569' }}>{s.industry} · {fmt(s.metrics.mrr)} MRR</div>
                   </div>
-                  <div style={{ fontFamily: 'Space Grotesk', fontSize: 16, fontWeight: 800, color: sc }}>{score}</div>
+                  <div style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 16, fontWeight: 800, color: sc }}>{score}</div>
                 </button>
               );
             })}
@@ -314,7 +314,7 @@ export default function InvestorCRMPage() {
               ].map((kv, i) => (
                 <div key={i} style={{ padding: '10px 14px', borderRadius: 10, background: 'rgba(0,0,0,0.04)', border: '1px solid rgba(0,0,0,0.08)' }}>
                   <div style={{ fontSize: 10, color: '#475569', marginBottom: 4 }}>{kv.l}</div>
-                  <div style={{ fontFamily: 'Space Grotesk', fontSize: 16, fontWeight: 700 }}>{kv.v}</div>
+                  <div style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 16, fontWeight: 700 }}>{kv.v}</div>
                 </div>
               ))}
             </div>

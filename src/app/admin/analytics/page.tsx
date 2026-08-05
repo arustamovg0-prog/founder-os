@@ -117,7 +117,7 @@ export default function AdminAnalyticsPage() {
   return (
     <div className="animate-fade-in">
       <div style={{ marginBottom: '28px' }}>
-        <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, marginBottom: 6 }}>Ecosystem Analytics</h1>
+        <h1 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontWeight: 700, marginBottom: 6 }}>Ecosystem Analytics</h1>
         <p style={{ color: '#64748b', fontSize: 14 }}>Portfolio-level performance metrics and trends</p>
       </div>
 
@@ -136,7 +136,7 @@ export default function AdminAnalyticsPage() {
                 {kpi.change} MoM
               </span>
             </div>
-            <div style={{ fontFamily: 'Space Grotesk', fontSize: 26, fontWeight: 800, color: kpi.color }}>{kpi.value}</div>
+            <div style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 26, fontWeight: 800, color: kpi.color }}>{kpi.value}</div>
             <div style={{ fontSize: 12, color: '#475569', fontWeight: 500 }}>{kpi.label}</div>
           </div>
         ))}
@@ -228,7 +228,7 @@ export default function AdminAnalyticsPage() {
             const scoreColor = score >= 75 ? '#D4D4D8' : score >= 50 ? '#71717A' : '#52525B';
             return (
               <div key={s.id} style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '12px 16px', borderRadius: '12px', background: i === 0 ? 'rgba(212,212,216,0.05)' : 'rgba(0,0,0,0.02)', border: `1px solid ${i === 0 ? 'rgba(212,212,216,0.15)' : 'rgba(0,0,0,0.05)'}` }}>
-                <div style={{ width: 28, height: 28, borderRadius: '50%', background: i === 0 ? '#71717A' : i === 1 ? '#94a3b8' : i === 2 ? '#cd7c32' : 'rgba(0,0,0,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Space Grotesk', fontWeight: 800, fontSize: 13, color: i <= 2 ? '#050510' : '#64748b', flexShrink: 0 }}>
+                <div style={{ width: 28, height: 28, borderRadius: '50%', background: i === 0 ? '#71717A' : i === 1 ? '#94a3b8' : i === 2 ? '#cd7c32' : 'rgba(0,0,0,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-space-grotesk), sans-serif', fontWeight: 800, fontSize: 13, color: i <= 2 ? '#050510' : '#64748b', flexShrink: 0 }}>
                   {i + 1}
                 </div>
                 <div style={{ flex: 1 }}>
@@ -238,7 +238,7 @@ export default function AdminAnalyticsPage() {
                 <div className="progress-bar" style={{ flex: 1, maxWidth: '200px' }}>
                   <div style={{ height: '100%', borderRadius: 99, width: `${score}%`, background: scoreColor, boxShadow: `0 0 6px ${scoreColor}80` }} />
                 </div>
-                <div style={{ fontFamily: 'Space Grotesk', fontSize: 20, fontWeight: 800, color: scoreColor, minWidth: 40, textAlign: 'right' }}>
+                <div style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 20, fontWeight: 800, color: scoreColor, minWidth: 40, textAlign: 'right' }}>
                   {score}
                 </div>
               </div>

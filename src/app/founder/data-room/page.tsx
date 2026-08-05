@@ -164,11 +164,11 @@ export default function DataRoomPage() {
     <div className="animate-fade-in">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 style={{ fontFamily: "Space Grotesk, sans-serif", fontWeight: 700 }}>{t('title')}</h1>
+          <h1 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontWeight: 700 }}>{t('title')}</h1>
           <p style={{ color: '#64748b', fontSize: 14 }}>{t('subtitle')}</p>
         </div>
         <div style={{ textAlign: 'right' }}>
-          <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 24, fontWeight: 700, color: '#a78bfa' }}>{uploaded}/{total}</div>
+          <div style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 24, fontWeight: 700, color: '#a78bfa' }}>{uploaded}/{total}</div>
           <div style={{ fontSize: 12, color: '#475569' }}>{t('documentsReady')}</div>
         </div>
       </div>
@@ -226,7 +226,7 @@ export default function DataRoomPage() {
                     marginBottom: '12px',
                   }}>
                     <span style={{ fontSize: 11, color: '#a78bfa', fontWeight: 600 }}>{t('aiScore')}</span>
-                    <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 16, fontWeight: 700, color: '#a78bfa', marginLeft: 'auto' }}>
+                    <span style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 16, fontWeight: 700, color: '#a78bfa', marginLeft: 'auto' }}>
                       {doc.aiScore}/100
                     </span>
                   </div>

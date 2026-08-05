@@ -124,7 +124,7 @@ export default function CommunityPage() {
           <div style={{ width: 32, height: 32, borderRadius: 8, background: 'linear-gradient(135deg,#D4D4D8,#A1A1AA)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Users size={16} color="currentColor" />
           </div>
-          <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700 }}>Co-founder Match</h1>
+          <h1 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontWeight: 700 }}>Co-founder Match</h1>
           <span className="badge badge-green">Community</span>
         </div>
         <p style={{ color: '#64748b', fontSize: 13 }}>Найди ко-фаундера или ключевого члена команды внутри экосистемы UNTITLED</p>
@@ -272,7 +272,7 @@ export default function CommunityPage() {
         /* Post form */
         <div style={{ maxWidth: 600 }}>
           <div style={{ padding: 24, borderRadius: 16, background: 'rgba(13,13,32,0.8)', border: '1px solid rgba(0,0,0,0.06)' }}>
-            <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 6, fontFamily: 'Space Grotesk' }}>Разместить объявление</h2>
+            <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 6, fontFamily: 'var(--font-space-grotesk), sans-serif' }}>Разместить объявление</h2>
             <p style={{ fontSize: 13, color: '#64748b', marginBottom: 24 }}>Расскажи о себе и о том, кого ты ищешь</p>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
@@ -296,7 +296,7 @@ export default function CommunityPage() {
                 <label style={{ fontSize: 12, fontWeight: 600, color: '#94a3b8', display: 'block', marginBottom: 6 }}>Расскажи о своём стартапе и о том, кого ищешь</label>
                 <textarea className="input-field" style={{ width: '100%', minHeight: 120, resize: 'vertical' }} placeholder="Мы строим [X] для [аудитории]. Ищем [роль] с опытом в [область]..." value={myPost.description} onChange={e => setMyPost(p => ({ ...p, description: e.target.value }))} />
               </div>
-              <button style={{ padding: '12px 20px', borderRadius: 10, fontSize: 14, fontWeight: 700, cursor: 'pointer', background: 'linear-gradient(135deg, rgba(212,212,216,0.2), rgba(161,161,170,0.2))', border: '1px solid rgba(212,212,216,0.3)', color: '#D4D4D8', fontFamily: 'Space Grotesk', transition: 'var(--transition-standard)' }}>
+              <button style={{ padding: '12px 20px', borderRadius: 10, fontSize: 14, fontWeight: 700, cursor: 'pointer', background: 'linear-gradient(135deg, rgba(212,212,216,0.2), rgba(161,161,170,0.2))', border: '1px solid rgba(212,212,216,0.3)', color: '#D4D4D8', fontFamily: 'var(--font-space-grotesk), sans-serif', transition: 'var(--transition-standard)' }}>
                 <Link size={14} style={{ display: 'inline', marginRight: 8 }} />Опубликовать объявление
               </button>
             </div>

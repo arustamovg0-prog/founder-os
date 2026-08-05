@@ -105,11 +105,11 @@ export default function AdminChallengesPage() {
             <div style={{ width: 32, height: 32, borderRadius: 8, background: 'linear-gradient(135deg,#52525B,#71717A)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Flame size={16} color="currentColor" />
             </div>
-            <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700 }}>Управление задачами</h1>
+            <h1 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontWeight: 700 }}>Управление задачами</h1>
           </div>
           <p style={{ color: '#64748b', fontSize: 13 }}>Создавайте и управляйте Corporate Challenges от партнёров</p>
         </div>
-        <button onClick={openCreate} style={{ padding: '10px 18px', borderRadius: 10, fontSize: 13, fontWeight: 700, cursor: 'pointer', background: 'linear-gradient(135deg, rgba(82,82,91,0.2), rgba(113,113,122,0.2))', border: '1px solid rgba(82,82,91,0.3)', color: '#52525B', display: 'flex', alignItems: 'center', gap: 8, fontFamily: 'Space Grotesk', transition: 'var(--transition-standard)' }}>
+        <button onClick={openCreate} style={{ padding: '10px 18px', borderRadius: 10, fontSize: 13, fontWeight: 700, cursor: 'pointer', background: 'linear-gradient(135deg, rgba(82,82,91,0.2), rgba(113,113,122,0.2))', border: '1px solid rgba(82,82,91,0.3)', color: '#52525B', display: 'flex', alignItems: 'center', gap: 8, fontFamily: 'var(--font-space-grotesk), sans-serif', transition: 'var(--transition-standard)' }}>
           <Plus size={16} />Добавить задачу
         </button>
       </div>
@@ -122,7 +122,7 @@ export default function AdminChallengesPage() {
           { label: 'Всего заявок', value: stats.applications, color: '#71717A' },
         ].map((s, i) => (
           <div key={i} style={{ padding: '16px', borderRadius: 12, background: `${s.color}10`, border: `1px solid ${s.color}25`, textAlign: 'center' }}>
-            <div style={{ fontSize: 28, fontWeight: 800, color: s.color, fontFamily: 'Space Grotesk' }}>{s.value}</div>
+            <div style={{ fontSize: 28, fontWeight: 800, color: s.color, fontFamily: 'var(--font-space-grotesk), sans-serif' }}>{s.value}</div>
             <div style={{ fontSize: 11, color: '#64748b', fontWeight: 600 }}>{s.label}</div>
           </div>
         ))}
@@ -185,7 +185,7 @@ export default function AdminChallengesPage() {
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)', zIndex: 999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
           <div style={{ width: '100%', maxWidth: 560, borderRadius: 20, background: 'rgba(10,10,28,0.98)', border: '1px solid rgba(0,0,0,0.1)', padding: 28, maxHeight: '90vh', overflowY: 'auto' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
-              <h2 style={{ fontFamily: 'Space Grotesk', fontSize: 18, fontWeight: 700 }}>{editId ? 'Редактировать задачу' : 'Создать задачу'}</h2>
+              <h2 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 18, fontWeight: 700 }}>{editId ? 'Редактировать задачу' : 'Создать задачу'}</h2>
               <button onClick={() => setShowForm(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748b' }}><X size={18} /></button>
             </div>
 
@@ -248,7 +248,7 @@ export default function AdminChallengesPage() {
               <button onClick={() => setShowForm(false)} style={{ flex: 1, padding: '10px', borderRadius: 10, fontSize: 13, background: 'none', border: '1px solid rgba(0,0,0,0.1)', color: '#64748b', cursor: 'pointer', fontFamily: 'Inter' }}>
                 Отмена
               </button>
-              <button onClick={save} disabled={!form.title || !form.company} style={{ flex: 2, padding: '10px', borderRadius: 10, fontSize: 13, fontWeight: 700, cursor: 'pointer', background: 'linear-gradient(135deg, rgba(82,82,91,0.2), rgba(113,113,122,0.2))', border: '1px solid rgba(82,82,91,0.3)', color: '#52525B', fontFamily: 'Space Grotesk', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+              <button onClick={save} disabled={!form.title || !form.company} style={{ flex: 2, padding: '10px', borderRadius: 10, fontSize: 13, fontWeight: 700, cursor: 'pointer', background: 'linear-gradient(135deg, rgba(82,82,91,0.2), rgba(113,113,122,0.2))', border: '1px solid rgba(82,82,91,0.3)', color: '#52525B', fontFamily: 'var(--font-space-grotesk), sans-serif', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
                 <Save size={14} />{editId ? 'Сохранить изменения' : 'Создать задачу'}
               </button>
             </div>
@@ -261,7 +261,7 @@ export default function AdminChallengesPage() {
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)', zIndex: 999, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <div style={{ padding: 28, borderRadius: 16, background: 'rgba(10,10,28,0.98)', border: '1px solid rgba(82,82,91,0.3)', maxWidth: 360, width: '90%' }}>
             <div style={{ fontSize: 32, textAlign: 'center', marginBottom: 12 }}></div>
-            <h3 style={{ fontFamily: 'Space Grotesk', fontSize: 16, fontWeight: 700, textAlign: 'center', marginBottom: 8 }}>Удалить задачу?</h3>
+            <h3 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 16, fontWeight: 700, textAlign: 'center', marginBottom: 8 }}>Удалить задачу?</h3>
             <p style={{ fontSize: 13, color: '#64748b', textAlign: 'center', marginBottom: 20 }}>Это действие нельзя отменить. Все заявки будут удалены.</p>
             <div style={{ display: 'flex', gap: 10 }}>
               <button onClick={() => setDeletingId(null)} style={{ flex: 1, padding: '9px', borderRadius: 8, border: '1px solid rgba(0,0,0,0.1)', background: 'none', color: '#64748b', cursor: 'pointer', fontFamily: 'Inter', fontSize: 13 }}>Отмена</button>
@@ -285,7 +285,7 @@ export default function AdminChallengesPage() {
               </div>
               <button onClick={() => setViewingId(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748b' }}><X size={18} /></button>
             </div>
-            <h3 style={{ fontFamily: 'Space Grotesk', fontSize: 16, fontWeight: 700, marginBottom: 12 }}>{viewing.title}</h3>
+            <h3 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 16, fontWeight: 700, marginBottom: 12 }}>{viewing.title}</h3>
             <p style={{ fontSize: 13, color: '#94a3b8', lineHeight: 1.7, marginBottom: 16 }}>{viewing.problem}</p>
             <div style={{ padding: '10px 14px', borderRadius: 10, background: `${REWARD_COLORS[viewing.rewardType]}08`, border: `1px solid ${REWARD_COLORS[viewing.rewardType]}20`, marginBottom: 16 }}>
               <div style={{ fontSize: 12, color: REWARD_COLORS[viewing.rewardType], fontWeight: 600 }}>Вознаграждение:</div>

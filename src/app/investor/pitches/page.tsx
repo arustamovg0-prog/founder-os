@@ -40,7 +40,7 @@ function FeedbackModal({ pitch, onClose }: { pitch: PitchEvent; onClose: () => v
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-box" onClick={e => e.stopPropagation()} style={{ maxWidth: '600px' }}>
-        <h2 style={{ fontFamily: 'Space Grotesk', fontSize: 20, fontWeight: 700, marginBottom: '4px' }}>
+        <h2 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 20, fontWeight: 700, marginBottom: '4px' }}>
           Submit Feedback
         </h2>
         <p style={{ color: '#64748b', fontSize: 13, marginBottom: '24px' }}>{pitch.startupName} — Post-pitch review</p>
@@ -189,7 +189,7 @@ export default function InvestorPitchesPage() {
   return (
     <div className="animate-fade-in">
       <div style={{ marginBottom: '28px' }}>
-        <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, marginBottom: 6 }}>Pitch Requests</h1>
+        <h1 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontWeight: 700, marginBottom: 6 }}>Pitch Requests</h1>
         <p style={{ color: '#64748b', fontSize: 14 }}>Manage incoming pitch requests and submit post-pitch feedback</p>
       </div>
 
@@ -220,7 +220,7 @@ export default function InvestorPitchesPage() {
                   width: 52, height: 52, borderRadius: '14px', flexShrink: 0,
                   background: 'rgba(0,0,0,0.15)', border: '1px solid rgba(0,0,0,0.25)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontFamily: 'Space Grotesk', fontSize: 22, fontWeight: 800, color: '#D8B4FE',
+                  fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 22, fontWeight: 800, color: '#D8B4FE',
                 }}>
                   {pitch.startupName?.charAt(0)}
                 </div>

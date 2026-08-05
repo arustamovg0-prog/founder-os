@@ -75,7 +75,7 @@ export default function SideNav() {
       <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-[var(--bg-secondary)] border-b border-[var(--border)] z-40 flex items-center justify-between px-4">
         <div className="flex items-center gap-2">
            <Command size={16} color="currentColor" />
-           <span className="text-[var(--text-primary)] font-semibold text-sm" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Founder OS</span>
+           <span className="text-[var(--text-primary)] font-semibold text-sm" style={{ fontFamily: 'var(--font-space-grotesk), sans-serif' }}>Founder OS</span>
         </div>
         <button onClick={() => setIsOpen(true)} className="p-2 text-[var(--text-primary)]">
           <Menu size={20} />
@@ -107,7 +107,7 @@ export default function SideNav() {
           <Command size={16} color="currentColor" />
         </div>
         <div>
-          <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: '16px', fontWeight: 600, color: 'var(--text-primary)', letterSpacing: '0.5px' }}>Founder OS</div>
+          <div style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: '16px', fontWeight: 600, color: 'var(--text-primary)', letterSpacing: '0.5px' }}>Founder OS</div>
           <div style={{ fontSize: '10px', color: '#a1a1aa', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px' }}>by UNTITLED</div>
         </div>
       </div>

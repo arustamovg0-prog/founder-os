@@ -139,7 +139,7 @@ export default function RoadmapPage() {
 
       {/* Header */}
       <div style={{ marginBottom: '32px' }}>
-        <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, marginBottom: 6 }}>
+        <h1 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontWeight: 700, marginBottom: 6 }}>
           {t('title')}
         </h1>
         <p style={{ color: '#64748b', fontSize: 14 }}>
@@ -151,7 +151,7 @@ export default function RoadmapPage() {
       <div className="card" style={{ marginBottom: '28px', background: 'rgba(0,0,0,0.06)', borderColor: 'rgba(0,0,0,0.2)' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
           <div>
-            <div style={{ fontSize: 24, fontWeight: 800, fontFamily: 'Space Grotesk, sans-serif', color: '#D8B4FE' }}>
+            <div style={{ fontSize: 24, fontWeight: 800, fontFamily: 'var(--font-space-grotesk), sans-serif', color: '#D8B4FE' }}>
               {startup.roadmapProgress || 0}%
             </div>
             <div style={{ fontSize: 13, color: '#64748b' }}>
@@ -199,7 +199,7 @@ export default function RoadmapPage() {
                   background: state === 'completed' ? 'rgba(212,212,216,0.2)' : state === 'locked' ? 'rgba(0,0,0,0.03)' : `${phaseColor}20`,
                   border: `2px solid ${state === 'completed' ? '#D4D4D8' : state === 'locked' ? 'rgba(0,0,0,0.08)' : phaseColor}`,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, fontSize: 15,
+                  fontFamily: 'var(--font-space-grotesk), sans-serif', fontWeight: 700, fontSize: 15,
                   color: state === 'completed' ? '#D4D4D8' : state === 'locked' ? '#334155' : phaseColor,
                 }}>
                   {state === 'completed' ? '✓' : idx + 1}
@@ -207,7 +207,7 @@ export default function RoadmapPage() {
 
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '4px' }}>
-                    <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 15, fontWeight: 700, color: state === 'locked' ? '#334155' : '#f8fafc' }}>
+                    <span style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 15, fontWeight: 700, color: state === 'locked' ? '#334155' : '#f8fafc' }}>
                       {t(`stages.${stage.id}.title`)}
                     </span>
                     <span style={{

@@ -38,7 +38,7 @@ function StartupDetailRow({ s }: { s: Startup }) {
           width: 44, height: 44, borderRadius: '12px', flexShrink: 0,
           background: `${stageColor}20`, border: `1px solid ${stageColor}30`,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontFamily: 'Space Grotesk', fontSize: 18, fontWeight: 800, color: stageColor,
+          fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 18, fontWeight: 800, color: stageColor,
         }}>{s.name.charAt(0)}</div>
 
         <div style={{ flex: '0 0 200px', minWidth: 0 }}>
@@ -62,13 +62,13 @@ function StartupDetailRow({ s }: { s: Startup }) {
           ].map((m, i) => (
             <div key={i}>
               <div style={{ fontSize: 11, color: '#334155', fontWeight: 600 }}>{m.l}</div>
-              <div style={{ fontFamily: 'Space Grotesk', fontSize: 14, fontWeight: 700, color: m.c }}>{m.v}</div>
+              <div style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 14, fontWeight: 700, color: m.c }}>{m.v}</div>
             </div>
           ))}
         </div>
 
         <div style={{ flex: '0 0 80px', textAlign: 'center' }}>
-          <div style={{ fontFamily: 'Space Grotesk', fontSize: 22, fontWeight: 800, color: scoreColor }}>{score}</div>
+          <div style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 22, fontWeight: 800, color: scoreColor }}>{score}</div>
           <div style={{ fontSize: 10, color: '#334155' }}>{t('aiScore')}</div>
         </div>
 
@@ -210,7 +210,7 @@ export default function AdminStartupsPage() {
   return (
     <div className="animate-fade-in">
       <div style={{ marginBottom: '28px' }}>
-        <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, marginBottom: 6 }}>{t('title')}</h1>
+        <h1 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontWeight: 700, marginBottom: 6 }}>{t('title')}</h1>
         <p style={{ color: '#64748b', fontSize: 14 }}>{t('subtitle')}</p>
       </div>
 

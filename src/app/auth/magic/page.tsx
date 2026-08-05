@@ -96,7 +96,7 @@ export default function MagicLinkCallbackPage() {
           }}>
             <Command size={22} color="currentColor" />
           </div>
-          <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 20, fontWeight: 700 }}>Founder OS</span>
+          <span style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 20, fontWeight: 700 }}>Founder OS</span>
         </div>
 
         <div className="card" style={{ padding: '40px', textAlign: 'center' }}>
@@ -110,7 +110,7 @@ export default function MagicLinkCallbackPage() {
                 borderRadius: '50%',
                 animation: 'spin 1s linear infinite',
               }} />
-              <h2 style={{ fontFamily: 'Space Grotesk', fontSize: 22, fontWeight: 700, marginBottom: 8 }}>
+              <h2 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 22, fontWeight: 700, marginBottom: 8 }}>
                 {state === 'checking' ? 'Проверяем ссылку...' : 'Входим в систему...'}
               </h2>
               <p style={{ color: '#64748b', fontSize: 14 }}>Подождите несколько секунд</p>
@@ -121,7 +121,7 @@ export default function MagicLinkCallbackPage() {
           {state === 'email_needed' && (
             <div>
               <div style={{ fontSize: 48, marginBottom: '16px' }}></div>
-              <h2 style={{ fontFamily: 'Space Grotesk', fontSize: 22, fontWeight: 700, marginBottom: 8 }}>
+              <h2 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 22, fontWeight: 700, marginBottom: 8 }}>
                 Подтверди Email
               </h2>
               <p style={{ color: '#64748b', fontSize: 14, marginBottom: '24px', lineHeight: 1.6 }}>
@@ -146,7 +146,7 @@ export default function MagicLinkCallbackPage() {
           {state === 'success' && (
             <div>
               <CheckCircle size={64} color="#D4D4D8" style={{ margin: '0 auto 20px', display: 'block' }} />
-              <h2 style={{ fontFamily: 'Space Grotesk', fontSize: 22, fontWeight: 700, marginBottom: 8, color: '#A1A1AA' }}>
+              <h2 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 22, fontWeight: 700, marginBottom: 8, color: '#A1A1AA' }}>
                 Вход выполнен!
               </h2>
               <p style={{ color: '#64748b', fontSize: 14 }}>Перенаправляем в дашборд...</p>
@@ -162,7 +162,7 @@ export default function MagicLinkCallbackPage() {
           {state === 'error' && (
             <div>
               <XCircle size={64} color="#52525B" style={{ margin: '0 auto 20px', display: 'block' }} />
-              <h2 style={{ fontFamily: 'Space Grotesk', fontSize: 22, fontWeight: 700, marginBottom: 8, color: '#f87171' }}>
+              <h2 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 22, fontWeight: 700, marginBottom: 8, color: '#f87171' }}>
                 Ссылка недействительна
               </h2>
               <p style={{ color: '#64748b', fontSize: 14, marginBottom: '24px', lineHeight: 1.6 }}>{error}</p>

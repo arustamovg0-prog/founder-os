@@ -90,7 +90,7 @@ export default function LeaderboardPage() {
             <Trophy size={13} color="#D4D4D8" />
             <span style={{ fontSize: 12, color: '#D4D4D8', fontWeight: 600 }}>UNTITLED Ecosystem</span>
           </div>
-          <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 40, fontWeight: 800, marginBottom: 10 }}>
+          <h1 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 40, fontWeight: 800, marginBottom: 10 }}>
             Startup <span style={{ background: 'linear-gradient(135deg,#71717A,#52525B)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Leaderboard</span>
           </h1>
           <p style={{ color: '#64748b', fontSize: 15 }}>
@@ -126,24 +126,24 @@ export default function LeaderboardPage() {
             {/* 2nd */}
             <div style={{ textAlign: 'center', padding: '24px 16px', borderRadius: '16px', background: 'rgba(148,163,184,0.06)', border: '1px solid rgba(148,163,184,0.15)', marginTop: '32px' }}>
               <div style={{ fontSize: 32, marginBottom: 8 }}>🥈</div>
-              <div style={{ width: 52, height: 52, borderRadius: '50%', background: 'rgba(148,163,184,0.2)', margin: '0 auto 10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Space Grotesk', fontSize: 20, fontWeight: 800, color: '#94a3b8' }}>
+              <div style={{ width: 52, height: 52, borderRadius: '50%', background: 'rgba(148,163,184,0.2)', margin: '0 auto 10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 20, fontWeight: 800, color: '#94a3b8' }}>
                 {topThree[1].name.charAt(0)}
               </div>
-              <div style={{ fontFamily: 'Space Grotesk', fontWeight: 700, fontSize: 14, marginBottom: 4 }}>{topThree[1].name}</div>
+              <div style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontWeight: 700, fontSize: 14, marginBottom: 4 }}>{topThree[1].name}</div>
               <div style={{ fontSize: 11, color: '#64748b', marginBottom: 8 }}>{topThree[1].industry}</div>
-              <div style={{ fontFamily: 'Space Grotesk', fontSize: 22, fontWeight: 800, color: '#94a3b8' }}>
+              <div style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 22, fontWeight: 800, color: '#94a3b8' }}>
                 {sortBy === 'score' ? topThree[1].aiScores.overallReadinessScore : sortBy === 'mrr' ? fmt(topThree[1].metrics.mrr) : sortBy === 'mau' ? topThree[1].metrics.mau.toLocaleString() : `${topThree[1].roadmapProgress}%`}
               </div>
             </div>
             {/* 1st */}
             <div style={{ textAlign: 'center', padding: '32px 20px', borderRadius: '20px', background: 'linear-gradient(135deg,rgba(113,113,122,0.12),rgba(82,82,91,0.08))', border: '2px solid rgba(113,113,122,0.3)', boxShadow: '0 0 40px rgba(113,113,122,0.15)' }}>
               <div style={{ fontSize: 40, marginBottom: 10 }}>🥇</div>
-              <div style={{ width: 64, height: 64, borderRadius: '50%', background: 'linear-gradient(135deg,#71717A,#52525B)', margin: '0 auto 12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Space Grotesk', fontSize: 26, fontWeight: 800, color: 'white', boxShadow: '0 0 20px rgba(113,113,122,0.4)' }}>
+              <div style={{ width: 64, height: 64, borderRadius: '50%', background: 'linear-gradient(135deg,#71717A,#52525B)', margin: '0 auto 12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 26, fontWeight: 800, color: 'white', boxShadow: '0 0 20px rgba(113,113,122,0.4)' }}>
                 {topThree[0].name.charAt(0)}
               </div>
-              <div style={{ fontFamily: 'Space Grotesk', fontWeight: 800, fontSize: 17, marginBottom: 4 }}>{topThree[0].name}</div>
+              <div style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontWeight: 800, fontSize: 17, marginBottom: 4 }}>{topThree[0].name}</div>
               <div style={{ fontSize: 12, color: '#94a3b8', marginBottom: 10 }}>{topThree[0].industry} · {topThree[0].location}</div>
-              <div style={{ fontFamily: 'Space Grotesk', fontSize: 32, fontWeight: 900, color: '#D4D4D8' }}>
+              <div style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 32, fontWeight: 900, color: '#D4D4D8' }}>
                 {sortBy === 'score' ? topThree[0].aiScores.overallReadinessScore : sortBy === 'mrr' ? fmt(topThree[0].metrics.mrr) : sortBy === 'mau' ? topThree[0].metrics.mau.toLocaleString() : `${topThree[0].roadmapProgress}%`}
               </div>
               <div style={{ marginTop: 12 }}>
@@ -155,12 +155,12 @@ export default function LeaderboardPage() {
             {/* 3rd */}
             <div style={{ textAlign: 'center', padding: '24px 16px', borderRadius: '16px', background: 'rgba(180,120,60,0.06)', border: '1px solid rgba(180,120,60,0.15)', marginTop: '48px' }}>
               <div style={{ fontSize: 32, marginBottom: 8 }}>🥉</div>
-              <div style={{ width: 52, height: 52, borderRadius: '50%', background: 'rgba(180,120,60,0.2)', margin: '0 auto 10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Space Grotesk', fontSize: 20, fontWeight: 800, color: '#b47c3c' }}>
+              <div style={{ width: 52, height: 52, borderRadius: '50%', background: 'rgba(180,120,60,0.2)', margin: '0 auto 10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 20, fontWeight: 800, color: '#b47c3c' }}>
                 {topThree[2].name.charAt(0)}
               </div>
-              <div style={{ fontFamily: 'Space Grotesk', fontWeight: 700, fontSize: 14, marginBottom: 4 }}>{topThree[2].name}</div>
+              <div style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontWeight: 700, fontSize: 14, marginBottom: 4 }}>{topThree[2].name}</div>
               <div style={{ fontSize: 11, color: '#64748b', marginBottom: 8 }}>{topThree[2].industry}</div>
-              <div style={{ fontFamily: 'Space Grotesk', fontSize: 22, fontWeight: 800, color: '#b47c3c' }}>
+              <div style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 22, fontWeight: 800, color: '#b47c3c' }}>
                 {sortBy === 'score' ? topThree[2].aiScores.overallReadinessScore : sortBy === 'mrr' ? fmt(topThree[2].metrics.mrr) : sortBy === 'mau' ? topThree[2].metrics.mau.toLocaleString() : `${topThree[2].roadmapProgress}%`}
               </div>
             </div>
@@ -179,8 +179,8 @@ export default function LeaderboardPage() {
                 borderRadius: '14px', background: 'rgba(0,0,0,0.02)', border: '1px solid rgba(0,0,0,0.06)',
                 transition: 'var(--transition-standard)',
               }}>
-                <div style={{ width: 32, fontSize: 16, fontFamily: 'Space Grotesk', fontWeight: 700, color: '#334155', textAlign: 'center', flexShrink: 0 }}>#{i + 4}</div>
-                <div style={{ width: 40, height: 40, borderRadius: '10px', background: `${stageColor}20`, border: `1px solid ${stageColor}30`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Space Grotesk', fontSize: 16, fontWeight: 800, color: stageColor, flexShrink: 0 }}>
+                <div style={{ width: 32, fontSize: 16, fontFamily: 'var(--font-space-grotesk), sans-serif', fontWeight: 700, color: '#334155', textAlign: 'center', flexShrink: 0 }}>#{i + 4}</div>
+                <div style={{ width: 40, height: 40, borderRadius: '10px', background: `${stageColor}20`, border: `1px solid ${stageColor}30`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 16, fontWeight: 800, color: stageColor, flexShrink: 0 }}>
                   {s.name.charAt(0)}
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
@@ -193,11 +193,11 @@ export default function LeaderboardPage() {
                   {s.stage.replace('_', ' ')}
                 </div>
                 <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                  <div style={{ fontFamily: 'Space Grotesk', fontSize: 18, fontWeight: 800, color: sc }}>{score}</div>
+                  <div style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 18, fontWeight: 800, color: sc }}>{score}</div>
                   <div style={{ fontSize: 10, color: '#334155' }}>AI Score</div>
                 </div>
                 <div style={{ textAlign: 'right', flexShrink: 0, minWidth: '60px' }}>
-                  <div style={{ fontFamily: 'Space Grotesk', fontSize: 14, fontWeight: 700, color: '#D4D4D8' }}>{fmt(s.metrics.mrr)}</div>
+                  <div style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 14, fontWeight: 700, color: '#D4D4D8' }}>{fmt(s.metrics.mrr)}</div>
                   <div style={{ fontSize: 10, color: '#334155' }}>MRR</div>
                 </div>
               </div>

@@ -44,7 +44,7 @@ export default function PublicStartupProfile({ params }: { params: { startupName
   if (!startup) {
     return (
       <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#64748b' }}>
-        <h1 style={{ fontFamily: 'Space Grotesk', fontSize: 48, marginBottom: 16, color: 'var(--text-primary)' }}>404</h1>
+        <h1 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 48, marginBottom: 16, color: 'var(--text-primary)' }}>404</h1>
         <p>Startup not found.</p>
         <Link href="/" className="btn-primary" style={{ marginTop: 24, textDecoration: 'none' }}>Back to Founder OS</Link>
       </div>
@@ -59,11 +59,11 @@ export default function PublicStartupProfile({ params }: { params: { startupName
 
         <div style={{ position: 'relative', zIndex: 1 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '24px', marginBottom: '32px' }}>
-            <div style={{ width: 80, height: 80, borderRadius: '20px', background: 'linear-gradient(135deg,rgba(0,0,0,0.2),rgba(161,161,170,0.2))', border: '1px solid rgba(0,0,0,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Space Grotesk', fontSize: 36, fontWeight: 800, color: '#D8B4FE' }}>
+            <div style={{ width: 80, height: 80, borderRadius: '20px', background: 'linear-gradient(135deg,rgba(0,0,0,0.2),rgba(161,161,170,0.2))', border: '1px solid rgba(0,0,0,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 36, fontWeight: 800, color: '#D8B4FE' }}>
               {startup.name.charAt(0)}
             </div>
             <div>
-              <h1 style={{ fontFamily: 'Space Grotesk', fontSize: 36, fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>{startup.name}</h1>
+              <h1 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 36, fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>{startup.name}</h1>
               <div style={{ fontSize: 16, color: '#D8B4FE', fontWeight: 600, marginTop: 4 }}>{startup.tagline || 'Building the future'}</div>
             </div>
           </div>
@@ -79,7 +79,7 @@ export default function PublicStartupProfile({ params }: { params: { startupName
           </div>
 
           <div style={{ marginBottom: '32px' }}>
-            <h3 style={{ fontFamily: 'Space Grotesk', fontSize: 18, color: 'var(--text-primary)', marginBottom: '12px' }}>Problem</h3>
+            <h3 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 18, color: 'var(--text-primary)', marginBottom: '12px' }}>Problem</h3>
             <p style={{ fontSize: 15, color: '#cbd5e1', lineHeight: 1.6, background: 'rgba(0,0,0,0.02)', padding: '16px', borderRadius: '12px', borderLeft: '2px solid rgba(0,0,0,0.4)' }}>
               {startup.problem || 'Not specified'}
             </p>
@@ -87,7 +87,7 @@ export default function PublicStartupProfile({ params }: { params: { startupName
 
           {startup.executiveSummaryAI && (
             <div style={{ marginBottom: '32px' }}>
-              <h3 style={{ fontFamily: 'Space Grotesk', fontSize: 18, color: '#D8B4FE', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: 8 }}>
+              <h3 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 18, color: '#D8B4FE', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: 8 }}>
                 <Rocket size={18} /> AI Executive Summary
               </h3>
               <p style={{ fontSize: 15, color: '#94a3b8', lineHeight: 1.6 }}>
@@ -99,11 +99,11 @@ export default function PublicStartupProfile({ params }: { params: { startupName
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
             <div style={{ padding: '20px', borderRadius: '16px', background: 'rgba(0,0,0,0.02)', border: '1px solid rgba(0,0,0,0.05)' }}>
               <div style={{ fontSize: 12, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', marginBottom: 8 }}>Traction (MRR)</div>
-              <div style={{ fontFamily: 'Space Grotesk', fontSize: 28, fontWeight: 800, color: '#D4D4D8' }}>${startup.metrics?.mrr || 0}</div>
+              <div style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 28, fontWeight: 800, color: '#D4D4D8' }}>${startup.metrics?.mrr || 0}</div>
             </div>
             <div style={{ padding: '20px', borderRadius: '16px', background: 'rgba(0,0,0,0.02)', border: '1px solid rgba(0,0,0,0.05)' }}>
               <div style={{ fontSize: 12, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', marginBottom: 8 }}>Users (MAU)</div>
-              <div style={{ fontFamily: 'Space Grotesk', fontSize: 28, fontWeight: 800, color: '#A1A1AA' }}>{startup.metrics?.mau?.toLocaleString() || 0}</div>
+              <div style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 28, fontWeight: 800, color: '#A1A1AA' }}>{startup.metrics?.mau?.toLocaleString() || 0}</div>
             </div>
           </div>
 

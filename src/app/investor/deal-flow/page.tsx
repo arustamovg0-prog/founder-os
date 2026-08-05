@@ -41,7 +41,7 @@ function ScoreRing({ score, size = 56 }: { score: number; size?: number }) {
           style={{ filter: `drop-shadow(0 0 4px ${color})` }} />
       </svg>
       <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
-        <span style={{ fontFamily: 'Space Grotesk', fontSize: size < 60 ? 13 : 16, fontWeight: 800, color }}>{score}</span>
+        <span style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: size < 60 ? 13 : 16, fontWeight: 800, color }}>{score}</span>
       </div>
     </div>
   );
@@ -53,7 +53,7 @@ function StartupCard({ s }: { s: Startup }) {
   return (
     <div className="card glass-hover" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
       <div style={{ display: 'flex', alignItems: 'flex-start', gap: '14px' }}>
-        <div style={{ width: 48, height: 48, borderRadius: '12px', flexShrink: 0, background: `linear-gradient(135deg, ${stageColor}40, ${stageColor}20)`, border: `1px solid ${stageColor}40`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Space Grotesk', fontSize: 20, fontWeight: 800, color: stageColor }}>
+        <div style={{ width: 48, height: 48, borderRadius: '12px', flexShrink: 0, background: `linear-gradient(135deg, ${stageColor}40, ${stageColor}20)`, border: `1px solid ${stageColor}40`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 20, fontWeight: 800, color: stageColor }}>
           {s.name.charAt(0)}
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
@@ -81,7 +81,7 @@ function StartupCard({ s }: { s: Startup }) {
           { label: 'LTV/CAC', value: s.metrics.ltvCacRatio > 0 ? `${s.metrics.ltvCacRatio}x` : '—', color: '#71717A' },
         ].map((m, i) => (
           <div key={i} style={{ padding: '10px', borderRadius: '10px', background: 'rgba(0,0,0,0.02)', border: '1px solid rgba(0,0,0,0.04)', textAlign: 'center' }}>
-            <div style={{ fontFamily: 'Space Grotesk', fontSize: 15, fontWeight: 700, color: m.color }}>{m.value}</div>
+            <div style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 15, fontWeight: 700, color: m.color }}>{m.value}</div>
             <div style={{ fontSize: 10, color: '#334155', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>{m.label}</div>
           </div>
         ))}
@@ -121,7 +121,7 @@ function KanbanCard({ s, columnColor }: { s: Startup; columnColor: string }) {
     >
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
         <span style={{ fontWeight: 700, fontSize: 13 }}>{s.name}</span>
-        <span style={{ fontWeight: 800, fontSize: 12, color: scoreColor, fontFamily: 'Space Grotesk' }}>{score}</span>
+        <span style={{ fontWeight: 800, fontSize: 12, color: scoreColor, fontFamily: 'var(--font-space-grotesk), sans-serif' }}>{score}</span>
       </div>
       <div style={{ fontSize: 11, color: '#64748b', marginBottom: 8 }}>{s.industry} · {s.location}</div>
       <div style={{ display: 'flex', gap: 8, fontSize: 11 }}>
@@ -199,7 +199,7 @@ export default function DealFlowPage() {
     <div className="animate-fade-in">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-7">
         <div>
-          <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, marginBottom: 6 }}>Deal Flow</h1>
+          <h1 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontWeight: 700, marginBottom: 6 }}>Deal Flow</h1>
           <p style={{ color: '#64748b', fontSize: 14 }}>Browse AI-scored startups in the UNTITLED ecosystem</p>
         </div>
         <div style={{ display: 'flex', gap: 4, padding: 4, background: 'rgba(0,0,0,0.04)', borderRadius: 10, border: '1px solid rgba(0,0,0,0.06)', flexShrink: 0 }}>

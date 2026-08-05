@@ -78,7 +78,7 @@ export default function FounderPitchesPage() {
     <div className="animate-fade-in">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, marginBottom: 6 }}>{t('title')}</h1>
+          <h1 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontWeight: 700, marginBottom: 6 }}>{t('title')}</h1>
           <p style={{ color: '#64748b', fontSize: 14 }}>{t('subtitle')}</p>
         </div>
         <button className="btn-primary btn-mobile-full" onClick={() => setShowModal(true)}>
@@ -100,7 +100,7 @@ export default function FounderPitchesPage() {
           ].map((step, i) => (
             <div key={i} style={{ textAlign: 'center', padding: '0 12px', position: 'relative' }}>
               {i > 0 && <div style={{ position: 'absolute', left: -1, top: '50%', transform: 'translateY(-80%)', fontSize: 20, color: '#334155' }}>→</div>}
-              <div style={{ fontFamily: 'Space Grotesk', fontSize: 32, fontWeight: 800, color: step.color, marginBottom: 4 }}>{step.val}</div>
+              <div style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 32, fontWeight: 800, color: step.color, marginBottom: 4 }}>{step.val}</div>
               <div style={{ fontSize: 12, color: '#64748b', fontWeight: 600, marginBottom: 8 }}>{step.label}</div>
               <div className="progress-bar">
                 <div style={{ height: '100%', width: `${step.pct}%`, borderRadius: 99, background: step.color, boxShadow: `0 0 8px ${step.color}50` }} />
@@ -118,7 +118,7 @@ export default function FounderPitchesPage() {
             { label: t('kpis.acceptRate'), value: `${Math.round((pitches.filter(p => p.status === 'accepted' || p.status === 'feedback_pending').length / pitches.length) * 100) || 0}%`, color: '#D4D4D8', desc: t('kpis.acceptRateDesc') },
           ].map((kpi, i) => (
             <div key={i} style={{ textAlign: 'center', padding: '14px', borderRadius: '12px', background: `${kpi.color}08`, border: `1px solid ${kpi.color}20` }}>
-              <div style={{ fontFamily: 'Space Grotesk', fontSize: 22, fontWeight: 800, color: kpi.color, marginBottom: 4 }}>{kpi.value}</div>
+              <div style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 22, fontWeight: 800, color: kpi.color, marginBottom: 4 }}>{kpi.value}</div>
               <div style={{ fontSize: 12, fontWeight: 700, color: '#94a3b8', marginBottom: 2 }}>{kpi.label}</div>
               <div style={{ fontSize: 11, color: '#475569' }}>{kpi.desc}</div>
             </div>
@@ -135,7 +135,7 @@ export default function FounderPitchesPage() {
           { label: t('stats.closed'), value: pitches.filter(p => p.status === 'closed').length, color: '#64748b' },
         ].map((stat, i) => (
           <div key={i} className="stat-card" style={{ textAlign: 'center' }}>
-            <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 32, fontWeight: 800, color: stat.color }}>{stat.value}</div>
+            <div style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 32, fontWeight: 800, color: stat.color }}>{stat.value}</div>
             <div style={{ fontSize: 12, color: '#475569', fontWeight: 500 }}>{stat.label}</div>
           </div>
         ))}
@@ -201,7 +201,7 @@ export default function FounderPitchesPage() {
       {showModal && (
         <div className="modal-overlay" onClick={() => setShowModal(false)}>
           <div className="modal-box" onClick={e => e.stopPropagation()}>
-            <h2 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 20, fontWeight: 700, marginBottom: '8px' }}>
+            <h2 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 20, fontWeight: 700, marginBottom: '8px' }}>
               {t('modal.title')}
             </h2>
             <p style={{ color: '#64748b', fontSize: 13, marginBottom: '24px' }}>

@@ -112,7 +112,7 @@ export default function AdminDashboard() {
             <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#D4D4D8', boxShadow: '0 0 8px #D4D4D8' }} />
             <span style={{ fontSize: 12, color: '#D4D4D8', fontWeight: 600 }}>{t('untitledAdmin')}</span>
           </div>
-          <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700 }}>{t('title')}</h1>
+          <h1 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontWeight: 700 }}>{t('title')}</h1>
           <p style={{ color: '#64748b', fontSize: 14 }}>{t('subtitle', { count: startups.length })}</p>
         </div>
       </div>
@@ -129,7 +129,7 @@ export default function AdminDashboard() {
             <div style={{ width: 36, height: 36, borderRadius: 8, background: `rgba(0,0,0,0.03)`, border: `1px solid rgba(0,0,0,0.1)`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: kpi.color, marginBottom: 12 }}>
               {kpi.icon}
             </div>
-            <div style={{ fontFamily: 'Space Grotesk', fontSize: 28, fontWeight: 800, color: kpi.color }}>{kpi.value}</div>
+            <div style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 28, fontWeight: 800, color: kpi.color }}>{kpi.value}</div>
             <div style={{ fontSize: 13, color: '#94a3b8', fontWeight: 500 }}>{kpi.label}</div>
             <div style={{ fontSize: 11, color: '#475569', marginTop: 2 }}>{kpi.sub}</div>
           </div>
@@ -231,13 +231,13 @@ export default function AdminDashboard() {
                         {STAGE_LABELS[s.stage]}
                       </span>
                     </td>
-                    <td style={{ padding: '12px 12px', fontFamily: 'Space Grotesk', fontWeight: 700, color: s.metrics.mrr > 0 ? '#D4D4D8' : '#334155' }}>{fmt(s.metrics.mrr) || '—'}</td>
+                    <td style={{ padding: '12px 12px', fontFamily: 'var(--font-space-grotesk), sans-serif', fontWeight: 700, color: s.metrics.mrr > 0 ? '#D4D4D8' : '#334155' }}>{fmt(s.metrics.mrr) || '—'}</td>
                     <td style={{ padding: '12px 12px', color: '#94a3b8' }}>{s.metrics.teamSize}</td>
                     <td style={{ padding: '12px 12px', color: s.metrics.runwayMonths <= 6 ? '#f87171' : '#D4D4D8' }}>
                       {s.metrics.runwayMonths > 0 ? `${s.metrics.runwayMonths}mo` : '—'}
                     </td>
                     <td style={{ padding: '12px 12px' }}>
-                      <span style={{ fontFamily: 'Space Grotesk', fontWeight: 800, fontSize: 16, color: scoreColor }}>{score}</span>
+                      <span style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontWeight: 800, fontSize: 16, color: scoreColor }}>{score}</span>
                     </td>
                     <td style={{ padding: '12px 12px' }}>
                       <span className={`badge ${s.status === 'active' ? 'badge-green' : s.status === 'deal' ? 'badge-purple' : 'badge-gray'}`}>

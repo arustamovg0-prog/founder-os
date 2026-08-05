@@ -36,7 +36,7 @@ export default function StageReviewPage() {
   return (
     <div className="animate-fade-in">
       <div style={{ marginBottom: '28px' }}>
-        <h1 style={{ fontFamily: "Space Grotesk, sans-serif", fontWeight: 700 }}>Stage Review</h1>
+        <h1 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontWeight: 700 }}>Stage Review</h1>
         <p style={{ color: '#64748b', fontSize: 14 }}>Verify and approve startup roadmap stage completions</p>
       </div>
 
@@ -49,7 +49,7 @@ export default function StageReviewPage() {
         ].map((stat, i) => (
           <div key={i} className="stat-card">
             <div style={{ width: 36, height: 36, borderRadius: 8, background: `${stat.color}20`, border: `1px solid ${stat.color}30`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: stat.color, marginBottom: 12 }}>{stat.icon}</div>
-            <div style={{ fontFamily: 'Space Grotesk', fontSize: 32, fontWeight: 800, color: stat.color }}>{stat.value}</div>
+            <div style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 32, fontWeight: 800, color: stat.color }}>{stat.value}</div>
             <div style={{ fontSize: 12, color: '#475569' }}>{stat.label}</div>
           </div>
         ))}
@@ -71,7 +71,7 @@ export default function StageReviewPage() {
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
                     <div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
-                        <span style={{ fontFamily: 'Space Grotesk', fontSize: 16, fontWeight: 700 }}>{r.startupName}</span>
+                        <span style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 16, fontWeight: 700 }}>{r.startupName}</span>
                         <ChevronRight size={14} color="#475569" />
                         <span style={{ padding: '2px 10px', borderRadius: 99, fontSize: 11, fontWeight: 600, background: `${phaseColor}15`, color: phaseColor, border: `1px solid ${phaseColor}25` }}>
                           {r.stageTitle}

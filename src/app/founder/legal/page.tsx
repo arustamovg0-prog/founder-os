@@ -132,7 +132,7 @@ export default function LegalToolkitPage() {
           <div style={{ width: 32, height: 32, borderRadius: 8, background: 'linear-gradient(135deg,#A1A1AA,#6366f1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Scale size={16} color="currentColor" />
           </div>
-          <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700 }}>Legal Toolkit</h1>
+          <h1 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontWeight: 700 }}>Legal Toolkit</h1>
           <span className="badge badge-blue">Центральная Азия</span>
         </div>
         <p style={{ color: '#64748b', fontSize: 13 }}>Юридические шаблоны, чек-листы и ответы на вопросы — всё для запуска и роста стартапа</p>
@@ -147,7 +147,7 @@ export default function LegalToolkitPage() {
           { label: 'FAQ вопросов', value: FAQ_ITEMS.length, color: '#71717A' },
         ].map((s, i) => (
           <div key={i} style={{ padding: '14px 16px', borderRadius: 12, background: `${s.color}10`, border: `1px solid ${s.color}25`, textAlign: 'center' }}>
-            <div style={{ fontSize: 22, fontWeight: 800, color: s.color, fontFamily: 'Space Grotesk' }}>{s.value}</div>
+            <div style={{ fontSize: 22, fontWeight: 800, color: s.color, fontFamily: 'var(--font-space-grotesk), sans-serif' }}>{s.value}</div>
             <div style={{ fontSize: 11, color: '#64748b', fontWeight: 600 }}>{s.label}</div>
           </div>
         ))}
@@ -158,7 +158,7 @@ export default function LegalToolkitPage() {
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
             <FileText size={16} color="#A1A1AA" />
-            <h2 style={{ fontSize: 16, fontWeight: 700, fontFamily: 'Space Grotesk' }}>Шаблоны документов</h2>
+            <h2 style={{ fontSize: 16, fontWeight: 700, fontFamily: 'var(--font-space-grotesk), sans-serif' }}>Шаблоны документов</h2>
           </div>
 
           <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 16 }}>
@@ -213,7 +213,7 @@ export default function LegalToolkitPage() {
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
               <CheckCircle size={16} color="#D4D4D8" />
-              <h2 style={{ fontSize: 16, fontWeight: 700, fontFamily: 'Space Grotesk' }}>Чек-листы</h2>
+              <h2 style={{ fontSize: 16, fontWeight: 700, fontFamily: 'var(--font-space-grotesk), sans-serif' }}>Чек-листы</h2>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {CHECKLISTS.map(cl => {
@@ -268,7 +268,7 @@ export default function LegalToolkitPage() {
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
               <BookOpen size={16} color="#71717A" />
-              <h2 style={{ fontSize: 16, fontWeight: 700, fontFamily: 'Space Grotesk' }}>Часто задаваемые вопросы</h2>
+              <h2 style={{ fontSize: 16, fontWeight: 700, fontFamily: 'var(--font-space-grotesk), sans-serif' }}>Часто задаваемые вопросы</h2>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
               {FAQ_ITEMS.map((item, i) => (

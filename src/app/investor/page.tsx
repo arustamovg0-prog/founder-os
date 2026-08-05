@@ -93,7 +93,7 @@ export default function InvestorDashboard() {
   return (
     <div className="animate-fade-in">
       <div style={{ marginBottom: '32px' }}>
-        <h1 style={{ fontFamily: "Space Grotesk, sans-serif", fontWeight: 700 }}>
+        <h1 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontWeight: 700 }}>
           {t('title')}
         </h1>
         <p style={{ color: '#64748b', fontSize: 14 }}>{t('subtitle')}</p>
@@ -115,7 +115,7 @@ export default function InvestorDashboard() {
             }}>
               {kpi.icon}
             </div>
-            <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 32, fontWeight: 800, color: kpi.color }}>{kpi.value}</div>
+            <div style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 32, fontWeight: 800, color: kpi.color }}>{kpi.value}</div>
             <div style={{ fontSize: 13, color: '#94a3b8', fontWeight: 500 }}>{kpi.label}</div>
           </div>
         ))}
@@ -155,7 +155,7 @@ export default function InvestorDashboard() {
                   </div>
                   <div style={{ textAlign: 'right', flexShrink: 0 }}>
                     <div style={{ fontSize: 11, color: '#475569', marginBottom: 2 }}>{t('mrr')}</div>
-                    <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 16, fontWeight: 700, color: '#10b981' }}>{fmt(s.metrics.mrr)}</div>
+                    <div style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 16, fontWeight: 700, color: '#10b981' }}>{fmt(s.metrics.mrr)}</div>
                   </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
