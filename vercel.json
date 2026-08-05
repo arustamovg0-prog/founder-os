@@ -1,0 +1,27 @@
+{
+    "services": {
+        "frontend": {
+            "root": ".",
+            "framework": "nextjs"
+        },
+        "agent-reach-api": {
+            "root": "services/agent-reach-api"
+        }
+    },
+    "rewrites": [
+        {
+            "source": "/api/agent-reach-api(/.*)?",
+            "destination": {
+                "type": "service",
+                "service": "agent-reach-api"
+            }
+        },
+        {
+            "source": "/(.*)",
+            "destination": {
+                "type": "service",
+                "service": "frontend"
+            }
+        }
+    ]
+}
