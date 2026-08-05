@@ -38,17 +38,17 @@ Your current readiness score is **85/100** — excellent position for Series A f
 
   metrics: `**Metrics Deep Dive for PayFlow UZ:**
 
-📈 **Revenue Health**
+**Revenue Health**
 - MRR: $28,000 (+16.7% MoM) — Strong
 - ARR Run Rate: $336,000
 - Net Revenue Retention: ~97.9% (based on 2.1% churn)
 
-👥 **Growth Efficiency**
+**Growth Efficiency**
 - CAC: $320 — Moderate for B2B FinTech
 - LTV: $4,800 — Excellent
 - LTV/CAC: **15x** — Top decile performance
 
-⚠️ **Areas of Concern**
+**Areas of Concern**
 - Churn at 2.1% is acceptable but worth monitoring — any uptick above 3% should trigger investigation
 - Team size at 12 may need to scale ahead of Series A deployment
 
@@ -66,7 +66,7 @@ Here's a breakdown by section:
 | Business Model | 90 | Revenue streams are clear |
 | Traction | 84 | Add cohort charts |
 | Team | 88 | Strong backgrounds |
-| Competitive Moat | 65 ⚠️ | Weakest section |
+| Competitive Moat | 65 | Weakest section |
 | Financials | 78 | 3-year model needs detail |
 | Ask | 82 | Use of funds is clear |
 
@@ -97,7 +97,7 @@ function MarkdownText({ text }: { text: string }) {
         if (line.startsWith('|')) {
           return null; // skip table lines for simplicity
         }
-        if (line.startsWith('⚠️') || line.startsWith('📈') || line.startsWith('👥')) {
+        if (line.startsWith('**Areas of Concern**') || line.startsWith('**Revenue Health**') || line.startsWith('**Growth Efficiency**')) {
           return <div key={i} style={{ fontWeight: 600, color: '#D8B4FE', marginTop: 12, marginBottom: 4 }}>{line}</div>;
         }
         if (line === '') return <div key={i} style={{ height: 6 }} />;

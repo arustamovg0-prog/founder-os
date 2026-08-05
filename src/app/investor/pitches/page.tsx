@@ -105,7 +105,7 @@ function FeedbackModal({ pitch, onClose }: { pitch: PitchEvent; onClose: () => v
             {[
               { value: 'deal', label: '🤝 Deal', color: '#D4D4D8' },
               { value: 'follow_up', label: '📅 Follow Up', color: '#A1A1AA' },
-              { value: 'traction', label: '📈 Improve Traction', color: '#71717A' },
+              { value: 'traction', label: 'Improve Traction', color: '#71717A' },
               { value: 'pivot', label: '🔄 Pivot', color: '#FFFFFF' },
               { value: 'reject', label: '✖ Pass', color: '#52525B' },
             ].map(ns => (

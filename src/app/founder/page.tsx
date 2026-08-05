@@ -148,7 +148,7 @@ export default function FounderDashboard() {
   ];
 
   const logIcons: Record<string, string> = {
-    artifact_uploaded: '📎', metric_updated: '📊', stage_completed: '✅',
+    artifact_uploaded: '', metric_updated: '', stage_completed: '',
     pitch_requested: '📨', meeting_held: '🤝', feedback_received: '💬', ai_analysis_done: '🤖',
   };
 
@@ -399,12 +399,12 @@ export default function FounderDashboard() {
           {/* Badges row */}
           <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 20 }}>
             {[
-              { emoji: '🚀', label: t('badges.firstPitch'), earned: true, color: '#FFFFFF' },
-              { emoji: '💡', label: t('badges.mvpReady'), earned: true, color: '#A1A1AA' },
-              { emoji: '📊', label: t('badges.mrr'), earned: true, color: '#D4D4D8' },
-              { emoji: '🏆', label: t('badges.investmentReady'), earned: true, color: '#71717A' },
-              { emoji: '🌍', label: t('badges.firstExport'), earned: false, color: '#64748b' },
-              { emoji: '💼', label: t('badges.seriesA'), earned: false, color: '#64748b' },
+              { label: t('badges.firstPitch'), earned: true, color: '#FFFFFF' },
+              { label: t('badges.mvpReady'), earned: true, color: '#A1A1AA' },
+              { label: t('badges.mrr'), earned: true, color: '#D4D4D8' },
+              { label: t('badges.investmentReady'), earned: true, color: '#71717A' },
+              { label: t('badges.firstExport'), earned: false, color: '#64748b' },
+              { label: t('badges.seriesA'), earned: false, color: '#64748b' },
             ].map((b, i) => (
               <div key={i} title={b.label} style={{
                 display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5, padding: '10px 14px', borderRadius: 12,
@@ -412,8 +412,7 @@ export default function FounderDashboard() {
                 border: `1px solid ${b.earned ? `${b.color}30` : 'rgba(255,255,255,0.06)'}`,
                 opacity: b.earned ? 1 : 0.4, transition: 'var(--transition-standard)', cursor: 'default', minWidth: 72,
               }}>
-                <span style={{ fontSize: 22, filter: b.earned ? 'none' : 'grayscale(100%)' }}>{b.emoji}</span>
-                <span style={{ fontSize: 10, fontWeight: 600, color: b.earned ? b.color : '#334155', whiteSpace: 'nowrap' }}>{b.label}</span>
+                <span style={{ fontSize: 10, fontWeight: 600, color: b.earned ? b.color : '#334155', whiteSpace: 'nowrap', marginTop: 10 }}>{b.label}</span>
                 {b.earned && <Star size={8} color={b.color} fill={b.color} />}
               </div>
             ))}

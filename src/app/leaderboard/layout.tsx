@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: '🏆 UNTITLED Startup Leaderboard',
+    title: 'UNTITLED Startup Leaderboard',
     description: 'Who is leading the UNTITLED ecosystem? Check the AI-powered startup ranking.',
   },
 };

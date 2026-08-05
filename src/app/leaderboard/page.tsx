@@ -19,10 +19,11 @@ function fmt(n: number) {
 }
 
 const FILTERS = [
-  { key: 'score', label: '🏆 AI Score' },
-  { key: 'mrr', label: '💰 MRR' },
-  { key: 'mau', label: '👥 MAU' },
-  { key: 'growth', label: '📈 Growth' },
+  { key: 'score', label: 'AI Score' },
+  { key: 'mrr', label: 'MRR' },
+  { key: 'mau', label: 'MAU' },
+  { key: 'growth', label: 'Growth' },
+  { key: 'geo', label: 'Global' }
 ] as const;
 
 export default function LeaderboardPage() {

@@ -184,7 +184,7 @@ export default function EcosystemHealthPage() {
           { label: 'Total Ecosystem MRR', value: fmt(totalMRR), sub: `ARR ${fmt(totalARR)}`, icon: <DollarSign size={18} />, color: '#D4D4D8', trend: 12 },
           { label: 'Total MAU', value: totalMAU.toLocaleString(), sub: `${S.length} стартапов`, icon: <Users size={18} />, color: '#FFFFFF', trend: 8 },
           { label: 'Investment Ready', value: `${investReady}/${S.length}`, sub: `${Math.round(investReady / S.length * 100)}% conversion`, icon: <Target size={18} />, color: '#A1A1AA', trend: 1 },
-          { label: 'Critical Runway', value: criticalRunway > 0 ? `⚠️ ${criticalRunway}` : '✅ 0', sub: `Avg ${avgRunway} мес runway`, icon: <AlertTriangle size={18} />, color: criticalRunway > 0 ? '#52525B' : '#D4D4D8', trend: -criticalRunway },
+          { label: 'Critical Runway', value: criticalRunway > 0 ? `${criticalRunway}` : '0', sub: `Avg ${avgRunway} мес runway`, icon: <AlertTriangle size={18} />, color: criticalRunway > 0 ? '#52525B' : '#D4D4D8', trend: -criticalRunway },
         ].map((stat, i) => (
           <div key={i} className="stat-card">
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
@@ -362,7 +362,7 @@ export default function EcosystemHealthPage() {
               .map((s, i) => {
                 const score = s.aiScores.overallReadinessScore || 0;
                 const sc = score >= 75 ? '#D4D4D8' : score >= 50 ? '#71717A' : '#52525B';
-                const medals = ['🥇', '🥈', '🥉', '4️⃣', '5️⃣'];
+                const medals = ['1', '2', '3', '4', '5'];
                 return (
                   <div key={s.id} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 14px', borderRadius: '10px', background: i === 0 ? 'rgba(212,212,216,0.06)' : 'rgba(255,255,255,0.02)', border: `1px solid ${i === 0 ? 'rgba(212,212,216,0.15)' : 'rgba(255,255,255,0.04)'}` }}>
                     <span style={{ fontSize: 16 }}>{medals[i]}</span>

@@ -22,8 +22,8 @@ const STAGE_COLORS: Record<string, string> = {
 
 const KANBAN_COLUMNS = [
   { id: 'watchlist', label: 'Watchlist', emoji: '👀', color: '#64748b', description: 'На примете' },
-  { id: 'first_contact', label: 'First Contact', emoji: '📧', color: '#A1A1AA', description: 'Первый контакт' },
-  { id: 'due_diligence', label: 'Due Diligence', emoji: '🔍', color: '#71717A', description: 'Проверка' },
+  { id: 'first_contact', label: 'First Contact', color: '#A1A1AA', description: 'Первый контакт' },
+  { id: 'due_diligence', label: 'Due Diligence', color: '#71717A', description: 'Проверка' },
   { id: 'portfolio', label: 'Portfolio', emoji: '✅', color: '#D4D4D8', description: 'В портфеле' },
 ];
 

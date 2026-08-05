@@ -69,7 +69,7 @@ export default function FounderPitchesPage() {
       await addDoc(collection(db, 'pitches'), newPitch);
     }
     
-    toast.success(t('pitchSent'), { icon: '🚀' });
+    toast.success(t('pitchSent'));
     setShowModal(false);
     setForm({ investorName: '', proposedDate: '', message: '' });
   };

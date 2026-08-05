@@ -6,7 +6,7 @@
     "node": ">=20.0.0"
   },
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --webpack",
     "dev:all": "concurrently \"npm run dev\" \"cd services/agent-reach-api && source venv/bin/activate && uvicorn main:app --port 8000\" \"cd services/omniroute && npm run dev\"",
     "prebuild": "node scripts/check-secrets.js",
     "build": "next build",

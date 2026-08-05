@@ -102,7 +102,7 @@ export function ImpersonationPanel() {
     setImpersonating(true);
     setSelectedId(null);
 
-    toast.success(t('successMode', { name: startup.founderName, hash: auditRes.hash?.substring(0, 8) }), { icon: '👁️' });
+    toast.success(t('successMode', { name: startup.founderName, hash: auditRes.hash?.substring(0, 8) }));
 
     // В реальном сценарии: redirect на /founder с impersonation token в headers
     // Здесь — показываем баннер
@@ -111,7 +111,7 @@ export function ImpersonationPanel() {
   const exitImpersonation = () => {
     setImpersonating(false);
     setImpersonateTarget(null);
-    toast.success(t('exitSuccess'), { icon: '🛡️' });
+    toast.success(t('exitSuccess'));
   };
 
   return (

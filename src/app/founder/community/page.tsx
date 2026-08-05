@@ -23,7 +23,7 @@ interface Profile {
 
 const PROFILES: Profile[] = [
   {
-    id: 'p1', name: 'Alibek Seitkali', avatar: '👨‍💻', role: 'CTO',
+    id: 'p1', name: 'Alibek Seitkali', avatar: 'AS', role: 'CTO',
     skills: ['React', 'Node.js', 'Python', 'AWS', 'PostgreSQL', 'System Design'],
     equity: '5–15%', location: 'Алматы, KZ', commitment: 'full-time',
     startupName: 'AgriTech стартап (стелс)', startupStage: 'Idea / Pre-seed',
@@ -32,7 +32,7 @@ const PROFILES: Profile[] = [
     linkedinUrl: '#', isOpen: true,
   },
   {
-    id: 'p2', name: 'Madina Bekova', avatar: '👩‍💼', role: 'CMO',
+    id: 'p2', name: 'Madina Bekova', avatar: 'MB', role: 'CMO',
     skills: ['Performance Marketing', 'SEO', 'Content', 'Brand Strategy', 'Growth Hacking', 'Analytics'],
     equity: '5–10%', location: 'Ташкент, UZ', commitment: 'full-time',
     startupName: 'EduTech (идея)', startupStage: 'Idea Stage',
@@ -41,7 +41,7 @@ const PROFILES: Profile[] = [
     linkedinUrl: '#', isOpen: true,
   },
   {
-    id: 'p3', name: 'Rustam Yusupov', avatar: '👨‍💼', role: 'COO',
+    id: 'p3', name: 'Rustam Yusupov', avatar: 'RY', role: 'COO',
     skills: ['Operations', 'Fundraising', 'Business Development', 'Strategy', 'P&L'],
     equity: '7–12%', location: 'Астана, KZ', commitment: 'full-time',
     startupName: 'FinTech стартап', startupStage: 'MVP',
@@ -50,7 +50,7 @@ const PROFILES: Profile[] = [
     linkedinUrl: '#', isOpen: true,
   },
   {
-    id: 'p4', name: 'Dilnoza Rahimova', avatar: '👩‍🎨', role: 'Designer',
+    id: 'p4', name: 'Dilnoza Rahimova', avatar: 'DR', role: 'Designer',
     skills: ['Figma', 'UX Research', 'Design Systems', 'Prototyping', 'Motion Design'],
     equity: '3–8%', location: 'Ташкент, UZ', commitment: 'part-time',
     startupName: 'Свободный агент', startupStage: 'Любая',
@@ -68,7 +68,7 @@ const PROFILES: Profile[] = [
     linkedinUrl: '#', isOpen: true,
   },
   {
-    id: 'p6', name: 'Kamila Dosova', avatar: '💰', role: 'CFO',
+    id: 'p6', name: 'Kamila Dosova', avatar: 'KD', role: 'CFO',
     skills: ['Financial Modeling', 'Fundraising', 'Accounting', 'Tax Planning', 'Investor Relations'],
     equity: '5–10%', location: 'Алматы, KZ', commitment: 'part-time',
     startupName: 'Открыта к предложениям', startupStage: 'Seed+',
@@ -132,7 +132,7 @@ export default function CommunityPage() {
 
       {/* Tabs */}
       <div style={{ display: 'flex', gap: 4, marginBottom: 24, padding: 4, background: 'rgba(255,255,255,0.04)', borderRadius: 10, width: 'fit-content', border: '1px solid rgba(255,255,255,0.06)' }}>
-        {([['browse', '🔍  Найти'], ['post', '✏️  Разместить объявление']] as const).map(([tab, label]) => (
+        {([['browse', 'Найти'], ['post', 'Разместить объявление']] as const).map(([tab, label]) => (
           <button key={tab} onClick={() => setActiveTab(tab)} style={{
             padding: '8px 16px', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer',
             background: activeTab === tab ? 'rgba(212,212,216,0.15)' : 'transparent',

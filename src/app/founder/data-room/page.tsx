@@ -154,7 +154,7 @@ export default function DataRoomPage() {
 
   const handleDelete = (key: string) => {
     setDocs(prev => prev.map(d => d.key === key ? { ...d, url: null, uploadedAt: undefined, aiScore: null } : d));
-    toast.error(t('documentRemoved'), { icon: '🗑️' });
+    toast.error(t('documentRemoved'));
   };
 
   const uploaded = docs.filter(d => d.url).length;

@@ -4,9 +4,9 @@ import { useState } from 'react';
 import { Scale, FileText, ChevronDown, ChevronRight, Download, Copy, CheckCircle, BookOpen, AlertCircle, Lightbulb } from 'lucide-react';
 
 const DOC_CATEGORIES = [
-  { id: 'corp', label: 'Корпоративные', icon: '🏢' },
-  { id: 'invest', label: 'Инвестиционные', icon: '💰' },
-  { id: 'hr', label: 'HR / Команда', icon: '👥' },
+  { id: 'corp', label: 'Корпоративные' },
+  { id: 'invest', label: 'Инвестиционные' },
+  { id: 'hr', label: 'HR / Команда' },
   { id: 'commercial', label: 'Коммерческие', icon: '🤝' },
 ];
 
@@ -37,14 +37,13 @@ const DOCUMENTS: Document[] = [
 interface Checklist {
   id: string;
   title: string;
-  emoji: string;
-  category: string;
+  category: 'corp' | 'invest' | 'ip' | 'hr';
   steps: { text: string; detail?: string }[];
 }
 
 const CHECKLISTS: Checklist[] = [
   {
-    id: 'c1', emoji: '🏢', title: 'Регистрация ТОО в Казахстане', category: 'corp',
+    id: 'c1', title: 'Регистрация ТОО в Казахстане', category: 'corp',
     steps: [
       { text: 'Выберите наименование компании (проверка уникальности на egov.kz)', detail: 'Используйте портал egov.kz → Бизнес → Регистрация ЮЛ' },
       { text: 'Подготовьте учредительные документы (Устав)', detail: 'Минимальный уставной капитал для ТОО — 0 тенге (с 2021 года)' },
@@ -57,7 +56,7 @@ const CHECKLISTS: Checklist[] = [
     ],
   },
   {
-    id: 'c2', emoji: '🇺🇿', title: 'Регистрация ООО в Узбекистане', category: 'corp',
+    id: 'c2', title: 'Регистрация ООО в Узбекистане', category: 'corp',
     steps: [
       { text: 'Проверьте название на сайте mybusiness.uz' },
       { text: 'Подготовьте Устав и решение учредителей' },
@@ -70,7 +69,7 @@ const CHECKLISTS: Checklist[] = [
     ],
   },
   {
-    id: 'c3', emoji: '💡', title: 'Стать резидентом IT Park Uzbekistan', category: 'invest',
+    id: 'c3', title: 'Стать резидентом IT Park Uzbekistan', category: 'invest',
     steps: [
       { text: 'Убедитесь, что деятельность соответствует IT (разработка ПО, IT-сервисы, экспорт)' },
       { text: 'Зарегистрируйтесь на портале my.gov.uz и подайте заявку в IT Park' },
@@ -81,7 +80,7 @@ const CHECKLISTS: Checklist[] = [
     ],
   },
   {
-    id: 'c4', emoji: '💰', title: 'Подготовка к привлечению первых инвестиций', category: 'invest',
+    id: 'c4', title: 'Подготовка к привлечению первых инвестиций', category: 'invest',
     steps: [
       { text: 'Приведите в порядок cap table (таблицу капитализации)' },
       { text: 'Оформите IP assignment от всех ко-фаундеров и ключевых разработчиков' },
@@ -143,7 +142,7 @@ export default function LegalToolkitPage() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 12, marginBottom: 32 }}>
         {[
           { label: 'Шаблонов', value: DOCUMENTS.length, color: '#A1A1AA' },
-          { label: 'Чек-листов', value: CHECKLISTS.length, color: '#FFFFFF' },
+          { label: 'Чек-листы', value: CHECKLISTS.length, color: '#FFFFFF' },
           { label: 'Юрисдикций', value: 3, color: '#D4D4D8' },
           { label: 'FAQ вопросов', value: FAQ_ITEMS.length, color: '#71717A' },
         ].map((s, i) => (
@@ -190,8 +189,8 @@ export default function LegalToolkitPage() {
                     </div>
                     <p style={{ fontSize: 12, color: '#64748b', lineHeight: 1.5, marginBottom: 8 }}>{doc.description}</p>
                     <div style={{ display: 'flex', gap: 8, fontSize: 10, color: '#334155' }}>
-                      <span>📄 {doc.format}</span>
-                      <span>🌍 {doc.jurisdiction}</span>
+                      <span>{doc.format}</span>
+                      <span>{doc.jurisdiction}</span>
                     </div>
                   </div>
                   <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
@@ -226,9 +225,10 @@ export default function LegalToolkitPage() {
                   <div key={cl.id} style={{ borderRadius: 12, background: 'rgba(13,13,32,0.8)', border: '1px solid rgba(255,255,255,0.06)', overflow: 'hidden' }}>
                     <button onClick={() => setExpandedChecklist(isExpanded ? null : cl.id)}
                       style={{ width: '100%', padding: '12px 16px', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 10, fontFamily: 'Inter' }}>
-                      <span style={{ fontSize: 18 }}>{cl.emoji}</span>
-                      <span style={{ flex: 1, textAlign: 'left', fontSize: 13, fontWeight: 600, color: '#f8fafc' }}>{cl.title}</span>
-                      <span style={{ fontSize: 11, color: progress === 100 ? '#D4D4D8' : '#64748b', fontWeight: 700 }}>{progress}%</span>
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', flex: 1 }}>
+                        <span style={{ fontSize: 14, fontWeight: 700, color: '#F8FAFC', marginBottom: 6 }}>{cl.title}</span>
+                        <span style={{ fontSize: 11, color: progress === 100 ? '#D4D4D8' : '#64748b', fontWeight: 700 }}>{progress}%</span>
+                      </div>
                       {isExpanded ? <ChevronDown size={14} color="#64748b" /> : <ChevronRight size={14} color="#64748b" />}
                     </button>
 

@@ -73,7 +73,7 @@ const CHALLENGES: Challenge[] = [
     applied: true, applicants: 15, difficulty: 'hard', status: 'open',
   },
   {
-    id: 'ch6', company: 'Magnum Cash&Carry', companyLogo: '🛍️',
+    id: 'ch6', company: 'Magnum Cash&Carry', companyLogo: '',
     industry: 'Retail / AI',
     title: 'AI-рекомендации для персонализации промо-акций',
     problem: 'Наши промо-кампании ориентированы на всех покупателей, хотя у нас есть данные о 2M+ клиентах. Нужна система персонализированных скидок и предложений на основе истории покупок с интеграцией в кассовую систему.',

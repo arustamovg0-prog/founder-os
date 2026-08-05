@@ -78,6 +78,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const unsub = onAuthStateChanged(auth, async (u) => {
       setUser(u);
       if (u) {
+        setCookie(SESSION_COOKIE, u.uid);
         try {
           if (isDemoConfig) throw new Error('Demo config: skipping Firebase fetch');
           const snap = await getDoc(doc(db, 'users', u.uid));

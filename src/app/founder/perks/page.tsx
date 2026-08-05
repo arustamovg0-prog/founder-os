@@ -5,18 +5,18 @@ import { Gift, ExternalLink, Zap, Shield, BarChart3, Cloud, Scale, Users, Star, 
 import { useTranslations } from 'next-intl';
 
 const CATEGORIES = [
-  { id: 'all', label: 'Все перки', icon: '✨' },
-  { id: 'saas', label: 'SaaS Tools', icon: '⚙️' },
-  { id: 'cloud', label: 'Cloud & Infra', icon: '☁️' },
-  { id: 'legal', label: 'Legal & Finance', icon: '⚖️' },
-  { id: 'marketing', label: 'Marketing', icon: '📣' },
-  { id: 'hr', label: 'HR & Talent', icon: '👥' },
+  { id: 'all', label: 'Все перки' },
+  { id: 'saas', label: 'SaaS Tools' },
+  { id: 'cloud', label: 'Cloud & Infra' },
+  { id: 'legal', label: 'Legal & Finance' },
+  { id: 'marketing', label: 'Marketing' },
+  { id: 'hr', label: 'HR & Talent' },
 ];
 
 interface Perk {
   id: string;
   company: string;
-  logo: string;
+
   tagline: string;
   description: string;
   discount: string;
@@ -30,73 +30,73 @@ interface Perk {
 
 const PERKS: Perk[] = [
   {
-    id: 'p1', company: 'Notion', logo: '📓', tagline: 'All-in-one workspace',
+    id: 'p1', company: 'Notion', tagline: 'All-in-one workspace',
     description: 'Бесплатный Notion Plus на 6 месяцев для всей команды. Документы, базы данных, планирование.',
     discount: '6 мес бесплатно', value: '$96', category: 'saas', usedBy: 18, link: '#', featured: true,
     tags: ['productivity', 'docs', 'team'],
   },
   {
-    id: 'p2', company: 'AWS Activate', logo: '☁️', tagline: 'Cloud Credits for Startups',
+    id: 'p2', company: 'AWS Activate', tagline: 'Cloud Credits for Startups',
     description: 'До $100,000 кредитов AWS для резидентов UNTITLED. Покрывает EC2, RDS, S3 и другие сервисы.',
     discount: 'до $100K кредитов', value: '$100,000', category: 'cloud', usedBy: 12, link: '#', featured: true,
     tags: ['cloud', 'infrastructure', 'hosting'],
   },
   {
-    id: 'p3', company: 'Stripe', logo: '💳', tagline: 'Global Payments Infrastructure',
+    id: 'p3', company: 'Stripe', tagline: 'Global Payments Infrastructure',
     description: 'Нулевая комиссия на первые $50K транзакций + приоритетный онбординг для стартапов ЦА.',
     discount: 'Комиссия 0% на $50K', value: '$1,500', category: 'saas', usedBy: 9, link: '#', featured: false,
     tags: ['payments', 'fintech', 'b2b'],
   },
   {
-    id: 'p4', company: 'Figma', logo: '🎨', tagline: 'Collaborative Design Tool',
+    id: 'p4', company: 'Figma', tagline: 'Collaborative Design Tool',
     description: 'Figma Professional бесплатно на 1 год. Безлимитные проекты и редакторы.',
     discount: '12 мес бесплатно', value: '$180', category: 'saas', usedBy: 22, link: '#', featured: false,
     tags: ['design', 'ui', 'collaboration'],
   },
   {
-    id: 'p5', company: 'Vercel', logo: '▲', tagline: 'Frontend Cloud Platform',
+    id: 'p5', company: 'Vercel', tagline: 'Frontend Cloud Platform',
     description: 'Vercel Pro на 12 месяцев для деплоя ваших Next.js и React приложений.',
     discount: '12 мес Pro', value: '$240', category: 'cloud', usedBy: 14, link: '#', featured: false,
     tags: ['hosting', 'frontend', 'nextjs'],
   },
   {
-    id: 'p6', company: 'PandaDoc', logo: '📄', tagline: 'Document Automation',
+    id: 'p6', company: 'PandaDoc', tagline: 'Document Automation',
     description: 'Автоматизация контрактов, NDA и Term Sheet. 50% скидка на Business план навсегда.',
     discount: '50% навсегда', value: '$600/год', category: 'legal', usedBy: 7, link: '#', featured: false,
     tags: ['legal', 'contracts', 'automation'],
   },
   {
-    id: 'p7', company: 'HubSpot', logo: '🔶', tagline: 'CRM & Marketing Platform',
+    id: 'p7', company: 'HubSpot', tagline: 'CRM & Marketing Platform',
     description: 'HubSpot Starter CRM бесплатно на 1 год + $500 дополнительных кредитов на рекламу.',
     discount: '1 год бесплатно', value: '$1,200', category: 'marketing', usedBy: 11, link: '#', featured: true,
     tags: ['crm', 'marketing', 'sales'],
   },
   {
-    id: 'p8', company: 'Linear', logo: '🔷', tagline: 'Issue Tracking for Modern Teams',
+    id: 'p8', company: 'Linear', tagline: 'Issue Tracking for Modern Teams',
     description: 'Linear Plus на 12 месяцев. Лучший инструмент для управления задачами и спринтами.',
     discount: '12 мес Plus', value: '$480', category: 'saas', usedBy: 16, link: '#', featured: false,
     tags: ['project-management', 'engineering', 'agile'],
   },
   {
-    id: 'p9', company: 'Deel', logo: '🌍', tagline: 'Global Payroll & HR',
+    id: 'p9', company: 'Deel', tagline: 'Global Payroll & HR',
     description: '3 месяца без комиссий при найме первых 5 международных сотрудников или подрядчиков.',
     discount: '3 мес без комиссий', value: '$750', category: 'hr', usedBy: 5, link: '#', featured: false,
     tags: ['hr', 'payroll', 'remote', 'hiring'],
   },
   {
-    id: 'p10', company: 'Legalpad', logo: '⚖️', tagline: 'US Visas for Founders',
+    id: 'p10', company: 'Legalpad', tagline: 'US Visas for Founders',
     description: '$500 скидка на консультации по O-1 и EB-1 визам для фаундеров, планирующих экспансию в США.',
     discount: '$500 скидка', value: '$500', category: 'legal', usedBy: 3, link: '#', featured: false,
     tags: ['legal', 'visa', 'usa', 'expansion'],
   },
   {
-    id: 'p11', company: 'Google Workspace', logo: '🔵', tagline: 'Business Email & Collaboration',
+    id: 'p11', company: 'Google Workspace', tagline: 'Business Email & Collaboration',
     description: 'Google Workspace Business Standard бесплатно на 12 месяцев для до 10 пользователей.',
     discount: '12 мес бесплатно', value: '$1,440', category: 'saas', usedBy: 19, link: '#', featured: false,
     tags: ['email', 'collaboration', 'google'],
   },
   {
-    id: 'p12', company: 'Brevo (Sendinblue)', logo: '📧', tagline: 'Email & SMS Marketing',
+    id: 'p12', company: 'Brevo (Sendinblue)', tagline: 'Email & SMS Marketing',
     description: 'Brevo Business на 6 месяцев бесплатно. Email-кампании, автоматизация и CRM-лайт.',
     discount: '6 мес Business', value: '$360', category: 'marketing', usedBy: 8, link: '#', featured: false,
     tags: ['email-marketing', 'automation', 'crm'],
@@ -255,13 +255,6 @@ function PerkCard({ perk, claimed, onClaim, featured }: { perk: Perk; claimed: b
 
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, marginBottom: 12 }}>
-        <div style={{
-          width: 44, height: 44, borderRadius: 10, flexShrink: 0,
-          background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22,
-        }}>
-          {perk.logo}
-        </div>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ fontWeight: 700, fontSize: 15, fontFamily: 'Space Grotesk', marginBottom: 2 }}>{perk.company}</div>
           <div style={{ fontSize: 12, color: '#64748b' }}>{perk.tagline}</div>

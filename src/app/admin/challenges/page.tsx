@@ -38,7 +38,7 @@ type FormState = {
   deadline: string; tags: string; difficulty: 'easy' | 'medium' | 'hard';
 };
 
-const EMPTY_FORM: FormState = { company: '', companyLogo: '🏢', industry: '', title: '', problem: '', reward: '', rewardType: 'grant', deadline: '', tags: '', difficulty: 'medium' };
+const EMPTY_FORM: FormState = { company: '', companyLogo: '', industry: '', title: '', problem: '', reward: '', rewardType: 'grant', deadline: '', tags: '', difficulty: 'medium' };
 
 export default function AdminChallengesPage() {
   const [challenges, setChallenges] = useState(INITIAL_CHALLENGES);
@@ -260,7 +260,7 @@ export default function AdminChallengesPage() {
       {deletingId && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)', zIndex: 999, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <div style={{ padding: 28, borderRadius: 16, background: 'rgba(10,10,28,0.98)', border: '1px solid rgba(82,82,91,0.3)', maxWidth: 360, width: '90%' }}>
-            <div style={{ fontSize: 32, textAlign: 'center', marginBottom: 12 }}>⚠️</div>
+            <div style={{ fontSize: 32, textAlign: 'center', marginBottom: 12 }}></div>
             <h3 style={{ fontFamily: 'Space Grotesk', fontSize: 16, fontWeight: 700, textAlign: 'center', marginBottom: 8 }}>Удалить задачу?</h3>
             <p style={{ fontSize: 13, color: '#64748b', textAlign: 'center', marginBottom: 20 }}>Это действие нельзя отменить. Все заявки будут удалены.</p>
             <div style={{ display: 'flex', gap: 10 }}>

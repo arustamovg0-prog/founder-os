@@ -120,7 +120,7 @@ export default function MagicLinkCallbackPage() {
           {/* Email needed */}
           {state === 'email_needed' && (
             <div>
-              <div style={{ fontSize: 48, marginBottom: '16px' }}>✉️</div>
+              <div style={{ fontSize: 48, marginBottom: '16px' }}></div>
               <h2 style={{ fontFamily: 'Space Grotesk', fontSize: 22, fontWeight: 700, marginBottom: 8 }}>
                 Подтверди Email
               </h2>

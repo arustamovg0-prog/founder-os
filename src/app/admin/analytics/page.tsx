@@ -220,7 +220,7 @@ export default function AdminAnalyticsPage() {
       {/* Startup Leaderboard */}
       <div className="card">
         <div style={{ fontSize: 13, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '20px' }}>
-          🏆 Startup Leaderboard — by AI Score
+          Startup Leaderboard — by AI Score
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
           {[...startups].sort((a, b) => (b.aiScores?.overallReadinessScore || 0) - (a.aiScores?.overallReadinessScore || 0)).map((s, i) => {
