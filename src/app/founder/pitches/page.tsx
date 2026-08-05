@@ -176,7 +176,7 @@ export default function FounderPitchesPage() {
                 {pitch.meeting.confirmedDate && (
                   <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: 13, color: '#94a3b8' }}>
-                      <Calendar size={13} color="#FFFFFF" />
+                      <Calendar size={13} color="currentColor" />
                       {pitch.meeting.confirmedDate instanceof Date ? pitch.meeting.confirmedDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }) : new Date((pitch.meeting.confirmedDate as any).seconds * 1000).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })}
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: 13, color: '#94a3b8' }}>

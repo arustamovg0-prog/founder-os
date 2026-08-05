@@ -169,7 +169,7 @@ export default function FounderChatPage() {
           <div key={msg.id} style={{ display: 'flex', gap: '12px', alignItems: 'flex-start', flexDirection: msg.role === 'user' ? 'row-reverse' : 'row' }}>
             {/* Avatar */}
             <div style={{ width: 32, height: 32, borderRadius: '50%', flexShrink: 0, background: msg.role === 'user' ? 'linear-gradient(135deg,#FFFFFF,#71717A)' : 'rgba(0,0,0,0.15)', border: '1px solid rgba(0,0,0,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              {msg.role === 'user' ? <User size={14} color="white" /> : <Brain size={14} color="#D8B4FE" />}
+              {msg.role === 'user' ? <User size={14} color="currentColor" /> : <Brain size={14} color="#D8B4FE" />}
             </div>
 
             {/* Bubble */}
@@ -226,7 +226,7 @@ export default function FounderChatPage() {
           style={{
             width: '100%', padding: '14px 56px 14px 16px', borderRadius: '14px', resize: 'none',
             background: 'rgba(0,0,0,0.04)', border: '1px solid rgba(0,0,0,0.1)',
-            color: '#f8fafc', fontSize: 14, fontFamily: 'Inter', lineHeight: 1.6,
+            color: 'var(--text-primary)', fontSize: 14, fontFamily: 'Inter', lineHeight: 1.6,
             outline: 'none', boxSizing: 'border-box', transition: 'border 0.15s',
           }}
           onFocus={e => e.target.style.borderColor = 'rgba(0,0,0,0.5)'}

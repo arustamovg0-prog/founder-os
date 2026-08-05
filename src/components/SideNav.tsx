@@ -72,12 +72,12 @@ export default function SideNav() {
   return (
     <>
       {/* Mobile Top Header */}
-      <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-[#000000] border-b border-white/10 z-40 flex items-center justify-between px-4">
+      <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-[var(--bg-secondary)] border-b border-[var(--border)] z-40 flex items-center justify-between px-4">
         <div className="flex items-center gap-2">
-           <Command size={16} color="white" />
-           <span className="text-[#f8fafc] font-semibold text-sm" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Founder OS</span>
+           <Command size={16} color="currentColor" />
+           <span className="text-[var(--text-primary)] font-semibold text-sm" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Founder OS</span>
         </div>
-        <button onClick={() => setIsOpen(true)} className="p-2 text-white">
+        <button onClick={() => setIsOpen(true)} className="p-2 text-[var(--text-primary)]">
           <Menu size={20} />
         </button>
       </div>
@@ -85,7 +85,7 @@ export default function SideNav() {
       {/* Backdrop for Mobile */}
       {isOpen && (
         <div 
-          className="md:hidden fixed inset-0 bg-black/50 z-40" 
+          className="md:hidden fixed inset-0 bg-black/10 z-40" 
           onClick={() => setIsOpen(false)}
         />
       )}
@@ -104,10 +104,10 @@ export default function SideNav() {
           border: '1px solid rgba(0,0,0,0.1)',
           display: 'flex', alignItems: 'center', justifyContent: 'center' 
         }}>
-          <Command size={16} color="white" />
+          <Command size={16} color="currentColor" />
         </div>
         <div>
-          <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: '16px', fontWeight: 600, color: '#f8fafc', letterSpacing: '0.5px' }}>Founder OS</div>
+          <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: '16px', fontWeight: 600, color: 'var(--text-primary)', letterSpacing: '0.5px' }}>Founder OS</div>
           <div style={{ fontSize: '10px', color: '#a1a1aa', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px' }}>by UNTITLED</div>
         </div>
       </div>

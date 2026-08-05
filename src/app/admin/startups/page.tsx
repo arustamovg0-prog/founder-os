@@ -119,7 +119,7 @@ function StartupDetailRow({ s }: { s: Startup }) {
                 ].map((m, i) => (
                   <div key={i} style={{ padding: '8px 12px', borderRadius: '8px', background: 'rgba(0,0,0,0.02)', border: '1px solid rgba(0,0,0,0.04)' }}>
                     <div style={{ fontSize: 10, color: '#334155', fontWeight: 600 }}>{m.l}</div>
-                    <div style={{ fontSize: 13, fontWeight: 700, color: '#f8fafc' }}>{m.v}</div>
+                    <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)' }}>{m.v}</div>
                   </div>
                 ))}
               </div>
@@ -147,7 +147,7 @@ function StartupDetailRow({ s }: { s: Startup }) {
               </button>
             )}
             {s.metrics.runwayMonths <= 6 && s.metrics.runwayMonths > 0 && (
-              <button style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: 12, padding: '7px 16px', borderRadius: '8px', background: 'rgba(113,113,122,0.1)', border: '1px solid rgba(113,113,122,0.3)', color: '#D4D4D8', cursor: 'pointer', fontFamily: 'Inter' }}>
+              <button style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: 12, padding: '7px 16px', borderRadius: '8px', background: 'rgba(0,0,0,0.05)', border: '1px solid rgba(113,113,122,0.3)', color: '#D4D4D8', cursor: 'pointer', fontFamily: 'Inter' }}>
                 <AlertTriangle size={13} /> {t('btnFlag')}
               </button>
             )}

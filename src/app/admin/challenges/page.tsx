@@ -103,7 +103,7 @@ export default function AdminChallengesPage() {
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
             <div style={{ width: 32, height: 32, borderRadius: 8, background: 'linear-gradient(135deg,#52525B,#71717A)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Flame size={16} color="white" />
+              <Flame size={16} color="currentColor" />
             </div>
             <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700 }}>Управление задачами</h1>
           </div>

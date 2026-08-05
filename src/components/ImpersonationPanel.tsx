@@ -36,7 +36,7 @@ export function ImpersonationBanner({ targetName, targetRole, onExit }: Imperson
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-        <Shield size={16} color="white" />
+        <Shield size={16} color="currentColor" />
         <span style={{ fontSize: 13, fontWeight: 700, color: 'white' }}>
           {t('adminMode')}
         </span>
@@ -128,7 +128,7 @@ export function ImpersonationPanel() {
       </AnimatePresence>
 
       {/* Trigger Block */}
-      <div className="card" style={{ marginBottom: '24px', background: 'rgba(113,113,122,0.04)', borderColor: 'rgba(113,113,122,0.15)' }}>
+      <div className="card" style={{ marginBottom: '24px', background: 'var(--bg-card)', borderColor: 'rgba(113,113,122,0.15)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
           <UserCheck size={18} color="#71717A" />
           <span style={{ fontFamily: 'Space Grotesk', fontSize: 15, fontWeight: 700 }}>{t('triggerTitle')}</span>
@@ -159,7 +159,7 @@ export function ImpersonationPanel() {
         </div>
 
         {impersonating && (
-          <div style={{ marginTop: '12px', padding: '10px 14px', borderRadius: '10px', background: 'rgba(113,113,122,0.1)', border: '1px solid rgba(113,113,122,0.25)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ marginTop: '12px', padding: '10px 14px', borderRadius: '10px', background: 'rgba(0,0,0,0.05)', border: '1px solid rgba(113,113,122,0.25)', display: 'flex', alignItems: 'center', gap: '8px' }}>
             <AlertTriangle size={14} color="#71717A" />
             <span style={{ fontSize: 13, color: '#D4D4D8' }}>{t('activeMode')}</span>
             <button onClick={exitImpersonation} style={{ marginLeft: 'auto', fontSize: 12, color: '#71717A', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Inter', textDecoration: 'underline' }}>

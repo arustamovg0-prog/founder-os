@@ -169,7 +169,7 @@ export default function FounderDashboard() {
       </div>
 
       {/* AI Readiness + Progress */}
-      <div className="card" style={{ marginBottom: '24px', background: 'linear-gradient(135deg, rgba(0,0,0,0.08), rgba(161,161,170,0.05))', borderColor: 'rgba(0,0,0,0.2)' }}>
+      <div className="card" style={{ marginBottom: '24px', background: 'var(--bg-card)', borderColor: 'rgba(0,0,0,0.2)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '24px', flexWrap: 'wrap' }}>
           <ScoreRing score={s.aiScores.overallReadinessScore || 0} />
           <div style={{ flex: 1 }}>
@@ -227,7 +227,7 @@ export default function FounderDashboard() {
       {/* ── Founder Health Widget ──────────────────────────────────────────── */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
         {/* AI Score detail */}
-        <div className="card" style={{ background: 'rgba(0,0,0,0.05)', borderColor: 'rgba(0,0,0,0.2)' }}>
+        <div className="card" style={{ background: 'var(--bg-card)', borderColor: 'rgba(0,0,0,0.2)' }}>
           <div style={{ fontSize: 11, color: '#D8B4FE', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 14, display: 'flex', alignItems: 'center', gap: 6 }}>
             <Brain size={12} /> {t('breakdown.title')}
           </div>
@@ -250,7 +250,7 @@ export default function FounderDashboard() {
         </div>
 
         {/* Next Step */}
-        <div className="card" style={{ background: 'rgba(212,212,216,0.04)', borderColor: 'rgba(212,212,216,0.15)' }}>
+        <div className="card" style={{ background: 'var(--bg-card)', borderColor: 'rgba(212,212,216,0.15)' }}>
           <div style={{ fontSize: 11, color: '#A1A1AA', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 14 }}>
             {t('nextStep.title')}
           </div>
@@ -275,7 +275,7 @@ export default function FounderDashboard() {
         </div>
 
         {/* Ecosystem rank */}
-        <div className="card" style={{ background: 'rgba(113,113,122,0.04)', borderColor: 'rgba(113,113,122,0.15)' }}>
+        <div className="card" style={{ background: 'var(--bg-card)', borderColor: 'rgba(113,113,122,0.15)' }}>
           <div style={{ fontSize: 11, color: '#D4D4D8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 14 }}>
             {t('ecosystemRank.title')}
           </div>

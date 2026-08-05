@@ -19,7 +19,7 @@ export default function LanguageSwitcher() {
       <button 
         onClick={() => handleLocaleChange('en')}
         disabled={isPending}
-        className={`hover:text-zinc-100 transition-colors ${locale === 'en' ? 'text-zinc-100 font-medium' : ''}`}
+        className={`hover:text-[var(--text-primary)] transition-colors ${locale === 'en' ? 'text-[var(--text-primary)] font-medium' : ''}`}
       >
         EN
       </button>
@@ -27,7 +27,7 @@ export default function LanguageSwitcher() {
       <button 
         onClick={() => handleLocaleChange('ru')}
         disabled={isPending}
-        className={`hover:text-zinc-100 transition-colors ${locale === 'ru' ? 'text-zinc-100 font-medium' : ''}`}
+        className={`hover:text-[var(--text-primary)] transition-colors ${locale === 'ru' ? 'text-[var(--text-primary)] font-medium' : ''}`}
       >
         RU
       </button>
@@ -35,7 +35,7 @@ export default function LanguageSwitcher() {
       <button 
         onClick={() => handleLocaleChange('uz')}
         disabled={isPending}
-        className={`hover:text-zinc-100 transition-colors ${locale === 'uz' ? 'text-zinc-100 font-medium' : ''}`}
+        className={`hover:text-[var(--text-primary)] transition-colors ${locale === 'uz' ? 'text-[var(--text-primary)] font-medium' : ''}`}
       >
         UZ
       </button>

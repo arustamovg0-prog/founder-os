@@ -130,7 +130,7 @@ export default function LegalToolkitPage() {
       <div style={{ marginBottom: 28 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
           <div style={{ width: 32, height: 32, borderRadius: 8, background: 'linear-gradient(135deg,#A1A1AA,#6366f1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Scale size={16} color="white" />
+            <Scale size={16} color="currentColor" />
           </div>
           <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700 }}>Legal Toolkit</h1>
           <span className="badge badge-blue">Центральная Азия</span>
@@ -248,7 +248,7 @@ export default function LegalToolkitPage() {
                               background: steps.has(i) ? '#D4D4D8' : 'transparent',
                               display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'var(--transition-standard)',
                             }}>
-                              {steps.has(i) && <CheckCircle size={10} color="white" />}
+                              {steps.has(i) && <CheckCircle size={10} color="currentColor" />}
                             </div>
                             <div>
                               <span style={{ fontSize: 12, color: steps.has(i) ? '#475569' : '#94a3b8', textDecoration: steps.has(i) ? 'line-through' : 'none', lineHeight: 1.4 }}>{step.text}</span>

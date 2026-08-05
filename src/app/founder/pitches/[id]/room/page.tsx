@@ -36,7 +36,7 @@ export default function VideoPitchRoomPage({ params }: { params: { id: string } 
         {/* Main Video Area */}
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '16px' }}>
           {/* Main Stage */}
-          <div style={{ flex: 1, background: '#0a0a14', borderRadius: '16px', border: '1px solid rgba(0,0,0,0.05)', position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ flex: 1, background: 'var(--bg-card)', borderRadius: '16px', border: '1px solid rgba(0,0,0,0.05)', position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             {camOn ? (
               <div style={{ textAlign: 'center', color: '#64748b' }}>
                 <Video size={48} style={{ opacity: 0.2, margin: '0 auto 16px' }} />
@@ -46,20 +46,20 @@ export default function VideoPitchRoomPage({ params }: { params: { id: string } 
               <div style={{ width: 80, height: 80, borderRadius: '50%', background: 'rgba(0,0,0,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, color: '#fff' }}>I</div>
             )}
             
-            <div style={{ position: 'absolute', bottom: 16, left: 16, padding: '6px 12px', background: 'rgba(0,0,0,0.6)', borderRadius: '8px', fontSize: 13, color: '#f8fafc', backdropFilter: 'blur(4px)' }}>
+            <div style={{ position: 'absolute', bottom: 16, left: 16, padding: '6px 12px', background: 'rgba(0,0,0,0.6)', borderRadius: '8px', fontSize: 13, color: 'var(--text-primary)', backdropFilter: 'blur(4px)' }}>
               Aibek Ventures ({t('investorLabel')})
             </div>
           </div>
 
           {/* Self View & Controls */}
           <div style={{ display: 'flex', gap: '16px', height: '180px' }}>
-            <div style={{ width: '300px', background: '#0f111a', borderRadius: '16px', border: '1px solid rgba(0,0,0,0.05)', position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ width: '300px', background: 'var(--bg-card)', borderRadius: '16px', border: '1px solid rgba(0,0,0,0.05)', position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                {camOn ? (
                 <div style={{ textAlign: 'center', color: '#64748b', fontSize: 12 }}>{t('selfFeedPlaceholder')}</div>
               ) : (
                 <div style={{ width: 60, height: 60, borderRadius: '50%', background: 'rgba(0,0,0,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, color: '#D8B4FE' }}>Me</div>
               )}
-              <div style={{ position: 'absolute', bottom: 12, left: 12, padding: '4px 8px', background: 'rgba(0,0,0,0.6)', borderRadius: '6px', fontSize: 11, color: '#f8fafc', backdropFilter: 'blur(4px)' }}>
+              <div style={{ position: 'absolute', bottom: 12, left: 12, padding: '4px 8px', background: 'rgba(0,0,0,0.6)', borderRadius: '6px', fontSize: 11, color: 'var(--text-primary)', backdropFilter: 'blur(4px)' }}>
                 {t('youFounder')}
               </div>
             </div>

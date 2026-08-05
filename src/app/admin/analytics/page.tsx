@@ -21,7 +21,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   if (!active || !payload?.length) return null;
   return (
     <div className="custom-tooltip">
-      <p style={{ fontSize: 12, fontWeight: 600, marginBottom: 4, color: '#f8fafc' }}>{label}</p>
+      <p style={{ fontSize: 12, fontWeight: 600, marginBottom: 4, color: 'var(--text-primary)' }}>{label}</p>
       {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
       {payload.map((p: any, i: number) => (
         <p key={i} style={{ fontSize: 12, color: p.color || p.stroke || '#94a3b8' }}>
@@ -195,7 +195,7 @@ export default function AdminAnalyticsPage() {
               <Pie data={industryData} cx="50%" cy="50%" outerRadius={80} dataKey="value" label={((p: any) => `${p.name} ${((p.percent ?? 0) * 100).toFixed(0)}%`) as any} labelLine={false}>
                 {industryData.map((_, i) => <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />)}
               </Pie>
-              <Tooltip formatter={(v) => [`${v} startup(s)`, 'Count']} contentStyle={{ background: '#0d0d20', border: '1px solid rgba(0,0,0,0.3)', borderRadius: 12 }} />
+              <Tooltip formatter={(v) => [`${v} startup(s)`, 'Count']} contentStyle={{ background: 'var(--bg-card)', border: '1px solid rgba(0,0,0,0.3)', borderRadius: 12 }} />
             </PieChart>
           </ResponsiveContainer>
         </div>

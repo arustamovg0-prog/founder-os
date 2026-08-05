@@ -93,7 +93,7 @@ export default function AuditEvidencePage() {
                 <div style={{ padding: '16px 20px', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '16px' }}>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
-                      <span style={{ fontSize: 14, fontWeight: 700, color: '#f8fafc' }}>{record.action_type}</span>
+                      <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--text-primary)' }}>{record.action_type}</span>
                       <span className={`badge ${record.decision === 'APPROVED' ? 'badge-green' : 'badge-red'}`}>
                         {record.decision}
                       </span>

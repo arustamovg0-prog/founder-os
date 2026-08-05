@@ -127,7 +127,7 @@ export default function PortfolioPage() {
                 ))}
               </Pie>
               <Legend formatter={v => <span style={{ fontSize: 12, color: '#94a3b8' }}>{v}</span>} />
-              <Tooltip formatter={(v) => [`${v} startup${(v as number) > 1 ? 's' : ''}`, 'Count']} contentStyle={{ background: '#0d0d20', border: '1px solid rgba(0,0,0,0.3)', borderRadius: '12px' }} />
+              <Tooltip formatter={(v) => [`${v} startup${(v as number) > 1 ? 's' : ''}`, 'Count']} contentStyle={{ background: 'var(--bg-card)', border: '1px solid rgba(0,0,0,0.3)', borderRadius: '12px' }} />
             </PieChart>
           </ResponsiveContainer>
         </div>

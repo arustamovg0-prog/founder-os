@@ -129,7 +129,7 @@ export default function ChallengesPage() {
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
               <div style={{ width: 32, height: 32, borderRadius: 8, background: 'linear-gradient(135deg,#52525B,#71717A)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Flame size={16} color="white" />
+                <Flame size={16} color="currentColor" />
               </div>
               <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700 }}>Corporate Challenges</h1>
               <span className="badge badge-red">{CHALLENGES.filter(c => c.status === 'open').length} активных</span>
@@ -266,7 +266,7 @@ export default function ChallengesPage() {
                   placeholder="Мы планируем решить эту задачу с помощью..."
                   style={{
                     width: '100%', minHeight: 100, padding: '10px 12px', borderRadius: 8, resize: 'vertical',
-                    background: 'rgba(5,5,16,0.6)', border: '1px solid rgba(0,0,0,0.1)', color: '#f8fafc',
+                    background: 'rgba(5,5,16,0.6)', border: '1px solid rgba(0,0,0,0.1)', color: 'var(--text-primary)',
                     fontSize: 13, fontFamily: 'Inter', outline: 'none',
                   }}
                 />

@@ -94,7 +94,7 @@ export default function MagicLinkCallbackPage() {
             border: '1px solid rgba(0,0,0,0.1)',
             display: 'flex', alignItems: 'center', justifyContent: 'center' 
           }}>
-            <Command size={22} color="white" />
+            <Command size={22} color="currentColor" />
           </div>
           <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 20, fontWeight: 700 }}>Founder OS</span>
         </div>

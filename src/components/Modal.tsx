@@ -42,7 +42,7 @@ export function Modal({ isOpen, onClose, children, maxWidth = '600px', title }: 
             className="modal-box"
             onClick={e => e.stopPropagation()}
             style={{
-              background: '#09090b',
+              background: 'var(--bg-card)',
               border: '1px solid rgba(0,0,0,0.1)',
               borderRadius: '16px',
               width: '100%',

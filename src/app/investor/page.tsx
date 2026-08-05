@@ -165,7 +165,7 @@ export default function InvestorDashboard() {
                     { label: t('metrics.runway'), value: `${s.metrics.runwayMonths}mo` },
                   ].map((m, j) => (
                     <div key={j} style={{ textAlign: 'center', padding: '8px', borderRadius: '8px', background: 'rgba(0,0,0,0.02)' }}>
-                      <div style={{ fontSize: 13, fontWeight: 700, color: '#f8fafc' }}>{m.value}</div>
+                      <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)' }}>{m.value}</div>
                       <div style={{ fontSize: 10, color: '#334155' }}>{m.label}</div>
                     </div>
                   ))}

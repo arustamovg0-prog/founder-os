@@ -44,7 +44,7 @@ export default function PublicStartupProfile({ params }: { params: { startupName
   if (!startup) {
     return (
       <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#64748b' }}>
-        <h1 style={{ fontFamily: 'Space Grotesk', fontSize: 48, marginBottom: 16, color: '#f8fafc' }}>404</h1>
+        <h1 style={{ fontFamily: 'Space Grotesk', fontSize: 48, marginBottom: 16, color: 'var(--text-primary)' }}>404</h1>
         <p>Startup not found.</p>
         <Link href="/" className="btn-primary" style={{ marginTop: 24, textDecoration: 'none' }}>Back to Founder OS</Link>
       </div>
@@ -63,7 +63,7 @@ export default function PublicStartupProfile({ params }: { params: { startupName
               {startup.name.charAt(0)}
             </div>
             <div>
-              <h1 style={{ fontFamily: 'Space Grotesk', fontSize: 36, fontWeight: 800, margin: 0, color: '#f8fafc' }}>{startup.name}</h1>
+              <h1 style={{ fontFamily: 'Space Grotesk', fontSize: 36, fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>{startup.name}</h1>
               <div style={{ fontSize: 16, color: '#D8B4FE', fontWeight: 600, marginTop: 4 }}>{startup.tagline || 'Building the future'}</div>
             </div>
           </div>
@@ -79,7 +79,7 @@ export default function PublicStartupProfile({ params }: { params: { startupName
           </div>
 
           <div style={{ marginBottom: '32px' }}>
-            <h3 style={{ fontFamily: 'Space Grotesk', fontSize: 18, color: '#f8fafc', marginBottom: '12px' }}>Problem</h3>
+            <h3 style={{ fontFamily: 'Space Grotesk', fontSize: 18, color: 'var(--text-primary)', marginBottom: '12px' }}>Problem</h3>
             <p style={{ fontSize: 15, color: '#cbd5e1', lineHeight: 1.6, background: 'rgba(0,0,0,0.02)', padding: '16px', borderRadius: '12px', borderLeft: '2px solid rgba(0,0,0,0.4)' }}>
               {startup.problem || 'Not specified'}
             </p>

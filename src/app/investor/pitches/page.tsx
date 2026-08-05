@@ -244,7 +244,7 @@ export default function InvestorPitchesPage() {
 
                   <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', marginBottom: '16px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: 13, color: '#94a3b8' }}>
-                      <Calendar size={13} color="#FFFFFF" />
+                      <Calendar size={13} color="currentColor" />
                       Proposed: {pitch.request.proposedDate instanceof Date ? pitch.request.proposedDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : (pitch.request.proposedDate as any)?.seconds ? new Date((pitch.request.proposedDate as any).seconds * 1000).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : 'Unknown date'}
                     </div>
                     {startup && (

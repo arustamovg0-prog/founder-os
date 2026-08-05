@@ -203,7 +203,7 @@ export default function EcosystemHealthPage() {
         {/* MRR Trend */}
         <div className="md:col-span-2 card">
           <div style={{ fontSize: 13, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: 8 }}>
-            <TrendingUp size={14} color="#FFFFFF" /> Ecosystem MRR Growth (6 мес)
+            <TrendingUp size={14} color="currentColor" /> Ecosystem MRR Growth (6 мес)
           </div>
           <ResponsiveContainer width="100%" height={220}>
             <AreaChart data={mrrTrend}>
@@ -234,7 +234,7 @@ export default function EcosystemHealthPage() {
               <PolarAngleAxis dataKey="metric" tick={{ fontSize: 9, fill: '#475569' }} />
               <PolarRadiusAxis angle={30} domain={[0, 100]} tick={{ fontSize: 9, fill: '#334155' }} />
               <Radar name="Ecosystem" dataKey="value" stroke="#D4D4D8" fill="#D4D4D8" fillOpacity={0.2} strokeWidth={2} />
-              <Tooltip formatter={(v) => [`${v}%`, '']} contentStyle={{ background: '#0d0d20', border: '1px solid rgba(212,212,216,0.3)', borderRadius: '10px' }} />
+              <Tooltip formatter={(v) => [`${v}%`, '']} contentStyle={{ background: 'var(--bg-card)', border: '1px solid rgba(212,212,216,0.3)', borderRadius: '10px' }} />
             </RadarChart>
           </ResponsiveContainer>
         </div>

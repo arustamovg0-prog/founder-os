@@ -142,7 +142,7 @@ export default function SpotlightSearch() {
             padding: '8px 16px',
             background: 'rgba(18, 18, 18, 0.6)',
             backdropFilter: 'blur(12px)',
-            border: '1px solid rgba(255, 255, 255, 0.08)',
+            border: '1px solid rgba(0, 0, 0, 0.08)',
             borderRadius: '99px',
             color: '#A1A1AA',
             fontSize: '13px',
@@ -151,11 +151,11 @@ export default function SpotlightSearch() {
             transition: 'var(--transition-standard)',
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.4)';
+            e.currentTarget.style.borderColor = 'rgba(0, 0, 0, 0.4)';
             e.currentTarget.style.color = '#FFFFFF';
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+            e.currentTarget.style.borderColor = 'rgba(0, 0, 0, 0.08)';
             e.currentTarget.style.color = '#A1A1AA';
           }}
         >
@@ -186,7 +186,7 @@ export default function SpotlightSearch() {
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
               className="spotlight-menu" 
               onClick={e => e.stopPropagation()}
-              style={{ background: '#050510', border: '1px solid rgba(0,0,0,0.1)', borderRadius: '16px', width: '100%', maxWidth: '600px', overflow: 'hidden', boxShadow: '0 20px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,0,0,0.05)' }}
+              style={{ background: 'var(--bg-card)', border: '1px solid rgba(0,0,0,0.1)', borderRadius: '16px', width: '100%', maxWidth: '600px', overflow: 'hidden', boxShadow: '0 20px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,0,0,0.05)' }}
             >
             {/* Search Input Header */}
             <div style={{ 
@@ -211,7 +211,7 @@ export default function SpotlightSearch() {
                   fontWeight: 500
                 }}
               />
-              <div style={{ fontSize: '10px', color: '#52525B', background: 'rgba(0,0,0,0.05)', padding: '4px 8px', borderRadius: '6px' }}>{tCommon('escToClose')}</div>
+              <div style={{ fontSize: '10px', color: '#52525B', background: 'var(--bg-card)', padding: '4px 8px', borderRadius: '6px' }}>{tCommon('escToClose')}</div>
             </div>
 
             {/* Results List */}
@@ -236,7 +236,7 @@ export default function SpotlightSearch() {
                       padding: '14px 16px',
                       borderRadius: '12px',
                       cursor: 'pointer',
-                      background: isSelected ? 'rgba(255, 255, 255, 0.1)' : 'transparent',
+                      background: isSelected ? 'rgba(0, 0, 0, 0.1)' : 'transparent',
                       color: isSelected ? '#FFFFFF' : (isActive ? '#FFFFFF' : '#A1A1AA'),
                       transition: 'background 160ms var(--ease-out), color 160ms var(--ease-out)',
                       animationDelay: `${index * 30}ms`
@@ -285,8 +285,8 @@ export default function SpotlightSearch() {
             
             <div style={{ padding: '12px 24px', background: 'rgba(0,0,0,0.2)', borderTop: '1px solid rgba(0,0,0,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div style={{ width: 24, height: 24, borderRadius: 6, background: 'rgba(0,0,0,0.05)', border: '1px solid rgba(0,0,0,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Command size={12} color="white" />
+                <div style={{ width: 24, height: 24, borderRadius: 6, background: 'var(--bg-card)', border: '1px solid rgba(0,0,0,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Command size={12} color="currentColor" />
                 </div>
                 <span style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: '13px', fontWeight: 700, color: '#A1A1AA' }}>Founder OS</span>
               </div>

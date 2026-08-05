@@ -122,7 +122,7 @@ export default function CommunityPage() {
       <div style={{ marginBottom: 28 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
           <div style={{ width: 32, height: 32, borderRadius: 8, background: 'linear-gradient(135deg,#D4D4D8,#A1A1AA)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Users size={16} color="white" />
+            <Users size={16} color="currentColor" />
           </div>
           <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700 }}>Co-founder Match</h1>
           <span className="badge badge-green">Community</span>
@@ -254,7 +254,7 @@ export default function CommunityPage() {
                       </div>
                       <textarea
                         placeholder={`Привет, ${profile.name.split(' ')[0]}! Меня зовут [имя]. Мы строим [стартап] и ищем ${profile.role}...`}
-                        style={{ flex: 1, padding: '10px 12px', borderRadius: 8, background: 'rgba(0,0,0,0.04)', border: '1px solid rgba(0,0,0,0.1)', color: '#f8fafc', fontSize: 13, fontFamily: 'Inter', outline: 'none', resize: 'none', minHeight: 100 }}
+                        style={{ flex: 1, padding: '10px 12px', borderRadius: 8, background: 'rgba(0,0,0,0.04)', border: '1px solid rgba(0,0,0,0.1)', color: 'var(--text-primary)', fontSize: 13, fontFamily: 'Inter', outline: 'none', resize: 'none', minHeight: 100 }}
                       />
                       <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
                         <button onClick={() => connect(profile.id)} style={{ flex: 1, padding: '9px', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer', background: `${roleColor}20`, border: `1px solid ${roleColor}40`, color: roleColor, fontFamily: 'Inter' }}>

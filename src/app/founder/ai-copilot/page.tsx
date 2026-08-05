@@ -86,7 +86,7 @@ function MarkdownText({ text }: { text: string }) {
     <div style={{ fontSize: 14, lineHeight: 1.7, color: '#e2e8f0' }}>
       {lines.map((line, i) => {
         if (line.startsWith('**') && line.endsWith('**') && !line.slice(2, -2).includes('**')) {
-          return <div key={i} style={{ fontWeight: 700, color: '#f8fafc', marginTop: i > 0 ? 12 : 0 }}>{line.slice(2, -2)}</div>;
+          return <div key={i} style={{ fontWeight: 700, color: 'var(--text-primary)', marginTop: i > 0 ? 12 : 0 }}>{line.slice(2, -2)}</div>;
         }
         if (line.startsWith('• ')) {
           return <div key={i} style={{ paddingLeft: 16, color: '#94a3b8' }}>• {formatInline(line.slice(2))}</div>;
@@ -198,7 +198,7 @@ export default function AICopilotPage() {
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: 4 }}>
             <div style={{ width: 32, height: 32, borderRadius: 8, background: 'linear-gradient(135deg,#FFFFFF,#71717A)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Brain size={16} color="white" />
+              <Brain size={16} color="currentColor" />
             </div>
             <h1 style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700 }}>{t('title')}</h1>
             <span className="badge badge-purple"><Sparkles size={10} /> {t('poweredBy')}</span>
@@ -291,7 +291,7 @@ export default function AICopilotPage() {
                 background: 'linear-gradient(135deg,#FFFFFF,#71717A)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
               }}>
-                <Brain size={15} color="white" />
+                <Brain size={15} color="currentColor" />
               </div>
             )}
             <div style={{
@@ -303,7 +303,7 @@ export default function AICopilotPage() {
               border: `1px solid ${msg.role === 'user' ? 'rgba(0,0,0,0.3)' : 'rgba(0,0,0,0.06)'}`,
             }}>
               {msg.role === 'assistant' ? <MarkdownText text={msg.content} /> : (
-                <p style={{ fontSize: 14, color: '#f8fafc', lineHeight: 1.6 }}>{msg.content}</p>
+                <p style={{ fontSize: 14, color: 'var(--text-primary)', lineHeight: 1.6 }}>{msg.content}</p>
               )}
               <div style={{ fontSize: 10, color: '#334155', marginTop: 8, textAlign: 'right' }}>
                 {msg.timestamp.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}
@@ -325,7 +325,7 @@ export default function AICopilotPage() {
         {loading && (
           <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
             <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'linear-gradient(135deg,#FFFFFF,#71717A)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Brain size={15} color="white" />
+              <Brain size={15} color="currentColor" />
             </div>
             <div style={{ padding: '16px', borderRadius: '4px 16px 16px 16px', background: 'rgba(13,13,32,0.9)', border: '1px solid rgba(0,0,0,0.06)' }}>
               <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>

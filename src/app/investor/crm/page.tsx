@@ -289,7 +289,7 @@ export default function InvestorCRMPage() {
                 <button key={s.id} onClick={() => addDeal(s.id, addModal!)} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 16px', borderRadius: '12px', background: 'rgba(0,0,0,0.04)', border: '1px solid rgba(0,0,0,0.08)', cursor: 'pointer', textAlign: 'left', width: '100%', fontFamily: 'Inter', transition: 'var(--transition-standard)' }}>
                   <div style={{ width: 36, height: 36, borderRadius: 8, background: 'rgba(0,0,0,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Space Grotesk', fontWeight: 800, color: '#D8B4FE', flexShrink: 0 }}>{s.name.charAt(0)}</div>
                   <div style={{ flex: 1 }}>
-                    <div style={{ fontWeight: 700, fontSize: 14, color: '#f8fafc' }}>{s.name}</div>
+                    <div style={{ fontWeight: 700, fontSize: 14, color: 'var(--text-primary)' }}>{s.name}</div>
                     <div style={{ fontSize: 11, color: '#475569' }}>{s.industry} · {fmt(s.metrics.mrr)} MRR</div>
                   </div>
                   <div style={{ fontFamily: 'Space Grotesk', fontSize: 16, fontWeight: 800, color: sc }}>{score}</div>

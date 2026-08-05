@@ -366,7 +366,7 @@ export default function OnboardingPage() {
                   ].map((r, i) => (
                     <div key={i} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13 }}>
                       <span style={{ color: '#475569' }}>{r.l}</span>
-                      <span style={{ color: '#f8fafc', fontWeight: 500 }}>{r.v}</span>
+                      <span style={{ color: 'var(--text-primary)', fontWeight: 500 }}>{r.v}</span>
                     </div>
                   ))}
                 </div>
