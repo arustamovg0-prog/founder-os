@@ -5,7 +5,8 @@
             "framework": "nextjs"
         },
         "agent-reach-api": {
-            "root": "services/agent-reach-api"
+            "root": "services/agent-reach-api",
+            "entrypoint": "main.py"
         }
     },
     "rewrites": [
