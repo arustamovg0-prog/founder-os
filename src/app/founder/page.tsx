@@ -1,8 +1,11 @@
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { ROADMAP_STAGES } from '@/lib/constants';
-import { TrendingUp, DollarSign, Users, Target, Zap, ArrowUpRight, Clock, CheckCircle, AlertCircle, Brain, Trophy, Star, Gift, Flame } from 'lucide-react';
+import { 
+  TrendingUp, DollarSign, Users, Target, Zap, ArrowUpRight, 
+  Clock, CheckCircle, AlertCircle, Brain, Trophy, Star, Gift, Flame 
+} from 'lucide-react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useAuth } from '@/contexts/AuthContext';
@@ -10,6 +13,10 @@ import { doc, onSnapshot, collection, getDocs } from 'firebase/firestore';
 import { db, isDemoConfig } from '@/lib/firebase';
 import { Startup } from '@/types';
 
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { FadeIn, StaggerContainer, StaggerItem } from '@/components/ui/animations';
+import { cn } from '@/lib/utils';
 
 function fmt(n: number) {
   if (n >= 1000000) return `$${(n / 1000000).toFixed(1)}M`;
@@ -17,26 +24,22 @@ function fmt(n: number) {
   return `$${n}`;
 }
 
-// STAGE_LABELS removed in favor of translations
-
-function ScoreRing({ score, color = '#FFFFFF' }: { score: number; color?: string }) {
+function ScoreRing({ score, color = '#111827' }: { score: number; color?: string }) {
   const r = 30, circ = 2 * Math.PI * r;
   const fill = (score / 100) * circ;
   return (
-    <div style={{ position: 'relative', width: 80, height: 80 }}>
-      <svg width="80" height="80" style={{ transform: 'rotate(-90deg)' }}>
+    <div className="relative h-20 w-20">
+      <svg width="80" height="80" className="-rotate-90 transform">
         <circle cx="40" cy="40" r={r} fill="none" stroke="rgba(0,0,0,0.06)" strokeWidth="6" />
-        <circle cx="40" cy="40" r={r} fill="none" stroke={color} strokeWidth="6"
+        <circle 
+          cx="40" cy="40" r={r} fill="none" stroke={color} strokeWidth="6"
           strokeDasharray={`${fill} ${circ - fill}`} strokeLinecap="round"
-          style={{ transition: 'stroke-dasharray 1s cubic-bezier(0.4,0,0.2,1)', filter: `drop-shadow(0 0 6px ${color})` }}
+          className="transition-all duration-1000 ease-[cubic-bezier(0.4,0,0.2,1)]"
         />
       </svg>
-      <div style={{
-        position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column',
-        alignItems: 'center', justifyContent: 'center',
-      }}>
-        <span style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 18, fontWeight: 800, color }}>{score}</span>
-        <span style={{ fontSize: 9, color: '#475569', fontWeight: 600, letterSpacing: '0.5px' }}>/ 100</span>
+      <div className="absolute inset-0 flex flex-col items-center justify-center">
+        <span className="font-display text-lg font-bold text-gray-900">{score}</span>
+        <span className="text-[9px] font-semibold tracking-wider text-gray-500">/ 100</span>
       </div>
     </div>
   );
@@ -128,10 +131,10 @@ export default function FounderDashboard() {
     }).catch(err => console.warn('Failed to fetch all startups for leaderboard', err));
 
     return () => unsubscribe();
-  }, [profile]);
+  }, [profile, isDemoMode]);
 
-  if (loading) return <div className="animate-fade-in" style={{ padding: 32, color: '#64748b' }}>{t('loading')}</div>;
-  if (!startup) return <div className="animate-fade-in" style={{ padding: 32, color: '#64748b' }}>{t('notFound')}</div>;
+  if (loading) return <div className="p-8 text-gray-500 animate-pulse">{t('loading')}</div>;
+  if (!startup) return <div className="p-8 text-gray-500">{t('notFound')}</div>;
 
   const s = startup;
   const metrics = s.metrics;
@@ -139,346 +142,198 @@ export default function FounderDashboard() {
   const currentStage = ROADMAP_STAGES[currentStageIdx >= 0 ? currentStageIdx : 0];
 
   const kpis = [
-    { label: 'MRR', value: fmt(metrics.mrr), icon: <DollarSign size={18} />, color: '#D8B4FE', change: '+16.7%', positive: true },
-    { label: 'ARR', value: fmt(metrics.arr), icon: <TrendingUp size={18} />, color: 'var(--text-primary)', change: '+16.7%', positive: true },
-    { label: 'MAU', value: metrics.mau.toLocaleString(), icon: <Users size={18} />, color: '#A1A1AA', change: '+9.1%', positive: true },
-    { label: 'LTV/CAC', value: `${metrics.ltvCacRatio}x`, icon: <Target size={18} />, color: '#D8B4FE', change: '', positive: true },
-    { label: 'Runway', value: t('kpis.runway', { months: metrics.runwayMonths }), icon: <Clock size={18} />, color: '#71717A', change: '', positive: true },
-    { label: 'Team', value: t('kpis.team', { count: metrics.teamSize }), icon: <Users size={18} />, color: 'var(--text-primary)', change: '', positive: true },
+    { label: 'MRR', value: fmt(metrics.mrr), icon: <DollarSign size={18} />, change: '+16.7%' },
+    { label: 'ARR', value: fmt(metrics.arr), icon: <TrendingUp size={18} />, change: '+16.7%' },
+    { label: 'MAU', value: metrics.mau.toLocaleString(), icon: <Users size={18} />, change: '+9.1%' },
+    { label: 'LTV/CAC', value: `${metrics.ltvCacRatio}x`, icon: <Target size={18} />, change: '' },
+    { label: 'Runway', value: t('kpis.runway', { months: metrics.runwayMonths }), icon: <Clock size={18} />, change: '' },
+    { label: 'Team', value: t('kpis.team', { count: metrics.teamSize }), icon: <Users size={18} />, change: '' },
   ];
 
   const logIcons: Record<string, string> = {
-    artifact_uploaded: '', metric_updated: '', stage_completed: '',
+    artifact_uploaded: '📄', metric_updated: '📈', stage_completed: '✅',
     pitch_requested: '📨', meeting_held: '🤝', feedback_received: '💬', ai_analysis_done: '🤖',
   };
 
   return (
-    <div className="animate-fade-in">
+    <FadeIn className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+      <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
         <div>
-          <h1 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontWeight: 700, marginBottom: 6 }}>
-            {s.name} <span style={{ fontSize: 14, color: 'var(--text-primary)', fontWeight: 500 }}>#{s.industry}</span>
+          <h1 className="font-display text-3xl font-bold tracking-tight text-gray-900">
+            {s.name} <span className="text-lg font-medium text-gray-400">#{s.industry}</span>
           </h1>
-          <p style={{ color: '#64748b', fontSize: 14 }}>{s.tagline}</p>
+          <p className="mt-1 text-sm text-gray-500">{s.tagline}</p>
         </div>
-        <div style={{ display: 'flex', gap: '10px' }}>
-          <span className="badge badge-purple">{(s.stage || '').replace('_', ' ')}</span>
-          <span className="badge badge-green">{s.status}</span>
+        <div className="flex gap-2">
+          <span className="inline-flex items-center rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold text-gray-800 capitalize">
+            {(s.stage || '').replace('_', ' ')}
+          </span>
+          <span className="inline-flex items-center rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700 capitalize">
+            {s.status}
+          </span>
         </div>
       </div>
 
       {/* AI Readiness + Progress */}
-      <div className="card" style={{ marginBottom: '24px', background: 'var(--bg-card)', borderColor: 'rgba(0,0,0,0.2)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '24px', flexWrap: 'wrap' }}>
+      <Card className="border-gray-200">
+        <CardContent className="flex flex-wrap items-center gap-6 p-6">
           <ScoreRing score={s.aiScores.overallReadinessScore || 0} />
-          <div style={{ flex: 1 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-              <Brain size={14} color="#D8B4FE" />
-              <span style={{ fontSize: 12, color: '#D8B4FE', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px' }}>{t('aiReadinessScore')}</span>
+          <div className="flex-1">
+            <div className="mb-2 flex items-center gap-2">
+              <Brain size={16} className="text-gray-900" />
+              <span className="text-xs font-bold uppercase tracking-wider text-gray-900">{t('aiReadinessScore')}</span>
             </div>
-            <p style={{ fontSize: 14, color: '#94a3b8', lineHeight: 1.6, marginBottom: '12px' }}>
+            <p className="mb-4 text-sm leading-relaxed text-gray-600">
               {s.executiveSummaryAI}
             </p>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <div style={{ fontSize: 13, color: '#64748b' }}>
-                {t('roadmap')}: <strong style={{ color: '#D8B4FE' }}>{s.roadmapProgress}%</strong>
+            <div className="flex items-center gap-4">
+              <div className="text-sm font-medium text-gray-700">
+                {t('roadmap')}: <strong className="text-gray-900">{s.roadmapProgress}%</strong>
               </div>
-              <div className="progress-bar" style={{ flex: 1 }}>
-                <div className="progress-fill" style={{ width: `${s.roadmapProgress}%` }} />
+              <div className="h-2 flex-1 overflow-hidden rounded-full bg-gray-100">
+                <div className="h-full rounded-full bg-gray-900 transition-all duration-1000" style={{ width: `${s.roadmapProgress}%` }} />
               </div>
-              <span style={{ fontSize: 13, color: '#64748b', whiteSpace: 'nowrap' }}>
+              <span className="text-xs font-medium text-gray-500">
                 {t('stage', { current: currentStageIdx + 1, total: ROADMAP_STAGES.length })}
               </span>
             </div>
           </div>
-          <Link href="/founder/roadmap" className="btn-primary" style={{ whiteSpace: 'nowrap' }}>
-            {t('viewRoadmap')} <ArrowUpRight size={14} />
-          </Link>
-        </div>
-      </div>
+          <Button asChild>
+            <Link href="/founder/roadmap" className="gap-2">
+              {t('viewRoadmap')} <ArrowUpRight size={16} />
+            </Link>
+          </Button>
+        </CardContent>
+      </Card>
 
       {/* KPI Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+      <StaggerContainer className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {kpis.map((kpi, i) => (
-          <div key={i} className="card stat-card animate-fade-in" style={{ animationDelay: `${i * 50}ms` }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-              <div style={{
-                width: 36, height: 36, borderRadius: '8px',
-                background: `rgba(0,0,0,0.03)`, border: `1px solid rgba(0,0,0,0.1)`,
-                display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-primary)',
-              }}>
-                {kpi.icon}
-              </div>
-              {kpi.change && (
-                <span style={{ fontSize: 11, color: '#D4D4D8', fontWeight: 600, background: 'rgba(212,212,216,0.1)', padding: '2px 8px', borderRadius: '99px' }}>
-                  {kpi.change}
-                </span>
-              )}
-            </div>
-            <div style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 28, fontWeight: 700, marginBottom: '4px', color: 'var(--text-primary)' }}>
-              {kpi.value}
-            </div>
-            <div style={{ fontSize: 13, color: '#94a3b8', fontWeight: 500 }}>{kpi.label}</div>
-          </div>
-        ))}
-      </div>
-
-      {/* ── Founder Health Widget ──────────────────────────────────────────── */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-        {/* AI Score detail */}
-        <div className="card" style={{ background: 'var(--bg-card)', borderColor: 'rgba(0,0,0,0.2)' }}>
-          <div style={{ fontSize: 11, color: '#D8B4FE', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 14, display: 'flex', alignItems: 'center', gap: 6 }}>
-            <Brain size={12} /> {t('breakdown.title')}
-          </div>
-          {[
-            { label: t('breakdown.pitchDeck'), val: s.aiScores.pitchDeckScore || 0, color: 'var(--text-primary)' },
-            { label: t('breakdown.marketFit'), val: Math.round((s.aiScores.overallReadinessScore || 0) * 0.9), color: '#A1A1AA' },
-            { label: t('breakdown.traction'), val: Math.round((s.aiScores.overallReadinessScore || 0) * 0.8), color: '#D4D4D8' },
-            { label: t('breakdown.team'), val: Math.round((s.aiScores.overallReadinessScore || 0) * 1.05), color: '#71717A' },
-          ].map((item, i) => (
-            <div key={i} style={{ marginBottom: 10 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, marginBottom: 4 }}>
-                <span style={{ color: '#64748b' }}>{item.label}</span>
-                <span style={{ color: item.color, fontWeight: 700 }}>{Math.min(item.val, 100)}</span>
-              </div>
-              <div className="progress-bar">
-                <div style={{ height: '100%', width: `${Math.min(item.val, 100)}%`, borderRadius: 99, background: item.color, boxShadow: `0 0 6px ${item.color}60` }} />
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Next Step */}
-        <div className="card" style={{ background: 'var(--bg-card)', borderColor: 'rgba(212,212,216,0.15)' }}>
-          <div style={{ fontSize: 11, color: '#A1A1AA', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 14 }}>
-            {t('nextStep.title')}
-          </div>
-          {currentStage && (
-            <>
-              <div style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 15, fontWeight: 700, marginBottom: 8 }}>{currentStage.title}</div>
-              <p style={{ fontSize: 12, color: '#64748b', lineHeight: 1.6, marginBottom: 14 }}>{currentStage.description}</p>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                {currentStage.requiredArtifacts.slice(0, 2).map(a => (
-                  <div key={a.key} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
-                    <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#71717A', flexShrink: 0 }} />
-                    <span style={{ color: '#94a3b8' }}>{a.label}</span>
-                    {a.isRequired && <span style={{ fontSize: 9, color: '#71717A', fontWeight: 700 }}>{t('nextStep.required')}</span>}
+          <StaggerItem key={i}>
+            <Card className="hover:border-gray-300">
+              <CardContent className="p-6">
+                <div className="mb-4 flex items-center justify-between">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 bg-gray-50 text-gray-700">
+                    {kpi.icon}
                   </div>
-                ))}
-              </div>
-              <Link href="/founder/roadmap" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, marginTop: 14, fontSize: 12, color: '#A1A1AA', fontWeight: 600, textDecoration: 'none' }}>
-                {t('nextStep.openRoadmap')} <ArrowUpRight size={12} />
-              </Link>
-            </>
-          )}
-        </div>
-
-        {/* Ecosystem rank */}
-        <div className="card" style={{ background: 'var(--bg-card)', borderColor: 'rgba(113,113,122,0.15)' }}>
-          <div style={{ fontSize: 11, color: '#D4D4D8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 14 }}>
-            {t('ecosystemRank.title')}
-          </div>
-          {(() => {
-            const sorted = [...allStartups].sort((a, b) => (b.aiScores.overallReadinessScore || 0) - (a.aiScores.overallReadinessScore || 0));
-            let rank = sorted.findIndex(st => st.id === s.id) + 1;
-            if (rank === 0) rank = sorted.length + 1;
-            const medals = ['🥇', '🥈', '🥉'];
-            return (
-              <>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 }}>
-                  <span style={{ fontSize: 36 }}>{rank <= 3 ? medals[rank - 1] : `#${rank}`}</span>
-                  <div>
-                    <div style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 22, fontWeight: 800, color: '#D4D4D8' }}>#{rank}</div>
-                    <div style={{ fontSize: 11, color: '#64748b' }}>{t('ecosystemRank.outOfTotal', { total: allStartups.length })}</div>
-                  </div>
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                  {sorted.slice(0, 3).map((st, i) => (
-                    <div key={st.id} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 10px', borderRadius: 8, background: st.id === s.id ? 'rgba(113,113,122,0.1)' : 'transparent', border: st.id === s.id ? '1px solid rgba(113,113,122,0.2)' : 'none' }}>
-                      <span style={{ fontSize: 12 }}>{medals[i]}</span>
-                      <span style={{ fontSize: 12, flex: 1, color: st.id === s.id ? '#D4D4D8' : '#64748b', fontWeight: st.id === s.id ? 700 : 400 }}>{st.name}</span>
-                      <span style={{ fontSize: 11, color: '#475569' }}>{st.aiScores.overallReadinessScore}</span>
-                    </div>
-                  ))}
-                </div>
-                <Link href="/leaderboard" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, marginTop: 12, fontSize: 12, color: '#D4D4D8', fontWeight: 600, textDecoration: 'none' }}>
-                  {t('ecosystemRank.fullLeaderboard')} <ArrowUpRight size={12} />
-                </Link>
-              </>
-            );
-          })()}
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Current Stage */}
-        <div className="card">
-          <div style={{ fontSize: 13, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '16px' }}>
-            {t('currentStage.title')}
-          </div>
-          {currentStage && (
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
-                <span className="badge badge-purple">{tCommon(`stages.${currentStage.phase}`)}</span>
-                <span style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 16, fontWeight: 700 }}>{tRoadmap(`stages.${currentStage.id}.title`)}</span>
-              </div>
-              <p style={{ fontSize: 13, color: '#64748b', marginBottom: '16px' }}>{tRoadmap(`stages.${currentStage.id}.description`)}</p>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                {currentStage.requiredArtifacts.map((art) => {
-                  const done = s.dataRoom?.pitchDeckUrl && art.key.includes('pitch');
-                  return (
-                    <div key={art.key} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      {done
-                        ? <CheckCircle size={14} color="#D4D4D8" />
-                        : <AlertCircle size={14} color="#71717A" />
-                      }
-                      <span style={{ fontSize: 13, color: done ? '#D4D4D8' : '#71717A' }}>{art.label}</span>
-                      {art.isRequired && !done && <span className="badge badge-yellow">{t('nextStep.required')}</span>}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Active Pitches */}
-        <div className="card">
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
-            <div style={{ fontSize: 13, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px' }}>
-              {t('activePitches.title')}
-            </div>
-            <Link href="/founder/pitches" style={{ fontSize: 12, color: 'var(--text-primary)', textDecoration: 'none', fontWeight: 500 }}>
-              {t('activePitches.viewAll')}
-            </Link>
-          </div>
-          {pitches.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '24px', color: '#334155' }}>
-              <Zap size={24} style={{ marginBottom: 8, opacity: 0.3 }} />
-              <p style={{ fontSize: 13 }}>{t('activePitches.noPitches')}</p>
-            </div>
-          ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              {pitches.map((p) => (
-                <div key={p.id} style={{ padding: '14px', borderRadius: '12px', background: 'rgba(0,0,0,0.03)', border: '1px solid rgba(0,0,0,0.06)' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
-                    <span style={{ fontSize: 14, fontWeight: 600 }}>{p.investorName}</span>
-                    <span className={`badge ${p.status === 'pending' ? 'badge-yellow' : p.status === 'accepted' ? 'badge-green' : 'badge-blue'}`}>
-                      {p.status}
+                  {kpi.change && (
+                    <span className="rounded-full bg-green-50 px-2.5 py-0.5 text-xs font-semibold text-green-700">
+                      {kpi.change}
                     </span>
+                  )}
+                </div>
+                <div className="font-display text-2xl font-bold text-gray-900">{kpi.value}</div>
+                <div className="mt-1 text-sm font-medium text-gray-500">{kpi.label}</div>
+              </CardContent>
+            </Card>
+          </StaggerItem>
+        ))}
+      </StaggerContainer>
+
+      {/* Founder Health Widget */}
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {/* AI Score detail */}
+        <Card>
+          <CardContent className="p-6">
+            <div className="mb-6 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-gray-900">
+              <Brain size={14} /> {t('breakdown.title')}
+            </div>
+            <div className="space-y-4">
+              {[
+                { label: t('breakdown.pitchDeck'), val: s.aiScores.pitchDeckScore || 0 },
+                { label: t('breakdown.marketFit'), val: Math.round((s.aiScores.overallReadinessScore || 0) * 0.9) },
+                { label: t('breakdown.traction'), val: Math.round((s.aiScores.overallReadinessScore || 0) * 0.8) },
+                { label: t('breakdown.team'), val: Math.round((s.aiScores.overallReadinessScore || 0) * 1.05) },
+              ].map((item, i) => (
+                <div key={i}>
+                  <div className="mb-1.5 flex justify-between text-xs">
+                    <span className="font-medium text-gray-600">{item.label}</span>
+                    <span className="font-bold text-gray-900">{Math.min(item.val, 100)}</span>
                   </div>
-                  <p style={{ fontSize: 12, color: '#475569' }}>
-                    {t('activePitches.scoreAtRequest', { score: p.request?.snapshotScore || 0 })}
-                  </p>
+                  <div className="h-1.5 w-full overflow-hidden rounded-full bg-gray-100">
+                    <div 
+                      className="h-full rounded-full bg-gray-900 transition-all duration-1000" 
+                      style={{ width: `${Math.min(item.val, 100)}%` }} 
+                    />
+                  </div>
                 </div>
               ))}
             </div>
-          )}
-        </div>
+          </CardContent>
+        </Card>
 
-        {/* Badges & Quick Links */}
-        <div className="card" style={{ gridColumn: '1 / -1' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20, flexWrap: 'wrap', gap: 12 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <Trophy size={16} color="#71717A" />
-              <span style={{ fontSize: 13, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px' }}>{t('achievements.title')}</span>
+        {/* Next Step */}
+        <Card>
+          <CardContent className="p-6">
+            <div className="mb-4 text-xs font-bold uppercase tracking-wider text-gray-500">
+              {t('nextStep.title')}
+            </div>
+            {currentStage && (
+              <>
+                <div className="font-display text-lg font-bold text-gray-900">{currentStage.title}</div>
+                <p className="mt-2 text-sm leading-relaxed text-gray-600">{currentStage.description}</p>
+                <div className="mt-4 space-y-2">
+                  {currentStage.requiredArtifacts.slice(0, 2).map(a => (
+                    <div key={a.key} className="flex items-center gap-2 text-sm">
+                      <div className="h-1.5 w-1.5 shrink-0 rounded-full bg-gray-400" />
+                      <span className="font-medium text-gray-600">{a.label}</span>
+                      {a.isRequired && <span className="text-[10px] font-bold text-gray-400">{t('nextStep.required')}</span>}
+                    </div>
+                  ))}
+                </div>
+                <Link href="/founder/roadmap" className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-gray-600 hover:text-gray-900">
+                  {t('nextStep.openRoadmap')} <ArrowUpRight size={16} />
+                </Link>
+              </>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Ecosystem rank */}
+        <Card>
+          <CardContent className="p-6">
+            <div className="mb-4 text-xs font-bold uppercase tracking-wider text-gray-500">
+              {t('ecosystemRank.title')}
             </div>
             {(() => {
               const sorted = [...allStartups].sort((a, b) => (b.aiScores.overallReadinessScore || 0) - (a.aiScores.overallReadinessScore || 0));
               let rank = sorted.findIndex(st => st.id === s.id) + 1;
               if (rank === 0) rank = sorted.length + 1;
+              const medals = ['🥇', '🥈', '🥉'];
               return (
-                <span style={{ fontSize: 11, color: '#475569' }}>
-                  <span dangerouslySetInnerHTML={{ __html: t('achievements.batchInfo', { rank: `<strong style="color: #71717A">#${rank}</strong>`, total: allStartups.length }) }} />
-                </span>
+                <>
+                  <div className="mb-6 flex items-center gap-4">
+                    <span className="text-4xl">{rank <= 3 ? medals[rank - 1] : `#${rank}`}</span>
+                    <div>
+                      <div className="font-display text-2xl font-bold text-gray-900">#{rank}</div>
+                      <div className="text-xs font-medium text-gray-500">{t('ecosystemRank.outOfTotal', { total: allStartups.length })}</div>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    {sorted.slice(0, 3).map((st, i) => {
+                      const isMe = st.id === s.id;
+                      return (
+                        <div key={st.id} className={cn(
+                          "flex items-center gap-2 rounded-lg px-3 py-2 text-sm",
+                          isMe ? "bg-gray-100 border border-gray-200" : "bg-transparent"
+                        )}>
+                          <span>{medals[i]}</span>
+                          <span className={cn("flex-1", isMe ? "font-bold text-gray-900" : "font-medium text-gray-600")}>{st.name}</span>
+                          <span className="text-xs font-semibold text-gray-500">{st.aiScores.overallReadinessScore}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <Link href="/leaderboard" className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-gray-600 hover:text-gray-900">
+                    {t('ecosystemRank.fullLeaderboard')} <ArrowUpRight size={16} />
+                  </Link>
+                </>
               );
             })()}
-          </div>
-
-          {/* Badges row */}
-          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 20 }}>
-            {[
-              { label: t('badges.firstPitch'), earned: true, color: 'var(--text-primary)' },
-              { label: t('badges.mvpReady'), earned: true, color: '#A1A1AA' },
-              { label: t('badges.mrr'), earned: true, color: '#D4D4D8' },
-              { label: t('badges.investmentReady'), earned: true, color: '#71717A' },
-              { label: t('badges.firstExport'), earned: false, color: '#64748b' },
-              { label: t('badges.seriesA'), earned: false, color: '#64748b' },
-            ].map((b, i) => (
-              <div key={i} title={b.label} style={{
-                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5, padding: '10px 14px', borderRadius: 12,
-                background: b.earned ? `${b.color}12` : 'rgba(0,0,0,0.02)',
-                border: `1px solid ${b.earned ? `${b.color}30` : 'rgba(0,0,0,0.06)'}`,
-                opacity: b.earned ? 1 : 0.4, transition: 'var(--transition-standard)', cursor: 'default', minWidth: 72,
-              }}>
-                <span style={{ fontSize: 10, fontWeight: 600, color: b.earned ? b.color : '#334155', whiteSpace: 'nowrap', marginTop: 10 }}>{b.label}</span>
-                {b.earned && <Star size={8} color={b.color} fill={b.color} />}
-              </div>
-            ))}
-          </div>
-
-          {/* Quick links to new modules */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 10 }}>
-            {[
-              { href: '/founder/perks', icon: <Gift size={14} />, label: tNav('perks'), sub: t('quickLinks.perksVal'), color: '#71717A' },
-              { href: '/founder/legal', icon: <Zap size={14} />, label: tNav('legal'), sub: t('quickLinks.legalVal'), color: '#A1A1AA' },
-              { href: '/founder/challenges', icon: <Flame size={14} />, label: tNav('challenges'), sub: t('quickLinks.challengesVal'), color: '#52525B' },
-              { href: '/founder/community', icon: <Users size={14} />, label: tNav('community'), sub: t('quickLinks.communityVal'), color: '#D4D4D8' },
-            ].map((link, i) => (
-              <Link key={i} href={link.href} style={{ textDecoration: 'none' }}>
-                <div style={{ padding: '12px 14px', borderRadius: 10, background: `${link.color}08`, border: `1px solid ${link.color}20`, cursor: 'pointer', transition: 'var(--transition-standard)' }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.borderColor = `${link.color}40`; (e.currentTarget as HTMLDivElement).style.background = `${link.color}12`; }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor = `${link.color}20`; (e.currentTarget as HTMLDivElement).style.background = `${link.color}08`; }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4, color: link.color }}>
-                    {link.icon}
-                    <span style={{ fontSize: 13, fontWeight: 700 }}>{link.label}</span>
-                  </div>
-                  <div style={{ fontSize: 11, color: '#475569' }}>{link.sub}</div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        {/* Activity Feed */}
-        <div className="card" style={{ gridColumn: '1 / -1' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
-            <div style={{ fontSize: 13, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px' }}>
-              {t('digitalFootprint.title')}
-            </div>
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {recentLogs.map((log, i) => (
-              <div key={log.id} style={{
-                display: 'flex', alignItems: 'flex-start', gap: '12px',
-                padding: '12px', borderRadius: '10px',
-                background: 'rgba(0,0,0,0.02)', border: '1px solid rgba(0,0,0,0.05)',
-                position: 'relative',
-              }}>
-                <div style={{
-                  width: 32, height: 32, borderRadius: '8px', flexShrink: 0,
-                  background: 'rgba(0,0,0,0.15)', border: '1px solid rgba(0,0,0,0.2)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: '14px',
-                }}>
-                  {logIcons[log.eventType]}
-                </div>
-                <div style={{ flex: 1 }}>
-                  <p style={{ fontSize: 13, color: '#e2e8f0', marginBottom: '4px' }}>{log.description}</p>
-                  <div style={{ display: 'flex', gap: '12px' }}>
-                    <span style={{ fontSize: 11, color: '#334155' }}>
-                      {log.timestamp.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' })}
-                    </span>
-                    <span style={{ fontSize: 11, color: '#334155', textTransform: 'capitalize' }}>{(log.actorRole || '').replace('_', ' ')}</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
-    </div>
+    </FadeIn>
   );
 }

@@ -1,13 +1,18 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { Startup, PitchEvent } from '@/types';
 import { TrendingUp, Users, Briefcase, DollarSign, ArrowUpRight, Star, Clock } from 'lucide-react';
-
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
+import { useAuth } from '@/contexts/AuthContext';
+
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { FadeIn, StaggerContainer, StaggerItem } from '@/components/ui/animations';
+import { cn } from '@/lib/utils';
 
 function fmt(n: number) {
   if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(1)}M`;
@@ -16,23 +21,32 @@ function fmt(n: number) {
 }
 
 const STAGE_BADGE: Record<string, string> = {
-  idea: 'badge-gray', validation: 'badge-yellow',
-  mvp: 'badge-blue', growth: 'badge-purple', investment_ready: 'badge-green',
+  idea: 'bg-gray-100 text-gray-800',
+  validation: 'bg-yellow-100 text-yellow-800',
+  mvp: 'bg-blue-100 text-blue-800',
+  growth: 'bg-purple-100 text-purple-800',
+  investment_ready: 'bg-green-100 text-green-800',
 };
 
-function ScoreBar({ score, color = '#7c3aed' }: { score: number; color?: string }) {
+function ScoreBar({ score, color = 'bg-primary' }: { score: number; color?: string }) {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-      <div className="progress-bar" style={{ flex: 1 }}>
-        <div style={{ height: '100%', borderRadius: '99px', width: `${score}%`, background: color, transition: 'width 0.8s ease', boxShadow: `0 0 6px ${color}80` }} />
+    <div className="flex items-center gap-2">
+      <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-gray-100">
+        <div 
+          className={cn("h-full rounded-full transition-all duration-1000", color)} 
+          style={{ width: `${score}%` }} 
+        />
       </div>
-      <span style={{ fontSize: 12, fontWeight: 700, color, minWidth: 32 }}>{score}</span>
+      <span className={cn("text-xs font-bold", color.replace('bg-', 'text-').replace('-500', '-600'))}>
+        {score}
+      </span>
     </div>
   );
 }
 
 export default function InvestorDashboard() {
   const t = useTranslations('investorDashboard');
+  const { profile } = useAuth();
   const [startups, setStartups] = useState<Startup[]>([]);
   const [pitches, setPitches] = useState<PitchEvent[]>([]);
   const [loading, setLoading] = useState(true);
@@ -44,6 +58,7 @@ export default function InvestorDashboard() {
           getDocs(collection(db, 'startups')),
           getDocs(collection(db, 'pitches'))
         ]);
+        
         if (!startupsSnap.empty) {
           const dbStartups = startupsSnap.docs.map(d => {
             const data = d.data();
@@ -84,145 +99,160 @@ export default function InvestorDashboard() {
     loadData();
   }, []);
 
-  if (loading) return <div className="animate-fade-in" style={{ padding: 32, color: '#64748b' }}>{t('loading')}</div>;
+  if (loading) return <div className="p-8 text-gray-500 animate-pulse">{t('loading')}</div>;
 
   const readyStartups = startups.filter(s => s.aiScores?.overallReadinessScore && s.aiScores.overallReadinessScore >= 60);
   const pendingPitches = pitches.filter(p => p.status === 'pending').length;
   const activePitches = pitches.filter(p => ['accepted', 'feedback_pending'].includes(p.status)).length;
 
   return (
-    <div className="animate-fade-in">
-      <div style={{ marginBottom: '32px' }}>
-        <h1 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontWeight: 700 }}>
+    <FadeIn className="space-y-6">
+      <div className="mb-8">
+        <h1 className="font-display text-3xl font-bold tracking-tight text-gray-900">
           {t('title')}
         </h1>
-        <p style={{ color: '#64748b', fontSize: 14 }}>{t('subtitle')}</p>
+        <p className="mt-1 text-sm text-gray-500">{t('subtitle', { name: profile?.name || 'Инвестор' })}</p>
       </div>
 
       {/* KPIs */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-7">
+      <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { label: t('kpis.ready'), value: startups.filter(s => (s.aiScores.overallReadinessScore || 0) >= 75).length, icon: <Star size={18} />, color: '#f59e0b' },
-          { label: t('kpis.active'), value: startups.length, icon: <TrendingUp size={18} />, color: '#7c3aed' },
-          { label: t('kpis.pending'), value: pendingPitches, icon: <Clock size={18} />, color: '#3b82f6' },
-          { label: t('kpis.pitches'), value: activePitches, icon: <Briefcase size={18} />, color: '#10b981' },
+          { label: t('kpis.ready'), value: startups.filter(s => (s.aiScores.overallReadinessScore || 0) >= 75).length, icon: <Star size={18} />, colorClass: 'text-amber-500' },
+          { label: t('kpis.active'), value: startups.length, icon: <TrendingUp size={18} />, colorClass: 'text-purple-500' },
+          { label: t('kpis.pending'), value: pendingPitches, icon: <Clock size={18} />, colorClass: 'text-blue-500' },
+          { label: t('kpis.pitches'), value: activePitches, icon: <Briefcase size={18} />, colorClass: 'text-green-500' },
         ].map((kpi, i) => (
-          <div key={i} className="card stat-card animate-fade-in" style={{ animationDelay: `${i * 50}ms` }}>
-            <div style={{
-              width: 36, height: 36, borderRadius: 8, marginBottom: 12,
-              background: `rgba(0,0,0,0.03)`, border: `1px solid rgba(0,0,0,0.1)`,
-              display: 'flex', alignItems: 'center', justifyContent: 'center', color: kpi.color,
-            }}>
-              {kpi.icon}
-            </div>
-            <div style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 32, fontWeight: 800, color: kpi.color }}>{kpi.value}</div>
-            <div style={{ fontSize: 13, color: '#94a3b8', fontWeight: 500 }}>{kpi.label}</div>
-          </div>
+          <StaggerItem key={i}>
+            <Card>
+              <CardContent className="p-6">
+                <div className={cn(
+                  "mb-4 flex h-10 w-10 items-center justify-center rounded-lg border border-gray-100 bg-gray-50",
+                  kpi.colorClass
+                )}>
+                  {kpi.icon}
+                </div>
+                <div className={cn("font-display text-3xl font-bold", kpi.colorClass)}>{kpi.value}</div>
+                <div className="mt-1 text-sm font-medium text-gray-500">{kpi.label}</div>
+              </CardContent>
+            </Card>
+          </StaggerItem>
         ))}
-      </div>
+      </StaggerContainer>
 
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-6">
         {/* Top Startups */}
-        <div className="card">
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
-            <div style={{ fontSize: 13, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px' }}>
-              {t('topStartups')}
-            </div>
-            <Link href="/investor/deal-flow" style={{ fontSize: 12, color: '#7c3aed', textDecoration: 'none', fontWeight: 500 }}>
-              {t('viewAll')} →
-            </Link>
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            {readyStartups.map((s, i) => (
-              <div key={s.id} className="card animate-fade-in" style={{
-                padding: '16px', animationDelay: `${(i + 4) * 50}ms`
-              }}>
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-                  <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                      <div style={{
-                        width: 28, height: 28, borderRadius: '6px',
-                        background: `hsl(${i * 60}, 70%, 30%)`,
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        fontSize: 12, fontWeight: 700, color: 'white',
-                      }}>
-                        {s.name.charAt(0)}
-                      </div>
-                      <span style={{ fontWeight: 700, fontSize: 15 }}>{s.name}</span>
-                      <span className={`badge ${STAGE_BADGE[s.stage]}`}>{s.stage.replace('_', ' ')}</span>
-                    </div>
-                    <p style={{ fontSize: 12, color: '#64748b' }}>{s.tagline}</p>
-                  </div>
-                  <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                    <div style={{ fontSize: 11, color: '#475569', marginBottom: 2 }}>{t('mrr')}</div>
-                    <div style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 16, fontWeight: 700, color: '#10b981' }}>{fmt(s.metrics.mrr)}</div>
-                  </div>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
-                  {[
-                    { label: t('metrics.ltv'), value: `${s.metrics.ltvCacRatio}x` },
-                    { label: t('metrics.mau'), value: s.metrics.mau.toLocaleString() },
-                    { label: t('metrics.runway'), value: `${s.metrics.runwayMonths}mo` },
-                  ].map((m, j) => (
-                    <div key={j} style={{ textAlign: 'center', padding: '8px', borderRadius: '8px', background: 'rgba(0,0,0,0.02)' }}>
-                      <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)' }}>{m.value}</div>
-                      <div style={{ fontSize: 10, color: '#334155' }}>{m.label}</div>
-                    </div>
-                  ))}
-                </div>
-                <div style={{ marginBottom: '12px' }}>
-                  <div style={{ fontSize: 11, color: '#475569', marginBottom: 6 }}>{t('score')}</div>
-                  <ScoreBar score={s.aiScores.overallReadinessScore || 0} color={i === 0 ? '#10b981' : i === 1 ? '#7c3aed' : '#f59e0b'} />
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                  <Link href={`/investor/deal-flow`} className="btn-secondary" style={{ fontSize: 12, padding: '6px 14px' }}>
-                    {t('viewProfile')} <ArrowUpRight size={12} />
-                  </Link>
-                </div>
+        <Card>
+          <CardContent className="p-6">
+            <div className="mb-6 flex items-center justify-between">
+              <div className="text-xs font-bold uppercase tracking-wider text-gray-500">
+                {t('topStartups')}
               </div>
-            ))}
-          </div>
-        </div>
+              <Link href="/investor/deal-flow" className="text-xs font-semibold text-gray-900 hover:underline">
+                {t('viewAll')} →
+              </Link>
+            </div>
+            
+            <div className="space-y-4">
+              {readyStartups.map((s, i) => (
+                <Card key={s.id} className="border-gray-200">
+                  <CardContent className="p-4">
+                    <div className="mb-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                      <div>
+                        <div className="mb-1 flex items-center gap-2">
+                          <div className="flex h-8 w-8 items-center justify-center rounded-md bg-gray-900 text-xs font-bold text-white">
+                            {s.name.charAt(0)}
+                          </div>
+                          <span className="text-base font-bold text-gray-900">{s.name}</span>
+                          <span className={cn("px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider rounded-full", STAGE_BADGE[s.stage] || STAGE_BADGE.idea)}>
+                            {s.stage.replace('_', ' ')}
+                          </span>
+                        </div>
+                        <p className="text-xs text-gray-500">{s.tagline}</p>
+                      </div>
+                      <div className="text-right shrink-0">
+                        <div className="mb-0.5 text-[10px] font-semibold uppercase tracking-wider text-gray-500">{t('mrr')}</div>
+                        <div className="font-display text-lg font-bold text-green-600">{fmt(s.metrics.mrr)}</div>
+                      </div>
+                    </div>
+                    
+                    <div className="mb-4 grid grid-cols-3 gap-2">
+                      {[
+                        { label: t('metrics.ltv'), value: `${s.metrics.ltvCacRatio}x` },
+                        { label: t('metrics.mau'), value: s.metrics.mau.toLocaleString() },
+                        { label: t('metrics.runway'), value: `${s.metrics.runwayMonths}mo` },
+                      ].map((m, j) => (
+                        <div key={j} className="rounded-md bg-gray-50 py-2 text-center">
+                          <div className="text-sm font-bold text-gray-900">{m.value}</div>
+                          <div className="text-[10px] font-semibold uppercase tracking-wider text-gray-500">{m.label}</div>
+                        </div>
+                      ))}
+                    </div>
+                    
+                    <div className="mb-4">
+                      <div className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-gray-500">{t('score')}</div>
+                      <ScoreBar 
+                        score={s.aiScores.overallReadinessScore || 0} 
+                        color={i === 0 ? 'bg-green-500' : i === 1 ? 'bg-purple-500' : 'bg-amber-500'} 
+                      />
+                    </div>
+                    
+                    <div className="flex justify-end">
+                      <Button variant="secondary" size="sm" asChild>
+                        <Link href={`/investor/deal-flow`}>
+                          {t('viewProfile')} <ArrowUpRight className="ml-1" size={14} />
+                        </Link>
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Pending Pitch Requests */}
-        <div className="card">
-          <div style={{ fontSize: 13, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '20px' }}>
-            {t('pendingRequests')}
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {pitches.filter(p => p.status === 'pending').map((p) => {
-              const startup = startups.find(s => s.id === p.startupId);
-              return (
-                <div key={p.id} style={{ padding: '14px', borderRadius: '12px', background: 'rgba(245,158,11,0.05)', border: '1px solid rgba(245,158,11,0.15)' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-                    <span style={{ fontSize: 14, fontWeight: 700 }}>{p.startupName}</span>
-                    <span className="badge badge-yellow"><Clock size={10} /> {t('pending')}</span>
+        <Card>
+          <CardContent className="p-6">
+            <div className="mb-6 text-xs font-bold uppercase tracking-wider text-gray-500">
+              {t('pendingRequests')}
+            </div>
+            <div className="space-y-4">
+              {pitches.filter(p => p.status === 'pending').map((p) => {
+                const startup = startups.find(s => s.id === p.startupId);
+                return (
+                  <div key={p.id} className="rounded-xl border border-amber-200 bg-amber-50 p-4">
+                    <div className="mb-2 flex items-center justify-between">
+                      <span className="text-sm font-bold text-gray-900">{p.startupName}</span>
+                      <span className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold text-amber-800">
+                        <Clock size={10} /> {t('pending')}
+                      </span>
+                    </div>
+                    <p className="mb-3 text-xs leading-relaxed text-gray-700">
+                      {p.request.message.slice(0, 100)}...
+                    </p>
+                    <div className="flex items-center justify-between text-[10px] font-semibold text-gray-500">
+                      <span>{t('pitchScore', { score: p.request.snapshotScore })}</span>
+                      <span>
+                        {p.request.proposedDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}
+                      </span>
+                    </div>
+                    <div className="mt-4 flex gap-2">
+                      <Button className="flex-1" size="sm">{t('accept')}</Button>
+                      <Button variant="secondary" className="flex-1" size="sm">{t('decline')}</Button>
+                    </div>
                   </div>
-                  <p style={{ fontSize: 12, color: '#64748b', marginBottom: '10px', lineHeight: 1.5 }}>
-                    {p.request.message.slice(0, 100)}...
-                  </p>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <span style={{ fontSize: 11, color: '#475569' }}>{t('pitchScore', { score: p.request.snapshotScore })}</span>
-                    <span style={{ fontSize: 11, color: '#475569' }}>
-                      {p.request.proposedDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}
-                    </span>
-                  </div>
-                  <div style={{ display: 'flex', gap: '8px', marginTop: '12px' }}>
-                    <button className="btn-primary" style={{ flex: 1, fontSize: 12, padding: '7px' }}>{t('accept')}</button>
-                    <button className="btn-secondary" style={{ flex: 1, fontSize: 12, padding: '7px' }}>{t('decline')}</button>
-                  </div>
+                );
+              })}
+              {pitches.filter(p => p.status === 'pending').length === 0 && (
+                <div className="py-10 text-center text-gray-500">
+                  <Clock size={32} className="mx-auto mb-3 opacity-20" />
+                  <p className="text-sm font-medium">{t('noRequests')}</p>
                 </div>
-              );
-            })}
-            {pitches.filter(p => p.status === 'pending').length === 0 && (
-              <div style={{ textAlign: 'center', padding: '40px 20px', color: '#334155' }}>
-                <Clock size={32} style={{ margin: '0 auto 12px', opacity: 0.3, display: 'block' }} />
-                <p style={{ fontSize: 13 }}>{t('noRequests')}</p>
-              </div>
-            )}
-          </div>
-        </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
       </div>
-    </div>
+    </FadeIn>
   );
 }
