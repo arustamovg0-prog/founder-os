@@ -233,7 +233,7 @@ export default function DataRoomPage() {
                 )}
 
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <span style={{ fontSize: 11, color: '#334155' }}>{t('uploadedDate', { date: doc.uploadedAt })}</span>
+                  <span style={{ fontSize: 11, color: '#334155' }}>{t('uploadedDate', { date: doc.uploadedAt || '' })}</span>
                   <div style={{ display: 'flex', gap: '6px' }}>
                     <button className="btn-secondary" style={{ fontSize: 11, padding: '5px 12px', gap: '4px' }}>
                       <Eye size={11} /> {t('view')}

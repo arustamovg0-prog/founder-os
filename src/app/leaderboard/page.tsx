@@ -29,7 +29,7 @@ const FILTERS = [
 export default function LeaderboardPage() {
   const [startups, setStartups] = useState<Startup[]>([]);
   const [loading, setLoading] = useState(true);
-  const [sortBy, setSortBy] = useState<'score' | 'mrr' | 'mau' | 'growth'>('score');
+  const [sortBy, setSortBy] = useState<'score' | 'mrr' | 'mau' | 'growth' | 'geo'>('score');
   const [industryFilter, setIndustryFilter] = useState('All');
 
   useEffect(() => {

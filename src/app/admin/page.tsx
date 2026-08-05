@@ -125,13 +125,13 @@ export default function AdminDashboard() {
           { label: t('kpis.avgScore'), value: `${avgScore}/100`, icon: <Brain size={18} />, color: '#A1A1AA', sub: t('kpis.avgScoreSub') },
           { label: t('kpis.ready'), value: readyCount, icon: <Zap size={18} />, color: '#71717A', sub: t('kpis.readySub') },
         ].map((kpi, i) => (
-          <div key={i} className="stat-card">
-            <div style={{ width: 36, height: 36, borderRadius: 8, background: `${kpi.color}20`, border: `1px solid ${kpi.color}30`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: kpi.color, marginBottom: 12 }}>
+          <div key={i} className="card stat-card animate-fade-in" style={{ animationDelay: `${i * 50}ms` }}>
+            <div style={{ width: 36, height: 36, borderRadius: 8, background: `rgba(255,255,255,0.03)`, border: `1px solid rgba(255,255,255,0.1)`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: kpi.color, marginBottom: 12 }}>
               {kpi.icon}
             </div>
             <div style={{ fontFamily: 'Space Grotesk', fontSize: 28, fontWeight: 800, color: kpi.color }}>{kpi.value}</div>
-            <div style={{ fontSize: 12, color: '#475569', fontWeight: 500 }}>{kpi.label}</div>
-            <div style={{ fontSize: 11, color: '#334155', marginTop: 2 }}>{kpi.sub}</div>
+            <div style={{ fontSize: 13, color: '#94a3b8', fontWeight: 500 }}>{kpi.label}</div>
+            <div style={{ fontSize: 11, color: '#475569', marginTop: 2 }}>{kpi.sub}</div>
           </div>
         ))}
       </div>
@@ -219,8 +219,8 @@ export default function AdminDashboard() {
                 const score = s.aiScores.overallReadinessScore || 0;
                 const scoreColor = score >= 75 ? '#D4D4D8' : score >= 50 ? '#71717A' : '#52525B';
                 return (
-                  <tr key={s.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}
-                    onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.02)')}
+                  <tr key={s.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)', transition: 'background-color 150ms var(--ease-out)' }}
+                    onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.03)')}
                     onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
                     <td style={{ padding: '12px 12px' }}>
                       <div style={{ fontWeight: 600, fontSize: 14 }}>{s.name}</div>

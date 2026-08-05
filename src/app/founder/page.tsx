@@ -201,12 +201,12 @@ export default function FounderDashboard() {
       {/* KPI Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
         {kpis.map((kpi, i) => (
-          <div key={i} className="stat-card">
+          <div key={i} className="card stat-card animate-fade-in" style={{ animationDelay: `${i * 50}ms` }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
               <div style={{
                 width: 36, height: 36, borderRadius: '8px',
-                background: `${kpi.color}20`, border: `1px solid ${kpi.color}30`,
-                display: 'flex', alignItems: 'center', justifyContent: 'center', color: kpi.color,
+                background: `rgba(255,255,255,0.03)`, border: `1px solid rgba(255,255,255,0.1)`,
+                display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ffffff',
               }}>
                 {kpi.icon}
               </div>
@@ -216,10 +216,10 @@ export default function FounderDashboard() {
                 </span>
               )}
             </div>
-            <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 26, fontWeight: 700, marginBottom: '4px', color: kpi.color }}>
+            <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 28, fontWeight: 700, marginBottom: '4px', color: '#ffffff' }}>
               {kpi.value}
             </div>
-            <div style={{ fontSize: 12, color: '#475569', fontWeight: 500 }}>{kpi.label}</div>
+            <div style={{ fontSize: 13, color: '#94a3b8', fontWeight: 500 }}>{kpi.label}</div>
           </div>
         ))}
       </div>

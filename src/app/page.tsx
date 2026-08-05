@@ -28,7 +28,8 @@ const containerVariants = {
   },
 };
 
-const itemVariants = {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const itemVariants: any = {
   hidden: { opacity: 0, y: 15, filter: 'blur(4px)' },
   visible: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { type: 'spring', damping: 20, stiffness: 100 } },
 };

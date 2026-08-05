@@ -107,16 +107,16 @@ export default function InvestorDashboard() {
           { label: t('kpis.pending'), value: pendingPitches, icon: <Clock size={18} />, color: '#3b82f6' },
           { label: t('kpis.pitches'), value: activePitches, icon: <Briefcase size={18} />, color: '#10b981' },
         ].map((kpi, i) => (
-          <div key={i} className="stat-card">
+          <div key={i} className="card stat-card animate-fade-in" style={{ animationDelay: `${i * 50}ms` }}>
             <div style={{
               width: 36, height: 36, borderRadius: 8, marginBottom: 12,
-              background: `${kpi.color}20`, border: `1px solid ${kpi.color}30`,
+              background: `rgba(255,255,255,0.03)`, border: `1px solid rgba(255,255,255,0.1)`,
               display: 'flex', alignItems: 'center', justifyContent: 'center', color: kpi.color,
             }}>
               {kpi.icon}
             </div>
             <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 32, fontWeight: 800, color: kpi.color }}>{kpi.value}</div>
-            <div style={{ fontSize: 12, color: '#475569', fontWeight: 500 }}>{kpi.label}</div>
+            <div style={{ fontSize: 13, color: '#94a3b8', fontWeight: 500 }}>{kpi.label}</div>
           </div>
         ))}
       </div>
@@ -134,10 +134,8 @@ export default function InvestorDashboard() {
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {readyStartups.map((s, i) => (
-              <div key={s.id} style={{
-                padding: '16px', borderRadius: '12px',
-                background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)',
-                transition: 'all 0.15s',
+              <div key={s.id} className="card animate-fade-in" style={{
+                padding: '16px', animationDelay: `${(i + 4) * 50}ms`
               }}>
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
                   <div>

@@ -50,6 +50,13 @@ export default function SideNav() {
   const t = useTranslations('Navigation');
   const tCommon = useTranslations('Common');
   
+  const [isOpen, setIsOpen] = useState(false);
+
+  // Close sidebar on route change
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
+
   if (!profile) return null;
 
   const role = profile.role || 'founder';
@@ -61,13 +68,6 @@ export default function SideNav() {
     toast.success(tCommon('logout'));
     router.push('/');
   };
-
-  const [isOpen, setIsOpen] = useState(false);
-
-  // Close sidebar on route change
-  useEffect(() => {
-    setIsOpen(false);
-  }, [pathname]);
 
   return (
     <>
@@ -121,14 +121,11 @@ export default function SideNav() {
         {navItems.map((item) => {
           const isActive = pathname === item.href;
           return (
-            <Link key={item.href} href={item.href} className={`nav-item ${isActive ? 'active' : ''}`} style={{ position: 'relative' }}>
+            <Link key={item.href} href={item.href} className={`nav-item ${isActive ? 'active' : ''}`}>
               <div className="nav-icon" style={{ color: isActive ? 'var(--text-primary)' : '#52525B' }}>
                 {item.icon}
               </div>
               <span style={{ flex: 1 }}>{t(item.i18nKey as any)}</span>
-              {isActive && (
-                <div style={{ width: 4, height: 16, background: 'var(--text-primary)', borderRadius: 4, position: 'absolute', right: 12 }} />
-              )}
             </Link>
           );
         })}

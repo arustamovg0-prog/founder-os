@@ -185,7 +185,7 @@ export default function PerksPage() {
               color: activeCategory === cat.id ? '#71717A' : '#64748b',
             }}
           >
-            {cat.icon} {t(`categories.${cat.id}` as any)}
+            {t(`categories.${cat.id}` as any)}
           </button>
         ))}
       </div>
