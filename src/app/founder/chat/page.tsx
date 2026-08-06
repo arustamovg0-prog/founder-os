@@ -6,6 +6,8 @@ import { Brain, Send, Bot, User, RefreshCw } from 'lucide-react';
 import { toast } from 'sonner';
 import { db } from '@/lib/firebase';
 import { doc, onSnapshot, setDoc, serverTimestamp } from 'firebase/firestore';
+import { cn } from '@/lib/utils';
+import { FadeIn } from '@/components/ui/animations';
 
 interface Message {
   id: string;
@@ -59,7 +61,7 @@ function renderMarkdown(text: string) {
     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
     .replace(/\*(.*?)\*/g, '<em>$1</em>')
     .replace(/^- (.+)$/gm, '<li>$1</li>')
-    .replace(/(<li>[\s\S]*?<\/li>)/g, '<ul style="margin:8px 0 8px 16px;display:flex;flex-direction:column;gap:4px">$1</ul>')
+    .replace(/(<li>[\s\S]*?<\/li>)/g, '<ul class="list-disc pl-4 my-2 flex flex-col gap-1">$1</ul>')
     .replace(/\n/g, '<br/>');
 }
 
@@ -145,42 +147,59 @@ export default function FounderChatPage() {
   };
 
   return (
-    <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 48px)', maxHeight: '900px' }}>
+    <FadeIn className="flex flex-col h-[calc(100vh-48px)] max-h-[900px]">
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '20px' }}>
-        <div style={{ width: 44, height: 44, borderRadius: '12px', background: 'linear-gradient(135deg,rgba(0,0,0,0.3),rgba(161,161,170,0.2))', border: '1px solid rgba(0,0,0,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <Bot size={20} color="#D8B4FE" />
+      <div className="flex items-center gap-4 mb-5">
+        <div className="w-11 h-11 rounded-xl bg-purple-100 dark:bg-purple-900/30 border border-purple-200 dark:border-purple-900/50 flex items-center justify-center shrink-0">
+          <Bot size={20} className="text-purple-600 dark:text-purple-400" />
         </div>
         <div>
-          <h1 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 20, fontWeight: 700, marginBottom: 2 }}>UNTITLED AI Support</h1>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: '#D4D4D8' }}>
-            <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#D4D4D8', boxShadow: '0 0 4px #D4D4D8' }} />
+          <h1 className="font-display text-xl font-bold mb-0.5 text-zinc-900 dark:text-white">UNTITLED AI Support</h1>
+          <div className="flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400 font-medium">
+            <div className="w-1.5 h-1.5 rounded-full bg-green-500 shadow-[0_0_4px_rgba(34,197,94,0.5)]" />
             AI ассистент онлайн
           </div>
         </div>
-        <button onClick={clearChat} style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: '10px', background: 'rgba(0,0,0,0.04)', border: '1px solid rgba(0,0,0,0.08)', color: '#64748b', cursor: 'pointer', fontSize: 12, fontFamily: 'Inter' }}>
+        <button 
+          onClick={clearChat} 
+          className="ml-auto flex items-center gap-1.5 px-3 py-2 rounded-lg bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 border border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-300 text-xs font-medium transition-colors cursor-pointer"
+        >
           <RefreshCw size={12} /> Новый чат
         </button>
       </div>
 
       {/* Messages */}
-      <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '16px', paddingRight: '4px', marginBottom: '16px' }}>
+      <div className="flex-1 overflow-y-auto flex flex-col gap-4 pr-1 mb-4 scrollbar-thin scrollbar-thumb-zinc-200 dark:scrollbar-thumb-zinc-800">
         {messages.map(msg => (
-          <div key={msg.id} style={{ display: 'flex', gap: '12px', alignItems: 'flex-start', flexDirection: msg.role === 'user' ? 'row-reverse' : 'row' }}>
+          <div key={msg.id} className={cn(
+            "flex gap-3 items-start",
+            msg.role === 'user' ? "flex-row-reverse" : "flex-row"
+          )}>
             {/* Avatar */}
-            <div style={{ width: 32, height: 32, borderRadius: '50%', flexShrink: 0, background: msg.role === 'user' ? 'linear-gradient(135deg,#FFFFFF,#71717A)' : 'rgba(0,0,0,0.15)', border: '1px solid rgba(0,0,0,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              {msg.role === 'user' ? <User size={14} color="currentColor" /> : <Brain size={14} color="#D8B4FE" />}
+            <div className={cn(
+              "w-8 h-8 rounded-full shrink-0 flex items-center justify-center border",
+              msg.role === 'user' 
+                ? "bg-zinc-900 dark:bg-white border-zinc-800 dark:border-zinc-200 text-white dark:text-zinc-900" 
+                : "bg-purple-100 dark:bg-purple-900/30 border-purple-200 dark:border-purple-900/50 text-purple-600 dark:text-purple-400"
+            )}>
+              {msg.role === 'user' ? <User size={14} /> : <Brain size={14} />}
             </div>
 
             {/* Bubble */}
-            <div style={{
-              maxWidth: '70%', padding: '12px 16px', borderRadius: msg.role === 'user' ? '16px 4px 16px 16px' : '4px 16px 16px 16px',
-              background: msg.role === 'user' ? 'linear-gradient(135deg,rgba(0,0,0,0.25),rgba(161,161,170,0.15))' : 'rgba(0,0,0,0.04)',
-              border: `1px solid ${msg.role === 'user' ? 'rgba(0,0,0,0.3)' : 'rgba(0,0,0,0.07)'}`,
-              fontSize: 14, lineHeight: 1.7, color: '#e2e8f0',
-            }}>
-              <div dangerouslySetInnerHTML={{ __html: renderMarkdown(msg.content) }} />
-              <div style={{ fontSize: 10, color: '#334155', marginTop: 6, textAlign: msg.role === 'user' ? 'right' : 'left' }}>
+            <div className={cn(
+              "max-w-[75%] sm:max-w-[70%] p-3 sm:p-4 text-sm leading-relaxed",
+              msg.role === 'user' 
+                ? "rounded-[16px_4px_16px_16px] bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 border border-zinc-800 dark:border-zinc-200" 
+                : "rounded-[4px_16px_16px_16px] bg-white dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200 border border-zinc-200 dark:border-zinc-800 shadow-sm"
+            )}>
+              <div 
+                className="markdown-body"
+                dangerouslySetInnerHTML={{ __html: renderMarkdown(msg.content) }} 
+              />
+              <div className={cn(
+                "text-[10px] mt-1.5",
+                msg.role === 'user' ? "text-right text-zinc-400 dark:text-zinc-500" : "text-left text-zinc-400 dark:text-zinc-500"
+              )}>
                 {msg.timestamp.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}
               </div>
             </div>
@@ -189,13 +208,17 @@ export default function FounderChatPage() {
 
         {/* Loading */}
         {loading && (
-          <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-            <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(0,0,0,0.15)', border: '1px solid rgba(0,0,0,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Brain size={14} color="#D8B4FE" />
+          <div className="flex gap-3 items-start">
+            <div className="w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-900/30 border border-purple-200 dark:border-purple-900/50 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0">
+              <Brain size={14} />
             </div>
-            <div style={{ padding: '16px 20px', borderRadius: '4px 16px 16px 16px', background: 'rgba(0,0,0,0.04)', border: '1px solid rgba(0,0,0,0.07)', display: 'flex', gap: '6px', alignItems: 'center' }}>
+            <div className="p-4 rounded-[4px_16px_16px_16px] bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm flex gap-1.5 items-center">
               {[0, 1, 2].map(i => (
-                <div key={i} style={{ width: 7, height: 7, borderRadius: '50%', background: '#FFFFFF', animation: `bounce 1.2s ease ${i * 0.2}s infinite` }} />
+                <div 
+                  key={i} 
+                  className="w-1.5 h-1.5 rounded-full bg-zinc-400 dark:bg-zinc-500 animate-bounce" 
+                  style={{ animationDelay: `${i * 0.2}s` }} 
+                />
               ))}
             </div>
           </div>
@@ -205,9 +228,13 @@ export default function FounderChatPage() {
 
       {/* Quick Questions */}
       {messages.length <= 2 && (
-        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '12px' }}>
+        <div className="flex gap-2 flex-wrap mb-3">
           {QUICK_QUESTIONS.map((q, i) => (
-            <button key={i} onClick={() => send(q)} style={{ padding: '8px 14px', borderRadius: '99px', fontSize: 12, background: 'rgba(0,0,0,0.1)', border: '1px solid rgba(0,0,0,0.2)', color: '#D8B4FE', cursor: 'pointer', fontFamily: 'Inter', fontWeight: 500, transition: 'var(--transition-standard)' }}>
+            <button 
+              key={i} 
+              onClick={() => send(q)} 
+              className="px-3 py-2 rounded-full text-xs font-medium bg-purple-50 hover:bg-purple-100 dark:bg-purple-900/20 dark:hover:bg-purple-900/40 border border-purple-100 dark:border-purple-900/30 text-purple-700 dark:text-purple-300 transition-colors cursor-pointer"
+            >
               {q}
             </button>
           ))}
@@ -215,7 +242,7 @@ export default function FounderChatPage() {
       )}
 
       {/* Input */}
-      <div style={{ position: 'relative' }}>
+      <div className="relative">
         <textarea
           ref={inputRef}
           value={input}
@@ -223,38 +250,31 @@ export default function FounderChatPage() {
           onKeyDown={handleKey}
           placeholder="Задай вопрос... (Enter — отправить, Shift+Enter — новая строка)"
           rows={2}
-          style={{
-            width: '100%', padding: '14px 56px 14px 16px', borderRadius: '14px', resize: 'none',
-            background: 'rgba(0,0,0,0.04)', border: '1px solid rgba(0,0,0,0.1)',
-            color: 'var(--text-primary)', fontSize: 14, fontFamily: 'Inter', lineHeight: 1.6,
-            outline: 'none', boxSizing: 'border-box', transition: 'border 0.15s',
-          }}
-          onFocus={e => e.target.style.borderColor = 'rgba(0,0,0,0.5)'}
-          onBlur={e => e.target.style.borderColor = 'rgba(0,0,0,0.1)'}
+          className="w-full py-3.5 pl-4 pr-14 rounded-xl resize-none bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 focus:border-purple-500 dark:focus:border-purple-500 text-sm text-zinc-900 dark:text-white outline-none transition-colors shadow-sm placeholder:text-zinc-400 dark:placeholder:text-zinc-500"
           disabled={loading}
         />
         <button
           onClick={() => send()}
           disabled={loading || !input.trim()}
-          style={{
-            position: 'absolute', right: 12, bottom: 12,
-            width: 36, height: 36, borderRadius: '10px',
-            background: input.trim() ? 'linear-gradient(135deg,#FFFFFF,#71717A)' : 'rgba(0,0,0,0.05)',
-            border: 'none', cursor: input.trim() ? 'pointer' : 'default',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            transition: 'var(--transition-standard)', boxShadow: input.trim() ? '0 0 12px rgba(0,0,0,0.4)' : 'none',
-          }}
+          className={cn(
+            "absolute right-3 bottom-3 w-9 h-9 rounded-lg flex items-center justify-center transition-all",
+            input.trim() 
+              ? "bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 shadow-md cursor-pointer hover:bg-zinc-800 dark:hover:bg-zinc-200" 
+              : "bg-zinc-100 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-500 cursor-not-allowed"
+          )}
         >
-          <Send size={15} color={input.trim() ? 'white' : '#334155'} />
+          <Send size={16} className={cn(input.trim() ? "translate-x-[-1px] translate-y-[1px]" : "")} />
         </button>
       </div>
 
       <style jsx global>{`
-        @keyframes bounce {
-          0%, 60%, 100% { transform: translateY(0); }
-          30% { transform: translateY(-8px); }
+        .markdown-body strong {
+          font-weight: 700;
+        }
+        .markdown-body em {
+          font-style: italic;
         }
       `}</style>
-    </div>
+    </FadeIn>
   );
 }

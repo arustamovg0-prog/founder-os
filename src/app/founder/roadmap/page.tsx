@@ -10,10 +10,16 @@ import { doc, onSnapshot, updateDoc } from 'firebase/firestore';
 import { db, storage } from '@/lib/firebase';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { Startup } from '@/types';
+import { cn } from '@/lib/utils';
+import { FadeIn, StaggerContainer, StaggerItem } from '@/components/ui/animations';
+import { Card, CardContent } from '@/components/ui/card';
 
 const PHASE_COLORS: Record<string, string> = {
-  discovery: '#3F3F46', validation: '#71717A',
-  building: '#FFFFFF', scaling: '#D4D4D8', fundraising: '#52525B',
+  discovery: 'bg-zinc-100 text-zinc-800 dark:bg-zinc-800 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700',
+  validation: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400 border-yellow-200 dark:border-yellow-900/50',
+  building: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 border-blue-200 dark:border-blue-900/50',
+  scaling: 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400 border-purple-200 dark:border-purple-900/50',
+  fundraising: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 border-green-200 dark:border-green-900/50',
 };
 
 type StageState = 'completed' | 'in_progress' | 'pending_review' | 'locked';
@@ -26,11 +32,11 @@ const STAGE_STATES: Record<string, StageState> = {
   stage_5_fundraising: 'in_progress',
 };
 
-const STATE_CONFIG: Record<StageState, { icon: React.ReactNode; label: string; color: string }> = {
-  completed: { icon: <CheckCircle size={16} />, label: 'Completed', color: '#D4D4D8' },
-  in_progress: { icon: <Clock size={16} />, label: 'In Progress', color: '#71717A' },
-  pending_review: { icon: <AlertCircle size={16} />, label: 'Pending Review', color: '#A1A1AA' },
-  locked: { icon: <Lock size={16} />, label: 'Locked', color: '#334155' },
+const STATE_CONFIG: Record<StageState, { icon: React.ReactNode; label: string; colorClass: string }> = {
+  completed: { icon: <CheckCircle size={16} />, label: 'Completed', colorClass: 'text-green-600 dark:text-green-400' },
+  in_progress: { icon: <Clock size={16} />, label: 'In Progress', colorClass: 'text-amber-600 dark:text-amber-400' },
+  pending_review: { icon: <AlertCircle size={16} />, label: 'Pending Review', colorClass: 'text-purple-600 dark:text-purple-400' },
+  locked: { icon: <Lock size={16} />, label: 'Locked', colorClass: 'text-zinc-400 dark:text-zinc-500' },
 };
 
 export default function RoadmapPage() {
@@ -124,163 +130,169 @@ export default function RoadmapPage() {
   const completedCount = Object.values(STAGE_STATES).filter(s => s === 'completed').length;
   const totalCount = ROADMAP_STAGES.length;
 
-  if (loading) return <div className="animate-fade-in" style={{ padding: 32, color: '#64748b' }}>{t('loading')}</div>;
-  if (!startup) return <div className="animate-fade-in" style={{ padding: 32, color: '#64748b' }}>{t('notFound')}</div>;
+  if (loading) return <div className="p-8 text-zinc-500 animate-pulse">{t('loading')}</div>;
+  if (!startup) return <div className="p-8 text-zinc-500">{t('notFound')}</div>;
 
   return (
-    <div className="animate-fade-in">
+    <FadeIn className="space-y-8">
       {/* Hidden file input */}
       <input
         type="file"
         ref={fileInputRef}
-        style={{ display: 'none' }}
+        className="hidden"
         onChange={handleFileSelected}
       />
 
       {/* Header */}
-      <div style={{ marginBottom: '32px' }}>
-        <h1 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontWeight: 700, marginBottom: 6 }}>
+      <div>
+        <h1 className="font-display text-3xl font-bold tracking-tight text-zinc-900 dark:text-white mb-2">
           {t('title')}
         </h1>
-        <p style={{ color: '#64748b', fontSize: 14 }}>
+        <p className="text-sm text-zinc-500 dark:text-zinc-400">
           {t('subtitle')}
         </p>
       </div>
 
       {/* Overall Progress */}
-      <div className="card" style={{ marginBottom: '28px', background: 'rgba(0,0,0,0.06)', borderColor: 'rgba(0,0,0,0.2)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-          <div>
-            <div style={{ fontSize: 24, fontWeight: 800, fontFamily: 'var(--font-space-grotesk), sans-serif', color: '#D8B4FE' }}>
-              {startup.roadmapProgress || 0}%
+      <Card className="border-zinc-200 dark:border-zinc-800">
+        <CardContent className="p-6">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <div className="font-display text-3xl font-bold text-purple-600 dark:text-purple-400">
+                {startup.roadmapProgress || 0}%
+              </div>
+              <div className="text-sm font-medium text-zinc-500 dark:text-zinc-400">
+                {completedCount} {t('of')} {totalCount} {t('stagesCompleted')}
+              </div>
             </div>
-            <div style={{ fontSize: 13, color: '#64748b' }}>
-              {completedCount} {t('of')} {totalCount} {t('stagesCompleted')}
-            </div>
+            <span className="inline-flex items-center rounded-full bg-purple-100 dark:bg-purple-900/30 px-3 py-1 text-xs font-bold text-purple-800 dark:text-purple-400 uppercase tracking-wider">
+              {t('investmentReadyTrack')}
+            </span>
           </div>
-          <span className="badge badge-purple">{t('investmentReadyTrack')}</span>
-        </div>
-        <div className="progress-bar" style={{ height: '8px' }}>
-          <div className="progress-fill" style={{ width: `${startup.roadmapProgress || 0}%` }} />
-        </div>
-      </div>
+          <div className="h-2 w-full overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
+            <div 
+              className="h-full rounded-full bg-purple-500 dark:bg-purple-400 transition-all duration-1000" 
+              style={{ width: `${startup.roadmapProgress || 0}%` }} 
+            />
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Stages */}
-      <div className="stagger-container" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+      <StaggerContainer className="flex flex-col gap-4">
         {ROADMAP_STAGES.map((stage, idx) => {
           const state = STAGE_STATES[stage.id] || 'locked';
           const cfg = STATE_CONFIG[state];
-          const phaseColor = PHASE_COLORS[stage.phase];
+          const phaseClasses = PHASE_COLORS[stage.phase] || PHASE_COLORS.discovery;
           const isExpanded = expanded === stage.id;
           const isActive = state === 'in_progress' || state === 'pending_review';
 
           return (
-            <div key={stage.id} className="stagger-item" style={{
-              borderRadius: '16px',
-              border: `1px solid ${isActive ? 'rgba(0,0,0,0.3)' : state === 'completed' ? 'rgba(212,212,216,0.2)' : 'rgba(0,0,0,0.06)'}`,
-              background: isActive ? 'rgba(0,0,0,0.05)' : state === 'locked' ? 'rgba(0,0,0,0.01)' : 'rgba(13,13,32,0.8)',
-              overflow: 'hidden',
-              transition: 'var(--transition-standard)',
-            }}>
+            <StaggerItem key={stage.id} className={cn(
+              "rounded-2xl border overflow-hidden transition-all duration-300",
+              isActive ? "border-zinc-300 dark:border-zinc-700 bg-transparent shadow-sm" : 
+              state === 'completed' ? "border-zinc-200 dark:border-zinc-800 bg-transparent" : 
+              "border-zinc-100 dark:border-zinc-800/50 bg-transparent"
+            )}>
               {/* Stage Header */}
               <button
                 onClick={() => setExpanded(isExpanded ? null : stage.id)}
                 disabled={state === 'locked'}
-                style={{
-                  width: '100%', padding: '20px 24px',
-                  display: 'flex', alignItems: 'center', gap: '16px',
-                  background: 'none', border: 'none', cursor: state === 'locked' ? 'not-allowed' : 'pointer',
-                  textAlign: 'left',
-                }}
+                className={cn(
+                  "w-full p-5 sm:p-6 flex items-center gap-4 text-left transition-colors",
+                  state === 'locked' ? "cursor-not-allowed opacity-75" : "cursor-pointer hover:bg-zinc-50 dark:hover:bg-zinc-800/50"
+                )}
               >
                 {/* Step number */}
-                <div style={{
-                  width: 40, height: 40, borderRadius: '50%', flexShrink: 0,
-                  background: state === 'completed' ? 'rgba(212,212,216,0.2)' : state === 'locked' ? 'rgba(0,0,0,0.03)' : `${phaseColor}20`,
-                  border: `2px solid ${state === 'completed' ? '#D4D4D8' : state === 'locked' ? 'rgba(0,0,0,0.08)' : phaseColor}`,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontFamily: 'var(--font-space-grotesk), sans-serif', fontWeight: 700, fontSize: 15,
-                  color: state === 'completed' ? '#D4D4D8' : state === 'locked' ? '#334155' : phaseColor,
-                }}>
+                <div className={cn(
+                  "w-10 h-10 rounded-full flex shrink-0 items-center justify-center font-display font-bold text-sm",
+                  state === 'completed' ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-900/50" : 
+                  state === 'locked' ? "bg-zinc-100 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-500 border border-zinc-200 dark:border-zinc-700" : 
+                  phaseClasses
+                )}>
                   {state === 'completed' ? '✓' : idx + 1}
                 </div>
 
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '4px' }}>
-                    <span style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 15, fontWeight: 700, color: state === 'locked' ? '#334155' : '#f8fafc' }}>
+                <div className="flex-1 min-w-0">
+                  <div className="flex flex-wrap items-center gap-2 mb-1">
+                    <span className={cn(
+                      "font-display text-base font-bold",
+                      state === 'locked' ? "text-zinc-500 dark:text-zinc-400" : "text-zinc-900 dark:text-white"
+                    )}>
                       {t(`stages.${stage.id}.title`)}
                     </span>
-                    <span style={{
-                      padding: '2px 8px', borderRadius: '99px', fontSize: 10, fontWeight: 600,
-                      textTransform: 'uppercase', letterSpacing: '0.5px',
-                      background: `${phaseColor}15`, color: phaseColor,
-                      border: `1px solid ${phaseColor}25`,
-                    }}>
+                    <span className={cn(
+                      "px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border",
+                      phaseClasses
+                    )}>
                       {stage.phase}
                     </span>
                     {stage.isGatekeeper && (
-                      <span className="badge badge-yellow">{t('gatekeeper')}</span>
+                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-400 border border-amber-200 dark:border-amber-900/50">
+                        {t('gatekeeper')}
+                      </span>
                     )}
                   </div>
-                  <p style={{ fontSize: 13, color: '#475569' }}>{t(`stages.${stage.id}.description`)}</p>
+                  <p className="text-sm text-zinc-500 dark:text-zinc-400 line-clamp-1 sm:line-clamp-none">{t(`stages.${stage.id}.description`)}</p>
                 </div>
                 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: cfg.color }}>
+                <div className="flex items-center gap-3 shrink-0">
+                  <div className={cn("hidden sm:flex items-center gap-1.5", cfg.colorClass)}>
                     {cfg.icon}
-                    <span style={{ fontSize: 12, fontWeight: 600 }}>
+                    <span className="text-xs font-bold">
                       {state === 'in_progress' ? t('inProgress') : state === 'pending_review' ? t('pendingReview') : t(state as any)}
                     </span>
                   </div>
                   {state !== 'locked' && (
-                    isExpanded ? <ChevronUp size={16} color="#475569" /> : <ChevronDown size={16} color="#475569" />
+                    <div className="w-6 h-6 flex items-center justify-center rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400">
+                      {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                    </div>
                   )}
                 </div>
               </button>
 
               {/* Expanded Content */}
               {isExpanded && state !== 'locked' && (
-                <div style={{ padding: '0 24px 24px', borderTop: '1px solid rgba(0,0,0,0.06)' }}>
-                  <div style={{ paddingTop: '20px' }}>
-                    <div style={{ fontSize: 12, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>
+                <div className="px-5 sm:px-6 pb-6 border-t border-zinc-100 dark:border-zinc-800">
+                  <div className="pt-6">
+                    <div className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-4">
                       {t('requiredArtifacts')}
                     </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    <div className="flex flex-col gap-3">
                       {stage.requiredArtifacts.map((art) => {
                         const isDone = state === 'completed' || uploadedArtifacts.includes(art.key);
                         return (
-                          <div key={art.key} style={{
-                            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                            padding: '12px 16px', borderRadius: '10px',
-                            background: isDone ? 'rgba(212,212,216,0.07)' : 'rgba(0,0,0,0.03)',
-                            border: `1px solid ${isDone ? 'rgba(212,212,216,0.2)' : 'rgba(0,0,0,0.06)'}`,
-                          }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                          <div key={art.key} className={cn(
+                            "flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-xl border transition-colors",
+                            isDone ? "bg-transparent border-zinc-200 dark:border-zinc-800" : "bg-transparent border-zinc-200 dark:border-zinc-700"
+                          )}>
+                            <div className="flex items-center gap-3">
                               {isDone
-                                ? <CheckCircle size={14} color="#D4D4D8" />
-                                : <Upload size={14} color="#64748b" />
+                                ? <CheckCircle size={16} className="text-green-500 dark:text-green-400 shrink-0" />
+                                : <Upload size={16} className="text-zinc-400 dark:text-zinc-500 shrink-0" />
                               }
                               <div>
-                                <div style={{ fontSize: 13, fontWeight: 500, color: isDone ? '#A1A1AA' : '#94a3b8' }}>
+                                <div className={cn("text-sm font-bold", isDone ? "text-zinc-600 dark:text-zinc-400" : "text-zinc-900 dark:text-white")}>
                                   {t(`stages.${stage.id}.artifacts.${art.key}`)}
                                 </div>
-                                <div style={{ fontSize: 11, color: '#334155' }}>{t('type')} {art.type} • {art.isRequired ? t('required') : t('optional')}</div>
+                                <div className="text-xs font-medium text-zinc-500 mt-0.5">
+                                  {t('type')} {art.type} • {art.isRequired ? <span className="text-amber-600 dark:text-amber-500 font-bold">{t('required')}</span> : t('optional')}
+                                </div>
                               </div>
                             </div>
                             {!isDone && (
                               <button
-                                className="btn-secondary"
-                                style={{ fontSize: 12, padding: '6px 14px' }}
+                                className="inline-flex items-center justify-center gap-2 rounded-lg bg-zinc-900 dark:bg-white px-4 py-2 text-xs font-bold text-white dark:text-zinc-900 transition-colors hover:bg-zinc-800 dark:hover:bg-zinc-200 disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
                                 onClick={() => triggerUpload(art.key)}
                                 disabled={uploading === art.key}
                               >
                                 {uploading === art.key ? (
-                                  <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                    <span style={{ width: 12, height: 12, border: '2px solid rgba(0,0,0,0.3)', borderTopColor: 'white', borderRadius: '50%', animation: 'spin 0.8s linear infinite', display: 'inline-block' }} />
+                                  <>
+                                    <span className="w-3.5 h-3.5 border-2 border-zinc-300 dark:border-zinc-500 border-t-white dark:border-t-zinc-900 rounded-full animate-spin" />
                                     {Math.round(uploadProgress)}%
-                                  </span>
+                                  </>
                                 ) : (
-                                  <><Upload size={12} /> {t('upload')}</>
+                                  <><Upload size={14} /> {t('upload')}</>
                                 )}
                               </button>
                             )}
@@ -290,26 +302,22 @@ export default function RoadmapPage() {
                     </div>
 
                     {stage.unlockConditions.adminVerificationRequired && (
-                      <div style={{ marginTop: '16px', padding: '12px 16px', borderRadius: '10px', background: 'rgba(161,161,170,0.08)', border: '1px solid rgba(161,161,170,0.2)' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                          <Zap size={14} color="#60a5fa" />
-                          <span style={{ fontSize: 13, color: '#60a5fa' }}>
-                            {t('verificationRequired', { team: 'UNTITLED' })}
-                          </span>
+                      <div className="mt-6 p-4 rounded-xl bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-900/50 flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center shrink-0">
+                          <Zap size={14} className="text-blue-600 dark:text-blue-400" />
                         </div>
+                        <span className="text-sm font-medium text-blue-800 dark:text-blue-300">
+                          {t('verificationRequired', { team: 'UNTITLED' })}
+                        </span>
                       </div>
                     )}
                   </div>
                 </div>
               )}
-            </div>
+            </StaggerItem>
           );
         })}
-      </div>
-
-      <style jsx>{`
-        @keyframes spin { to { transform: rotate(360deg); } }
-      `}</style>
-    </div>
+      </StaggerContainer>
+    </FadeIn>
   );
 }

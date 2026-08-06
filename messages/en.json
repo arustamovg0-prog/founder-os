@@ -689,7 +689,7 @@
       "ready": "Investment-Ready Startups",
       "active": "Active Pipeline",
       "pending": "Pending Pitches",
-      "activeP": "Active Pitches"
+      "pitches": "Active Pitches"
     },
     "topOpps": "Top Opportunities",
     "viewAll": "View all →",

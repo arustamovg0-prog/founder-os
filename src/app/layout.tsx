@@ -4,6 +4,7 @@ import { AuthProvider } from '@/contexts/AuthContext';
 import { Toaster } from 'sonner';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
+import { ThemeProvider } from '@/components/providers/theme-provider';
 
 export const viewport = {
   themeColor: '#000000',
@@ -47,25 +48,17 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
       </head>
-      <body className="font-sans antialiased">
+      <body className="font-sans antialiased bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-50">
         <NextIntlClientProvider messages={messages}>
-          <AuthProvider>
-          <div className="mesh-bg" />
-          <div style={{ position: 'relative', zIndex: 1 }}>
-            {children}
-          </div>
-          <Toaster 
-            theme="light" 
-            position="bottom-right" 
-            toastOptions={{
-              style: {
-                background: '#ffffff',
-                border: '1px solid rgba(0,0,0,0.1)',
-                color: '#111827',
-              }
-            }} 
-          />
-        </AuthProvider>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+            <AuthProvider>
+              <div className="mesh-bg" />
+              <div style={{ position: 'relative', zIndex: 1 }}>
+                {children}
+              </div>
+              <Toaster position="bottom-right" />
+            </AuthProvider>
+          </ThemeProvider>
         </NextIntlClientProvider>
       </body>
     </html>

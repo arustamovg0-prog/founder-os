@@ -7,6 +7,10 @@ import { Rocket, Building2, Globe, ChevronRight, ChevronLeft, Sparkles, CheckCir
 import { toast } from 'sonner';
 import { doc, setDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import { cn } from '@/lib/utils';
+import { Card, CardContent } from '@/components/ui/card';
+import { FadeIn } from '@/components/ui/animations';
+import { Button } from '@/components/ui/button';
 
 const INDUSTRIES = ['FinTech', 'EdTech', 'AgriTech', 'HealthTech', 'E-Commerce', 'PropTech', 'HRTech', 'LegalTech', 'Other'];
 const STAGES = [
@@ -145,267 +149,301 @@ export default function OnboardingPage() {
   };
 
   return (
-    <div style={{
-      minHeight: '100vh', background: 'var(--bg-primary)',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      padding: '40px 20px', fontFamily: 'Inter, sans-serif',
-    }}>
-      <div style={{ width: '100%', maxWidth: '620px' }}>
-
+    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 flex items-center justify-center p-6 font-sans">
+      <div className="w-full max-w-2xl">
         {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '6px 16px', borderRadius: '99px', background: 'rgba(0,0,0,0.15)', border: '1px solid rgba(0,0,0,0.3)', marginBottom: '16px' }}>
-            <Sparkles size={13} color="#D8B4FE" />
-            <span style={{ fontSize: 12, color: '#D8B4FE', fontWeight: 600 }}>Добро пожаловать, {profile?.displayName?.split(' ')[0] || 'Founder'}</span>
+        <div className="text-center mb-10">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-100 dark:bg-purple-900/30 border border-purple-200 dark:border-purple-900/50 mb-4">
+            <Sparkles size={13} className="text-purple-600 dark:text-purple-400" />
+            <span className="text-xs text-purple-700 dark:text-purple-300 font-semibold">Добро пожаловать, {profile?.displayName?.split(' ')[0] || 'Founder'}</span>
           </div>
-          <h1 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 32, fontWeight: 800, marginBottom: 8 }}>
+          <h1 className="font-display text-3xl font-extrabold mb-2 text-zinc-900 dark:text-white">
             Настроим твой стартап
           </h1>
-          <p style={{ color: '#64748b', fontSize: 15 }}>3 шага — и ты в системе</p>
+          <p className="text-zinc-500 dark:text-zinc-400 text-sm">3 шага — и ты в системе</p>
         </div>
 
         {/* Step Indicators */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0', marginBottom: '40px' }}>
+        <div className="flex items-center justify-center gap-0 mb-10">
           {STEPS.map((s, i) => (
-            <div key={s.id} style={{ display: 'flex', alignItems: 'center' }}>
-              <div style={{
-                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', cursor: step > s.id ? 'pointer' : 'default',
-              }} onClick={() => step > s.id && setStep(s.id)}>
-                <div style={{
-                  width: 44, height: 44, borderRadius: '50%',
-                  background: step > s.id ? '#D4D4D8' : step === s.id ? 'rgba(0,0,0,0.3)' : 'rgba(0,0,0,0.05)',
-                  border: `2px solid ${step > s.id ? '#D4D4D8' : step === s.id ? '#FFFFFF' : 'rgba(0,0,0,0.1)'}`,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  color: step > s.id ? 'white' : step === s.id ? '#D8B4FE' : '#334155',
-                  transition: 'var(--transition-standard)',
-                  boxShadow: step === s.id ? '0 0 20px rgba(0,0,0,0.4)' : 'none',
-                }}>
+            <div key={s.id} className="flex items-center">
+              <div 
+                className={cn(
+                  "flex flex-col items-center gap-1.5",
+                  step > s.id ? "cursor-pointer" : "cursor-default"
+                )}
+                onClick={() => step > s.id && setStep(s.id)}
+              >
+                <div className={cn(
+                  "w-11 h-11 rounded-full flex items-center justify-center transition-all duration-300 border-2",
+                  step > s.id 
+                    ? "bg-zinc-900 dark:bg-zinc-200 border-zinc-900 dark:border-zinc-200 text-white dark:text-zinc-900" 
+                    : step === s.id 
+                      ? "bg-white dark:bg-zinc-900 border-zinc-900 dark:border-zinc-200 text-zinc-900 dark:text-white shadow-lg" 
+                      : "bg-zinc-100 dark:bg-zinc-900/50 border-zinc-200 dark:border-zinc-800 text-zinc-400 dark:text-zinc-600"
+                )}>
                   {step > s.id ? <CheckCircle size={18} /> : s.icon}
                 </div>
-                <span style={{ fontSize: 11, color: step === s.id ? '#D8B4FE' : '#334155', fontWeight: 600, whiteSpace: 'nowrap' }}>
+                <span className={cn(
+                  "text-[11px] font-semibold whitespace-nowrap",
+                  step === s.id ? "text-zinc-900 dark:text-white" : "text-zinc-500 dark:text-zinc-500"
+                )}>
                   {s.title}
                 </span>
               </div>
               {i < STEPS.length - 1 && (
-                <div style={{ width: '80px', height: '2px', background: step > s.id ? '#D4D4D8' : 'rgba(0,0,0,0.06)', margin: '0 4px 20px', transition: 'background 160ms var(--ease-out)' }} />
+                <div className={cn(
+                  "w-12 sm:w-20 h-[2px] mx-2 sm:mx-4 mb-5 transition-colors duration-300",
+                  step > s.id ? "bg-zinc-900 dark:bg-zinc-200" : "bg-zinc-200 dark:bg-zinc-800"
+                )} />
               )}
             </div>
           ))}
         </div>
 
         {/* Card */}
-        <div className="card" style={{ padding: '36px' }}>
-          {/* Step 1 */}
-          {step === 1 && (
-            <div className="animate-fade-in">
-              <h2 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 22, fontWeight: 700, marginBottom: 24 }}>
-                Расскажи о своём стартапе
-              </h2>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                <div>
-                  <label style={{ fontSize: 12, color: '#64748b', fontWeight: 600, display: 'block', marginBottom: 6 }}>Название стартапа *</label>
-                  <input className="input-field" placeholder="e.g. PayFlow, EduStack, AgriSense..." value={data.startupName} onChange={e => set('startupName', e.target.value)} />
-                </div>
-                <div>
-                  <label style={{ fontSize: 12, color: '#64748b', fontWeight: 600, display: 'block', marginBottom: 6 }}>Tagline — одним предложением</label>
-                  <input className="input-field" placeholder="e.g. B2B payment infrastructure for Central Asia" value={data.tagline} onChange={e => set('tagline', e.target.value)} />
-                </div>
-                <div>
-                  <label style={{ fontSize: 12, color: '#64748b', fontWeight: 600, display: 'block', marginBottom: 10 }}>Индустрия *</label>
-                  <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                    {INDUSTRIES.map(ind => (
-                      <button key={ind} onClick={() => set('industry', ind)} style={{
-                        padding: '8px 14px', borderRadius: '10px', fontSize: 13, fontWeight: 500,
-                        background: data.industry === ind ? 'rgba(0,0,0,0.2)' : 'rgba(0,0,0,0.04)',
-                        border: `1px solid ${data.industry === ind ? '#FFFFFF' : 'rgba(0,0,0,0.08)'}`,
-                        color: data.industry === ind ? '#D8B4FE' : '#64748b',
-                        cursor: 'pointer', fontFamily: 'Inter', transition: 'var(--transition-standard)',
-                      }}>{ind}</button>
-                    ))}
+        <Card className="p-2 sm:p-4">
+          <CardContent className="p-4 sm:p-6">
+            {/* Step 1 */}
+            {step === 1 && (
+              <FadeIn>
+                <h2 className="font-display text-2xl font-bold mb-6 text-zinc-900 dark:text-white">
+                  Расскажи о своём стартапе
+                </h2>
+                <div className="flex flex-col gap-5">
+                  <div>
+                    <label className="text-xs text-zinc-500 dark:text-zinc-400 font-semibold block mb-1.5">Название стартапа *</label>
+                    <input 
+                      className="w-full px-4 py-3 rounded-xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 focus:border-zinc-400 dark:focus:border-zinc-600 text-zinc-900 dark:text-white outline-none transition-colors" 
+                      placeholder="e.g. PayFlow, EduStack, AgriSense..." 
+                      value={data.startupName} 
+                      onChange={e => set('startupName', e.target.value)} 
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs text-zinc-500 dark:text-zinc-400 font-semibold block mb-1.5">Tagline — одним предложением</label>
+                    <input 
+                      className="w-full px-4 py-3 rounded-xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 focus:border-zinc-400 dark:focus:border-zinc-600 text-zinc-900 dark:text-white outline-none transition-colors" 
+                      placeholder="e.g. B2B payment infrastructure for Central Asia" 
+                      value={data.tagline} 
+                      onChange={e => set('tagline', e.target.value)} 
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs text-zinc-500 dark:text-zinc-400 font-semibold block mb-2.5">Индустрия *</label>
+                    <div className="flex gap-2 flex-wrap">
+                      {INDUSTRIES.map(ind => (
+                        <button 
+                          key={ind} 
+                          onClick={() => set('industry', ind)} 
+                          className={cn(
+                            "px-3.5 py-2 rounded-lg text-[13px] font-medium transition-colors cursor-pointer border",
+                            data.industry === ind 
+                              ? "bg-zinc-900 dark:bg-white border-zinc-900 dark:border-white text-white dark:text-zinc-900" 
+                              : "bg-zinc-50 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                          )}
+                        >
+                          {ind}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <label className="text-xs text-zinc-500 dark:text-zinc-400 font-semibold block mb-2.5">Текущая стадия *</label>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      {STAGES.map(s => (
+                        <button 
+                          key={s.id} 
+                          onClick={() => set('stage', s.id)} 
+                          className={cn(
+                            "p-3.5 rounded-xl text-left border transition-all",
+                            data.stage === s.id 
+                              ? "bg-zinc-100 dark:bg-zinc-800 border-zinc-300 dark:border-zinc-600 ring-1 ring-zinc-300 dark:ring-zinc-600" 
+                              : "bg-zinc-50 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                          )}
+                        >
+                          <div className={cn(
+                            "text-[13px] font-semibold mb-0.5",
+                            data.stage === s.id ? "text-zinc-900 dark:text-white" : "text-zinc-600 dark:text-zinc-400"
+                          )}>{s.label}</div>
+                          <div className="text-[11px] text-zinc-500">{s.desc}</div>
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 </div>
-                <div>
-                  <label style={{ fontSize: 12, color: '#64748b', fontWeight: 600, display: 'block', marginBottom: 10 }}>Текущая стадия *</label>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                    {STAGES.map(s => (
-                      <button key={s.id} onClick={() => set('stage', s.id)} style={{
-                        padding: '12px 16px', borderRadius: '12px', textAlign: 'left',
-                        background: data.stage === s.id ? 'rgba(0,0,0,0.15)' : 'rgba(0,0,0,0.03)',
-                        border: `1px solid ${data.stage === s.id ? '#FFFFFF' : 'rgba(0,0,0,0.08)'}`,
-                        cursor: 'pointer', fontFamily: 'Inter', transition: 'var(--transition-standard)',
-                      }}>
-                        <div style={{ fontSize: 13, fontWeight: 600, color: data.stage === s.id ? '#D8B4FE' : '#94a3b8', marginBottom: 2 }}>{s.label}</div>
-                        <div style={{ fontSize: 11, color: '#334155' }}>{s.desc}</div>
+              </FadeIn>
+            )}
+
+            {/* Step 2 */}
+            {step === 2 && (
+              <FadeIn>
+                <h2 className="font-display text-2xl font-bold mb-6 text-zinc-900 dark:text-white">
+                  Рынок и команда
+                </h2>
+                <div className="flex flex-col gap-5">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-xs text-zinc-500 dark:text-zinc-400 font-semibold block mb-1.5"><MapPin size={11} className="inline mr-1" /> Город / Страна *</label>
+                      <input 
+                        className="w-full px-4 py-3 rounded-xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 focus:border-zinc-400 dark:focus:border-zinc-600 text-zinc-900 dark:text-white outline-none transition-colors" 
+                        placeholder="Tashkent, UZ" 
+                        value={data.location} 
+                        onChange={e => set('location', e.target.value)} 
+                      />
+                    </div>
+                    <div>
+                      <label className="text-xs text-zinc-500 dark:text-zinc-400 font-semibold block mb-1.5"><Users size={11} className="inline mr-1" /> Размер команды</label>
+                      <select 
+                        className="w-full px-4 py-3 rounded-xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 focus:border-zinc-400 dark:focus:border-zinc-600 text-zinc-900 dark:text-white outline-none transition-colors appearance-none" 
+                        value={data.teamSize} 
+                        onChange={e => set('teamSize', e.target.value)}
+                      >
+                        {['1', '2-3', '4-6', '7-10', '11-20', '20+'].map(o => <option key={o} value={o}>{o} чел.</option>)}
+                      </select>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="text-xs text-zinc-500 dark:text-zinc-400 font-semibold block mb-1.5 flex items-center justify-between">
+                      <span>Какую проблему решаешь? *</span>
+                      <span className="font-normal">(мин. 20 символов)</span>
+                    </label>
+                    <textarea
+                      className="w-full px-4 py-3 rounded-xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 focus:border-zinc-400 dark:focus:border-zinc-600 text-zinc-900 dark:text-white outline-none transition-colors resize-y leading-relaxed"
+                      rows={5}
+                      placeholder="Опиши боль рынка и свою гипотезу решения. Чем конкретнее — тем лучше AI-анализ."
+                      value={data.problem}
+                      onChange={e => set('problem', e.target.value)}
+                    />
+                    <div className="text-[11px] text-zinc-500 mt-1.5 text-right">
+                      {data.problem.length} символов
+                    </div>
+                  </div>
+
+                  {/* AI Summary Preview */}
+                  {data.problem.length >= 20 && (
+                    <div>
+                      <button
+                        onClick={handleGenerateAI}
+                        disabled={aiGenerating}
+                        className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-purple-50 hover:bg-purple-100 dark:bg-purple-900/20 dark:hover:bg-purple-900/30 border border-purple-200 dark:border-purple-900/50 text-purple-700 dark:text-purple-300 font-semibold text-sm transition-colors"
+                      >
+                        {aiGenerating ? (
+                          <><div className="w-3.5 h-3.5 rounded-full border-2 border-purple-300 dark:border-purple-700 border-t-purple-600 dark:border-t-purple-400 animate-spin" /> Gemini генерирует AI Summary...</>
+                        ) : (
+                          <><Sparkles size={14} /> ✨ Сгенерировать AI Executive Summary</>
+                        )}
                       </button>
+                      {aiSummary && (
+                        <div className="mt-3 p-4 rounded-xl bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800/50 text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                          <span className="text-zinc-900 dark:text-zinc-300 font-semibold block mb-1.5">🤖 AI Summary:</span>
+                          {aiSummary}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </FadeIn>
+            )}
+
+            {/* Step 3 */}
+            {step === 3 && (
+              <FadeIn>
+                <h2 className="font-display text-2xl font-bold mb-2 text-zinc-900 dark:text-white">
+                  Загрузи Pitch Deck
+                </h2>
+                <p className="text-zinc-500 text-sm mb-6">
+                  Необязательно прямо сейчас — можно добавить позже в Data Room
+                </p>
+
+                <div
+                  className={cn(
+                    "border-2 border-dashed rounded-2xl p-12 text-center cursor-pointer transition-colors",
+                    data.pitchDeckFile 
+                      ? "border-green-300 dark:border-green-900/50 bg-green-50/50 dark:bg-green-900/10" 
+                      : "border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50 hover:bg-zinc-100 dark:hover:bg-zinc-900"
+                  )}
+                  onClick={() => document.getElementById('pitch-deck-input')?.click()}
+                >
+                  {data.pitchDeckFile ? (
+                    <>
+                      <CheckCircle size={40} className="mx-auto mb-3 text-green-500 dark:text-green-400" />
+                      <div className="font-semibold text-zinc-900 dark:text-zinc-200 mb-1">{data.pitchDeckFile.name}</div>
+                      <div className="text-xs text-zinc-500">{(data.pitchDeckFile.size / 1024 / 1024).toFixed(1)} MB</div>
+                      <div className="mt-4 text-xs text-purple-600 dark:text-purple-400 font-medium">🤖 AI Score будет рассчитан после загрузки</div>
+                    </>
+                  ) : (
+                    <>
+                      <Upload size={40} className="mx-auto mb-3 text-zinc-400" />
+                      <div className="text-sm text-zinc-500 mb-1">
+                        <span className="font-semibold text-zinc-900 dark:text-zinc-300">Нажми или перетащи</span> PDF файл
+                      </div>
+                      <div className="text-xs text-zinc-400">PDF до 50 MB · Pitch Deck, Executive Summary</div>
+                    </>
+                  )}
+                  <input
+                    id="pitch-deck-input" type="file" accept=".pdf" className="hidden"
+                    onChange={e => set('pitchDeckFile', e.target.files?.[0] || null)}
+                  />
+                </div>
+
+                {/* Summary */}
+                <div className="mt-6 p-5 rounded-xl bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800">
+                  <div className="text-xs text-zinc-500 font-semibold uppercase tracking-wide mb-3">Итог:</div>
+                  <div className="flex flex-col gap-2.5">
+                    {[
+                      { l: 'Стартап', v: data.startupName || '—' },
+                      { l: 'Индустрия', v: data.industry || '—' },
+                      { l: 'Стадия', v: data.stage },
+                      { l: 'Команда', v: `${data.teamSize} чел.` },
+                      { l: 'Локация', v: data.location },
+                    ].map((r, i) => (
+                      <div key={i} className="flex justify-between text-[13px]">
+                        <span className="text-zinc-500">{r.l}</span>
+                        <span className="text-zinc-900 dark:text-zinc-200 font-medium">{r.v}</span>
+                      </div>
                     ))}
                   </div>
                 </div>
-              </div>
-            </div>
-          )}
-
-          {/* Step 2 */}
-          {step === 2 && (
-            <div className="animate-fade-in">
-              <h2 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 22, fontWeight: 700, marginBottom: 24 }}>
-                Рынок и команда
-              </h2>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  <div>
-                    <label style={{ fontSize: 12, color: '#64748b', fontWeight: 600, display: 'block', marginBottom: 6 }}><MapPin size={11} style={{ display: 'inline' }} /> Город / Страна *</label>
-                    <input className="input-field" placeholder="Tashkent, UZ" value={data.location} onChange={e => set('location', e.target.value)} />
-                  </div>
-                  <div>
-                    <label style={{ fontSize: 12, color: '#64748b', fontWeight: 600, display: 'block', marginBottom: 6 }}><Users size={11} style={{ display: 'inline' }} /> Размер команды</label>
-                    <select className="input-field" value={data.teamSize} onChange={e => set('teamSize', e.target.value)} style={{ appearance: 'none' }}>
-                      {['1', '2-3', '4-6', '7-10', '11-20', '20+'].map(o => <option key={o} value={o}>{o} чел.</option>)}
-                    </select>
-                  </div>
-                </div>
-                <div>
-                  <label style={{ fontSize: 12, color: '#64748b', fontWeight: 600, display: 'block', marginBottom: 6 }}>
-                    Какую проблему решаешь? * <span style={{ color: '#334155', fontWeight: 400 }}>(мин. 20 символов)</span>
-                  </label>
-                  <textarea
-                    className="input-field"
-                    rows={5}
-                    placeholder="Опиши боль рынка и свою гипотезу решения. Чем конкретнее — тем лучше AI-анализ."
-                    value={data.problem}
-                    onChange={e => set('problem', e.target.value)}
-                    style={{ resize: 'vertical', lineHeight: 1.7 }}
-                  />
-                  <div style={{ fontSize: 11, color: '#334155', marginTop: 4, textAlign: 'right' }}>
-                    {data.problem.length} символов
-                  </div>
-                </div>
-
-                {/* AI Summary Preview */}
-                {data.problem.length >= 20 && (
-                  <div>
-                    <button
-                      onClick={handleGenerateAI}
-                      disabled={aiGenerating}
-                      style={{
-                        display: 'flex', alignItems: 'center', gap: '8px',
-                        width: '100%', padding: '12px 16px', borderRadius: '12px',
-                        background: 'rgba(0,0,0,0.1)', border: '1px solid rgba(0,0,0,0.25)',
-                        color: '#D8B4FE', cursor: 'pointer', fontFamily: 'Inter', fontSize: 13, fontWeight: 600,
-                        transition: 'var(--transition-standard)',
-                      }}
-                    >
-                      {aiGenerating ? (
-                        <><span style={{ width: 14, height: 14, border: '2px solid rgba(216,180,254,0.3)', borderTopColor: '#D8B4FE', borderRadius: '50%', animation: 'spin 0.8s linear infinite', display: 'inline-block' }} /> Gemini генерирует AI Summary...</>
-                      ) : (
-                        <><Sparkles size={14} /> ✨ Сгенерировать AI Executive Summary</>
-                      )}
-                    </button>
-                    {aiSummary && (
-                      <div style={{ marginTop: '10px', padding: '14px', borderRadius: '10px', background: 'rgba(212,212,216,0.07)', border: '1px solid rgba(212,212,216,0.2)', fontSize: 13, color: '#94a3b8', lineHeight: 1.7 }}>
-                        <span style={{ color: '#A1A1AA', fontWeight: 600, display: 'block', marginBottom: 6 }}>🤖 AI Summary:</span>
-                        {aiSummary}
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* Step 3 */}
-          {step === 3 && (
-            <div className="animate-fade-in">
-              <h2 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 22, fontWeight: 700, marginBottom: 8 }}>
-                Загрузи Pitch Deck
-              </h2>
-              <p style={{ color: '#64748b', fontSize: 14, marginBottom: 24 }}>
-                Необязательно прямо сейчас — можно добавить позже в Data Room
-              </p>
-
-              <div
-                style={{
-                  border: `2px dashed ${data.pitchDeckFile ? 'rgba(212,212,216,0.4)' : 'rgba(0,0,0,0.1)'}`,
-                  borderRadius: '16px', padding: '48px 24px', textAlign: 'center',
-                  background: data.pitchDeckFile ? 'rgba(212,212,216,0.05)' : 'rgba(0,0,0,0.02)',
-                  cursor: 'pointer', transition: 'var(--transition-standard)',
-                }}
-                onClick={() => document.getElementById('pitch-deck-input')?.click()}
-              >
-                {data.pitchDeckFile ? (
-                  <>
-                    <CheckCircle size={40} color="#D4D4D8" style={{ margin: '0 auto 12px', display: 'block' }} />
-                    <div style={{ fontWeight: 600, color: '#A1A1AA', marginBottom: 4 }}>{data.pitchDeckFile.name}</div>
-                    <div style={{ fontSize: 12, color: '#475569' }}>{(data.pitchDeckFile.size / 1024 / 1024).toFixed(1)} MB</div>
-                    <div style={{ marginTop: 12, fontSize: 12, color: '#D8B4FE' }}>🤖 AI Score будет рассчитан после загрузки</div>
-                  </>
-                ) : (
-                  <>
-                    <Upload size={40} style={{ margin: '0 auto 12px', display: 'block', color: '#334155' }} />
-                    <div style={{ fontSize: 14, color: '#64748b', marginBottom: 4 }}>
-                      <span style={{ color: 'var(--text-primary)', fontWeight: 600 }}>Нажми или перетащи</span> PDF файл
-                    </div>
-                    <div style={{ fontSize: 12, color: '#334155' }}>PDF до 50 MB · Pitch Deck, Executive Summary</div>
-                  </>
-                )}
-                <input
-                  id="pitch-deck-input" type="file" accept=".pdf" style={{ display: 'none' }}
-                  onChange={e => set('pitchDeckFile', e.target.files?.[0] || null)}
-                />
-              </div>
-
-              {/* Summary */}
-              <div style={{ marginTop: '24px', padding: '20px', borderRadius: '14px', background: 'rgba(0,0,0,0.07)', border: '1px solid rgba(0,0,0,0.15)' }}>
-                <div style={{ fontSize: 12, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '12px' }}>Итог:</div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                  {[
-                    { l: 'Стартап', v: data.startupName || '—' },
-                    { l: 'Индустрия', v: data.industry || '—' },
-                    { l: 'Стадия', v: data.stage },
-                    { l: 'Команда', v: `${data.teamSize} чел.` },
-                    { l: 'Локация', v: data.location },
-                  ].map((r, i) => (
-                    <div key={i} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13 }}>
-                      <span style={{ color: '#475569' }}>{r.l}</span>
-                      <span style={{ color: 'var(--text-primary)', fontWeight: 500 }}>{r.v}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Navigation */}
-          <div style={{ display: 'flex', gap: '10px', marginTop: '32px' }}>
-            {step > 1 && (
-              <button onClick={() => setStep(s => s - 1)} className="btn-secondary" style={{ flex: 1 }}>
-                <ChevronLeft size={16} /> Назад
-              </button>
+              </FadeIn>
             )}
-            {step < 3 ? (
-              <button
-                onClick={() => setStep(s => s + 1)}
-                className="btn-primary"
-                disabled={!canNext()}
-                style={{ flex: 2, opacity: canNext() ? 1 : 0.5 }}
-              >
-                Далее <ChevronRight size={16} />
-              </button>
-            ) : (
-              <button onClick={handleFinish} className="btn-primary" style={{ flex: 2 }} disabled={submitting}>
-                {submitting ? (
-                  <><span style={{ width: 14, height: 14, border: '2px solid rgba(0,0,0,0.3)', borderTopColor: 'white', borderRadius: '50%', animation: 'spin 0.8s linear infinite', display: 'inline-block' }} /> Создаём стартап...</>
-                ) : (
-                  <><Rocket size={14} /> Запустить Founder OS</>
-                )}
-              </button>
-            )}
-          </div>
-        </div>
+
+            {/* Navigation */}
+            <div className="flex gap-3 mt-8">
+              {step > 1 && (
+                <Button 
+                  variant="outline" 
+                  onClick={() => setStep(s => s - 1)} 
+                  className="flex-1 border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-900"
+                >
+                  <ChevronLeft size={16} className="mr-1.5" /> Назад
+                </Button>
+              )}
+              {step < 3 ? (
+                <Button
+                  onClick={() => setStep(s => s + 1)}
+                  disabled={!canNext()}
+                  className="flex-[2] bg-zinc-900 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-100 text-white dark:text-zinc-900"
+                >
+                  Далее <ChevronRight size={16} className="ml-1.5" />
+                </Button>
+              ) : (
+                <Button 
+                  onClick={handleFinish} 
+                  disabled={submitting}
+                  className="flex-[2] bg-zinc-900 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-100 text-white dark:text-zinc-900"
+                >
+                  {submitting ? (
+                    <><div className="w-3.5 h-3.5 mr-2 rounded-full border-2 border-zinc-400 border-t-white dark:border-zinc-300 dark:border-t-zinc-900 animate-spin" /> Создаём стартап...</>
+                  ) : (
+                    <><Rocket size={14} className="mr-1.5" /> Запустить Founder OS</>
+                  )}
+                </Button>
+              )}
+            </div>
+          </CardContent>
+        </Card>
       </div>
-
-      <style jsx>{`
-        @keyframes spin { to { transform: rotate(360deg); } }
-      `}</style>
     </div>
   );
 }

@@ -6,10 +6,16 @@ import Link from 'next/link';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { Startup } from '@/types';
+import { cn } from '@/lib/utils';
+import { FadeIn, StaggerContainer, StaggerItem } from '@/components/ui/animations';
+import { Card, CardContent } from '@/components/ui/card';
 
 const STAGE_COLORS: Record<string, string> = {
-  idea: '#64748b', validation: '#71717A', mvp: '#A1A1AA',
-  growth: '#FFFFFF', investment_ready: '#D4D4D8',
+  idea: 'bg-zinc-100 text-zinc-800 dark:bg-zinc-800 dark:text-zinc-300',
+  validation: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400',
+  mvp: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400',
+  growth: 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400',
+  investment_ready: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
 };
 
 function fmt(n: number) {
@@ -78,140 +84,153 @@ export default function LeaderboardPage() {
   const topThree = sorted.slice(0, 3);
   const rest = sorted.slice(3);
 
-  if (loading) return <div style={{ minHeight: '100vh', background: 'var(--bg-primary)', padding: '48px 24px', color: '#64748b' }}>Загрузка лидерборда...</div>;
+  if (loading) return <div className="min-h-screen p-12 text-zinc-500 animate-pulse text-center">Загрузка лидерборда...</div>;
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--bg-primary)', padding: '48px 24px', fontFamily: 'Inter, sans-serif' }}>
-      <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+    <div className="min-h-screen py-12 px-6">
+      <FadeIn className="mx-auto max-w-4xl">
 
         {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '6px 16px', borderRadius: 99, background: 'rgba(113,113,122,0.12)', border: '1px solid rgba(113,113,122,0.25)', marginBottom: 16 }}>
-            <Trophy size={13} color="#D4D4D8" />
-            <span style={{ fontSize: 12, color: '#D4D4D8', fontWeight: 600 }}>UNTITLED Ecosystem</span>
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 mb-4">
+            <Trophy size={14} className="text-zinc-500 dark:text-zinc-400" />
+            <span className="text-xs font-semibold text-zinc-600 dark:text-zinc-300">UNTITLED Ecosystem</span>
           </div>
-          <h1 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 40, fontWeight: 800, marginBottom: 10 }}>
-            Startup <span style={{ background: 'linear-gradient(135deg,#71717A,#52525B)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Leaderboard</span>
+          <h1 className="font-display text-4xl font-bold mb-3 text-zinc-900 dark:text-white">
+            Startup <span className="bg-clip-text text-transparent bg-gradient-to-br from-zinc-500 to-zinc-800 dark:from-zinc-400 dark:to-zinc-600">Leaderboard</span>
           </h1>
-          <p style={{ color: '#64748b', fontSize: 15 }}>
+          <p className="text-zinc-500 dark:text-zinc-400">
             Рейтинг стартапов UNTITLED по AI Score, MRR и прогрессу
           </p>
         </div>
 
         {/* Filters */}
-        <div style={{ display: 'flex', gap: '12px', marginBottom: '32px', flexWrap: 'wrap', justifyContent: 'center' }}>
-          <div style={{ display: 'flex', gap: '4px', background: 'rgba(0,0,0,0.04)', borderRadius: '10px', padding: '4px' }}>
+        <div className="flex flex-wrap justify-center gap-4 mb-10">
+          <div className="flex gap-1 bg-zinc-100 dark:bg-zinc-800/50 p-1 rounded-xl">
             {FILTERS.map(f => (
-              <button key={f.key} onClick={() => setSortBy(f.key)} style={{
-                padding: '8px 16px', borderRadius: '7px', border: 'none', fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: 'Inter',
-                background: sortBy === f.key ? 'rgba(113,113,122,0.2)' : 'transparent',
-                color: sortBy === f.key ? '#D4D4D8' : '#64748b',
-              }}>{f.label}</button>
+              <button key={f.key} onClick={() => setSortBy(f.key)} className={cn(
+                "px-4 py-2 rounded-lg text-sm font-semibold transition-all",
+                sortBy === f.key ? "bg-white dark:bg-zinc-700 text-zinc-900 dark:text-white shadow-sm" : "text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-300"
+              )}>
+                {f.label}
+              </button>
             ))}
           </div>
-          <div style={{ display: 'flex', gap: '4px', background: 'rgba(0,0,0,0.04)', borderRadius: '10px', padding: '4px', overflowX: 'auto' }}>
+          <div className="flex gap-1 bg-zinc-100 dark:bg-zinc-800/50 p-1 rounded-xl overflow-x-auto max-w-full">
             {INDUSTRY_FILTERS.map(ind => (
-              <button key={ind} onClick={() => setIndustryFilter(ind)} style={{
-                padding: '8px 12px', borderRadius: '7px', border: 'none', fontSize: 12, cursor: 'pointer', fontFamily: 'Inter', fontWeight: 500, whiteSpace: 'nowrap',
-                background: industryFilter === ind ? 'rgba(0,0,0,0.2)' : 'transparent',
-                color: industryFilter === ind ? '#D8B4FE' : '#64748b',
-              }}>{ind}</button>
+              <button key={ind} onClick={() => setIndustryFilter(ind)} className={cn(
+                "px-3 py-2 rounded-lg text-xs font-medium whitespace-nowrap transition-all",
+                industryFilter === ind ? "bg-white dark:bg-zinc-700 text-zinc-900 dark:text-white shadow-sm" : "text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-300"
+              )}>
+                {ind}
+              </button>
             ))}
           </div>
         </div>
 
         {/* Podium — Top 3 */}
         {topThree.length >= 3 && (
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.1fr 1fr', gap: '16px', marginBottom: '32px', alignItems: 'end' }}>
+          <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12 items-end">
             {/* 2nd */}
-            <div style={{ textAlign: 'center', padding: '24px 16px', borderRadius: '16px', background: 'rgba(148,163,184,0.06)', border: '1px solid rgba(148,163,184,0.15)', marginTop: '32px' }}>
-              <div style={{ fontSize: 32, marginBottom: 8 }}>🥈</div>
-              <div style={{ width: 52, height: 52, borderRadius: '50%', background: 'rgba(148,163,184,0.2)', margin: '0 auto 10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 20, fontWeight: 800, color: '#94a3b8' }}>
-                {topThree[1].name.charAt(0)}
-              </div>
-              <div style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontWeight: 700, fontSize: 14, marginBottom: 4 }}>{topThree[1].name}</div>
-              <div style={{ fontSize: 11, color: '#64748b', marginBottom: 8 }}>{topThree[1].industry}</div>
-              <div style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 22, fontWeight: 800, color: '#94a3b8' }}>
-                {sortBy === 'score' ? topThree[1].aiScores.overallReadinessScore : sortBy === 'mrr' ? fmt(topThree[1].metrics.mrr) : sortBy === 'mau' ? topThree[1].metrics.mau.toLocaleString() : `${topThree[1].roadmapProgress}%`}
-              </div>
-            </div>
+            <StaggerItem className="order-2 md:order-1">
+              <Card className="text-center bg-zinc-50/50 dark:bg-zinc-900/30 border-zinc-200 dark:border-zinc-800 mt-8">
+                <CardContent className="pt-8 pb-6 px-4">
+                  <div className="text-3xl mb-2">🥈</div>
+                  <div className="w-14 h-14 rounded-full bg-zinc-200 dark:bg-zinc-800 flex items-center justify-center font-display text-xl font-bold text-zinc-500 mx-auto mb-3">
+                    {topThree[1].name.charAt(0)}
+                  </div>
+                  <div className="font-display font-bold text-sm mb-1 text-zinc-900 dark:text-white">{topThree[1].name}</div>
+                  <div className="text-xs text-zinc-500 mb-2">{topThree[1].industry}</div>
+                  <div className="font-display text-2xl font-bold text-zinc-700 dark:text-zinc-300">
+                    {sortBy === 'score' ? topThree[1].aiScores.overallReadinessScore : sortBy === 'mrr' ? fmt(topThree[1].metrics.mrr) : sortBy === 'mau' ? topThree[1].metrics.mau.toLocaleString() : `${topThree[1].roadmapProgress}%`}
+                  </div>
+                </CardContent>
+              </Card>
+            </StaggerItem>
             {/* 1st */}
-            <div style={{ textAlign: 'center', padding: '32px 20px', borderRadius: '20px', background: 'linear-gradient(135deg,rgba(113,113,122,0.12),rgba(82,82,91,0.08))', border: '2px solid rgba(113,113,122,0.3)', boxShadow: '0 0 40px rgba(113,113,122,0.15)' }}>
-              <div style={{ fontSize: 40, marginBottom: 10 }}>🥇</div>
-              <div style={{ width: 64, height: 64, borderRadius: '50%', background: 'linear-gradient(135deg,#71717A,#52525B)', margin: '0 auto 12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 26, fontWeight: 800, color: 'white', boxShadow: '0 0 20px rgba(113,113,122,0.4)' }}>
-                {topThree[0].name.charAt(0)}
-              </div>
-              <div style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontWeight: 800, fontSize: 17, marginBottom: 4 }}>{topThree[0].name}</div>
-              <div style={{ fontSize: 12, color: '#94a3b8', marginBottom: 10 }}>{topThree[0].industry} · {topThree[0].location}</div>
-              <div style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 32, fontWeight: 900, color: '#D4D4D8' }}>
-                {sortBy === 'score' ? topThree[0].aiScores.overallReadinessScore : sortBy === 'mrr' ? fmt(topThree[0].metrics.mrr) : sortBy === 'mau' ? topThree[0].metrics.mau.toLocaleString() : `${topThree[0].roadmapProgress}%`}
-              </div>
-              <div style={{ marginTop: 12 }}>
-                <span style={{ fontSize: 10, fontWeight: 700, color: '#D4D4D8', background: 'rgba(113,113,122,0.15)', padding: '3px 10px', borderRadius: 99 }}>
-                  {topThree[0].stage.replace('_', ' ').toUpperCase()}
-                </span>
-              </div>
-            </div>
+            <StaggerItem className="order-1 md:order-2">
+              <Card className="text-center border-2 border-zinc-300 dark:border-zinc-700 shadow-xl shadow-zinc-200/50 dark:shadow-none bg-gradient-to-br from-zinc-50 to-white dark:from-zinc-900 dark:to-zinc-950 relative z-10">
+                <CardContent className="pt-10 pb-8 px-5">
+                  <div className="text-4xl mb-3">🥇</div>
+                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-zinc-700 to-zinc-900 dark:from-zinc-400 dark:to-zinc-600 flex items-center justify-center font-display text-2xl font-bold text-white shadow-lg mx-auto mb-3">
+                    {topThree[0].name.charAt(0)}
+                  </div>
+                  <div className="font-display font-bold text-lg mb-1 text-zinc-900 dark:text-white">{topThree[0].name}</div>
+                  <div className="text-xs text-zinc-500 mb-3">{topThree[0].industry} · {topThree[0].location}</div>
+                  <div className="font-display text-3xl font-black text-zinc-900 dark:text-white">
+                    {sortBy === 'score' ? topThree[0].aiScores.overallReadinessScore : sortBy === 'mrr' ? fmt(topThree[0].metrics.mrr) : sortBy === 'mau' ? topThree[0].metrics.mau.toLocaleString() : `${topThree[0].roadmapProgress}%`}
+                  </div>
+                  <div className="mt-4">
+                    <span className={cn("text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider", STAGE_COLORS[topThree[0].stage] || STAGE_COLORS.idea)}>
+                      {topThree[0].stage.replace('_', ' ')}
+                    </span>
+                  </div>
+                </CardContent>
+              </Card>
+            </StaggerItem>
             {/* 3rd */}
-            <div style={{ textAlign: 'center', padding: '24px 16px', borderRadius: '16px', background: 'rgba(180,120,60,0.06)', border: '1px solid rgba(180,120,60,0.15)', marginTop: '48px' }}>
-              <div style={{ fontSize: 32, marginBottom: 8 }}>🥉</div>
-              <div style={{ width: 52, height: 52, borderRadius: '50%', background: 'rgba(180,120,60,0.2)', margin: '0 auto 10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 20, fontWeight: 800, color: '#b47c3c' }}>
-                {topThree[2].name.charAt(0)}
-              </div>
-              <div style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontWeight: 700, fontSize: 14, marginBottom: 4 }}>{topThree[2].name}</div>
-              <div style={{ fontSize: 11, color: '#64748b', marginBottom: 8 }}>{topThree[2].industry}</div>
-              <div style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 22, fontWeight: 800, color: '#b47c3c' }}>
-                {sortBy === 'score' ? topThree[2].aiScores.overallReadinessScore : sortBy === 'mrr' ? fmt(topThree[2].metrics.mrr) : sortBy === 'mau' ? topThree[2].metrics.mau.toLocaleString() : `${topThree[2].roadmapProgress}%`}
-              </div>
-            </div>
-          </div>
+            <StaggerItem className="order-3 md:order-3">
+              <Card className="text-center bg-amber-50/30 dark:bg-amber-950/20 border-amber-200/50 dark:border-amber-900/30 mt-12">
+                <CardContent className="pt-8 pb-6 px-4">
+                  <div className="text-3xl mb-2">🥉</div>
+                  <div className="w-14 h-14 rounded-full bg-amber-100 dark:bg-amber-900/40 flex items-center justify-center font-display text-xl font-bold text-amber-700 dark:text-amber-500 mx-auto mb-3">
+                    {topThree[2].name.charAt(0)}
+                  </div>
+                  <div className="font-display font-bold text-sm mb-1 text-zinc-900 dark:text-white">{topThree[2].name}</div>
+                  <div className="text-xs text-zinc-500 mb-2">{topThree[2].industry}</div>
+                  <div className="font-display text-2xl font-bold text-amber-700 dark:text-amber-500">
+                    {sortBy === 'score' ? topThree[2].aiScores.overallReadinessScore : sortBy === 'mrr' ? fmt(topThree[2].metrics.mrr) : sortBy === 'mau' ? topThree[2].metrics.mau.toLocaleString() : `${topThree[2].roadmapProgress}%`}
+                  </div>
+                </CardContent>
+              </Card>
+            </StaggerItem>
+          </StaggerContainer>
         )}
 
         {/* Rest of table */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '48px' }}>
+        <StaggerContainer className="flex flex-col gap-3 mb-16">
           {rest.map((s, i) => {
             const score = s.aiScores.overallReadinessScore || 0;
-            const sc = score >= 75 ? '#D4D4D8' : score >= 50 ? '#71717A' : '#52525B';
-            const stageColor = STAGE_COLORS[s.stage] || '#64748b';
+            const scColor = score >= 75 ? 'text-green-600 dark:text-green-400' : score >= 50 ? 'text-amber-600 dark:text-amber-400' : 'text-zinc-600 dark:text-zinc-400';
+            const stageClass = STAGE_COLORS[s.stage] || STAGE_COLORS.idea;
             return (
-              <div key={s.id} style={{
-                display: 'flex', alignItems: 'center', gap: '16px', padding: '16px 20px',
-                borderRadius: '14px', background: 'rgba(0,0,0,0.02)', border: '1px solid rgba(0,0,0,0.06)',
-                transition: 'var(--transition-standard)',
-              }}>
-                <div style={{ width: 32, fontSize: 16, fontFamily: 'var(--font-space-grotesk), sans-serif', fontWeight: 700, color: '#334155', textAlign: 'center', flexShrink: 0 }}>#{i + 4}</div>
-                <div style={{ width: 40, height: 40, borderRadius: '10px', background: `${stageColor}20`, border: `1px solid ${stageColor}30`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 16, fontWeight: 800, color: stageColor, flexShrink: 0 }}>
-                  {s.name.charAt(0)}
-                </div>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 2 }}>{s.name}</div>
-                  <div style={{ fontSize: 11, color: '#475569', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <MapPin size={9} />{s.location} · {s.industry}
+              <StaggerItem key={s.id}>
+                <div className="flex items-center gap-4 p-4 rounded-2xl bg-white dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 transition-all hover:border-zinc-300 dark:hover:border-zinc-700 shadow-sm hover:shadow-md">
+                  <div className="w-8 text-center font-display font-bold text-zinc-400 dark:text-zinc-500 shrink-0">#{i + 4}</div>
+                  <div className="w-10 h-10 rounded-xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center font-display font-bold text-zinc-900 dark:text-white shrink-0">
+                    {s.name.charAt(0)}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-bold text-sm text-zinc-900 dark:text-white mb-0.5 truncate">{s.name}</div>
+                    <div className="text-[11px] text-zinc-500 flex items-center gap-1.5 truncate">
+                      <MapPin size={10} />{s.location} <span className="opacity-50">·</span> {s.industry}
+                    </div>
+                  </div>
+                  <div className={cn("hidden sm:block text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider shrink-0", stageClass)}>
+                    {s.stage.replace('_', ' ')}
+                  </div>
+                  <div className="text-right shrink-0 min-w-[60px]">
+                    <div className={cn("font-display text-lg font-bold", scColor)}>{score}</div>
+                    <div className="text-[10px] text-zinc-500 font-semibold uppercase tracking-wider">AI Score</div>
+                  </div>
+                  <div className="text-right shrink-0 min-w-[70px]">
+                    <div className="font-display text-sm font-bold text-zinc-900 dark:text-white">{fmt(s.metrics.mrr)}</div>
+                    <div className="text-[10px] text-zinc-500 font-semibold uppercase tracking-wider">MRR</div>
                   </div>
                 </div>
-                <div style={{ fontSize: 11, color: stageColor, background: `${stageColor}15`, padding: '3px 10px', borderRadius: 99, fontWeight: 600, flexShrink: 0 }}>
-                  {s.stage.replace('_', ' ')}
-                </div>
-                <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                  <div style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 18, fontWeight: 800, color: sc }}>{score}</div>
-                  <div style={{ fontSize: 10, color: '#334155' }}>AI Score</div>
-                </div>
-                <div style={{ textAlign: 'right', flexShrink: 0, minWidth: '60px' }}>
-                  <div style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 14, fontWeight: 700, color: '#D4D4D8' }}>{fmt(s.metrics.mrr)}</div>
-                  <div style={{ fontSize: 10, color: '#334155' }}>MRR</div>
-                </div>
-              </div>
+              </StaggerItem>
             );
           })}
-        </div>
+        </StaggerContainer>
 
         {/* Footer */}
-        <div style={{ textAlign: 'center' }}>
-          <p style={{ fontSize: 12, color: '#334155' }}>
-            Рейтинг обновляется в реальном времени · <Link href="/" style={{ color: 'var(--text-primary)', textDecoration: 'none' }}>Founder OS</Link> · UNTITLED Ecosystem
+        <div className="text-center">
+          <p className="text-xs text-zinc-500">
+            Рейтинг обновляется в реальном времени · <Link href="/" className="text-zinc-900 dark:text-white font-medium hover:underline">Founder OS</Link> · UNTITLED Ecosystem
           </p>
         </div>
-      </div>
+      </FadeIn>
     </div>
   );
 }
+

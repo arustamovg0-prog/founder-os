@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import { Gift, ExternalLink, Zap, Shield, BarChart3, Cloud, Scale, Users, Star, CheckCircle } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { Card, CardContent } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
 
 const CATEGORIES = [
   { id: 'all', label: 'Все перки' },
@@ -139,51 +141,49 @@ export default function PerksPage() {
   return (
     <div className="animate-fade-in">
       {/* Header */}
-      <div style={{ marginBottom: 28 }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
+      <div className="mb-7">
+        <div className="flex items-center justify-between flex-wrap gap-3">
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
-              <div style={{ width: 32, height: 32, borderRadius: 8, background: 'linear-gradient(135deg,#71717A,#52525B)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div className="flex items-center gap-2.5 mb-1">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-zinc-500 to-zinc-600 flex items-center justify-center text-white">
                 <Gift size={16} color="currentColor" />
               </div>
-              <h1 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontWeight: 700 }}>{t('title')}</h1>
+              <h1 className="font-display font-bold text-zinc-900 dark:text-zinc-100">{t('title')}</h1>
               <span className="badge badge-green">{t('exclusive')}</span>
             </div>
-            <p style={{ color: '#64748b', fontSize: 13 }}>{t('subtitle')}</p>
+            <p className="text-zinc-500 dark:text-zinc-400 text-[13px]">{t('subtitle')}</p>
           </div>
-          <div style={{ padding: '10px 18px', borderRadius: 12, background: 'rgba(0,0,0,0.05)', border: '1px solid rgba(113,113,122,0.2)', textAlign: 'center' }}>
-            <div style={{ fontSize: 20, fontWeight: 800, color: '#71717A', fontFamily: 'var(--font-space-grotesk), sans-serif' }}>
+          <div className="px-4.5 py-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-900/30 border border-zinc-200 dark:border-zinc-800 text-center">
+            <div className="text-[20px] font-extrabold text-zinc-700 dark:text-zinc-300 font-display">
               ${(totalValue).toLocaleString()}+
             </div>
-            <div style={{ fontSize: 11, color: '#64748b', fontWeight: 600 }}>{t('totalValue')}</div>
+            <div className="text-[11px] text-zinc-500 dark:text-zinc-400 font-semibold">{t('totalValue')}</div>
           </div>
         </div>
       </div>
 
       {/* Search */}
-      <div style={{ marginBottom: 20 }}>
+      <div className="mb-5">
         <input
-          className="input-field"
+          className="input-field w-full max-w-[480px]"
           placeholder={t('searchPlaceholder')}
           value={search}
           onChange={e => setSearch(e.target.value)}
-          style={{ width: '100%', maxWidth: 480 }}
         />
       </div>
 
       {/* Category Filters */}
-      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 28 }}>
+      <div className="flex gap-2 flex-wrap mb-7">
         {CATEGORIES.map(cat => (
           <button
             key={cat.id}
             onClick={() => setActiveCategory(cat.id)}
-            style={{
-              padding: '7px 14px', borderRadius: 99, fontSize: 12, fontWeight: 600,
-              cursor: 'pointer', transition: 'var(--transition-standard)', fontFamily: 'Inter',
-              background: activeCategory === cat.id ? 'rgba(113,113,122,0.15)' : 'rgba(0,0,0,0.04)',
-              border: activeCategory === cat.id ? '1px solid rgba(113,113,122,0.4)' : '1px solid rgba(0,0,0,0.08)',
-              color: activeCategory === cat.id ? '#71717A' : '#64748b',
-            }}
+            className={cn(
+              "px-3.5 py-1.5 rounded-full text-xs font-semibold cursor-pointer transition-colors font-sans border",
+              activeCategory === cat.id 
+                ? "bg-zinc-200 dark:bg-zinc-800/80 border-zinc-300 dark:border-zinc-700 text-zinc-800 dark:text-zinc-200" 
+                : "bg-zinc-50 dark:bg-zinc-900/30 border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800/50"
+            )}
           >
             {t(`categories.${cat.id}` as any)}
           </button>
@@ -192,14 +192,14 @@ export default function PerksPage() {
 
       {/* Featured */}
       {featured.length > 0 && (
-        <div style={{ marginBottom: 32 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
-            <Star size={14} color="#71717A" />
-            <span style={{ fontSize: 12, fontWeight: 700, color: '#71717A', textTransform: 'uppercase', letterSpacing: '1px' }}>
+        <div className="mb-8">
+          <div className="flex items-center gap-2 mb-4">
+            <Star size={14} className="text-zinc-600 dark:text-zinc-400" />
+            <span className="text-xs font-bold text-zinc-600 dark:text-zinc-400 uppercase tracking-widest">
               {t('featuredTitle')}
             </span>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 16 }}>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {featured.map(perk => (
               <PerkCard key={perk.id} perk={perk} claimed={claimed.has(perk.id)} onClaim={claim} featured />
             ))}
@@ -210,12 +210,12 @@ export default function PerksPage() {
       {/* All perks */}
       {regular.length > 0 && (
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
-            <span style={{ fontSize: 12, fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '1px' }}>
+          <div className="flex items-center gap-2 mb-4">
+            <span className="text-xs font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-widest">
               {t('allTitle', { count: regular.length })}
             </span>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 14 }}>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3.5">
             {regular.map(perk => (
               <PerkCard key={perk.id} perk={perk} claimed={claimed.has(perk.id)} onClaim={claim} featured={false} />
             ))}
@@ -224,9 +224,9 @@ export default function PerksPage() {
       )}
 
       {filtered.length === 0 && (
-        <div style={{ textAlign: 'center', padding: '60px 20px', color: '#334155' }}>
-          <Gift size={40} style={{ margin: '0 auto 12px', display: 'block', opacity: 0.3 }} />
-          <p style={{ fontSize: 14 }}>{t('notFound')}</p>
+        <div className="text-center py-16 text-zinc-600 dark:text-zinc-400">
+          <Gift size={40} className="mx-auto mb-3 opacity-30 block" />
+          <p className="text-sm">{t('notFound')}</p>
         </div>
       )}
     </div>
@@ -236,65 +236,56 @@ export default function PerksPage() {
 function PerkCard({ perk, claimed, onClaim, featured }: { perk: Perk; claimed: boolean; onClaim: (id: string) => void; featured: boolean }) {
   const t = useTranslations('FounderPerks');
   return (
-    <div
-      style={{
-        padding: 20, borderRadius: 16,
-        background: featured ? 'rgba(113,113,122,0.06)' : 'rgba(13,13,32,0.8)',
-        border: `1px solid ${featured ? 'rgba(113,113,122,0.2)' : 'rgba(0,0,0,0.06)'}`,
-        transition: 'var(--transition-standard)', cursor: 'default',
-        position: 'relative', overflow: 'hidden',
-      }}
-      onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.borderColor = featured ? 'rgba(113,113,122,0.4)' : 'rgba(0,0,0,0.12)'; }}
-      onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor = featured ? 'rgba(113,113,122,0.2)' : 'rgba(0,0,0,0.06)'; }}
-    >
+    <Card className={cn(
+      "relative overflow-hidden transition-all duration-200 border",
+      featured ? "bg-zinc-100/50 dark:bg-zinc-800/30 border-zinc-300 dark:border-zinc-700 hover:border-zinc-400 dark:hover:border-zinc-600" : "hover:border-zinc-300 dark:hover:border-zinc-700"
+    )}>
       {featured && (
-        <div style={{ position: 'absolute', top: 12, right: 12 }}>
-          <Star size={12} color="#71717A" fill="#71717A" />
+        <div className="absolute top-3 right-3">
+          <Star size={12} className="text-zinc-500 dark:text-zinc-400 fill-zinc-500 dark:fill-zinc-400" />
         </div>
       )}
 
-      {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, marginBottom: 12 }}>
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontWeight: 700, fontSize: 15, fontFamily: 'var(--font-space-grotesk), sans-serif', marginBottom: 2 }}>{perk.company}</div>
-          <div style={{ fontSize: 12, color: '#64748b' }}>{perk.tagline}</div>
+      <CardContent className="p-5">
+        {/* Header */}
+        <div className="flex items-start gap-3 mb-3">
+          <div className="flex-1 min-w-0">
+            <div className="font-bold text-[15px] font-display mb-0.5 text-zinc-900 dark:text-zinc-100">{perk.company}</div>
+            <div className="text-xs text-zinc-500 dark:text-zinc-400">{perk.tagline}</div>
+          </div>
         </div>
-      </div>
 
-      {/* Description */}
-      <p style={{ fontSize: 13, color: '#94a3b8', lineHeight: 1.6, marginBottom: 14 }}>{t(`items.${perk.id}.description` as any)}</p>
+        {/* Description */}
+        <p className="text-[13px] text-zinc-600 dark:text-zinc-400 leading-relaxed mb-3.5">{t(`items.${perk.id}.description` as any)}</p>
 
-      {/* Tags */}
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 14 }}>
-        {perk.tags.slice(0, 3).map(tag => (
-          <span key={tag} style={{
-            padding: '2px 8px', borderRadius: 99, fontSize: 10, fontWeight: 600,
-            background: 'rgba(0,0,0,0.04)', border: '1px solid rgba(0,0,0,0.08)', color: '#475569',
-          }}>
-            {tag}
-          </span>
-        ))}
-      </div>
-
-      {/* Footer */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <div>
-          <div style={{ fontSize: 13, fontWeight: 700, color: '#D4D4D8' }}>{t(`items.${perk.id}.discount` as any)}</div>
-          <div style={{ fontSize: 10, color: '#475569' }}>{t('card.value')} {perk.value} · {t('card.usedBy', { count: perk.usedBy })}</div>
+        {/* Tags */}
+        <div className="flex flex-wrap gap-1.5 mb-3.5">
+          {perk.tags.slice(0, 3).map(tag => (
+            <span key={tag} className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-zinc-100 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400">
+              {tag}
+            </span>
+          ))}
         </div>
-        <button
-          onClick={() => onClaim(perk.id)}
-          style={{
-            padding: '7px 14px', borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: 'pointer',
-            display: 'flex', alignItems: 'center', gap: 6, fontFamily: 'Inter', transition: 'var(--transition-standard)',
-            background: claimed ? 'rgba(212,212,216,0.15)' : 'rgba(113,113,122,0.15)',
-            border: `1px solid ${claimed ? 'rgba(212,212,216,0.3)' : 'rgba(113,113,122,0.3)'}`,
-            color: claimed ? '#D4D4D8' : '#71717A',
-          }}
-        >
-          {claimed ? <><CheckCircle size={12} /> {t('card.claimed')}</> : <><ExternalLink size={12} /> {t('card.claim')}</>}
-        </button>
-      </div>
-    </div>
+
+        {/* Footer */}
+        <div className="flex items-center justify-between mt-auto">
+          <div>
+            <div className="text-[13px] font-bold text-zinc-800 dark:text-zinc-200">{t(`items.${perk.id}.discount` as any)}</div>
+            <div className="text-[10px] text-zinc-500 dark:text-zinc-400">{t('card.value')} {perk.value} · {t('card.usedBy', { count: perk.usedBy })}</div>
+          </div>
+          <button
+            onClick={() => onClaim(perk.id)}
+            className={cn(
+              "px-3.5 py-1.5 rounded-lg text-xs font-semibold cursor-pointer flex items-center gap-1.5 font-sans transition-colors border",
+              claimed 
+                ? "bg-zinc-200 dark:bg-zinc-800 border-zinc-300 dark:border-zinc-700 text-zinc-800 dark:text-zinc-200" 
+                : "bg-zinc-100 dark:bg-zinc-800/50 border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-700"
+            )}
+          >
+            {claimed ? <><CheckCircle size={12} /> {t('card.claimed')}</> : <><ExternalLink size={12} /> {t('card.claim')}</>}
+          </button>
+        </div>
+      </CardContent>
+    </Card>
   );
 }

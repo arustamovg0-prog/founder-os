@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { collection, getDocs, limit, query } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { Startup } from '@/types';
@@ -9,6 +9,8 @@ import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
 import { logImpersonationAction } from '@/app/actions/audit';
 import { useTranslations } from 'next-intl';
+import { Card, CardContent } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
 
 interface ImpersonationBannerProps {
   targetName: string;
@@ -70,14 +72,11 @@ export function ImpersonationPanel() {
   const [impersonating, setImpersonating] = useState(false);
   const [startups, setStartups] = useState<Startup[]>([]);
 
-  import('react').then(({ useEffect }) => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useEffect(() => {
-      getDocs(query(collection(db, 'startups'), limit(4))).then(snap => {
-        setStartups(snap.docs.map(d => ({ id: d.id, ...d.data() } as Startup)));
-      }).catch(err => console.warn('Failed to fetch startups for impersonation', err));
-    }, []);
-  });
+  useEffect(() => {
+    getDocs(query(collection(db, 'startups'), limit(4))).then(snap => {
+      setStartups(snap.docs.map(d => ({ id: d.id, ...d.data() } as Startup)));
+    }).catch(err => console.warn('Failed to fetch startups for impersonation', err));
+  }, []);
 
   const [isLogging, setIsLogging] = useState(false);
   const [impersonateTarget, setImpersonateTarget] = useState<{ name: string; role: string } | null>(null);
@@ -128,46 +127,47 @@ export function ImpersonationPanel() {
       </AnimatePresence>
 
       {/* Trigger Block */}
-      <div className="card" style={{ marginBottom: '24px', background: 'var(--bg-card)', borderColor: 'rgba(113,113,122,0.15)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
-          <UserCheck size={18} color="#71717A" />
-          <span style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 15, fontWeight: 700 }}>{t('triggerTitle')}</span>
-          <span className="badge badge-yellow">{t('auditLogged')}</span>
-        </div>
-        <p style={{ fontSize: 13, color: '#64748b', marginBottom: '16px' }}>
-          {t('triggerDesc')}
-        </p>
-
-        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-          {startups.map(s => (
-            <button
-              key={s.id}
-              onClick={() => startImpersonation(s.id!)}
-              style={{
-                display: 'flex', alignItems: 'center', gap: '8px',
-                padding: '8px 16px', borderRadius: '10px', fontSize: 13,
-                background: 'rgba(113,113,122,0.08)', border: '1px solid rgba(113,113,122,0.2)',
-                color: '#D4D4D8', cursor: isLogging ? 'not-allowed' : 'pointer', fontFamily: 'Inter', fontWeight: 500,
-                opacity: isLogging ? 0.7 : 1
-              }}
-              disabled={isLogging}
-            >
-              {isLogging && selectedId === s.id ? <Loader2 size={13} className="animate-spin" /> : <Eye size={13} />}
-              {s.founderName?.split(' ')[0] || s.name}
-            </button>
-          ))}
-        </div>
-
-        {impersonating && (
-          <div style={{ marginTop: '12px', padding: '10px 14px', borderRadius: '10px', background: 'rgba(0,0,0,0.05)', border: '1px solid rgba(113,113,122,0.25)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <AlertTriangle size={14} color="#71717A" />
-            <span style={{ fontSize: 13, color: '#D4D4D8' }}>{t('activeMode')}</span>
-            <button onClick={exitImpersonation} style={{ marginLeft: 'auto', fontSize: 12, color: '#71717A', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Inter', textDecoration: 'underline' }}>
-              {t('end')}
-            </button>
+      <Card className="mb-6">
+        <CardContent className="p-6">
+          <div className="flex items-center gap-2 mb-4">
+            <UserCheck size={18} className="text-zinc-500" />
+            <span className="font-display text-[15px] font-bold text-zinc-900 dark:text-zinc-100">{t('triggerTitle')}</span>
+            <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-500">{t('auditLogged')}</span>
           </div>
-        )}
-      </div>
+          <p className="text-[13px] text-zinc-500 dark:text-zinc-400 mb-4">
+            {t('triggerDesc')}
+          </p>
+
+          <div className="flex gap-2 flex-wrap">
+            {startups.map(s => (
+              <button
+                key={s.id}
+                onClick={() => startImpersonation(s.id!)}
+                disabled={isLogging}
+                className={cn(
+                  "flex items-center gap-2 px-4 py-2 rounded-lg text-[13px] font-medium transition-colors font-sans",
+                  "bg-zinc-100 dark:bg-zinc-800/50 hover:bg-zinc-200 dark:hover:bg-zinc-800",
+                  "text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-700/50",
+                  isLogging && "opacity-70 cursor-not-allowed"
+                )}
+              >
+                {isLogging && selectedId === s.id ? <Loader2 size={13} className="animate-spin" /> : <Eye size={13} />}
+                {s.founderName?.split(' ')[0] || s.name}
+              </button>
+            ))}
+          </div>
+
+          {impersonating && (
+            <div className="mt-4 p-3 rounded-lg bg-zinc-100 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-700/50 flex items-center gap-2">
+              <AlertTriangle size={14} className="text-zinc-500" />
+              <span className="text-[13px] text-zinc-700 dark:text-zinc-300">{t('activeMode')}</span>
+              <button onClick={exitImpersonation} className="ml-auto text-xs text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 underline font-sans">
+                {t('end')}
+              </button>
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </>
   );
 }

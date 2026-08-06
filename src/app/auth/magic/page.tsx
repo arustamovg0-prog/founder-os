@@ -7,6 +7,10 @@ import { auth } from '@/lib/firebase';
 import { useAuth } from '@/contexts/AuthContext';
 import { Command, CheckCircle, XCircle } from 'lucide-react';
 import { toast } from 'sonner';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { FadeIn } from '@/components/ui/animations';
+import { cn } from '@/lib/utils';
 
 type MagicState = 'checking' | 'email_needed' | 'signing_in' | 'success' | 'error';
 
@@ -80,102 +84,92 @@ export default function MagicLinkCallbackPage() {
   }, []);
 
   return (
-    <div style={{
-      minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center',
-      padding: '24px', fontFamily: 'Inter, sans-serif',
-    }}>
-      <div style={{ width: '100%', maxWidth: '420px', textAlign: 'center' }}>
+    <div className="min-h-screen flex items-center justify-center p-6 font-sans">
+      <div className="w-full max-w-md text-center">
 
         {/* Logo */}
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', marginBottom: '40px' }}>
-          <div style={{ 
-            width: 44, height: 44, borderRadius: 10, 
-            background: 'rgba(0,0,0,0.03)', 
-            border: '1px solid rgba(0,0,0,0.1)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center' 
-          }}>
-            <Command size={22} color="currentColor" />
+        <div className="inline-flex items-center gap-3 mb-10">
+          <div className="w-11 h-11 rounded-xl bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 flex items-center justify-center text-zinc-900 dark:text-white">
+            <Command size={22} />
           </div>
-          <span style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 20, fontWeight: 700 }}>Founder OS</span>
+          <span className="font-display text-2xl font-bold text-zinc-900 dark:text-white">Founder OS</span>
         </div>
 
-        <div className="card" style={{ padding: '40px', textAlign: 'center' }}>
-          {/* Checking */}
-          {(state === 'checking' || state === 'signing_in') && (
-            <div>
-              <div style={{
-                width: 64, height: 64, margin: '0 auto 20px',
-                border: '3px solid rgba(0,0,0,0.2)',
-                borderTopColor: '#FFFFFF',
-                borderRadius: '50%',
-                animation: 'spin 1s linear infinite',
-              }} />
-              <h2 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 22, fontWeight: 700, marginBottom: 8 }}>
-                {state === 'checking' ? 'Проверяем ссылку...' : 'Входим в систему...'}
-              </h2>
-              <p style={{ color: '#64748b', fontSize: 14 }}>Подождите несколько секунд</p>
-            </div>
-          )}
+        <Card className="p-2">
+          <CardContent className="p-8 sm:p-10 text-center">
+            {/* Checking */}
+            {(state === 'checking' || state === 'signing_in') && (
+              <FadeIn>
+                <div className="w-16 h-16 mx-auto mb-6 rounded-full border-4 border-zinc-200 dark:border-zinc-800 border-t-zinc-900 dark:border-t-white animate-spin" />
+                <h2 className="font-display text-2xl font-bold mb-2 text-zinc-900 dark:text-white">
+                  {state === 'checking' ? 'Проверяем ссылку...' : 'Входим в систему...'}
+                </h2>
+                <p className="text-zinc-500 dark:text-zinc-400 text-sm">Подождите несколько секунд</p>
+              </FadeIn>
+            )}
 
-          {/* Email needed */}
-          {state === 'email_needed' && (
-            <div>
-              <div style={{ fontSize: 48, marginBottom: '16px' }}></div>
-              <h2 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 22, fontWeight: 700, marginBottom: 8 }}>
-                Подтверди Email
-              </h2>
-              <p style={{ color: '#64748b', fontSize: 14, marginBottom: '24px', lineHeight: 1.6 }}>
-                Ты открыл ссылку в другом браузере. Введи email, на который был отправлен Magic Link.
-              </p>
-              <input
-                className="input-field"
-                type="email"
-                placeholder="your@email.com"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                onKeyDown={e => e.key === 'Enter' && handleMagicLink(email)}
-                style={{ marginBottom: '12px' }}
-              />
-              <button className="btn-primary" style={{ width: '100%', padding: '12px' }} onClick={() => handleMagicLink(email)} disabled={!email}>
-                Подтвердить и войти
-              </button>
-            </div>
-          )}
+            {/* Email needed */}
+            {state === 'email_needed' && (
+              <FadeIn>
+                <h2 className="font-display text-2xl font-bold mb-2 text-zinc-900 dark:text-white">
+                  Подтверди Email
+                </h2>
+                <p className="text-zinc-500 dark:text-zinc-400 text-sm mb-6 leading-relaxed">
+                  Ты открыл ссылку в другом браузере. Введи email, на который был отправлен Magic Link.
+                </p>
+                <input
+                  className="w-full px-4 py-3 rounded-xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 focus:border-zinc-400 dark:focus:border-zinc-600 text-zinc-900 dark:text-white outline-none transition-colors mb-4 text-center"
+                  type="email"
+                  placeholder="your@email.com"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && handleMagicLink(email)}
+                />
+                <Button 
+                  className="w-full py-6 text-base bg-zinc-900 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-100 text-white dark:text-zinc-900 font-semibold"
+                  onClick={() => handleMagicLink(email)} 
+                  disabled={!email}
+                >
+                  Подтвердить и войти
+                </Button>
+              </FadeIn>
+            )}
 
-          {/* Success */}
-          {state === 'success' && (
-            <div>
-              <CheckCircle size={64} color="#D4D4D8" style={{ margin: '0 auto 20px', display: 'block' }} />
-              <h2 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 22, fontWeight: 700, marginBottom: 8, color: '#A1A1AA' }}>
-                Вход выполнен!
-              </h2>
-              <p style={{ color: '#64748b', fontSize: 14 }}>Перенаправляем в дашборд...</p>
-              <div style={{ marginTop: 24 }}>
-                <div className="progress-bar">
-                  <div className="progress-fill" style={{ width: '100%', animation: 'progress 1.5s ease forwards' }} />
+            {/* Success */}
+            {state === 'success' && (
+              <FadeIn>
+                <CheckCircle size={64} className="mx-auto mb-6 text-zinc-400 dark:text-zinc-500" />
+                <h2 className="font-display text-2xl font-bold mb-2 text-zinc-400 dark:text-zinc-500">
+                  Вход выполнен!
+                </h2>
+                <p className="text-zinc-500 dark:text-zinc-400 text-sm mb-8">Перенаправляем в дашборд...</p>
+                <div className="h-1.5 w-full bg-zinc-100 dark:bg-zinc-900 rounded-full overflow-hidden">
+                  <div className="h-full bg-zinc-900 dark:bg-white rounded-full animate-[progress_1.5s_ease_forwards]" />
                 </div>
-              </div>
-            </div>
-          )}
+              </FadeIn>
+            )}
 
-          {/* Error */}
-          {state === 'error' && (
-            <div>
-              <XCircle size={64} color="#52525B" style={{ margin: '0 auto 20px', display: 'block' }} />
-              <h2 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontSize: 22, fontWeight: 700, marginBottom: 8, color: '#f87171' }}>
-                Ссылка недействительна
-              </h2>
-              <p style={{ color: '#64748b', fontSize: 14, marginBottom: '24px', lineHeight: 1.6 }}>{error}</p>
-              <button className="btn-primary" style={{ width: '100%', padding: '12px' }} onClick={() => router.push('/')}>
-                Вернуться на главную
-              </button>
-            </div>
-          )}
-        </div>
+            {/* Error */}
+            {state === 'error' && (
+              <FadeIn>
+                <XCircle size={64} className="mx-auto mb-6 text-red-400" />
+                <h2 className="font-display text-2xl font-bold mb-2 text-red-500 dark:text-red-400">
+                  Ссылка недействительна
+                </h2>
+                <p className="text-zinc-500 dark:text-zinc-400 text-sm mb-6 leading-relaxed">{error}</p>
+                <Button 
+                  className="w-full py-6 text-base bg-zinc-900 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-100 text-white dark:text-zinc-900 font-semibold" 
+                  onClick={() => router.push('/')}
+                >
+                  Вернуться на главную
+                </Button>
+              </FadeIn>
+            )}
+          </CardContent>
+        </Card>
       </div>
 
       <style jsx>{`
-        @keyframes spin { to { transform: rotate(360deg); } }
         @keyframes progress { from { width: 0; } to { width: 100%; } }
       `}</style>
     </div>

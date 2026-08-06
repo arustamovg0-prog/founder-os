@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { Flame, Calendar, DollarSign, Tag, Send, ChevronRight, Clock, Building2, Trophy, Filter } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
 
 interface Challenge {
   id: string;
@@ -166,126 +168,114 @@ export default function ChallengesPage() {
       </div>
 
       {/* Challenges Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(480px, 1fr))', gap: 16 }}>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {filtered.map(ch => (
-          <div key={ch.id} style={{
-            borderRadius: 16, overflow: 'hidden',
-            background: 'rgba(13,13,32,0.8)', border: `1px solid ${ch.applied ? 'rgba(212,212,216,0.25)' : 'rgba(0,0,0,0.06)'}`,
-            transition: 'var(--transition-standard)',
-          }}
-            onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.borderColor = ch.applied ? 'rgba(212,212,216,0.4)' : 'rgba(0,0,0,0.12)'; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor = ch.applied ? 'rgba(212,212,216,0.25)' : 'rgba(0,0,0,0.06)'; }}
-          >
+          <Card key={ch.id} className={cn(
+            "overflow-hidden transition-all duration-200 border",
+            ch.applied || submittedIds.has(ch.id) ? "border-zinc-300 dark:border-zinc-700" : "hover:border-zinc-300 dark:hover:border-zinc-700"
+          )}>
             {/* Top bar */}
             <div style={{ height: 3, background: `linear-gradient(90deg, ${REWARD_COLORS[ch.rewardType]}, transparent)` }} />
 
-            <div style={{ padding: 20 }}>
+            <CardContent className="p-5">
               {/* Header */}
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, marginBottom: 14 }}>
-                <div style={{ width: 44, height: 44, borderRadius: 10, flexShrink: 0, background: 'rgba(0,0,0,0.06)', border: '1px solid rgba(0,0,0,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22 }}>
+              <div className="flex items-start gap-3 mb-3.5">
+                <div className="w-11 h-11 rounded-xl shrink-0 bg-zinc-100 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-800 flex items-center justify-center text-[22px]">
                   {ch.companyLogo}
                 </div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginBottom: 2 }}>
-                    <span style={{ fontWeight: 700, fontSize: 13 }}>{ch.company}</span>
-                    <span style={{ fontSize: 10, padding: '2px 8px', borderRadius: 99, fontWeight: 600, background: `${REWARD_COLORS[ch.rewardType]}15`, border: `1px solid ${REWARD_COLORS[ch.rewardType]}30`, color: REWARD_COLORS[ch.rewardType] }}>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 flex-wrap mb-0.5">
+                    <span className="font-bold text-[13px] text-zinc-900 dark:text-zinc-100">{ch.company}</span>
+                    <span className="text-[10px] px-2 py-0.5 rounded-full font-semibold border" style={{ background: `${REWARD_COLORS[ch.rewardType]}15`, borderColor: `${REWARD_COLORS[ch.rewardType]}30`, color: REWARD_COLORS[ch.rewardType] }}>
                       {REWARD_LABELS[ch.rewardType]}
                     </span>
-                    <span style={{ fontSize: 10, color: DIFFICULTY_COLORS[ch.difficulty], fontWeight: 600 }}>
+                    <span className="text-[10px] font-semibold" style={{ color: DIFFICULTY_COLORS[ch.difficulty] }}>
                       ● {DIFFICULTY_LABELS[ch.difficulty]}
                     </span>
                   </div>
-                  <div style={{ fontSize: 11, color: '#64748b' }}>
-                    <Building2 size={10} style={{ display: 'inline', marginRight: 4 }} />
+                  <div className="text-[11px] text-zinc-500 dark:text-zinc-400 flex items-center">
+                    <Building2 size={10} className="inline mr-1" />
                     {ch.industry}
                   </div>
                 </div>
               </div>
 
-              <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 10, fontFamily: 'var(--font-space-grotesk), sans-serif', lineHeight: 1.4 }}>{ch.title}</h3>
-              <p style={{ fontSize: 13, color: '#94a3b8', lineHeight: 1.7, marginBottom: 14 }}>{ch.problem}</p>
+              <h3 className="text-[15px] font-bold mb-2.5 font-display leading-snug text-zinc-900 dark:text-zinc-100">{ch.title}</h3>
+              <p className="text-[13px] text-zinc-600 dark:text-zinc-400 leading-relaxed mb-3.5">{ch.problem}</p>
 
               {/* Tags */}
-              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 14 }}>
+              <div className="flex gap-1.5 flex-wrap mb-3.5">
                 {ch.tags.map(tag => (
-                  <span key={tag} style={{ padding: '2px 8px', borderRadius: 99, fontSize: 10, fontWeight: 600, background: 'rgba(0,0,0,0.04)', border: '1px solid rgba(0,0,0,0.08)', color: '#475569' }}>
-                    <Tag size={8} style={{ display: 'inline', marginRight: 3 }} />{tag}
+                  <span key={tag} className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-zinc-100 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 flex items-center">
+                    <Tag size={8} className="inline mr-1" />{tag}
                   </span>
                 ))}
               </div>
 
               {/* Reward */}
-              <div style={{ padding: '10px 14px', borderRadius: 10, background: `${REWARD_COLORS[ch.rewardType]}08`, border: `1px solid ${REWARD_COLORS[ch.rewardType]}20`, marginBottom: 14 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <div className="p-2.5 px-3.5 rounded-lg mb-3.5 border" style={{ background: `${REWARD_COLORS[ch.rewardType]}08`, borderColor: `${REWARD_COLORS[ch.rewardType]}20` }}>
+                <div className="flex items-center gap-1.5">
                   <Trophy size={12} color={REWARD_COLORS[ch.rewardType]} />
-                  <span style={{ fontSize: 12, fontWeight: 600, color: REWARD_COLORS[ch.rewardType] }}>Вознаграждение:</span>
+                  <span className="text-xs font-semibold" style={{ color: REWARD_COLORS[ch.rewardType] }}>Вознаграждение:</span>
                 </div>
-                <p style={{ fontSize: 12, color: '#94a3b8', marginTop: 4 }}>{ch.reward}</p>
+                <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-1">{ch.reward}</p>
               </div>
 
               {/* Footer */}
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <div style={{ display: 'flex', gap: 16, fontSize: 11, color: '#475569' }}>
-                  <span style={{ display: 'flex', alignItems: 'center', gap: 4, color: ch.daysLeft <= 30 ? '#52525B' : '#64748b' }}>
+              <div className="flex items-center justify-between">
+                <div className="flex gap-4 text-[11px] text-zinc-500 dark:text-zinc-400">
+                  <span className={cn("flex items-center gap-1", ch.daysLeft <= 30 ? "text-red-500" : "")}>
                     <Clock size={10} />
                     {ch.daysLeft} дней
                   </span>
-                  <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                  <span className="flex items-center gap-1">
                     <Send size={10} />
                     {ch.applicants} заявок
                   </span>
-                  <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                  <span className="flex items-center gap-1">
                     <Calendar size={10} />
                     {new Date(ch.deadline).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' })}
                   </span>
                 </div>
 
                 {ch.applied || submittedIds.has(ch.id) ? (
-                  <span style={{ padding: '7px 14px', borderRadius: 8, fontSize: 12, fontWeight: 600, background: 'rgba(212,212,216,0.1)', border: '1px solid rgba(212,212,216,0.25)', color: '#D4D4D8', display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <span className="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-900/30 text-green-700 dark:text-green-400 flex items-center gap-1.5">
                     ✅ Заявка подана
                   </span>
                 ) : (
-                  <button onClick={() => setApplyingTo(ch.id)} style={{
-                    padding: '7px 14px', borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: 'pointer',
-                    background: 'rgba(0,0,0,0.15)', border: '1px solid rgba(0,0,0,0.3)', color: '#D8B4FE',
-                    display: 'flex', alignItems: 'center', gap: 6, fontFamily: 'Inter', transition: 'var(--transition-standard)',
-                  }}>
+                  <button onClick={() => setApplyingTo(ch.id)} className="px-3.5 py-1.5 rounded-lg text-xs font-semibold cursor-pointer bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 hover:bg-zinc-800 dark:hover:bg-white transition-colors flex items-center gap-1.5 font-sans">
                     <ChevronRight size={12} />Подать заявку
                   </button>
                 )}
               </div>
-            </div>
+            </CardContent>
 
             {/* Apply form */}
             {applyingTo === ch.id && (
-              <div style={{ padding: '16px 20px', borderTop: '1px solid rgba(0,0,0,0.06)', background: 'rgba(0,0,0,0.04)' }}>
-                <p style={{ fontSize: 12, color: '#64748b', marginBottom: 10 }}>Опишите ваш подход к решению задачи и почему именно ваша команда:</p>
+              <div className="p-5 border-t border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/30">
+                <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-2.5">Опишите ваш подход к решению задачи и почему именно ваша команда:</p>
                 <textarea
                   value={applicationText}
                   onChange={e => setApplicationText(e.target.value)}
                   placeholder="Мы планируем решить эту задачу с помощью..."
-                  style={{
-                    width: '100%', minHeight: 100, padding: '10px 12px', borderRadius: 8, resize: 'vertical',
-                    background: 'rgba(5,5,16,0.6)', border: '1px solid rgba(0,0,0,0.1)', color: 'var(--text-primary)',
-                    fontSize: 13, fontFamily: 'Inter', outline: 'none',
-                  }}
+                  className="w-full min-h-[100px] p-3 rounded-lg resize-y bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 text-[13px] font-sans focus:outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-zinc-100"
                 />
-                <div style={{ display: 'flex', gap: 8, marginTop: 10, justifyContent: 'flex-end' }}>
-                  <button onClick={() => setApplyingTo(null)} style={{ padding: '7px 14px', borderRadius: 8, fontSize: 12, background: 'none', border: '1px solid rgba(0,0,0,0.1)', color: '#64748b', cursor: 'pointer', fontFamily: 'Inter' }}>
+                <div className="flex gap-2 mt-2.5 justify-end">
+                  <button onClick={() => setApplyingTo(null)} className="px-3.5 py-1.5 rounded-lg text-xs bg-transparent border border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-400 cursor-pointer font-sans hover:bg-zinc-100 dark:hover:bg-zinc-800">
                     Отмена
                   </button>
-                  <button onClick={() => submitApplication(ch.id)} disabled={!applicationText.trim()} style={{
-                    padding: '7px 14px', borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: applicationText.trim() ? 'pointer' : 'not-allowed',
-                    background: applicationText.trim() ? 'rgba(0,0,0,0.3)' : 'rgba(0,0,0,0.04)',
-                    border: `1px solid ${applicationText.trim() ? 'rgba(0,0,0,0.5)' : 'rgba(0,0,0,0.08)'}`,
-                    color: applicationText.trim() ? '#D8B4FE' : '#334155', fontFamily: 'Inter',
-                  }}>
-                    <Send size={12} style={{ display: 'inline', marginRight: 6 }} />Отправить
+                  <button onClick={() => submitApplication(ch.id)} disabled={!applicationText.trim()} className={cn(
+                    "px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center font-sans",
+                    applicationText.trim() 
+                      ? "cursor-pointer bg-zinc-900 dark:bg-zinc-100 border border-zinc-900 dark:border-zinc-100 text-white dark:text-zinc-900 hover:bg-zinc-800 dark:hover:bg-white" 
+                      : "cursor-not-allowed bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-400 dark:text-zinc-500"
+                  )}>
+                    <Send size={12} className="inline mr-1.5" />Отправить
                   </button>
                 </div>
               </div>
             )}
-          </div>
+          </Card>
         ))}
       </div>
     </div>

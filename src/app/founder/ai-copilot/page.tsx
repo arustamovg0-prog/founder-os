@@ -7,9 +7,8 @@ import { doc, getDoc } from 'firebase/firestore';
 import { db, isDemoConfig, auth } from '@/lib/firebase';
 import { Startup } from '@/types';
 import { useTranslations } from 'next-intl';
-
-
-interface Message {
+import { Card, CardContent } from '@/components/ui/card';
+import { cn } from '@/lib/utils';interface Message {
   role: 'user' | 'assistant';
   content: string;
   timestamp: Date;
@@ -83,24 +82,24 @@ function getResponse(message: string): string {
 function MarkdownText({ text }: { text: string }) {
   const lines = text.split('\n');
   return (
-    <div style={{ fontSize: 14, lineHeight: 1.7, color: '#e2e8f0' }}>
+    <div className="text-sm leading-relaxed text-zinc-700 dark:text-zinc-300 font-sans space-y-3">
       {lines.map((line, i) => {
         if (line.startsWith('**') && line.endsWith('**') && !line.slice(2, -2).includes('**')) {
-          return <div key={i} style={{ fontWeight: 700, color: 'var(--text-primary)', marginTop: i > 0 ? 12 : 0 }}>{line.slice(2, -2)}</div>;
+          return <div key={i} className="font-bold text-zinc-900 dark:text-zinc-100">{line.slice(2, -2)}</div>;
         }
         if (line.startsWith('• ')) {
-          return <div key={i} style={{ paddingLeft: 16, color: '#94a3b8' }}>• {formatInline(line.slice(2))}</div>;
+          return <div key={i} className="pl-4 text-zinc-600 dark:text-zinc-400">• {formatInline(line.slice(2))}</div>;
         }
         if (/^\d+\./.test(line)) {
-          return <div key={i} style={{ paddingLeft: 16, color: '#94a3b8', marginTop: 4 }}>{formatInline(line)}</div>;
+          return <div key={i} className="pl-4 text-zinc-600 dark:text-zinc-400">{formatInline(line)}</div>;
         }
         if (line.startsWith('|')) {
           return null; // skip table lines for simplicity
         }
         if (line.startsWith('**Areas of Concern**') || line.startsWith('**Revenue Health**') || line.startsWith('**Growth Efficiency**')) {
-          return <div key={i} style={{ fontWeight: 600, color: '#D8B4FE', marginTop: 12, marginBottom: 4 }}>{line}</div>;
+          return <div key={i} className="font-semibold text-zinc-900 dark:text-zinc-100">{line}</div>;
         }
-        if (line === '') return <div key={i} style={{ height: 6 }} />;
+        if (line === '') return <div key={i} className="h-1.5" />;
         return <div key={i}>{formatInline(line)}</div>;
       })}
     </div>
@@ -111,7 +110,7 @@ function formatInline(text: string): React.ReactNode {
   const parts = text.split(/(\*\*.*?\*\*)/g);
   return parts.map((part, i) =>
     part.startsWith('**') && part.endsWith('**')
-      ? <strong key={i} style={{ color: '#D8B4FE', fontWeight: 600 }}>{part.slice(2, -2)}</strong>
+      ? <strong key={i} className="font-semibold text-zinc-900 dark:text-zinc-100">{part.slice(2, -2)}</strong>
       : part
   );
 }
@@ -192,36 +191,32 @@ export default function AICopilotPage() {
   };
 
   return (
-    <div className="animate-fade-in" style={{ height: 'calc(100vh - 64px)', display: 'flex', flexDirection: 'column' }}>
+    <div className="animate-fade-in flex flex-col h-[calc(100vh-64px)] pb-4">
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px', flexShrink: 0 }}>
+      <div className="flex items-center justify-between mb-5 shrink-0">
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: 4 }}>
-            <div style={{ width: 32, height: 32, borderRadius: 8, background: 'linear-gradient(135deg,#FFFFFF,#71717A)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Brain size={16} color="currentColor" />
+          <div className="flex items-center gap-2.5 mb-1">
+            <div className="w-8 h-8 rounded-lg bg-zinc-900 dark:bg-zinc-100 flex items-center justify-center text-white dark:text-zinc-900">
+              <Brain size={16} />
             </div>
-            <h1 style={{ fontFamily: 'var(--font-space-grotesk), sans-serif', fontWeight: 700 }}>{t('title')}</h1>
+            <h1 className="font-display font-bold text-zinc-900 dark:text-zinc-100">{t('title')}</h1>
             <span className="badge badge-purple"><Sparkles size={10} /> {t('poweredBy')}</span>
           </div>
-          <p style={{ color: '#64748b', fontSize: 13 }}>{t('subtitle')}</p>
+          <p className="text-[13px] text-zinc-500 dark:text-zinc-400">{t('subtitle')}</p>
         </div>
 
         {/* Context cards */}
-        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+        <div className="flex gap-2.5 items-center">
           {[
-            { icon: <TrendingUp size={12} />, label: t('context.aiScore'), value: `${startup?.aiScores?.overallReadinessScore || 0}/100`, color: 'var(--text-primary)' },
-            { icon: <Target size={12} />, label: t('context.stage'), value: startup?.stage || t('context.idea'), color: '#D4D4D8' },
-            { icon: <FileText size={12} />, label: t('context.pitchDeck'), value: startup?.dataRoom?.pitchDeckUrl ? t('context.uploaded') : t('context.missing'), color: '#A1A1AA' },
+            { icon: <TrendingUp size={12} />, label: t('context.aiScore'), value: `${startup?.aiScores?.overallReadinessScore || 0}/100`, colorClass: 'text-zinc-900 dark:text-zinc-100' },
+            { icon: <Target size={12} />, label: t('context.stage'), value: startup?.stage || t('context.idea'), colorClass: 'text-zinc-600 dark:text-zinc-400' },
+            { icon: <FileText size={12} />, label: t('context.pitchDeck'), value: startup?.dataRoom?.pitchDeckUrl ? t('context.uploaded') : t('context.missing'), colorClass: 'text-zinc-500 dark:text-zinc-500' },
           ].map((c, i) => (
-            <div key={i} style={{
-              padding: '8px 14px', borderRadius: '10px',
-              background: `${c.color}15`, border: `1px solid ${c.color}25`,
-              display: 'flex', alignItems: 'center', gap: '6px',
-            }}>
-              <span style={{ color: c.color }}>{c.icon}</span>
+            <div key={i} className="px-3.5 py-2 rounded-xl bg-transparent border border-zinc-200 dark:border-zinc-800 flex items-center gap-1.5">
+              <span className={c.colorClass}>{c.icon}</span>
               <div>
-                <div style={{ fontSize: 10, color: '#475569', fontWeight: 600 }}>{c.label}</div>
-                <div style={{ fontSize: 13, fontWeight: 700, color: c.color }}>{c.value}</div>
+                <div className="text-[10px] font-semibold text-zinc-500 dark:text-zinc-400">{c.label}</div>
+                <div className={cn("text-[13px] font-bold", c.colorClass)}>{c.value}</div>
               </div>
             </div>
           ))}
@@ -261,14 +256,11 @@ export default function AICopilotPage() {
               setLoading(false);
             }}
             disabled={loading || !startup}
-            style={{
-              padding: '8px 16px', borderRadius: '10px', height: '100%',
-              background: 'linear-gradient(135deg, rgba(0,0,0,0.2), rgba(99,102,241,0.15))',
-              border: '1px solid rgba(0,0,0,0.3)',
-              color: '#D8B4FE', fontWeight: 600, fontSize: 13, cursor: loading ? 'wait' : 'pointer',
-              display: 'flex', alignItems: 'center', gap: '8px',
-              fontFamily: 'Inter'
-            }}
+            className={cn(
+              "px-4 py-2 rounded-xl flex items-center gap-2 font-semibold text-[13px] transition-colors border",
+              loading ? "cursor-wait opacity-70" : "cursor-pointer",
+              "bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 border-zinc-900 dark:border-zinc-100 hover:bg-zinc-800 dark:hover:bg-zinc-200"
+            )}
           >
             <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
             {loading ? t('assessment.analyzing') : t('assessment.run')}
@@ -277,45 +269,29 @@ export default function AICopilotPage() {
       </div>
 
       {/* Chat */}
-      <div style={{
-        flex: 1, overflow: 'auto', display: 'flex', flexDirection: 'column', gap: '16px',
-        padding: '20px', borderRadius: '16px',
-        background: 'rgba(5,5,16,0.6)', border: '1px solid rgba(0,0,0,0.06)',
-        marginBottom: '16px',
-      }}>
+      <div className="flex-1 overflow-auto flex flex-col gap-4 p-5 rounded-2xl bg-transparent border border-zinc-200 dark:border-zinc-800 mb-4">
         {messages.map((msg, i) => (
-          <div key={i} style={{ display: 'flex', gap: '12px', justifyContent: msg.role === 'user' ? 'flex-end' : 'flex-start' }}>
+          <div key={i} className={cn("flex gap-3", msg.role === 'user' ? "justify-end" : "justify-start")}>
             {msg.role === 'assistant' && (
-              <div style={{
-                width: 32, height: 32, borderRadius: '50%', flexShrink: 0,
-                background: 'linear-gradient(135deg,#FFFFFF,#71717A)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-              }}>
-                <Brain size={15} color="currentColor" />
+              <div className="w-8 h-8 rounded-full shrink-0 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 flex items-center justify-center">
+                <Brain size={15} />
               </div>
             )}
-            <div style={{
-              maxWidth: '75%',
-              padding: '14px 18px', borderRadius: msg.role === 'user' ? '16px 16px 4px 16px' : '4px 16px 16px 16px',
-              background: msg.role === 'user'
-                ? 'linear-gradient(135deg, rgba(0,0,0,0.3), rgba(99,102,241,0.2))'
-                : 'rgba(13,13,32,0.9)',
-              border: `1px solid ${msg.role === 'user' ? 'rgba(0,0,0,0.3)' : 'rgba(0,0,0,0.06)'}`,
-            }}>
+            <div className={cn(
+              "max-w-[75%] px-4.5 py-3.5 rounded-2xl border",
+              msg.role === 'user' 
+                ? "rounded-tr-sm bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 border-zinc-900 dark:border-zinc-100" 
+                : "rounded-tl-sm bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800"
+            )}>
               {msg.role === 'assistant' ? <MarkdownText text={msg.content} /> : (
-                <p style={{ fontSize: 14, color: 'var(--text-primary)', lineHeight: 1.6 }}>{msg.content}</p>
+                <p className="text-sm font-sans">{msg.content}</p>
               )}
-              <div style={{ fontSize: 10, color: '#334155', marginTop: 8, textAlign: 'right' }}>
+              <div className={cn("text-[10px] mt-2 text-right opacity-70", msg.role === 'user' ? 'text-zinc-300 dark:text-zinc-600' : 'text-zinc-500 dark:text-zinc-400')}>
                 {msg.timestamp.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}
               </div>
             </div>
             {msg.role === 'user' && (
-              <div style={{
-                width: 32, height: 32, borderRadius: '50%', flexShrink: 0,
-                background: 'rgba(0,0,0,0.3)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 13, fontWeight: 700, color: '#D8B4FE',
-              }}>
+              <div className="w-8 h-8 rounded-full shrink-0 bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 flex items-center justify-center text-[13px] font-bold">
                 {startup?.founderName?.charAt(0) || profile?.displayName?.charAt(0) || 'U'}
               </div>
             )}
@@ -323,20 +299,16 @@ export default function AICopilotPage() {
         ))}
 
         {loading && (
-          <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-            <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'linear-gradient(135deg,#FFFFFF,#71717A)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Brain size={15} color="currentColor" />
+          <div className="flex gap-3 items-start">
+            <div className="w-8 h-8 rounded-full bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 flex items-center justify-center">
+              <Brain size={15} />
             </div>
-            <div style={{ padding: '16px', borderRadius: '4px 16px 16px 16px', background: 'rgba(13,13,32,0.9)', border: '1px solid rgba(0,0,0,0.06)' }}>
-              <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+            <div className="p-4 rounded-2xl rounded-tl-sm bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800">
+              <div className="flex gap-1.5 items-center">
                 {[0, 0.2, 0.4].map((delay, i) => (
-                  <div key={i} style={{
-                    width: 8, height: 8, borderRadius: '50%',
-                    background: '#FFFFFF',
-                    animation: `bounce 1s ${delay}s infinite`,
-                  }} />
+                  <div key={i} className="w-2 h-2 rounded-full bg-zinc-400 dark:bg-zinc-600 animate-bounce" style={{ animationDelay: `${delay}s` }} />
                 ))}
-                <span style={{ fontSize: 12, color: '#475569', marginLeft: 8 }}>{t('chat.analyzing')}</span>
+                <span className="text-xs text-zinc-500 dark:text-zinc-400 ml-2">{t('chat.analyzing')}</span>
               </div>
             </div>
           </div>
@@ -347,17 +319,12 @@ export default function AICopilotPage() {
 
       {/* Suggested prompts */}
       {messages.length <= 1 && (
-        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '12px', flexShrink: 0 }}>
+        <div className="flex gap-2 flex-wrap mb-3 shrink-0">
           {suggested.map((s, i) => (
             <button
               key={i}
               onClick={() => send(s.text)}
-              style={{
-                padding: '8px 14px', borderRadius: '99px', fontSize: 12, fontWeight: 500,
-                background: 'rgba(0,0,0,0.1)', border: '1px solid rgba(0,0,0,0.2)',
-                color: '#D8B4FE', cursor: 'pointer', transition: 'var(--transition-standard)',
-                fontFamily: 'Inter, sans-serif', display: 'flex', alignItems: 'center', gap: '6px',
-              }}
+              className="px-3.5 py-2 rounded-full text-xs font-medium bg-transparent border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 cursor-pointer transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-800 flex items-center gap-1.5 font-sans"
             >
               {s.icon} {s.text}
             </button>
@@ -366,20 +333,18 @@ export default function AICopilotPage() {
       )}
 
       {/* Input */}
-      <div style={{ display: 'flex', gap: '10px', flexShrink: 0 }}>
+      <div className="flex gap-2.5 shrink-0">
         <input
-          className="input-field"
+          className="input-field flex-1"
           placeholder={t('chat.placeholder')}
           value={input}
           onChange={e => setInput(e.target.value)}
           onKeyDown={e => e.key === 'Enter' && !e.shiftKey && send()}
-          style={{ flex: 1 }}
         />
         <button
-          className="btn-primary"
+          className="btn-primary px-5 shrink-0"
           onClick={() => send()}
           disabled={!input.trim() || loading}
-          style={{ padding: '10px 20px', flexShrink: 0 }}
         >
           <Send size={15} />
         </button>

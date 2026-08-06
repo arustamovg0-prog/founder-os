@@ -4,8 +4,10 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import SpotlightSearch from '@/components/SpotlightSearch';
-import SideNav from '@/components/SideNav';
+import { Sidebar } from '@/components/layout/sidebar';
+import { Header } from '@/components/layout/header';
 import { useTranslations } from 'next-intl';
+import { Loader2 } from 'lucide-react';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const t = useTranslations('Common');
@@ -29,24 +31,28 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   if (loading || isInitializing || !profile) {
     return (
-      <div className="dashboard-layout">
-        <SideNav />
-        <main className="dashboard-main flex items-center justify-center flex-col gap-4 min-h-screen">
-          <div style={{ width: 36, height: 36, border: '3px solid rgba(212,212,216,0.2)', borderTopColor: '#D4D4D8', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
-          <p style={{ color: '#52525B', fontSize: 14 }}>{t('loadingProtocol')}</p>
+      <div className="flex min-h-screen w-full">
+        <Sidebar />
+        <main className="flex min-h-screen flex-1 flex-col items-center justify-center gap-4 md:pl-[260px]">
+          <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
+          <p className="text-sm text-gray-500">{t('loadingProtocol')}</p>
         </main>
-        <style jsx global>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>
     );
   }
 
   return (
-    <div className="dashboard-layout">
-      <SideNav />
+    <div className="flex min-h-screen w-full">
+      <Sidebar />
       <SpotlightSearch />
-      <main className="dashboard-main animate-fade-in">
-        {children}
-      </main>
+      <div className="flex flex-1 flex-col md:pl-[260px]">
+        <Header />
+        <main className="flex-1 animate-fade-in p-4 sm:p-8">
+          <div className="mx-auto max-w-6xl">
+            {children}
+          </div>
+        </main>
+      </div>
     </div>
   );
 }

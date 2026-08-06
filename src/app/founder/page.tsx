@@ -38,8 +38,8 @@ function ScoreRing({ score, color = '#111827' }: { score: number; color?: string
         />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="font-display text-lg font-bold text-gray-900">{score}</span>
-        <span className="text-[9px] font-semibold tracking-wider text-gray-500">/ 100</span>
+        <span className="font-display text-lg font-bold text-zinc-900 dark:text-white">{score}</span>
+        <span className="text-[9px] font-semibold tracking-wider text-zinc-500 dark:text-zinc-400">/ 100</span>
       </div>
     </div>
   );
@@ -133,8 +133,8 @@ export default function FounderDashboard() {
     return () => unsubscribe();
   }, [profile, isDemoMode]);
 
-  if (loading) return <div className="p-8 text-gray-500 animate-pulse">{t('loading')}</div>;
-  if (!startup) return <div className="p-8 text-gray-500">{t('notFound')}</div>;
+  if (loading) return <div className="p-8 text-zinc-500 animate-pulse">{t('loading')}</div>;
+  if (!startup) return <div className="p-8 text-zinc-500">{t('notFound')}</div>;
 
   const s = startup;
   const metrics = s.metrics;
@@ -160,41 +160,41 @@ export default function FounderDashboard() {
       {/* Header */}
       <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
         <div>
-          <h1 className="font-display text-3xl font-bold tracking-tight text-gray-900">
-            {s.name} <span className="text-lg font-medium text-gray-400">#{s.industry}</span>
+          <h1 className="font-display text-3xl font-bold tracking-tight text-zinc-900 dark:text-white">
+            {s.name} <span className="text-lg font-medium text-zinc-400 dark:text-zinc-500">#{s.industry}</span>
           </h1>
-          <p className="mt-1 text-sm text-gray-500">{s.tagline}</p>
+          <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">{s.tagline}</p>
         </div>
         <div className="flex gap-2">
-          <span className="inline-flex items-center rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold text-gray-800 capitalize">
+          <span className="inline-flex items-center rounded-full bg-zinc-100 dark:bg-zinc-800 px-3 py-1 text-xs font-semibold text-zinc-800 dark:text-zinc-200 capitalize">
             {(s.stage || '').replace('_', ' ')}
           </span>
-          <span className="inline-flex items-center rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700 capitalize">
+          <span className="inline-flex items-center rounded-full bg-green-100 dark:bg-green-900/30 px-3 py-1 text-xs font-semibold text-green-700 dark:text-green-400 capitalize">
             {s.status}
           </span>
         </div>
       </div>
 
       {/* AI Readiness + Progress */}
-      <Card className="border-gray-200">
+      <Card className="border-zinc-200 dark:border-zinc-800">
         <CardContent className="flex flex-wrap items-center gap-6 p-6">
           <ScoreRing score={s.aiScores.overallReadinessScore || 0} />
           <div className="flex-1">
             <div className="mb-2 flex items-center gap-2">
-              <Brain size={16} className="text-gray-900" />
-              <span className="text-xs font-bold uppercase tracking-wider text-gray-900">{t('aiReadinessScore')}</span>
+              <Brain size={16} className="text-zinc-900 dark:text-white" />
+              <span className="text-xs font-bold uppercase tracking-wider text-zinc-900 dark:text-white">{t('aiReadinessScore')}</span>
             </div>
-            <p className="mb-4 text-sm leading-relaxed text-gray-600">
+            <p className="mb-4 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
               {s.executiveSummaryAI}
             </p>
             <div className="flex items-center gap-4">
-              <div className="text-sm font-medium text-gray-700">
-                {t('roadmap')}: <strong className="text-gray-900">{s.roadmapProgress}%</strong>
+              <div className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                {t('roadmap')}: <strong className="text-zinc-900 dark:text-white">{s.roadmapProgress}%</strong>
               </div>
-              <div className="h-2 flex-1 overflow-hidden rounded-full bg-gray-100">
-                <div className="h-full rounded-full bg-gray-900 transition-all duration-1000" style={{ width: `${s.roadmapProgress}%` }} />
+              <div className="h-2 flex-1 overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
+                <div className="h-full rounded-full bg-zinc-900 dark:bg-white transition-all duration-1000" style={{ width: `${s.roadmapProgress}%` }} />
               </div>
-              <span className="text-xs font-medium text-gray-500">
+              <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
                 {t('stage', { current: currentStageIdx + 1, total: ROADMAP_STAGES.length })}
               </span>
             </div>
@@ -211,20 +211,20 @@ export default function FounderDashboard() {
       <StaggerContainer className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {kpis.map((kpi, i) => (
           <StaggerItem key={i}>
-            <Card className="hover:border-gray-300">
+            <Card className="hover:border-zinc-300 dark:hover:border-zinc-700">
               <CardContent className="p-6">
                 <div className="mb-4 flex items-center justify-between">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 bg-gray-50 text-gray-700">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-[#111] text-zinc-700 dark:text-zinc-300">
                     {kpi.icon}
                   </div>
                   {kpi.change && (
-                    <span className="rounded-full bg-green-50 px-2.5 py-0.5 text-xs font-semibold text-green-700">
+                    <span className="rounded-full bg-green-50 dark:bg-green-900/30 px-2.5 py-0.5 text-xs font-semibold text-green-700 dark:text-green-400">
                       {kpi.change}
                     </span>
                   )}
                 </div>
-                <div className="font-display text-2xl font-bold text-gray-900">{kpi.value}</div>
-                <div className="mt-1 text-sm font-medium text-gray-500">{kpi.label}</div>
+                <div className="font-display text-2xl font-bold text-zinc-900 dark:text-white">{kpi.value}</div>
+                <div className="mt-1 text-sm font-medium text-zinc-500 dark:text-zinc-400">{kpi.label}</div>
               </CardContent>
             </Card>
           </StaggerItem>
@@ -236,7 +236,7 @@ export default function FounderDashboard() {
         {/* AI Score detail */}
         <Card>
           <CardContent className="p-6">
-            <div className="mb-6 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-gray-900">
+            <div className="mb-6 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-zinc-900 dark:text-white">
               <Brain size={14} /> {t('breakdown.title')}
             </div>
             <div className="space-y-4">
@@ -248,12 +248,12 @@ export default function FounderDashboard() {
               ].map((item, i) => (
                 <div key={i}>
                   <div className="mb-1.5 flex justify-between text-xs">
-                    <span className="font-medium text-gray-600">{item.label}</span>
-                    <span className="font-bold text-gray-900">{Math.min(item.val, 100)}</span>
+                    <span className="font-medium text-zinc-600 dark:text-zinc-400">{item.label}</span>
+                    <span className="font-bold text-zinc-900 dark:text-white">{Math.min(item.val, 100)}</span>
                   </div>
-                  <div className="h-1.5 w-full overflow-hidden rounded-full bg-gray-100">
+                  <div className="h-1.5 w-full overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
                     <div 
-                      className="h-full rounded-full bg-gray-900 transition-all duration-1000" 
+                      className="h-full rounded-full bg-zinc-900 dark:bg-white transition-all duration-1000" 
                       style={{ width: `${Math.min(item.val, 100)}%` }} 
                     />
                   </div>
@@ -266,23 +266,23 @@ export default function FounderDashboard() {
         {/* Next Step */}
         <Card>
           <CardContent className="p-6">
-            <div className="mb-4 text-xs font-bold uppercase tracking-wider text-gray-500">
+            <div className="mb-4 text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
               {t('nextStep.title')}
             </div>
             {currentStage && (
               <>
-                <div className="font-display text-lg font-bold text-gray-900">{currentStage.title}</div>
-                <p className="mt-2 text-sm leading-relaxed text-gray-600">{currentStage.description}</p>
+                <div className="font-display text-lg font-bold text-zinc-900 dark:text-white">{currentStage.title}</div>
+                <p className="mt-2 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">{currentStage.description}</p>
                 <div className="mt-4 space-y-2">
                   {currentStage.requiredArtifacts.slice(0, 2).map(a => (
                     <div key={a.key} className="flex items-center gap-2 text-sm">
-                      <div className="h-1.5 w-1.5 shrink-0 rounded-full bg-gray-400" />
-                      <span className="font-medium text-gray-600">{a.label}</span>
-                      {a.isRequired && <span className="text-[10px] font-bold text-gray-400">{t('nextStep.required')}</span>}
+                      <div className="h-1.5 w-1.5 shrink-0 rounded-full bg-zinc-400 dark:bg-zinc-500" />
+                      <span className="font-medium text-zinc-600 dark:text-zinc-300">{a.label}</span>
+                      {a.isRequired && <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500">{t('nextStep.required')}</span>}
                     </div>
                   ))}
                 </div>
-                <Link href="/founder/roadmap" className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-gray-600 hover:text-gray-900">
+                <Link href="/founder/roadmap" className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white">
                   {t('nextStep.openRoadmap')} <ArrowUpRight size={16} />
                 </Link>
               </>
@@ -293,7 +293,7 @@ export default function FounderDashboard() {
         {/* Ecosystem rank */}
         <Card>
           <CardContent className="p-6">
-            <div className="mb-4 text-xs font-bold uppercase tracking-wider text-gray-500">
+            <div className="mb-4 text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
               {t('ecosystemRank.title')}
             </div>
             {(() => {
@@ -306,8 +306,8 @@ export default function FounderDashboard() {
                   <div className="mb-6 flex items-center gap-4">
                     <span className="text-4xl">{rank <= 3 ? medals[rank - 1] : `#${rank}`}</span>
                     <div>
-                      <div className="font-display text-2xl font-bold text-gray-900">#{rank}</div>
-                      <div className="text-xs font-medium text-gray-500">{t('ecosystemRank.outOfTotal', { total: allStartups.length })}</div>
+                      <div className="font-display text-2xl font-bold text-zinc-900 dark:text-white">#{rank}</div>
+                      <div className="text-xs font-medium text-zinc-500 dark:text-zinc-400">{t('ecosystemRank.outOfTotal', { total: allStartups.length })}</div>
                     </div>
                   </div>
                   <div className="space-y-2">
@@ -316,16 +316,16 @@ export default function FounderDashboard() {
                       return (
                         <div key={st.id} className={cn(
                           "flex items-center gap-2 rounded-lg px-3 py-2 text-sm",
-                          isMe ? "bg-gray-100 border border-gray-200" : "bg-transparent"
+                          isMe ? "bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700" : "bg-transparent"
                         )}>
                           <span>{medals[i]}</span>
-                          <span className={cn("flex-1", isMe ? "font-bold text-gray-900" : "font-medium text-gray-600")}>{st.name}</span>
-                          <span className="text-xs font-semibold text-gray-500">{st.aiScores.overallReadinessScore}</span>
+                          <span className={cn("flex-1", isMe ? "font-bold text-zinc-900 dark:text-white" : "font-medium text-zinc-600 dark:text-zinc-300")}>{st.name}</span>
+                          <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">{st.aiScores.overallReadinessScore}</span>
                         </div>
                       );
                     })}
                   </div>
-                  <Link href="/leaderboard" className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-gray-600 hover:text-gray-900">
+                  <Link href="/leaderboard" className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white">
                     {t('ecosystemRank.fullLeaderboard')} <ArrowUpRight size={16} />
                   </Link>
                 </>
