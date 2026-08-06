@@ -41,7 +41,7 @@ const STATE_CONFIG: Record<StageState, { icon: React.ReactNode; label: string; c
 
 export default function RoadmapPage() {
   const t = useTranslations('FounderRoadmap');
-  const { profile } = useAuth();
+  const { profile, isDemoMode } = useAuth();
   const [startup, setStartup] = useState<Startup | null>(null);
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState<string | null>('stage_5_fundraising');
@@ -55,24 +55,49 @@ export default function RoadmapPage() {
       setLoading(false);
       return;
     }
-    const unsubscribe = onSnapshot(doc(db, 'startups', profile.linkedStartupId), (snap) => {
-      if (snap.exists()) {
-        const data = { id: snap.id, ...snap.data() } as Startup;
-        setStartup(data);
-        
-        // Попытка восстановить состояние загруженных артефактов из Firestore
-        const restored: string[] = [];
-        if (data.dataRoom?.pitchDeckUrl) restored.push('pitch_deck');
-        if (data.dataRoom?.financialModelUrl) restored.push('financial_model');
-        if (data.dataRoom?.executiveSummaryUrl) restored.push('executive_summary');
-        if (data.dataRoom?.customerDevReportUrl) restored.push('customer_dev_report');
-        if (data.dataRoom?.legalDocsUrl) restored.push('legal_docs');
-        setUploadedArtifacts(restored);
-      }
+    if (isDemoMode) {
+      setStartup({
+        id: 'demo_startup',
+        name: 'Nexus AI',
+        tagline: 'AI-driven operations for modern teams',
+        industry: 'B2B SaaS',
+        stage: 'validation',
+        status: 'active',
+        roadmapProgress: 45,
+        dataRoom: {
+          pitchDeckUrl: 'https://example.com/pitch.pdf',
+        },
+      } as Startup);
+      setUploadedArtifacts(['pitch_deck']);
       setLoading(false);
-    });
+      return;
+    }
+
+    const unsubscribe = onSnapshot(
+      doc(db, 'startups', profile.linkedStartupId), 
+      (snap) => {
+        if (snap.exists()) {
+          const data = { id: snap.id, ...snap.data() } as Startup;
+          setStartup(data);
+          
+          // Попытка восстановить состояние загруженных артефактов из Firestore
+          const restored: string[] = [];
+          if (data.dataRoom?.pitchDeckUrl) restored.push('pitch_deck');
+          if (data.dataRoom?.financialModelUrl) restored.push('financial_model');
+          if (data.dataRoom?.executiveSummaryUrl) restored.push('executive_summary');
+          if (data.dataRoom?.customerDevReportUrl) restored.push('customer_dev_report');
+          if (data.dataRoom?.legalDocsUrl) restored.push('legal_docs');
+          setUploadedArtifacts(restored);
+        }
+        setLoading(false);
+      },
+      (error) => {
+        console.error('Failed to load startup roadmap:', error);
+        setLoading(false);
+      }
+    );
     return () => unsubscribe();
-  }, [profile]);
+  }, [profile, isDemoMode]);
 
   const triggerUpload = (artifactKey: string) => {
     setUploading(artifactKey);

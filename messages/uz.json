@@ -678,7 +678,15 @@
     },
     "table": {
       "title": "Barcha startaplar — Qisqacha sharh",
-      "cols": ["Startap", "Bosqich", "MRR", "Jamoa", "Runway", "Baho", "Status"]
+      "cols": [
+        "Startap",
+        "Bosqich",
+        "MRR",
+        "Jamoa",
+        "Runway",
+        "Baho",
+        "Status"
+      ]
     }
   },
   "investorDashboard": {
@@ -707,5 +715,41 @@
     "btnAccept": "Qabul qilish",
     "btnDecline": "Rad etish",
     "noRequests": "Kutilayotgan so'rovlar yo'q"
+  },
+  "LandingPage": {
+    "demoFounder": "Founderlar uchun kirish",
+    "demoInvestor": "Investorlar uchun kirish",
+    "demoAdmin": "Adminlar uchun kirish",
+    "loadingDemo": "Demo kirish yuklanmoqda...",
+    "titlePart1": "Startap xaosini",
+    "titlePart2": "mukammal tizimga aylantiring.",
+    "subtitle": "Founderlar va investorlarni birlashtiruvchi yagona operatsion tizim. Tuzilgan ma'lumotlar, AI analitikasi va shaffof fandrayzing jarayoni.",
+    "accessFounder": "Founder boshqaruv paneliga kirish.",
+    "accessInvestor": "Investor boshqaruv paneliga kirish.",
+    "accessAdmin": "Admin boshqaruv paneliga kirish.",
+    "enterSystem": "Tizimga kirish",
+    "endOfChaosTitle": "Excel va xaos davrining oxiri",
+    "endOfChaosDesc": "Startaplarning 90% tartibsiz jarayonlar va investorlar bilan yomon aloqa tufayli muvaffaqiyatsizlikka uchraydi. Biz bu muammoni hal qilamiz.",
+    "feature1Title": "Tarqoq ma'lumotlar",
+    "feature1Desc": "Notion, Google Docs va Excel modellariga yo'qolgan havolalar ortiq yo'q. Barchasi bir joyda.",
+    "feature2Title": "Noaniq holat",
+    "feature2Desc": "Investorlar doimo startapning dolzarb holatini, uning o'sishini va raundga tayyorligini ko'rishadi.",
+    "feature3Title": "Uzoq Due Diligence",
+    "feature3Desc": "Standartlashtirilgan ma'lumotlar xonasi startapni tekshirish vaqtini 3 barobarga qisqartiradi.",
+    "forFounders": "FOUNDERLAR UCHUN",
+    "founderTitle": "Jadvallarga emas, mahsulotga e'tibor qarating",
+    "founderDesc": "Founder OS sizga qadamma-qadam harakatlar rejasini beradi. G'oyani ishlab chiqishdan tortib moliyalashtirish raundini yopishgacha.",
+    "founderList1": "Pitch Deckingizni tavsiyalar bilan AI tahlili",
+    "founderList2": "Moliyaviy modellar va metrikalarni avtomatik hisoblash",
+    "founderList3": "Tasdiqlangan investorlarga to'g'ridan-to'g'ri kirish",
+    "founderList4": "Investitsiyaga tayyorlikni (Investment Readiness) kuzatish",
+    "forInvestors": "INVESTORLAR UCHUN",
+    "investorTitle": "Pochtaga spam emas, sifatli Pipeline",
+    "investorDesc": "Faqat bazaviy tekshiruvdan o'tgan va investitsiya yo'nalishingizga mos keladigan startaplarga kirish huquqiga ega bo'ling.",
+    "investorList1": "Metrikalarni taqdim etishning unifikatsiyalangan formati",
+    "investorList2": "Barcha hujjatlar bilan qulay Data Room",
+    "investorList3": "AI skoringi yordamida xavflarni erta aniqlash",
+    "investorList4": "Portfelni va bitimlar pipelineni sinxronlashtirish",
+    "footerRights": "© 2026 UNTITLED Ecosystem. Barcha huquqlar himoyalangan."
   }
 }

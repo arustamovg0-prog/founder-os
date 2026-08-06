@@ -7,12 +7,7 @@ import { UserRole } from '@/types';
 import { toast } from 'sonner';
 import { Command, Users, Zap, ArrowRight, Brain, Target, Layers, Activity, ShieldCheck } from 'lucide-react';
 import { motion } from 'framer-motion';
-
-const DEMO_ACCOUNTS = [
-  { role: 'founder' as UserRole, label: 'Вход для Фаундеров', icon: <Command size={24} />, color: 'from-emerald-500/20 to-emerald-900/5', borderColor: 'border-emerald-500/30', accent: 'text-emerald-400' },
-  { role: 'investor' as UserRole, label: 'Вход для Инвесторов', icon: <Users size={24} />, color: 'from-blue-500/20 to-blue-900/5', borderColor: 'border-blue-500/30', accent: 'text-blue-400' },
-  { role: 'admin' as UserRole, label: 'Вход для Админов', icon: <Zap size={24} />, color: 'from-purple-500/20 to-purple-900/5', borderColor: 'border-purple-500/30', accent: 'text-purple-400' },
-];
+import { useTranslations } from 'next-intl';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -28,6 +23,13 @@ export default function LandingPage() {
   const router = useRouter();
   const { loginDemo, profile } = useAuth();
   const [loadingRole, setLoadingRole] = useState<UserRole | null>(null);
+  const t = useTranslations('LandingPage');
+
+  const DEMO_ACCOUNTS = [
+    { role: 'founder' as UserRole, label: t('demoFounder'), icon: <Command size={24} />, color: 'from-emerald-500/20 to-emerald-900/5', borderColor: 'border-emerald-500/30', accent: 'text-emerald-400', desc: t('accessFounder') },
+    { role: 'investor' as UserRole, label: t('demoInvestor'), icon: <Users size={24} />, color: 'from-blue-500/20 to-blue-900/5', borderColor: 'border-blue-500/30', accent: 'text-blue-400', desc: t('accessInvestor') },
+    { role: 'admin' as UserRole, label: t('demoAdmin'), icon: <Zap size={24} />, color: 'from-purple-500/20 to-purple-900/5', borderColor: 'border-purple-500/30', accent: 'text-purple-400', desc: t('accessAdmin') },
+  ];
 
   const redirectByProfile = (p: { role: UserRole; linkedStartupId?: string | null }) => {
     if (p.role === 'admin') router.push('/admin');
@@ -51,7 +53,7 @@ export default function LandingPage() {
   const handleDemoLogin = (role: UserRole) => {
     setLoadingRole(role);
     loginDemo(role);
-    toast.success(`Демо-доступ загружается...`);
+    toast.success(t('loadingDemo'));
     setTimeout(() => {
       redirectByProfile({ role, linkedStartupId: 'demo_startup' });
     }, 400);
@@ -93,12 +95,11 @@ export default function LandingPage() {
           className="text-center max-w-4xl mx-auto mb-24 md:mb-32"
         >
           <motion.h1 variants={itemVariants} className="font-space text-5xl md:text-7xl font-bold tracking-tighter leading-tight mb-8">
-            Превратите хаос стартапа <br className="hidden md:block" />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-zinc-300 to-zinc-600">в безупречную систему.</span>
+            {t('titlePart1')} <br className="hidden md:block" />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-zinc-300 to-zinc-600">{t('titlePart2')}</span>
           </motion.h1>
           <motion.p variants={itemVariants} className="text-lg md:text-xl text-zinc-400 max-w-2xl mx-auto leading-relaxed mb-16">
-            Единая операционная система, которая объединяет фаундеров и инвесторов. 
-            Структурированные данные, AI-аналитика и прозрачный процесс фандрайзинга.
+            {t('subtitle')}
           </motion.p>
 
           {/* Access Portals */}
@@ -122,10 +123,10 @@ export default function LandingPage() {
                   </div>
                   <div className="font-space text-xl font-semibold mb-2">{account.label}</div>
                   <div className="text-sm text-zinc-400 mb-8 flex-grow">
-                    Доступ в панель управления {account.role === 'founder' ? 'основателя' : account.role === 'investor' ? 'инвестора' : 'администратора'}.
+                    {account.desc}
                   </div>
                   <div className={`flex items-center gap-2 text-sm font-semibold ${account.accent}`}>
-                    <span>Войти в систему</span>
+                    <span>{t('enterSystem')}</span>
                     <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
                   </div>
                 </div>
@@ -143,17 +144,17 @@ export default function LandingPage() {
           className="mb-32"
         >
           <div className="text-center mb-16">
-            <h2 className="font-space text-3xl md:text-5xl font-bold mb-6">Конец эпохи Excel и хаоса</h2>
+            <h2 className="font-space text-3xl md:text-5xl font-bold mb-6">{t('endOfChaosTitle')}</h2>
             <p className="text-zinc-400 max-w-2xl mx-auto text-lg">
-              90% стартапов проваливаются из-за неструктурированных процессов и плохой коммуникации с инвесторами. Мы решаем эту проблему.
+              {t('endOfChaosDesc')}
             </p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { icon: <Layers size={24} />, title: "Разрозненные данные", desc: "Больше никаких потерянных ссылок на Notion, Google Docs и Excel-модели. Всё в одном месте." },
-              { icon: <Target size={24} />, title: "Непонятный статус", desc: "Инвесторы всегда видят актуальный статус стартапа, его traction и готовность к раунду." },
-              { icon: <Activity size={24} />, title: "Долгий Due Diligence", desc: "Стандартизированная дата-комната сокращает время проверки стартапа в 3 раза." }
+              { icon: <Layers size={24} />, title: t('feature1Title'), desc: t('feature1Desc') },
+              { icon: <Target size={24} />, title: t('feature2Title'), desc: t('feature2Desc') },
+              { icon: <Activity size={24} />, title: t('feature3Title'), desc: t('feature3Desc') }
             ].map((feature, i) => (
               <div key={i} className="p-8 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm">
                 <div className="w-12 h-12 rounded-full bg-zinc-800/80 border border-white/5 flex items-center justify-center text-zinc-300 mb-6">
@@ -176,20 +177,20 @@ export default function LandingPage() {
         >
           <div className="flex-1 space-y-8">
             <div className="inline-block px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm font-semibold tracking-wide">
-              ДЛЯ ФАУНДЕРОВ
+              {t('forFounders')}
             </div>
             <h2 className="font-space text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
-              Фокус на продукте,<br />а не на таблицах
+              {t('founderTitle')}
             </h2>
             <p className="text-zinc-400 text-lg leading-relaxed">
-              Founder OS дает вам пошаговый алгоритм действий. От проработки идеи до закрытия раунда финансирования.
+              {t('founderDesc')}
             </p>
             <ul className="space-y-4">
               {[
-                "AI-анализ вашего Pitch Deck с рекомендациями",
-                "Автоматический расчет финансовых моделей и метрик",
-                "Прямой доступ к верифицированным инвесторам",
-                "Трекинг готовности к инвестициям (Investment Readiness)"
+                t('founderList1'),
+                t('founderList2'),
+                t('founderList3'),
+                t('founderList4')
               ].map((item, i) => (
                 <li key={i} className="flex items-start gap-4 text-zinc-300 font-medium">
                   <div className="mt-1 w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0">
@@ -243,20 +244,20 @@ export default function LandingPage() {
           </div>
           <div className="flex-1 space-y-8">
             <div className="inline-block px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-sm font-semibold tracking-wide">
-              ДЛЯ ИНВЕСТОРОВ
+              {t('forInvestors')}
             </div>
             <h2 className="font-space text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
-              Качественный Pipeline,<br />а не спам на почту
+              {t('investorTitle')}
             </h2>
             <p className="text-zinc-400 text-lg leading-relaxed">
-              Получайте доступ только к тем стартапам, которые прошли базовую проверку и соответствуют вашему инвестиционному фокусу.
+              {t('investorDesc')}
             </p>
             <ul className="space-y-4">
               {[
-                "Унифицированный формат презентации метрик",
-                "Удобная Data Room со всеми документами",
-                "Раннее обнаружение рисков благодаря AI-скорингу",
-                "Синхронизация портфеля и пайплайн сделок"
+                t('investorList1'),
+                t('investorList2'),
+                t('investorList3'),
+                t('investorList4')
               ].map((item, i) => (
                 <li key={i} className="flex items-start gap-4 text-zinc-300 font-medium">
                   <div className="mt-1 w-5 h-5 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0">
@@ -275,7 +276,7 @@ export default function LandingPage() {
             <Command size={18} className="text-zinc-400" />
             <span className="font-space font-semibold text-zinc-300">Founder OS</span>
           </div>
-          <p>© 2026 UNTITLED Ecosystem. Все права защищены.</p>
+          <p>{t('footerRights')}</p>
         </footer>
 
       </div>

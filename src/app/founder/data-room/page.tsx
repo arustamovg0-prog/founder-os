@@ -26,7 +26,7 @@ interface DocItem {
 
 export default function DataRoomPage() {
   const t = useTranslations('FounderDataRoom');
-  const { profile } = useAuth();
+  const { profile, isDemoMode } = useAuth();
   const [startup, setStartup] = useState<Startup | null>(null);
   
   const [docs, setDocs] = useState<DocItem[]>([
@@ -59,6 +59,26 @@ export default function DataRoomPage() {
 
   useEffect(() => {
     async function loadStartup() {
+      if (isDemoMode) {
+        setStartup({
+          id: 'demo_startup',
+          name: 'Nexus AI',
+          tagline: 'AI-driven operations',
+          dataRoom: {
+            pitchDeckUrl: 'https://example.com/pitch.pdf',
+          },
+          aiScores: { overallReadinessScore: 85 }
+        } as Startup);
+        
+        setDocs(prev => prev.map(d => {
+          if (d.key === 'pitch_deck') {
+            return { ...d, url: 'https://example.com/pitch.pdf', aiScore: 85, uploadedAt: new Date().toLocaleDateString('en-GB') };
+          }
+          return d;
+        }));
+        return;
+      }
+
       if (profile?.linkedStartupId && !isDemoConfig) {
         try {
           const snap = await getDoc(doc(db, 'startups', profile.linkedStartupId));
@@ -89,7 +109,7 @@ export default function DataRoomPage() {
       }
     }
     loadStartup();
-  }, [profile]);
+  }, [profile, isDemoMode]);
 
   const [uploading, setUploading] = useState<string | null>(null);
   const [dragging, setDragging] = useState<string | null>(null);

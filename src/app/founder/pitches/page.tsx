@@ -25,12 +25,36 @@ const STATUS_CONFIG: Record<string, { variant: 'default' | 'secondary' | 'destru
 
 export default function FounderPitchesPage() {
   const t = useTranslations('FounderPitches');
-  const { profile } = useAuth();
+  const { profile, isDemoMode } = useAuth();
   const [pitches, setPitches] = useState<PitchEvent[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState({ investorName: '', proposedDate: '', message: '' });
 
   useEffect(() => {
+    if (isDemoMode) {
+      setPitches([{
+        id: 'demo_pitch_1',
+        startupId: 'demo_uid',
+        startupName: 'Nexus AI',
+        investorId: 'inv_1',
+        investorName: 'Acme Ventures',
+        status: 'accepted',
+        request: {
+          message: 'Мы хотели бы обсудить возможности интеграции AI в ваши бизнес-процессы.',
+          snapshotScore: 88,
+          sentAt: new Date(Date.now() - 86400000 * 2),
+          proposedDate: new Date(Date.now() + 86400000 * 5)
+        },
+        meeting: {
+          confirmedDate: new Date(Date.now() + 86400000 * 5),
+          calendarEventId: 'evt_1',
+          location: 'online',
+          meetingUrl: 'https://zoom.us/j/demo123'
+        }
+      } as PitchEvent]);
+      return;
+    }
+
     if (!profile) return;
 
     const q = query(collection(db, 'pitches'), where('startupId', '==', profile.uid));
@@ -40,7 +64,7 @@ export default function FounderPitchesPage() {
     });
 
     return () => unsubscribe();
-  }, [profile]);
+  }, [profile, isDemoMode]);
 
   const handleSend = async () => {
     if (!form.investorName || !form.proposedDate || !form.message) {
@@ -48,7 +72,7 @@ export default function FounderPitchesPage() {
       return;
     }
     
-    if (profile) {
+    if (profile && !isDemoMode) {
       const newPitch: Partial<PitchEvent> = {
         startupId: profile.uid,
         startupName: profile.displayName || 'My Startup',

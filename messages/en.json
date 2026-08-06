@@ -678,7 +678,15 @@
     },
     "table": {
       "title": "All Startups — Quick View",
-      "cols": ["Startup", "Stage", "MRR", "Team", "Runway", "Score", "Status"]
+      "cols": [
+        "Startup",
+        "Stage",
+        "MRR",
+        "Team",
+        "Runway",
+        "Score",
+        "Status"
+      ]
     }
   },
   "investorDashboard": {
@@ -707,5 +715,41 @@
     "btnAccept": "Accept",
     "btnDecline": "Decline",
     "noRequests": "No pending requests"
+  },
+  "LandingPage": {
+    "demoFounder": "Founder Login",
+    "demoInvestor": "Investor Login",
+    "demoAdmin": "Admin Login",
+    "loadingDemo": "Loading demo access...",
+    "titlePart1": "Turn startup chaos",
+    "titlePart2": "into a flawless system.",
+    "subtitle": "A unified operating system connecting founders and investors. Structured data, AI analytics, and a transparent fundraising process.",
+    "accessFounder": "Access Founder Dashboard",
+    "accessInvestor": "Access Investor Dashboard",
+    "accessAdmin": "Access Admin Dashboard",
+    "enterSystem": "Enter System",
+    "endOfChaosTitle": "The end of Excel and chaos",
+    "endOfChaosDesc": "90% of startups fail due to unstructured processes and poor investor communication. We solve this.",
+    "feature1Title": "Fragmented Data",
+    "feature1Desc": "No more lost links to Notion, Google Docs, and Excel models. Everything in one place.",
+    "feature2Title": "Unclear Status",
+    "feature2Desc": "Investors always see the current status of the startup, its traction, and readiness for a round.",
+    "feature3Title": "Long Due Diligence",
+    "feature3Desc": "A standardized data room reduces startup verification time by 3 times.",
+    "forFounders": "FOR FOUNDERS",
+    "founderTitle": "Focus on product, not spreadsheets",
+    "founderDesc": "Founder OS gives you a step-by-step action plan. From idea validation to closing a funding round.",
+    "founderList1": "AI analysis of your Pitch Deck with recommendations",
+    "founderList2": "Automatic calculation of financial models and metrics",
+    "founderList3": "Direct access to verified investors",
+    "founderList4": "Investment Readiness tracking",
+    "forInvestors": "FOR INVESTORS",
+    "investorTitle": "Quality Pipeline, not email spam",
+    "investorDesc": "Get access only to startups that have passed basic verification and match your investment focus.",
+    "investorList1": "Unified metric presentation format",
+    "investorList2": "Convenient Data Room with all documents",
+    "investorList3": "Early risk detection thanks to AI scoring",
+    "investorList4": "Portfolio synchronization and deal pipeline",
+    "footerRights": "© 2026 UNTITLED Ecosystem. All rights reserved."
   }
 }

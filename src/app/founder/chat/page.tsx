@@ -66,7 +66,7 @@ function renderMarkdown(text: string) {
 }
 
 export default function FounderChatPage() {
-  const { profile } = useAuth();
+  const { profile, isDemoMode } = useAuth();
   const [messages, setMessages] = useState<Message[]>([WELCOME]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -78,7 +78,7 @@ export default function FounderChatPage() {
   }, [messages]);
 
   useEffect(() => {
-    if (!profile?.uid) return;
+    if (!profile?.uid || isDemoMode) return;
     const unsub = onSnapshot(doc(db, 'support_threads', profile.uid), (docSnap) => {
       if (docSnap.exists() && docSnap.data().messages) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -90,11 +90,11 @@ export default function FounderChatPage() {
       }
     });
     return () => unsub();
-  }, [profile?.uid]);
+  }, [profile?.uid, isDemoMode]);
 
   const clearChat = async () => {
     setMessages([WELCOME]);
-    if (profile?.uid) {
+    if (profile?.uid && !isDemoMode) {
       await setDoc(doc(db, 'support_threads', profile.uid), { messages: [WELCOME], updatedAt: serverTimestamp() });
     }
   };
@@ -112,7 +112,7 @@ export default function FounderChatPage() {
     setInput('');
     setLoading(true);
 
-    if (profile?.uid) {
+    if (profile?.uid && !isDemoMode) {
       await setDoc(doc(db, 'support_threads', profile.uid), { messages: newMsgs, updatedAt: serverTimestamp() }, { merge: true });
     }
 
@@ -124,7 +124,7 @@ export default function FounderChatPage() {
       };
       const finalMsgs = [...newMsgs, botMsg];
       setMessages(finalMsgs);
-      if (profile?.uid) {
+      if (profile?.uid && !isDemoMode) {
         await setDoc(doc(db, 'support_threads', profile.uid), { messages: finalMsgs, updatedAt: serverTimestamp() }, { merge: true });
       }
     } catch {

@@ -118,7 +118,7 @@ function formatInline(text: string): React.ReactNode {
 export default function AICopilotPage() {
   const t = useTranslations('FounderAICopilot');
   const suggested = (t.raw('suggested') as { icon: string; text: string }[]) || [];
-  const { profile } = useAuth();
+  const { profile, isDemoMode } = useAuth();
   const [startup, setStartup] = useState<Startup | null>(null);
   
   const [messages, setMessages] = useState<Message[]>([
@@ -134,6 +134,17 @@ export default function AICopilotPage() {
 
   useEffect(() => {
     async function loadStartup() {
+      if (isDemoMode) {
+        setStartup({
+          id: 'demo_startup',
+          name: 'Nexus AI',
+          stage: 'seed',
+          dataRoom: { pitchDeckUrl: 'https://example.com/pitch.pdf' },
+          aiScores: { overallReadinessScore: 85 }
+        } as Startup);
+        return;
+      }
+
       if (profile?.linkedStartupId && !isDemoConfig) {
         try {
           const snap = await getDoc(doc(db, 'startups', profile.linkedStartupId));
@@ -146,7 +157,7 @@ export default function AICopilotPage() {
       }
     }
     loadStartup();
-  }, [profile]);
+  }, [profile, isDemoMode]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
