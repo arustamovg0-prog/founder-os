@@ -184,16 +184,16 @@ export default function InvestorDashboard() {
                         <p className="text-xs text-zinc-500 dark:text-zinc-400">{s.tagline}</p>
                       </div>
                       <div className="text-right shrink-0">
-                        <div className="mb-0.5 text-[10px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">{t('mrr')}</div>
-                        <div className="font-display text-lg font-bold text-green-600 dark:text-green-400">{fmt(s.metrics.mrr)}</div>
+                        <div className="mb-0.5 text-[10px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">{t('metrics.mrr')}</div>
+                        <div className="font-display text-lg font-bold text-green-600 dark:text-green-400">{fmt(s.metrics?.mrr || 0)}</div>
                       </div>
                     </div>
                     
                     <div className="mb-4 grid grid-cols-3 gap-2">
                       {[
-                        { label: t('metrics.ltv'), value: `${s.metrics.ltvCacRatio}x` },
-                        { label: t('metrics.mau'), value: s.metrics.mau.toLocaleString() },
-                        { label: t('metrics.runway'), value: `${s.metrics.runwayMonths}mo` },
+                        { label: t('metrics.ltvCac'), value: `${s.metrics?.ltvCacRatio || 0}x` },
+                        { label: t('metrics.mau'), value: (s.metrics?.mau || 0).toLocaleString() },
+                        { label: t('metrics.runway'), value: `${s.metrics?.runwayMonths || 0}mo` },
                       ].map((m, j) => (
                         <div key={j} className="rounded-md bg-zinc-50 dark:bg-zinc-900/50 py-2 text-center">
                           <div className="text-sm font-bold text-zinc-900 dark:text-white">{m.value}</div>
@@ -203,7 +203,7 @@ export default function InvestorDashboard() {
                     </div>
                     
                     <div className="mb-4">
-                      <div className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">{t('score')}</div>
+                      <div className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">{t('metrics.aiScore')}</div>
                       <ScoreBar 
                         score={s.aiScores.overallReadinessScore || 0} 
                         color={i === 0 ? 'bg-green-500' : i === 1 ? 'bg-purple-500' : 'bg-amber-500'} 
@@ -213,7 +213,7 @@ export default function InvestorDashboard() {
                     <div className="flex justify-end">
                       <Button variant="secondary" size="sm" asChild>
                         <Link href={`/investor/deal-flow`}>
-                          {t('viewProfile')} <ArrowUpRight className="ml-1" size={14} />
+                          {t('btnProfile')} <ArrowUpRight className="ml-1" size={14} />
                         </Link>
                       </Button>
                     </div>
@@ -238,21 +238,21 @@ export default function InvestorDashboard() {
                     <div className="mb-2 flex items-center justify-between">
                       <span className="text-sm font-bold text-zinc-900 dark:text-white">{p.startupName}</span>
                       <span className="inline-flex items-center gap-1 rounded-full bg-amber-100 dark:bg-amber-900/50 px-2 py-0.5 text-[10px] font-bold text-amber-800 dark:text-amber-500">
-                        <Clock size={10} /> {t('pending')}
+                        <Clock size={10} /> {t('pendingBadge')}
                       </span>
                     </div>
                     <p className="mb-3 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
                       {p.request.message.slice(0, 100)}...
                     </p>
                     <div className="flex items-center justify-between text-[10px] font-semibold text-zinc-500 dark:text-zinc-400">
-                      <span>{t('pitchScore', { score: p.request.snapshotScore })}</span>
+                      <span>{t('scoreLabel', { score: p.request.snapshotScore })}</span>
                       <span>
                         {p.request.proposedDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}
                       </span>
                     </div>
                     <div className="mt-4 flex gap-2">
-                      <Button className="flex-1" size="sm">{t('accept')}</Button>
-                      <Button variant="secondary" className="flex-1" size="sm">{t('decline')}</Button>
+                      <Button className="flex-1" size="sm">{t('btnAccept')}</Button>
+                      <Button variant="secondary" className="flex-1" size="sm">{t('btnDecline')}</Button>
                     </div>
                   </div>
                 );

@@ -128,7 +128,7 @@ export default function SpotlightSearch() {
       <div 
         style={{
           position: 'fixed',
-          top: '24px',
+          bottom: '24px',
           right: '24px',
           zIndex: 50,
         }}
